@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * @module @proc7ts/hatsy
+ * @module @hatsy/hatsy
  */
 /**
  * A error corresponding to the given HTTP status code.

@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * @module @proc7ts/hatsy
+ * @module @hatsy/hatsy
  */
 import { HatsyRequestContext } from '../handler';
 import { HatsyHttpError } from '../http-error';

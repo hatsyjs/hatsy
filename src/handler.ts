@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * @module @proc7ts/hatsy
+ * @module @hatsy/hatsy
  */
 import { IncomingMessage, ServerResponse } from 'http';
 

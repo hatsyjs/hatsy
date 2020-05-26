@@ -1,5 +1,5 @@
 {
-  "name": "@proc7ts/hatsy",
+  "name": "@hatsy/hatsy",
   "version": "1.0.0-dev.0",
   "description": "Asynchronous TypeScript-friendly HTTP server for Node.js",
   "keywords": [
@@ -13,20 +13,20 @@
     "web-server",
     "typescript"
   ],
-  "homepage": "https://github.com/proc7ts/hatsy",
+  "homepage": "https://github.com/hatsyjs/hatsy",
   "repository": {
     "type": "git",
-    "url": "ssh://git@github.com:proc7ts/hatsy.git"
+    "url": "ssh://git@github.com:hatsyjs/hatsy.git"
   },
   "license": "MIT",
   "author": "Ruslan Lopatin <ruslan.lopatin@gmail.com>",
   "bugs": {
-    "url": "https://github.com/proc7ts/hatsy/issues"
+    "url": "https://github.com/hatsyjs/hatsy/issues"
   },
   "main": "dist/hatsy.js",
   "module": "dist/hatsy.mjs",
   "bin": {
-    "hatsy": "./dist/hatsy.cli.js"
+    "hatsy": "dist/hatsy.cli.js"
   },
   "dependencies": {
     "send": "^0.17.1"
@@ -68,8 +68,7 @@
     "clean": "node ./build/clean",
     "doc": "typedoc",
     "doc:gh-pages": "gh-pages --dist target/typedoc --dotfiles",
-    "doc:ci": "node ./build/doc-ci",
-    "doc:publish": "run-s doc doc:ci \"doc:gh-pages {@}\" --",
+    "doc:publish": "run-s doc \"doc:gh-pages {@}\" --",
     "lint": "eslint . --ext .js,.ts",
     "rebuild": "run-s clean build",
     "test": "jest"

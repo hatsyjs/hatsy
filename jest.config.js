@@ -23,7 +23,7 @@ module.exports = {
     [
       'jest-junit',
       {
-        suiteName: '@proc7ts/hatsy',
+        suiteName: '@hatsy/hatsy',
         outputDirectory: './target/test-results',
         classNameTemplate: '{classname}: {title}',
         titleTemplate: '{classname}: {title}',
