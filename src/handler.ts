@@ -74,16 +74,17 @@ export interface HatsyRequestContext {
    * Delegates request processing to next `handler` and extends this context by creating a new one with the given
    * `extensions` applied. The rest of the properties remain unchanged.
    *
-   * @param handler  Target handler to delegate request processing to.
+   * @typeparam TExt  A type of HTTP request processing context extension.
+   * @param handler  Target handler accepting extended context to delegate request processing to.
    * @param extensions  Request processing context extensions.
    *
    * @returns A promise resolved when request processing completes. Resolves to `true` if response is written,
    * or to `false` otherwise.
    */
-  next<TNextCtx extends this>(
+  next<TExt>(
       this: void,
-      handler: HatsyHandler<TNextCtx>,
-      extensions: HatsyRequestContext.Extensions<this, TNextCtx>,
+      handler: HatsyHandler<this & TExt>,
+      extensions: HatsyRequestContext.Extensions<this, TExt>,
   ): Promise<boolean>;
 
 }
@@ -105,11 +106,11 @@ export namespace HatsyRequestContext {
    * The properties listed here either replace the original ones, or added to new context.
    *
    * @typeparam TCtx  A type of HTTP request processing context to extend.
-   * @typeparam TNextCtx  A type of extended HTTP request processing context.
+   * @typeparam TExt  A type of HTTP request processing context extension.
    */
-  export type Extensions<TCtx extends HatsyRequestContext, TNextCtx extends TCtx> =
+  export type Extensions<TCtx extends HatsyRequestContext, TExt> =
       & Modifications<TCtx>
-      & Omit<TNextCtx, 'next' | keyof TCtx>;
+      & Omit<TExt, 'next' | keyof TCtx>;
 
 }
 

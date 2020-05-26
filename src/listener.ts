@@ -90,21 +90,23 @@ export function hatsyListener(
 /**
  * @internal
  */
-function toHatsyRequestContext<TCtx extends HatsyRequestContext>(context: Omit<TCtx, 'next'>): TCtx {
+function toHatsyRequestContext<TCtx extends HatsyRequestContext>(draft: Omit<TCtx, 'next'>): TCtx {
 
-  const ctx = context as TCtx;
+  const context = draft as TCtx;
 
-  ctx.next = async <TNextCtx extends TCtx>(
-      handler: HatsyHandler<TNextCtx>,
-      extensions?: HatsyRequestContext.Extensions<TCtx, TNextCtx>,
+  context.next = async <TExt>(
+      handler: HatsyHandler<TCtx & TExt>,
+      extensions?: HatsyRequestContext.Extensions<TCtx, TExt>,
   ): Promise<boolean> => {
+
     await handler(extensions
-        ? toHatsyRequestContext({ ...context, ...extensions } as TNextCtx)
-        : ctx as TNextCtx);
-    return context.response.writableEnded;
+        ? toHatsyRequestContext<TCtx & TExt & HatsyRequestContext>({ ...draft, ...extensions } as TCtx & TExt)
+        : context as TCtx & TExt);
+
+    return draft.response.writableEnded;
   };
 
-  return ctx;
+  return context;
 }
 
 /**
