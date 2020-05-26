@@ -72,7 +72,7 @@ export function hatsyListener(
         await next(defaultHandler);
       }
     } catch (error) {
-      await next<HatsyErrorContext>(errorHandler, { error });
+      await next(errorHandler, { error });
     }
   };
 
