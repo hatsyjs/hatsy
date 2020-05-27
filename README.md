@@ -1,7 +1,6 @@
 Hatsy
 =====
-Asynchronous TypeScript-friendly HTTP server for Node.js
-
+###### Asynchronous TypeScript-friendly HTTP server for Node.js
 [![NPM][npm-image]][npm-url]
 [![Build Status][build-status-img]][build-status-link]
 [![codecov][codecov-image]][codecov-url]
