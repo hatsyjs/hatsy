@@ -46,7 +46,7 @@ export interface HatsyConfig {
 }
 
 /**
- * Creates Node.js HTTP server listener out of Hatsy HTTP handler(s).
+ * Creates Node.js HTTP request listener by Hatsy HTTP handler(s).
  *
  * @param handlers  Either single HTTP request handler or iterable of HTTP request handlers to delegate request
  * processing to.
@@ -82,7 +82,7 @@ export function hatsyListener(
       response,
       log,
     }).next(fullHandler).catch(
-        error => log.error(`${request.method} <${request.url}> Unhandled error`, error),
+        error => log.error(`[${request.method} ${request.url}]`, 'Unhandled error', error),
     );
   };
 }
@@ -145,9 +145,9 @@ function hatsyErrorHandler({
  */
 function hatsyLogError({ request, log, error }: HatsyErrorContext): void {
   if (error instanceof HatsyHttpError) {
-    log.error(`${request.method} <${request.url}>`, `ERROR ${error.statusCode} ${error.statusMessage}`);
+    log.error(`[${request.method} ${request.url}]`, `ERROR ${error.message}`);
   } else {
-    log.error(`${request.method} <${request.url}>`, error);
+    log.error(`[${request.method} ${request.url}]`, error);
   }
 }
 

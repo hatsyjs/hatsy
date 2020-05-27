@@ -22,7 +22,7 @@ export class HatsyHttpError extends Error {
       readonly statusCode: number,
       readonly statusMessage?: string,
   ) {
-    super();
+    super(statusMessage ? `${statusCode} ${statusMessage}` : `${statusCode}`);
   }
 
 }

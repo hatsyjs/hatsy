@@ -6,7 +6,7 @@ export class TestServer {
 
   readonly address: AddressInfo;
 
-  constructor(readonly server: Server) {
+  constructor(readonly server: Server, readonly listener: jest.Mock<void, Parameters<RequestListener>>) {
     this.address = server.address() as AddressInfo;
   }
 
@@ -40,13 +40,14 @@ export class TestServer {
 
 }
 
-export function testServer(listener: RequestListener): Promise<TestServer> {
+export function testServer(): Promise<TestServer> {
   return new Promise<TestServer>((resolve, reject) => {
 
+    const listener = jest.fn();
     const server = createServer(listener);
 
     server.on('error', reject);
-    server.on('listening', () => resolve(new TestServer(server)));
+    server.on('listening', () => resolve(new TestServer(server, listener)));
     server.listen({ port: 0, host: 'localhost' });
   });
 }

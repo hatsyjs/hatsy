@@ -1,34 +1,31 @@
-import { HatsyHandler } from './handler';
+import { HatsyRequestContext } from './handler';
+import { HatsyErrorContext } from './handlers';
+import { HatsyHttpError } from './http-error';
 import { hatsyListener } from './listener';
 import { readAll, suppressedLog, testServer, TestServer } from './spec';
 
 describe('hatsyListener', () => {
 
   let server: TestServer;
-  let handler: jest.Mock<ReturnType<HatsyHandler>, Parameters<HatsyHandler>>;
 
   beforeAll(async () => {
-    handler = jest.fn();
-    server = await testServer(hatsyListener(handler, { log: suppressedLog }));
+    server = await testServer();
   });
   afterAll(async () => {
     await server.stop();
   });
 
   beforeEach(() => {
-    handler.mockReset();
+    server.listener.mockReset();
   });
 
-  it('responds with `404` when handler not responding', async () => {
-
-    const response = await server.get('/');
-
-    expect(response.statusCode).toBe(404);
-    expect(response.statusMessage).toBe('Not Found');
-    expect(await readAll(response)).toContain('ERROR 404');
-  });
   it('invokes handler', async () => {
-    handler.mockImplementation(({ response }) => response.end('TEST'));
+
+    const handler = jest.fn(({ response }: HatsyRequestContext) => {
+      response.end('TEST');
+    });
+
+    server.listener.mockImplementation(hatsyListener(handler));
 
     const response = await server.get('/test');
 
@@ -37,5 +34,172 @@ describe('hatsyListener', () => {
       request: expect.objectContaining({ method: 'GET', url: '/test' }),
     }));
   });
+  it('responds with `404` status when handler not responding', async () => {
+    server.listener.mockImplementation(hatsyListener(() => {/* do not respond */}, { log: suppressedLog() }));
 
+    const response = await server.get('/');
+
+    expect(response.statusCode).toBe(404);
+    expect(response.statusMessage).toBe('Not Found');
+    expect(await readAll(response)).toContain('ERROR 404');
+  });
+  it('does not respond when handler not responding ad no default handler', async () => {
+
+    const listener = hatsyListener(() => {/* do not respond */}, { defaultHandler: false });
+
+    server.listener.mockImplementation((request, response) => {
+      listener(request, response);
+      Promise.resolve().finally(() => {
+        response.end('NO RESPONSE');
+      });
+    });
+
+    const response = await server.get('/');
+
+    expect(await readAll(response)).toBe('NO RESPONSE');
+  });
+  it('responds with `500` status when handler throws error', async () => {
+
+    const error = new Error('test');
+
+    server.listener.mockImplementation(hatsyListener(() => { throw error; }, { log: suppressedLog() }));
+
+    const response = await server.get('/test');
+
+    expect(response.statusCode).toBe(500);
+    expect(response.statusMessage).toBe('Internal Server Error');
+    expect(await readAll(response)).toContain('ERROR 500');
+  });
+  it('responds with error status when handler throws error', async () => {
+
+    const error = new HatsyHttpError(403);
+
+    server.listener.mockImplementation(hatsyListener(() => { throw error; }, { log: suppressedLog() }));
+
+    const response = await server.get('/test');
+
+    expect(response.statusCode).toBe(403);
+    expect(response.statusMessage).toBe('Forbidden');
+    expect(await readAll(response)).toContain('ERROR 403');
+  });
+  it('invokes provided default handler when handler not responding', async () => {
+
+    const defaultHandler = jest.fn(({ response }: HatsyRequestContext) => {
+      response.end('DEFAULT');
+    });
+
+    server.listener.mockImplementation(hatsyListener(
+        () => {/* do not respond */},
+        { log: suppressedLog(), defaultHandler },
+    ));
+
+    const response = await server.get('/test');
+
+    expect(await readAll(response)).toBe('DEFAULT');
+    expect(defaultHandler).toHaveBeenCalledWith(expect.objectContaining({
+      request: expect.objectContaining({ method: 'GET', url: '/test' }),
+    }));
+  });
+  it('logs error and invokes provided error handler', async () => {
+
+    const error = new Error('test');
+    const log = suppressedLog();
+    const logErrorSpy = jest.spyOn(log, 'error');
+    const errorHandler = jest.fn(({ response, error }: HatsyErrorContext) => {
+      response.end(`ERROR ${error.message}`);
+    });
+
+    server.listener.mockImplementation(hatsyListener(() => { throw error; }, { log, errorHandler }));
+
+    const response = await server.get('/test');
+
+    expect(await readAll(response)).toContain('ERROR test');
+    expect(logErrorSpy).toHaveBeenCalledWith('[GET /test]', error);
+    expect(errorHandler).toHaveBeenCalledWith(expect.objectContaining({
+      request: expect.objectContaining({ method: 'GET', url: '/test' }),
+      error,
+    }));
+  });
+  it('logs HTTP error and invokes provided error handler', async () => {
+
+    const error = new HatsyHttpError(404, 'Never Found');
+    const log = suppressedLog();
+    const logErrorSpy = jest.spyOn(log, 'error');
+    const errorHandler = jest.fn(({ response, error }: HatsyErrorContext) => {
+      response.end(`ERROR ${error.message}`);
+    });
+
+    server.listener.mockImplementation(hatsyListener(() => { throw error; }, { log, errorHandler }));
+
+    const response = await server.get('/test');
+
+    expect(await readAll(response)).toContain('ERROR 404 Never Found');
+    expect(logErrorSpy).toHaveBeenCalledWith('[GET /test]', 'ERROR 404 Never Found');
+    expect(errorHandler).toHaveBeenCalledWith(expect.objectContaining({
+      request: expect.objectContaining({ method: 'GET', url: '/test' }),
+      error,
+    }));
+  });
+  it('logs ERROR when there is no error handler', async () => {
+
+    const error = new Error('test');
+    const log = suppressedLog();
+    const logErrorSpy = jest.spyOn(log, 'error');
+
+    server.listener.mockImplementation(hatsyListener(() => { throw error; }, { log, errorHandler: false }));
+
+    const response = await server.get('/test');
+
+    expect(await readAll(response)).toBe('');
+    expect(logErrorSpy).toHaveBeenCalledWith('[GET /test]', error);
+  });
+  it('logs ERROR when there is neither error, not default handler', async () => {
+
+    const error = new Error('test');
+    const log = suppressedLog();
+    const logErrorSpy = jest.spyOn(log, 'error');
+    const listener = hatsyListener(
+        () => { throw error; },
+        { log, defaultHandler: false, errorHandler: false },
+    );
+
+    server.listener.mockImplementation((request, response) => {
+      listener(request, response);
+      Promise.resolve().finally(() => {
+        response.end('NO RESPONSE');
+      });
+    });
+
+    await server.get('/test');
+    const response = await server.get('/test');
+
+    expect(await readAll(response)).toBe('NO RESPONSE');
+    expect(logErrorSpy).toHaveBeenCalledWith('[GET /test]', error);
+  });
+  it('logs unhandled errors', async () => {
+
+    const error = new Error('test');
+    const log = suppressedLog();
+    const logErrorSpy = jest.spyOn(log, 'error');
+    const errorHandler = jest.fn(() => {
+      throw error;
+    });
+
+    const listener = hatsyListener(
+        () => { throw error; },
+        { log, errorHandler },
+    );
+
+    server.listener.mockImplementation((request, response) => {
+      listener(request, response);
+      Promise.resolve().finally(() => {
+        response.end('NO RESPONSE');
+      });
+    });
+
+    const response = await server.get('/test');
+
+    expect(await readAll(response)).toBe('NO RESPONSE');
+    expect(logErrorSpy).toHaveBeenCalledWith('[GET /test]', 'Unhandled error', error);
+  });
 });

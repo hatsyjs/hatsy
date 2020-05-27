@@ -7,7 +7,9 @@ const noout = new Writable({
   },
 });
 
-export const suppressedLog: Console = new Console({
-  stdout: noout,
-  stderr: noout,
-});
+export function suppressedLog(): Console {
+  return new Console({
+    stdout: noout,
+    stderr: noout,
+  });
+}

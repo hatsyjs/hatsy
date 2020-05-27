@@ -39,7 +39,7 @@ export async function hatsyRenderError(context: HatsyErrorContext): Promise<void
     if (error.statusMessage) {
       response.statusMessage = error.statusMessage;
     }
-  } else if (response.statusCode === 200) {
+  } else {
     response.statusCode = 500;
     response.statusMessage = 'Internal Server Error';
   }
