@@ -11,6 +11,8 @@ import { hatsyRenderHtml } from './render-html';
  *
  * This context is created once error is thrown by one of the handlers before passing it to
  * {@link HatsyConfig.errorHandler error handler}.
+ *
+ * @category Core
  */
 export interface HatsyErrorContext extends HatsyRequestContext {
 
@@ -26,6 +28,7 @@ export interface HatsyErrorContext extends HatsyRequestContext {
  *
  * Threats {@link HatsyHttpError HTTP status error} as HTTP status code to set for error page.
  *
+ * @category Core
  * @param context  HTTP processing error context.
  *
  * @returns New HTTP request handler.

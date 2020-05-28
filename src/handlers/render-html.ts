@@ -4,6 +4,14 @@
  */
 import { HatsyHandler, HatsyRequestContext } from '../handler';
 
+/**
+ * Builds HTTP request handler that renders provided HTML on response.
+ *
+ * @category Core
+ * @param html  HTML text to render or its promise.
+ *
+ * @returns HTTP request handler.
+ */
 export function hatsyRenderHtml(html: string | PromiseLike<string>): HatsyHandler {
   return async ({ response }: HatsyRequestContext): Promise<void> => {
 

@@ -1,6 +1,6 @@
 {
   "categorizeByGroup": true,
-  "categoryOrder": ["Core", "State Tracking", "Value Tracking", "DOM Events", "*"],
+  "categoryOrder": ["Core", "Routing", "*"],
   "exclude": [
     "**/index.ts",
     "**/cli/**/*.ts",
@@ -10,7 +10,7 @@
   ],
   "excludeNotExported": true,
   "mode": "modules",
-  "name": "Functional Event Processor",
+  "name": "Hatsy",
   "out": "./target/typedoc",
   "tsconfig": "tsconfig.main.json"
 }

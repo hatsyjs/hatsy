@@ -9,6 +9,8 @@ import { HatsyHttpError } from './http-error';
 
 /**
  * Hatsy configuration.
+ *
+ * @category Core
  */
 export interface HatsyConfig {
 
@@ -48,6 +50,7 @@ export interface HatsyConfig {
 /**
  * Creates Node.js HTTP request listener by Hatsy HTTP handler(s).
  *
+ * @category Core
  * @param handlers  Either single HTTP request handler or iterable of HTTP request handlers to delegate request
  * processing to.
  * @param config  Hatsy configuration.

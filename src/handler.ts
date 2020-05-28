@@ -12,6 +12,7 @@ import { IncomingMessage, ServerResponse } from 'http';
  *
  * The handler may be asynchronous.
  *
+ * @category Core
  * @typeparam TCtx  A type of HTTP request processing context this handler expects.
  */
 export type HatsyHandler<TCtx extends HatsyRequestContext = HatsyRequestContext> =
@@ -35,6 +36,8 @@ export type HatsyHandler<TCtx extends HatsyRequestContext = HatsyRequestContext>
  * A context instance is immutable. It can be {@link HatsyRequestContext.Modifications modified} or even
  * {@link HatsyRequestContext.Extensions extended} when delegating request processing to the [[next]] handler
  * by creating another context based on original one.
+ *
+ * @category Core
  */
 export interface HatsyRequestContext {
 
@@ -120,6 +123,7 @@ export namespace HatsyRequestContext {
  * It iterates over the given handlers in order and delegates the request processing to them. And stops when
  * either response is written, an error thrown, or there is no more handlers.
  *
+ * @category Core
  * @typeparam TCtx  A type of HTTP request processing context the `handlers` expect.
  * @param handlers  Either single HTTP request handler or iterable of HTTP request handlers to delegate request
  * processing to.

@@ -8,6 +8,7 @@
  * {@link HatsyHandler HTTP handlers} may raise this error. The {@link hatsyRenderError} handler would render
  * corresponding error page then.
  *
+ * @category Core
  * @see {@link HatsyConfig.ignoreErrors}
  */
 export class HatsyHttpError extends Error {
