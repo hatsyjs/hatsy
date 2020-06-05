@@ -2,18 +2,20 @@
  * @packageDocumentation
  * @module @hatsy/hatsy
  */
-import { HatsyHandler, HatsyRequestContext } from '../handler';
+import { HatsyContext } from '../../context';
+import { HTTPHandler } from '../http-handler';
+import { HTTPMatters } from '../http-matters';
 
 /**
  * Builds HTTP request handler that renders the given value as JSON on response.
  *
- * @category Core
+ * @category HTTP
  * @param value  A value to render or its promise.
  *
  * @returns HTTP request handler.
  */
-export function hatsyRenderJson(value: any | PromiseLike<any>): HatsyHandler {
-  return async ({ response }: HatsyRequestContext): Promise<void> => {
+export function renderJSON(value: any | PromiseLike<any>): HTTPHandler {
+  return async ({ response }: HatsyContext<HTTPMatters>): Promise<void> => {
 
     const content = await value;
 

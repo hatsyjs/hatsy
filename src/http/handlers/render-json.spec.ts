@@ -1,8 +1,8 @@
-import { hatsyListener } from '../listener';
-import { readAll, testServer, TestServer } from '../spec';
-import { hatsyRenderJson } from './render-json';
+import { readAll, testServer, TestServer } from '../../spec';
+import { httpListener } from '../http-listener';
+import { renderJSON } from './render-json';
 
-describe('hatsyRenderJSON', () => {
+describe('renderJSON', () => {
 
   let server: TestServer;
 
@@ -17,7 +17,7 @@ describe('hatsyRenderJSON', () => {
 
     const json = { name: 'test response' };
 
-    server.listener.mockImplementation(hatsyListener(hatsyRenderJson(json)));
+    server.listener.mockImplementation(httpListener(renderJSON(json)));
 
     const response = await server.get('/');
 

@@ -1,0 +1,47 @@
+/**
+ * @packageDocumentation
+ * @module @hatsy/hatsy
+ */
+import { HatsyContext } from '../../context';
+import { ErrorMatters } from '../../errors';
+import { HTTPError } from '../http-error';
+import { HTTPMatters } from '../http-matters';
+import { renderHtml } from './render-html';
+
+/**
+ * HTTP request processing error handler that renders HTML page with error info.
+ *
+ * Threats {@link HTTPError HTTP status error} as HTTP status code to set for error page.
+ *
+ * @category HTTP
+ * @param context  HTTP error processing context.
+ *
+ * @returns New HTTP request handler.
+ */
+export async function renderHTTPError(context: HatsyContext<HTTPMatters & ErrorMatters>): Promise<void> {
+
+  const { error, response, next } = context;
+
+  if (error instanceof HTTPError) {
+    response.statusCode = error.statusCode;
+    if (error.statusMessage) {
+      response.statusMessage = error.statusMessage;
+    }
+  } else {
+    response.statusCode = 500;
+    response.statusMessage = 'Internal Server Error';
+  }
+
+  await next(renderHtml(
+      `<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>ERROR ${response.statusCode} ${response.statusMessage}</title>
+</head>
+<body>
+<h1><strong>ERROR ${response.statusCode}</strong> ${response.statusMessage}</h1>
+</body>
+</html>
+`,
+  ));
+}

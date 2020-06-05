@@ -2,18 +2,20 @@
  * @packageDocumentation
  * @module @hatsy/hatsy
  */
-import { HatsyHandler, HatsyRequestContext } from '../handler';
+import { HatsyContext } from '../../context';
+import { HTTPHandler } from '../http-handler';
+import { HTTPMatters } from '../http-matters';
 
 /**
  * Builds HTTP request handler that renders provided HTML on response.
  *
- * @category Core
+ * @category HTTP
  * @param html  HTML text to render or its promise.
  *
  * @returns HTTP request handler.
  */
-export function hatsyRenderHtml(html: string | PromiseLike<string>): HatsyHandler {
-  return async ({ response }: HatsyRequestContext): Promise<void> => {
+export function renderHtml(html: string | PromiseLike<string>): HTTPHandler {
+  return async ({ response }: HatsyContext<HTTPMatters>): Promise<void> => {
 
     const content = await html;
 

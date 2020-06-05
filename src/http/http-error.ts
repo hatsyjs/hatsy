@@ -5,13 +5,13 @@
 /**
  * A error corresponding to the given HTTP status code.
  *
- * {@link HatsyHandler HTTP handlers} may raise this error. The {@link hatsyRenderError} handler would render
+ * {@link HatsyHandler HTTP handlers} may raise this error. The {@link renderHTTPError} handler would render
  * corresponding error page then.
  *
- * @category Core
- * @see {@link HatsyConfig.ignoreErrors}
+ * @category HTTP
+ * @see {@link HTTPConfig.errorHandler}
  */
-export class HatsyHttpError extends Error {
+export class HTTPError extends Error {
 
   /**
    * Constructs HTTP status error.

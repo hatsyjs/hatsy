@@ -1,10 +1,11 @@
-import { HatsyRequestContext } from './handler';
-import { HatsyErrorContext } from './handlers';
-import { HatsyHttpError } from './http-error';
-import { hatsyListener } from './listener';
-import { readAll, suppressedLog, testServer, TestServer } from './spec';
+import { HatsyContext } from '../context';
+import { ErrorMatters } from '../errors';
+import { readAll, suppressedLog, testServer, TestServer } from '../spec';
+import { HTTPError } from './http-error';
+import { httpListener } from './http-listener';
+import { HTTPMatters } from './http-matters';
 
-describe('hatsyListener', () => {
+describe('hatsyHTTPListener', () => {
 
   let server: TestServer;
 
@@ -21,11 +22,11 @@ describe('hatsyListener', () => {
 
   it('invokes handler', async () => {
 
-    const handler = jest.fn(({ response }: HatsyRequestContext) => {
+    const handler = jest.fn(({ response }: HatsyContext<HTTPMatters>) => {
       response.end('TEST');
     });
 
-    server.listener.mockImplementation(hatsyListener(handler));
+    server.listener.mockImplementation(httpListener(handler));
 
     const response = await server.get('/test');
 
@@ -35,7 +36,7 @@ describe('hatsyListener', () => {
     }));
   });
   it('responds with `404` status when handler not responding', async () => {
-    server.listener.mockImplementation(hatsyListener(() => {/* do not respond */}, { log: suppressedLog() }));
+    server.listener.mockImplementation(httpListener(() => {/* do not respond */}, { log: suppressedLog() }));
 
     const response = await server.get('/');
 
@@ -45,7 +46,7 @@ describe('hatsyListener', () => {
   });
   it('does not respond when handler not responding ad no default handler', async () => {
 
-    const listener = hatsyListener(() => {/* do not respond */}, { defaultHandler: false });
+    const listener = httpListener(() => {/* do not respond */}, { defaultHandler: false });
 
     server.listener.mockImplementation((request, response) => {
       listener(request, response);
@@ -62,7 +63,7 @@ describe('hatsyListener', () => {
 
     const error = new Error('test');
 
-    server.listener.mockImplementation(hatsyListener(() => { throw error; }, { log: suppressedLog() }));
+    server.listener.mockImplementation(httpListener(() => { throw error; }, { log: suppressedLog() }));
 
     const response = await server.get('/test');
 
@@ -72,9 +73,9 @@ describe('hatsyListener', () => {
   });
   it('responds with error status when handler throws error', async () => {
 
-    const error = new HatsyHttpError(403);
+    const error = new HTTPError(403);
 
-    server.listener.mockImplementation(hatsyListener(() => { throw error; }, { log: suppressedLog() }));
+    server.listener.mockImplementation(httpListener(() => { throw error; }, { log: suppressedLog() }));
 
     const response = await server.get('/test');
 
@@ -84,11 +85,11 @@ describe('hatsyListener', () => {
   });
   it('invokes provided default handler when handler not responding', async () => {
 
-    const defaultHandler = jest.fn(({ response }: HatsyRequestContext) => {
+    const defaultHandler = jest.fn(({ response }: HatsyContext<HTTPMatters>) => {
       response.end('DEFAULT');
     });
 
-    server.listener.mockImplementation(hatsyListener(
+    server.listener.mockImplementation(httpListener(
         () => {/* do not respond */},
         { log: suppressedLog(), defaultHandler },
     ));
@@ -105,11 +106,11 @@ describe('hatsyListener', () => {
     const error = new Error('test');
     const log = suppressedLog();
     const logErrorSpy = jest.spyOn(log, 'error');
-    const errorHandler = jest.fn(({ response, error }: HatsyErrorContext) => {
+    const errorHandler = jest.fn(({ response, error }: HatsyContext<ErrorMatters & HTTPMatters>) => {
       response.end(`ERROR ${error.message}`);
     });
 
-    server.listener.mockImplementation(hatsyListener(() => { throw error; }, { log, errorHandler }));
+    server.listener.mockImplementation(httpListener(() => { throw error; }, { log, errorHandler }));
 
     const response = await server.get('/test');
 
@@ -122,14 +123,14 @@ describe('hatsyListener', () => {
   });
   it('logs HTTP error and invokes provided error handler', async () => {
 
-    const error = new HatsyHttpError(404, 'Never Found');
+    const error = new HTTPError(404, 'Never Found');
     const log = suppressedLog();
     const logErrorSpy = jest.spyOn(log, 'error');
-    const errorHandler = jest.fn(({ response, error }: HatsyErrorContext) => {
+    const errorHandler = jest.fn(({ response, error }: HatsyContext<ErrorMatters & HTTPMatters>) => {
       response.end(`ERROR ${error.message}`);
     });
 
-    server.listener.mockImplementation(hatsyListener(() => { throw error; }, { log, errorHandler }));
+    server.listener.mockImplementation(httpListener(() => { throw error; }, { log, errorHandler }));
 
     const response = await server.get('/test');
 
@@ -146,7 +147,7 @@ describe('hatsyListener', () => {
     const log = suppressedLog();
     const logErrorSpy = jest.spyOn(log, 'error');
 
-    server.listener.mockImplementation(hatsyListener(() => { throw error; }, { log, errorHandler: false }));
+    server.listener.mockImplementation(httpListener(() => { throw error; }, { log, errorHandler: false }));
 
     const response = await server.get('/test');
 
@@ -158,7 +159,7 @@ describe('hatsyListener', () => {
     const error = new Error('test');
     const log = suppressedLog();
     const logErrorSpy = jest.spyOn(log, 'error');
-    const listener = hatsyListener(
+    const listener = httpListener(
         () => { throw error; },
         { log, defaultHandler: false, errorHandler: false },
     );
@@ -185,7 +186,7 @@ describe('hatsyListener', () => {
       throw error;
     });
 
-    const listener = hatsyListener(
+    const listener = httpListener(
         () => { throw error; },
         { log, errorHandler },
     );

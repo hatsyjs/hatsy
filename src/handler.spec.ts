@@ -1,9 +1,10 @@
 import { ServerResponse } from 'http';
-import { hatsyHandler, HatsyHandler, HatsyRequestContext } from './handler';
+import { HatsyContext } from './context';
+import { hatsyHandler, HatsyHandler } from './handler';
 
 describe('hatsyHandler', () => {
 
-  let context: HatsyRequestContext;
+  let context: HatsyContext<object>;
   let response: ServerResponse;
 
   beforeEach(() => {
@@ -12,16 +13,16 @@ describe('hatsyHandler', () => {
     } as ServerResponse;
     context = {
       response,
-      next: async (handler: HatsyHandler) => {
+      next: async (handler: HatsyHandler<any>) => {
         await handler(context);
         return response.writableEnded;
       },
-    } as unknown as HatsyRequestContext;
+    } as HatsyContext<object>;
   });
 
   it('returns the only handler', () => {
 
-    const handler: HatsyHandler = () => {/* handler */};
+    const handler: HatsyHandler<any> = () => {/* handler */};
 
     expect(hatsyHandler(handler)).toBe(handler);
   });
