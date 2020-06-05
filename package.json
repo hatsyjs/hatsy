@@ -29,10 +29,11 @@
     "hatsy": "dist/hatsy.cli.js"
   },
   "dependencies": {
+    "@hatsy/route-match": "^1.0.0-dev.0",
     "send": "^0.17.1"
   },
   "engines": {
-    "node": ">=12.16"
+    "node": ">=12"
   },
   "devDependencies": {
     "@proc7ts/eslint-config": "^2.0.0",
