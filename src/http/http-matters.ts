@@ -11,18 +11,23 @@ import { IncomingMessage, ServerResponse } from 'http';
  * or delegates to {@link HatsyContext.Agent.next next handler}.
  *
  * @category HTTP
+ * @typeparam TRequest  HTTP request type.
+ * @typeparam TResponse  HTTP response type.
  */
-export interface HTTPMatters {
+export interface HTTPMatters<
+    TRequest extends IncomingMessage = IncomingMessage,
+    TResponse extends ServerResponse = ServerResponse,
+    > {
 
   /**
    * HTTP request.
    */
-  readonly request: IncomingMessage;
+  readonly request: TRequest;
 
   /**
    * HTTP response.
    */
-  readonly response: ServerResponse;
+  readonly response: TResponse;
 
   /**
    * A logger to use.

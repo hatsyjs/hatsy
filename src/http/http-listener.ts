@@ -2,7 +2,7 @@
  * @packageDocumentation
  * @module @hatsy/hatsy
  */
-import { IncomingMessage, RequestListener, ServerResponse } from 'http';
+import { IncomingMessage, ServerResponse } from 'http';
 import { HatsyContext } from '../context';
 import { ErrorHandler, ErrorMatters } from '../errors';
 import { hatsyHandler, HatsyHandler } from '../handler';
@@ -15,8 +15,13 @@ import { HTTPMatters } from './http-matters';
  * HTTP processing configuration.
  *
  * @category HTTP
+ * @typeparam TRequest  A type of supported HTTP request.
+ * @typeparam TResponse  A type of supported HTTP response.
  */
-export interface HTTPConfig {
+export interface HTTPConfig<
+    TRequest extends IncomingMessage = IncomingMessage,
+    TResponse extends ServerResponse = ServerResponse,
+    > {
 
   /**
    * A {@link HTTPMatters.log logger} to use.
@@ -34,7 +39,7 @@ export interface HTTPConfig {
    *
    * @default `true`, which means a `404 Not Found` error will be raised if there is no response.
    */
-  defaultHandler?: HTTPHandler | boolean;
+  defaultHandler?: HTTPHandler<TRequest, TResponse> | boolean;
 
   /**
    * Error processing handler.
@@ -47,7 +52,7 @@ export interface HTTPConfig {
    * @default `true`, which means the request processing error page will be rendered by {@link renderHTTPError}
    * handler.
    */
-  errorHandler?: ErrorHandler<HTTPMatters> | boolean;
+  errorHandler?: ErrorHandler<HTTPMatters<TRequest, TResponse>> | boolean;
 
 }
 
@@ -55,6 +60,8 @@ export interface HTTPConfig {
  * Creates Node.js HTTP request listener by Hatsy HTTP handler(s).
  *
  * @category HTTP
+ * @typeparam TRequest  A type of supported HTTP request.
+ * @typeparam TResponse  A type of supported HTTP response.
  * @param handlers  Either single HTTP request handler or iterable of HTTP request handlers to delegate request
  * processing to.
  * @param config  HTTP processing configuration.
@@ -63,17 +70,19 @@ export interface HTTPConfig {
  *
  * @see {@link hatsyHandler}
  */
-export function httpListener(
-    handlers: HTTPHandler | Iterable<HTTPHandler>,
-    config: HTTPConfig = {},
-): RequestListener {
+export function httpListener<TRequest extends IncomingMessage, TResponse extends ServerResponse>(
+    handlers: HTTPHandler<TRequest, TResponse> | Iterable<HTTPHandler<TRequest, TResponse>>,
+    config: HTTPConfig<TRequest, TResponse> = {},
+): (this: void, req: TRequest, res: TResponse) => void {
 
   const { log = console } = config;
   const handler = hatsyHandler(handlers);
   const defaultHandler = defaultHTTPHandler(config);
   const errorHandler = httpErrorHandler(config);
 
-  const fullHandler: HTTPHandler = async ({ next }: HatsyContext<HTTPMatters>): Promise<void> => {
+  const fullHandler: HTTPHandler<TRequest, TResponse> = async (
+      { next }: HatsyContext<HTTPMatters<TRequest, TResponse>>,
+  ): Promise<void> => {
     try {
       if (!await next(handler)) {
         await next(defaultHandler);
@@ -83,7 +92,7 @@ export function httpListener(
     }
   };
 
-  return (request: IncomingMessage, response: ServerResponse): void => {
+  return (request: TRequest, response: TResponse): void => {
     toHTTPContext({
       request,
       response,
@@ -97,20 +106,26 @@ export function httpListener(
 /**
  * @internal
  */
-function toHTTPContext<TMatters extends HTTPMatters>(draft: Omit<TMatters, 'next'>): HatsyContext<TMatters> {
+function toHTTPContext<
+    TRequest extends IncomingMessage,
+    TResponse extends ServerResponse,
+    TMatters extends HTTPMatters<TRequest, TResponse>,
+>(
+    matters: TMatters,
+): HatsyContext<TMatters> {
 
-  const context = draft as HatsyContext<TMatters>;
+  const context = matters as HatsyContext<TMatters>;
 
   context.next = async <TExt>(
       handler: HatsyHandler<TMatters & TExt>,
-      extensions?: HatsyContext.Extensions<TMatters, TExt>,
+      extensions?: HatsyContext.Extensions<HTTPMatters<TRequest, TResponse>, TExt>,
   ): Promise<boolean> => {
 
     await handler(extensions
-        ? toHTTPContext<TMatters & TExt>({ ...draft, ...extensions } as TMatters & TExt)
+        ? toHTTPContext({ ...matters, ...extensions } as TMatters & TExt)
         : context as HatsyContext<TMatters & TExt>);
 
-    return draft.response.writableEnded;
+    return matters.response.writableEnded;
   };
 
   return context;
@@ -119,7 +134,11 @@ function toHTTPContext<TMatters extends HTTPMatters>(draft: Omit<TMatters, 'next
 /**
  * @internal
  */
-function defaultHTTPHandler({ defaultHandler = true }: HTTPConfig): HTTPHandler {
+function defaultHTTPHandler<TRequest extends IncomingMessage, TResponse extends ServerResponse>(
+    {
+      defaultHandler = true,
+    }: HTTPConfig<TRequest, TResponse>,
+): HTTPHandler<TRequest, TResponse> {
   if (!defaultHandler) {
     return () => {/* no default handler */};
   }
@@ -131,12 +150,12 @@ function defaultHTTPHandler({ defaultHandler = true }: HTTPConfig): HTTPHandler 
 /**
  * @internal
  */
-function httpErrorHandler(
+function httpErrorHandler<TRequest extends IncomingMessage, TResponse extends ServerResponse>(
     {
       defaultHandler = true,
       errorHandler = true,
-    }: HTTPConfig,
-): ErrorHandler<HTTPMatters> {
+    }: HTTPConfig<TRequest, TResponse>,
+): ErrorHandler<HTTPMatters<TRequest, TResponse>> {
   if (!errorHandler) {
     return defaultHandler ? renderEmptyHTTPError : logHTTPError;
   }
@@ -152,7 +171,9 @@ function httpErrorHandler(
 /**
  * @internal
  */
-function logHTTPError({ request, log, error }: HatsyContext<HTTPMatters & ErrorMatters>): void {
+function logHTTPError<TRequest extends IncomingMessage, TResponse extends ServerResponse>(
+    { request, log, error }: HatsyContext<HTTPMatters<TRequest, TResponse> & ErrorMatters>,
+): void {
   if (error instanceof HTTPError) {
     log.error(`[${request.method} ${request.url}]`, `ERROR ${error.message}`);
   } else {
