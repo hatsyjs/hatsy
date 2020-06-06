@@ -1,3 +1,7 @@
+/**
+ * @packageDocumentation
+ * @module @hatsy/hatsy
+ */
 import { HthvItem, hthvParse } from '@hatsy/http-header-value';
 import { IncomingMessage } from 'http';
 
@@ -34,7 +38,7 @@ export interface ProxyForwardingTrustPolicy {
  * @returns Parsed HTTP header value item corresponding to trusted record in `Forwarded` header value, or `undefined`
  * when either `Forwarded` header is missing, or does not contain trusted records.
  */
-export function trustedForwarded(
+export function trustedForward(
     request: IncomingMessage,
     policy: ProxyForwardingTrustPolicy = {},
 ): HthvItem | undefined {

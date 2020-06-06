@@ -1,3 +1,7 @@
+/**
+ * @packageDocumentation
+ * @module @hatsy/hatsy
+ */
 import { PathRoute, RouteCaptor, routeMatch, RouteMatcher, RoutePattern, routeTail } from '@hatsy/route-match';
 import { RequestContext } from '../request-context';
 import { RequestHandler } from '../request-handler';

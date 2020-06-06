@@ -1,3 +1,7 @@
+/**
+ * @packageDocumentation
+ * @module @hatsy/hatsy
+ */
 import { urlRoute, URLRoute } from '@hatsy/route-match';
 import { noop } from '@proc7ts/primitives';
 import { HttpMatters } from '../http';
