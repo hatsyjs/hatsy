@@ -1,11 +1,11 @@
 import { PathRoute } from '@hatsy/route-match';
-import { HatsyHandler } from '../handler';
+import { RequestHandler } from '../request-handler';
 import { RoutingMatters } from './routing-matters';
 
 /**
  * Request route handler signature.
  *
- * Accepts a {@link HatsyContext request processing context} containing {@link RoutingMatters request routing matters}
+ * Accepts a {@link RequestContext request processing context} containing {@link RoutingMatters request routing matters}
  * used to respond or to delegate to another handler.
  *
  * @category Router
@@ -18,4 +18,4 @@ export type RouteHandler<
     TMatters,
     TEntry extends PathRoute.Entry = PathRoute.Entry,
     TRoute extends PathRoute<TEntry> = PathRoute<TEntry>> =
-    HatsyHandler<RoutingMatters<TEntry, TRoute> & TMatters>;
+    RequestHandler<RoutingMatters<TEntry, TRoute> & TMatters>;

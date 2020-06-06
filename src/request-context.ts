@@ -2,27 +2,27 @@
  * @packageDocumentation
  * @module @hatsy/hatsy
  */
-import { HatsyHandler } from './handler';
+import { RequestHandler } from './request-handler';
 
 /**
  * Request processing context.
  *
- * It is passed to {@link HatsyHandler request processing handler}. It contains request processing matters the handler
- * needs. The latter can either respond, or delegate processing to {@link HatsyContext.Agent.next next handler}.
+ * It is passed to {@link RequestHandler request processing handler}. It contains request processing matters the handler
+ * needs. The latter can either respond, or delegate processing to {@link RequestContext.Agent.next next handler}.
  *
- * The context instance is immutable. The matters it contain can be {@link HatsyContext.Modifications modified} or even
- * {@link HatsyContext.Extensions extended} when delegating request processing to the
- * {@link HatsyContext.Agent.next next handler} by creating another context based on original one.
+ * The context instance is immutable. The matters it contain can be {@link RequestContext.Modifications modified}
+ * or even {@link RequestContext.Extensions extended} when delegating request processing to the
+ * {@link RequestContext.Agent.next next handler} by creating another context based on original one.
  *
  * @category Core
  * @typeparam TMatters  Request processing matters of this context.
  */
-export type HatsyContext<TMatters> = TMatters & HatsyContext.Agent<TMatters>;
+export type RequestContext<TMatters> = TMatters & RequestContext.Agent<TMatters>;
 
-export namespace HatsyContext {
+export namespace RequestContext {
 
   /**
-   * Modifications to {@link HatsyContext request processing matters}.
+   * Modifications to {@link RequestContext request processing matters}.
    *
    * The properties listed here replace the original ones.
    *
@@ -31,7 +31,7 @@ export namespace HatsyContext {
   export type Modifications<TMatters> = Partial<TMatters>;
 
   /**
-   * Extensions of {@link HatsyContext request processing matters}.
+   * Extensions of {@link RequestContext request processing matters}.
    *
    * The properties listed here either replace the original ones, or added to new context.
    *
@@ -45,8 +45,8 @@ export namespace HatsyContext {
   /**
    * Request processing agent interface.
    *
-   * It is extended by {@link HatsyContext request processing context} in order the {@link HatsyHandler handlers} to be
-   * able to {@link next delegate processing} to other handlers.
+   * It is extended by {@link RequestContext request processing context} in order the {@link RequestHandler handlers}
+   * to be able to {@link next delegate processing} to other handlers.
    *
    * @typeparam TMatters A type of request processing matters.
    */
@@ -65,8 +65,8 @@ export namespace HatsyContext {
      */
     next(
         this: void,
-        handler: HatsyHandler<TMatters>,
-        modifications?: HatsyContext.Modifications<TMatters>,
+        handler: RequestHandler<TMatters>,
+        modifications?: RequestContext.Modifications<TMatters>,
     ): Promise<boolean>;
 
     /**
@@ -82,8 +82,8 @@ export namespace HatsyContext {
      */
     next<TExt>(
         this: void,
-        handler: HatsyHandler<TMatters & TExt>,
-        extensions: HatsyContext.Extensions<TMatters, TExt>,
+        handler: RequestHandler<TMatters & TExt>,
+        extensions: RequestContext.Extensions<TMatters, TExt>,
     ): Promise<boolean>;
 
   }

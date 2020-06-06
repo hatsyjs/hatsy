@@ -3,13 +3,13 @@
  * @module @hatsy/hatsy
  */
 import { IncomingMessage, ServerResponse } from 'http';
-import { HatsyHandler } from '../handler';
+import { RequestHandler } from '../request-handler';
 import { HTTPMatters } from './http-matters';
 
 /**
  * HTTP request handler signature.
  *
- * HTTP request handler is called once per request. It accepts a {@link HatsyContext request processing context}
+ * HTTP request handler is called once per request. It accepts a {@link RequestContext request processing context}
  * containing {@link HTTPMatters HTTP request processing matters} used to respond or to delegate to another handler.
  *
  * @category HTTP
@@ -22,4 +22,4 @@ export type HTTPHandler<
     TRequest extends IncomingMessage = IncomingMessage,
     TResponse extends ServerResponse = ServerResponse,
     TMatters = object,
-> = HatsyHandler<HTTPMatters<TRequest, TResponse> & TMatters>;
+> = RequestHandler<HTTPMatters<TRequest, TResponse> & TMatters>;

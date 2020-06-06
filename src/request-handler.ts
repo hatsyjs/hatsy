@@ -2,21 +2,21 @@
  * @packageDocumentation
  * @module @hatsy/hatsy
  */
-import { HatsyContext } from './context';
+import { RequestContext } from './request-context';
 
 /**
  * Request processing handler signature.
  *
  * Handler implementations expect a request processing context containing specific processing matters.
  * E.g. the ones for {@link HTTPMatters HTTP request processing}. The handler may either respond using the provided
- * matters, or delegate to {@link HatsyContext.Agent.next next handler}.
+ * matters, or delegate to {@link RequestContext.Agent.next next handler}.
  *
  * The handler may be asynchronous.
  *
  * @category Core
  * @typeparam TMatter  A type of request processing matters this handler expects.
  */
-export type HatsyHandler<TMatters> =
+export type RequestHandler<TMatters> =
 /**
  * @param context  Request processing context containing processing matters.
  *
@@ -25,7 +25,7 @@ export type HatsyHandler<TMatters> =
  */
     (
         this: void,
-        context: HatsyContext<TMatters>,
+        context: RequestContext<TMatters>,
     ) => PromiseLike<void> | void;
 
 /**
@@ -40,13 +40,13 @@ export type HatsyHandler<TMatters> =
  *
  * @returns Request processing handler.
  */
-export function hatsyHandler<TMatters>(
-    handlers: HatsyHandler<TMatters> | Iterable<HatsyHandler<TMatters>>,
-): HatsyHandler<TMatters> {
+export function requestHandler<TMatters>(
+    handlers: RequestHandler<TMatters> | Iterable<RequestHandler<TMatters>>,
+): RequestHandler<TMatters> {
   if (typeof handlers === 'function') {
     return handlers;
   }
-  return async (context: HatsyContext<TMatters>): Promise<void> => {
+  return async (context: RequestContext<TMatters>): Promise<void> => {
     for (const handler of handlers) {
       if (await context.next(handler)) {
         return;

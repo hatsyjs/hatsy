@@ -2,8 +2,8 @@
  * @packageDocumentation
  * @module @hatsy/hatsy
  */
-import { HatsyContext } from '../../context';
 import { ErrorMatters } from '../../errors';
+import { RequestContext } from '../../request-context';
 import { HTTPError } from '../http-error';
 import { HTTPMatters } from '../http-matters';
 import { renderHtml } from './render-html';
@@ -18,7 +18,7 @@ import { renderHtml } from './render-html';
  *
  * @returns New HTTP request handler.
  */
-export async function renderHTTPError(context: HatsyContext<HTTPMatters & ErrorMatters>): Promise<void> {
+export async function renderHTTPError(context: RequestContext<HTTPMatters & ErrorMatters>): Promise<void> {
 
   const { error, response, next } = context;
 

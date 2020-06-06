@@ -1,10 +1,10 @@
 import { ServerResponse } from 'http';
-import { HatsyContext } from './context';
-import { hatsyHandler, HatsyHandler } from './handler';
+import { RequestContext } from './request-context';
+import { requestHandler, RequestHandler } from './request-handler';
 
-describe('hatsyHandler', () => {
+describe('requestHandler', () => {
 
-  let context: HatsyContext<object>;
+  let context: RequestContext<object>;
   let response: ServerResponse;
 
   beforeEach(() => {
@@ -13,24 +13,24 @@ describe('hatsyHandler', () => {
     } as ServerResponse;
     context = {
       response,
-      next: async (handler: HatsyHandler<any>) => {
+      next: async (handler: RequestHandler<any>) => {
         await handler(context);
         return response.writableEnded;
       },
-    } as HatsyContext<object>;
+    } as RequestContext<object>;
   });
 
   it('returns the only handler', () => {
 
-    const handler: HatsyHandler<any> = () => {/* handler */};
+    const handler: RequestHandler<any> = () => {/* handler */};
 
-    expect(hatsyHandler(handler)).toBe(handler);
+    expect(requestHandler(handler)).toBe(handler);
   });
   it('executes handlers in order', async () => {
 
     const calls: number[] = [];
 
-    await hatsyHandler([
+    await requestHandler([
       () => { calls.push(1); },
       () => { calls.push(2); },
       () => { calls.push(3); },
@@ -43,7 +43,7 @@ describe('hatsyHandler', () => {
     const error = new Error('test');
     const calls: number[] = [];
 
-    const call = async (): Promise<void> => await hatsyHandler([
+    const call = async (): Promise<void> => await requestHandler([
       () => { calls.push(1); },
       () => { calls.push(2); throw error; },
       () => { calls.push(3); },
@@ -56,7 +56,7 @@ describe('hatsyHandler', () => {
 
     const calls: number[] = [];
 
-    const call = async (): Promise<void> => await hatsyHandler([
+    const call = async (): Promise<void> => await requestHandler([
       () => { calls.push(1); },
       () => { calls.push(2); (response as any).writableEnded = true; },
       () => { calls.push(3); },

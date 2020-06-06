@@ -2,7 +2,7 @@
  * @packageDocumentation
  * @module @hatsy/hatsy
  */
-import { HatsyHandler } from './handler';
+import { RequestHandler } from './request-handler';
 
 /**
  * Error processing matters.
@@ -24,11 +24,11 @@ export interface ErrorMatters {
 /**
  * Error processing handler.
  *
- * Accepts a {@link HatsyContext request processing context} containing {@link ErrorMatters error processing matters}
+ * Accepts a {@link RequestContext request processing context} containing {@link ErrorMatters error processing matters}
  * used to respond or delegate to another handler.
  *
  * @category Core
  * @typeparam TMatters  A type of request processing matters required in addition to {@link ErrorMatters error
  * processing} ones.
  */
-export type ErrorHandler<TMatters = object> = HatsyHandler<ErrorMatters & TMatters>;
+export type ErrorHandler<TMatters = object> = RequestHandler<ErrorMatters & TMatters>;

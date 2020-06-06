@@ -1,11 +1,11 @@
-import { HatsyContext } from '../context';
 import { ErrorMatters } from '../errors';
+import { RequestContext } from '../request-context';
 import { readAll, suppressedLog, testServer, TestServer } from '../spec';
 import { HTTPError } from './http-error';
 import { httpListener } from './http-listener';
 import { HTTPMatters } from './http-matters';
 
-describe('hatsyHTTPListener', () => {
+describe('httpListener', () => {
 
   let server: TestServer;
 
@@ -22,7 +22,7 @@ describe('hatsyHTTPListener', () => {
 
   it('invokes handler', async () => {
 
-    const handler = jest.fn(({ response }: HatsyContext<HTTPMatters>) => {
+    const handler = jest.fn(({ response }: RequestContext<HTTPMatters>) => {
       response.end('TEST');
     });
 
@@ -85,7 +85,7 @@ describe('hatsyHTTPListener', () => {
   });
   it('invokes provided default handler when handler not responding', async () => {
 
-    const defaultHandler = jest.fn(({ response }: HatsyContext<HTTPMatters>) => {
+    const defaultHandler = jest.fn(({ response }: RequestContext<HTTPMatters>) => {
       response.end('DEFAULT');
     });
 
@@ -106,7 +106,7 @@ describe('hatsyHTTPListener', () => {
     const error = new Error('test');
     const log = suppressedLog();
     const logErrorSpy = jest.spyOn(log, 'error');
-    const errorHandler = jest.fn(({ response, error }: HatsyContext<ErrorMatters & HTTPMatters>) => {
+    const errorHandler = jest.fn(({ response, error }: RequestContext<ErrorMatters & HTTPMatters>) => {
       response.end(`ERROR ${error.message}`);
     });
 
@@ -126,7 +126,7 @@ describe('hatsyHTTPListener', () => {
     const error = new HTTPError(404, 'Never Found');
     const log = suppressedLog();
     const logErrorSpy = jest.spyOn(log, 'error');
-    const errorHandler = jest.fn(({ response, error }: HatsyContext<ErrorMatters & HTTPMatters>) => {
+    const errorHandler = jest.fn(({ response, error }: RequestContext<ErrorMatters & HTTPMatters>) => {
       response.end(`ERROR ${error.message}`);
     });
 

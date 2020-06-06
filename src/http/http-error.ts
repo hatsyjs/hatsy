@@ -5,7 +5,7 @@
 /**
  * A error corresponding to the given HTTP status code.
  *
- * {@link HatsyHandler HTTP handlers} may raise this error. The {@link renderHTTPError} handler would render
+ * {@link RequestHandler HTTP handlers} may raise this error. The {@link renderHTTPError} handler would render
  * corresponding error page then.
  *
  * @category HTTP
