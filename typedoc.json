@@ -1,6 +1,7 @@
 {
   "categorizeByGroup": true,
-  "categoryOrder": ["Core", "Routing", "*"],
+  "categoryOrder": ["Core", "HTTP", "Router", "*"],
+  "disableAutoModuleName": true,
   "exclude": [
     "**/index.ts",
     "**/cli/**/*.ts",
