@@ -15,13 +15,9 @@ import { HttpMatters } from './http-matters';
  * HTTP processing configuration.
  *
  * @category HTTP
- * @typeparam TRequest  A type of supported HTTP request.
- * @typeparam TResponse  A type of supported HTTP response.
+ * @typeparam TMatters  A type of supported HTTP request processing matters.
  */
-export interface HttpConfig<
-    TRequest extends IncomingMessage = IncomingMessage,
-    TResponse extends ServerResponse = ServerResponse,
-    > {
+export interface HttpConfig<TMatters extends HttpMatters = HttpMatters> {
 
   /**
    * A {@link HttpMatters.log logger} to use.
@@ -39,7 +35,7 @@ export interface HttpConfig<
    *
    * @default `true`, which means a `404 Not Found` error will be raised if there is no response.
    */
-  defaultHandler?: HttpHandler<TRequest, TResponse> | boolean;
+  defaultHandler?: HttpHandler<TMatters> | boolean;
 
   /**
    * Error processing handler.
@@ -52,7 +48,7 @@ export interface HttpConfig<
    * @default `true`, which means the request processing error page will be rendered by {@link renderHttpError}
    * handler.
    */
-  errorHandler?: ErrorHandler<HttpMatters<TRequest, TResponse>> | boolean;
+  errorHandler?: ErrorHandler<TMatters> | boolean;
 
 }
 
@@ -71,8 +67,8 @@ export interface HttpConfig<
  * @see {@link hatsyHandler}
  */
 export function httpListener<TRequest extends IncomingMessage, TResponse extends ServerResponse>(
-    handlers: HttpHandler<TRequest, TResponse> | Iterable<HttpHandler<TRequest, TResponse>>,
-    config: HttpConfig<TRequest, TResponse> = {},
+    handlers: HttpHandler<HttpMatters<TRequest, TResponse>> | Iterable<HttpHandler<HttpMatters<TRequest, TResponse>>>,
+    config: HttpConfig<HttpMatters<TRequest, TResponse>> = {},
 ): (this: void, req: TRequest, res: TResponse) => void {
 
   const { log = console } = config;
@@ -80,7 +76,7 @@ export function httpListener<TRequest extends IncomingMessage, TResponse extends
   const defaultHandler = defaultHttpHandler(config);
   const errorHandler = httpErrorHandler(config);
 
-  const fullHandler: HttpHandler<TRequest, TResponse> = async (
+  const fullHandler: HttpHandler<HttpMatters<TRequest, TResponse>> = async (
       { next }: RequestContext<HttpMatters<TRequest, TResponse>>,
   ): Promise<void> => {
     try {
@@ -134,11 +130,11 @@ function toHttpContext<
 /**
  * @internal
  */
-function defaultHttpHandler<TRequest extends IncomingMessage, TResponse extends ServerResponse>(
+function defaultHttpHandler<TMatters extends HttpMatters>(
     {
       defaultHandler = true,
-    }: HttpConfig<TRequest, TResponse>,
-): HttpHandler<TRequest, TResponse> {
+    }: HttpConfig<TMatters>,
+): HttpHandler<TMatters> {
   if (!defaultHandler) {
     return () => {/* no default handler */};
   }
@@ -150,12 +146,12 @@ function defaultHttpHandler<TRequest extends IncomingMessage, TResponse extends 
 /**
  * @internal
  */
-function httpErrorHandler<TRequest extends IncomingMessage, TResponse extends ServerResponse>(
+function httpErrorHandler<TMatters extends HttpMatters>(
     {
       defaultHandler = true,
       errorHandler = true,
-    }: HttpConfig<TRequest, TResponse>,
-): ErrorHandler<HttpMatters<TRequest, TResponse>> {
+    }: HttpConfig<TMatters>,
+): ErrorHandler<TMatters> {
   if (!errorHandler) {
     return defaultHandler ? renderEmptyHttpError : logHttpError;
   }
@@ -171,8 +167,8 @@ function httpErrorHandler<TRequest extends IncomingMessage, TResponse extends Se
 /**
  * @internal
  */
-function logHttpError<TRequest extends IncomingMessage, TResponse extends ServerResponse>(
-    { request, log, error }: RequestContext<HttpMatters<TRequest, TResponse> & ErrorMatters>,
+function logHttpError(
+    { request, log, error }: RequestContext<HttpMatters & ErrorMatters>,
 ): void {
   if (error instanceof HttpError) {
     log.error(`[${request.method} ${request.url}]`, `ERROR ${error.message}`);
