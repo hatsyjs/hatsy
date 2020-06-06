@@ -1,2 +1,2 @@
 export * from './route-handler';
-export * from './routing-matters';
+export * from './route-matters';
