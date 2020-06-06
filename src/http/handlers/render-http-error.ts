@@ -4,25 +4,25 @@
  */
 import { ErrorMatters } from '../../errors';
 import { RequestContext } from '../../request-context';
-import { HTTPError } from '../http-error';
-import { HTTPMatters } from '../http-matters';
+import { HttpError } from '../http-error';
+import { HttpMatters } from '../http-matters';
 import { renderHtml } from './render-html';
 
 /**
  * HTTP request processing error handler that renders HTML page with error info.
  *
- * Threats {@link HTTPError HTTP status error} as HTTP status code to set for error page.
+ * Threats {@link HttpError HTTP status error} as HTTP status code to set for error page.
  *
  * @category HTTP
  * @param context  HTTP error processing context.
  *
  * @returns New HTTP request handler.
  */
-export async function renderHTTPError(context: RequestContext<HTTPMatters & ErrorMatters>): Promise<void> {
+export async function renderHttpError(context: RequestContext<HttpMatters & ErrorMatters>): Promise<void> {
 
   const { error, response, next } = context;
 
-  if (error instanceof HTTPError) {
+  if (error instanceof HttpError) {
     response.statusCode = error.statusCode;
     if (error.statusMessage) {
       response.statusMessage = error.statusMessage;

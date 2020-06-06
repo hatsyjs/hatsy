@@ -1,6 +1,6 @@
 import { readAll, testServer, TestServer } from '../../spec';
 import { httpListener } from '../http-listener';
-import { renderJSON } from './render-json';
+import { renderJson } from './render-json';
 
 describe('renderJSON', () => {
 
@@ -17,7 +17,7 @@ describe('renderJSON', () => {
 
     const json = { name: 'test response' };
 
-    server.listener.mockImplementation(httpListener(renderJSON(json)));
+    server.listener.mockImplementation(httpListener(renderJson(json)));
 
     const response = await server.get('/');
 

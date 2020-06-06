@@ -8,7 +8,7 @@ import { RequestContext } from './request-context';
  * Request processing handler signature.
  *
  * Handler implementations expect a request processing context containing specific processing matters.
- * E.g. the ones for {@link HTTPMatters HTTP request processing}. The handler may either respond using the provided
+ * E.g. the ones for {@link HttpMatters HTTP request processing}. The handler may either respond using the provided
  * matters, or delegate to {@link RequestContext.Agent.next next handler}.
  *
  * The handler may be asynchronous.

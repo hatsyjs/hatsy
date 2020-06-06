@@ -5,13 +5,13 @@
 /**
  * A error corresponding to the given HTTP status code.
  *
- * {@link RequestHandler HTTP handlers} may raise this error. The {@link renderHTTPError} handler would render
+ * {@link HttpHandler HTTP handlers} may raise this error. The {@link renderHttpError} handler would render
  * corresponding error page then.
  *
  * @category HTTP
- * @see {@link HTTPConfig.errorHandler}
+ * @see {@link HttpConfig.errorHandler}
  */
-export class HTTPError extends Error {
+export class HttpError extends Error {
 
   /**
    * Constructs HTTP status error.

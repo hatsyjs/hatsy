@@ -1,9 +1,9 @@
 import { ErrorMatters } from '../errors';
 import { RequestContext } from '../request-context';
 import { readAll, suppressedLog, testServer, TestServer } from '../spec';
-import { HTTPError } from './http-error';
+import { HttpError } from './http-error';
 import { httpListener } from './http-listener';
-import { HTTPMatters } from './http-matters';
+import { HttpMatters } from './http-matters';
 
 describe('httpListener', () => {
 
@@ -22,7 +22,7 @@ describe('httpListener', () => {
 
   it('invokes handler', async () => {
 
-    const handler = jest.fn(({ response }: RequestContext<HTTPMatters>) => {
+    const handler = jest.fn(({ response }: RequestContext<HttpMatters>) => {
       response.end('TEST');
     });
 
@@ -73,7 +73,7 @@ describe('httpListener', () => {
   });
   it('responds with error status when handler throws error', async () => {
 
-    const error = new HTTPError(403);
+    const error = new HttpError(403);
 
     server.listener.mockImplementation(httpListener(() => { throw error; }, { log: suppressedLog() }));
 
@@ -85,7 +85,7 @@ describe('httpListener', () => {
   });
   it('invokes provided default handler when handler not responding', async () => {
 
-    const defaultHandler = jest.fn(({ response }: RequestContext<HTTPMatters>) => {
+    const defaultHandler = jest.fn(({ response }: RequestContext<HttpMatters>) => {
       response.end('DEFAULT');
     });
 
@@ -106,7 +106,7 @@ describe('httpListener', () => {
     const error = new Error('test');
     const log = suppressedLog();
     const logErrorSpy = jest.spyOn(log, 'error');
-    const errorHandler = jest.fn(({ response, error }: RequestContext<ErrorMatters & HTTPMatters>) => {
+    const errorHandler = jest.fn(({ response, error }: RequestContext<ErrorMatters & HttpMatters>) => {
       response.end(`ERROR ${error.message}`);
     });
 
@@ -123,10 +123,10 @@ describe('httpListener', () => {
   });
   it('logs HTTP error and invokes provided error handler', async () => {
 
-    const error = new HTTPError(404, 'Never Found');
+    const error = new HttpError(404, 'Never Found');
     const log = suppressedLog();
     const logErrorSpy = jest.spyOn(log, 'error');
-    const errorHandler = jest.fn(({ response, error }: RequestContext<ErrorMatters & HTTPMatters>) => {
+    const errorHandler = jest.fn(({ response, error }: RequestContext<ErrorMatters & HttpMatters>) => {
       response.end(`ERROR ${error.message}`);
     });
 

@@ -7,14 +7,14 @@ import { IncomingMessage, ServerResponse } from 'http';
 /**
  * HTTP request processing matters.
  *
- * When passed to {@link HTTPHandler HTTP handler} the latter responds by utilizing the passed in [[response]],
+ * When passed to {@link HttpHandler HTTP handler} the latter responds by utilizing the passed in [[response]],
  * or delegates to {@link RequestContext.Agent.next next handler}.
  *
  * @category HTTP
  * @typeparam TRequest  HTTP request type.
  * @typeparam TResponse  HTTP response type.
  */
-export interface HTTPMatters<
+export interface HttpMatters<
     TRequest extends IncomingMessage = IncomingMessage,
     TResponse extends ServerResponse = ServerResponse,
     > {
