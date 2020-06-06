@@ -94,6 +94,10 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter"><a href="../interfaces/@hatsy_hatsy.RouteMatters.html" class="tsd-kind-icon">Route<wbr>Matters</a></li>
 							</ul>
+							<h3>Utilities Interfaces</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/@hatsy_hatsy.ProxyForwardingTrustPolicy.html" class="tsd-kind-icon">Proxy<wbr>Forwarding<wbr>Trust<wbr>Policy</a></li>
+							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Core Type aliases</h3>
@@ -104,6 +108,12 @@
 							<h3>HTTP Type aliases</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter"><a href="@hatsy_hatsy.html#HttpHandler" class="tsd-kind-icon">Http<wbr>Handler</a></li>
+							</ul>
+							<h3>Router Type aliases</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter"><a href="@hatsy_hatsy.html#RouteHandler" class="tsd-kind-icon">Route<wbr>Handler</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter"><a href="@hatsy_hatsy.html#RouteSpec" class="tsd-kind-icon">Route<wbr>Spec</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter"><a href="@hatsy_hatsy.html#RouteTailExtractor" class="tsd-kind-icon">Route<wbr>Tail<wbr>Extractor</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
@@ -118,9 +128,18 @@
 								<li class="tsd-kind-function tsd-parent-kind-module"><a href="@hatsy_hatsy.html#renderHttpError" class="tsd-kind-icon">render<wbr>Http<wbr>Error</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module"><a href="@hatsy_hatsy.html#renderJson" class="tsd-kind-icon">render<wbr>Json</a></li>
 							</ul>
+							<h3>Router Functions</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter"><a href="@hatsy_hatsy.html#routeHandler" class="tsd-kind-icon">route<wbr>Handler</a></li>
+							</ul>
+							<h3>Other Functions</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter"><a href="@hatsy_hatsy.html#router" class="tsd-kind-icon">router</a></li>
+							</ul>
 							<h3>Utilities Functions</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-function tsd-parent-kind-module"><a href="@hatsy_hatsy.html#requestURL" class="tsd-kind-icon">requestURL</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="@hatsy_hatsy.html#trustedForward" class="tsd-kind-icon">trusted<wbr>Forward</a></li>
 							</ul>
 						</section>
 					</div>
@@ -134,7 +153,7 @@
 					<div class="tsd-signature tsd-kind-icon">Error<wbr>Handler&lt;TMatters&gt;<span class="tsd-signature-symbol">:</span> <a href="@hatsy_hatsy.html#RequestHandler" class="tsd-signature-type">RequestHandler</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/@hatsy_hatsy.ErrorMatters.html" class="tsd-signature-type">ErrorMatters</a><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">TMatters</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/60b340b/src/errors.ts#L34">hatsy/hatsy/src/errors.ts:34</a></li>
+							<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/07eec53/src/errors.ts#L34">hatsy/hatsy/src/errors.ts:34</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -162,7 +181,7 @@
 					<div class="tsd-signature tsd-kind-icon">Request<wbr>Handler&lt;TMatters&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, context<span class="tsd-signature-symbol">: </span><a href="@hatsy_hatsy.RequestContext.html" class="tsd-signature-type">RequestContext</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TMatters</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">PromiseLike</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">void</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/60b340b/src/request-handler.ts#L19">hatsy/hatsy/src/request-handler.ts:19</a></li>
+							<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/07eec53/src/request-handler.ts#L19">hatsy/hatsy/src/request-handler.ts:19</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -228,7 +247,7 @@
 					<div class="tsd-signature tsd-kind-icon">Http<wbr>Handler&lt;THttpMatters, TMatters&gt;<span class="tsd-signature-symbol">:</span> <a href="@hatsy_hatsy.html#RequestHandler" class="tsd-signature-type">RequestHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">THttpMatters</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">TMatters</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/60b340b/src/http/http-handler.ts#L18">hatsy/hatsy/src/http/http-handler.ts:18</a></li>
+							<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/07eec53/src/http/http-handler.ts#L18">hatsy/hatsy/src/http/http-handler.ts:18</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -260,6 +279,152 @@
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Router Type aliases</h2>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
+					<a name="RouteHandler" class="tsd-anchor"></a>
+					<h3>Route<wbr>Handler</h3>
+					<div class="tsd-signature tsd-kind-icon">Route<wbr>Handler&lt;TMatters, TRoute&gt;<span class="tsd-signature-symbol">:</span> <a href="@hatsy_hatsy.html#RequestHandler" class="tsd-signature-type">RequestHandler</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/@hatsy_hatsy.RouteMatters.html" class="tsd-signature-type">RouteMatters</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TRoute</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">TMatters</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/07eec53/src/router/route-handler.ts#L21">hatsy/hatsy/src/router/route-handler.ts:21</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Request route handler signature.</p>
+						</div>
+						<p>Accepts a <a href="@hatsy_hatsy.RequestContext.html">request processing context</a> containing <a href="../interfaces/@hatsy_hatsy.RouteMatters.html">request routing matters</a>
+						used to respond or to delegate to another handler.</p>
+					</div>
+					<h4 class="tsd-type-parameters-title">Type parameters</h4>
+					<ul class="tsd-type-parameters">
+						<li>
+							<h4>TMatters</h4>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>A type of request processing matters required in addition to <a href="../interfaces/@hatsy_hatsy.RouteMatters.html">request routing</a> ones.</p>
+								</div>
+							</div>
+						</li>
+						<li>
+							<h4>TRoute<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PathRoute</span></h4>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>A type of supported route.</p>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
+					<a name="RouteSpec" class="tsd-anchor"></a>
+					<h3>Route<wbr>Spec</h3>
+					<div class="tsd-signature tsd-kind-icon">Route<wbr>Spec&lt;TMatters, TRoute&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">keyof </span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">RoutePattern</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TRoute</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="@hatsy_hatsy.html#RouteHandler" class="tsd-signature-type">RouteHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TMatters</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TRoute</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, matters<span class="tsd-signature-symbol">: </span><a href="../interfaces/@hatsy_hatsy.RouteMatters.html" class="tsd-signature-type">RouteMatters</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TRoute</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">TMatters</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">TRoute</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/07eec53/src/router/route-handler.ts#L39">hatsy/hatsy/src/router/route-handler.ts:39</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>A specifier of route handler to delegate request processing to when it matches the given</p>
+						</div>
+						<p>This is a tuple consisting of:</p>
+						<ul>
+							<li>a route pattern to match the route against to call the handler,</li>
+							<li>a route handler to call when the route matches the pattern, and</li>
+							<li>optionally a matching route tail extractor function. The extracted route tail is passed to the handler.</li>
+						</ul>
+						<p>If route tail extractor is not specified, the route tail is extracted starting from the first match in the pattern.</p>
+					</div>
+					<h4 class="tsd-type-parameters-title">Type parameters</h4>
+					<ul class="tsd-type-parameters">
+						<li>
+							<h4>TMatters</h4>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>A type of request processing matters required in addition to <a href="../interfaces/@hatsy_hatsy.RouteMatters.html">request route</a> ones.</p>
+								</div>
+							</div>
+						</li>
+						<li>
+							<h4>TRoute<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PathRoute</span></h4>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>A type of matching route.</p>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
+					<a name="RouteTailExtractor" class="tsd-anchor"></a>
+					<h3>Route<wbr>Tail<wbr>Extractor</h3>
+					<div class="tsd-signature tsd-kind-icon">Route<wbr>Tail<wbr>Extractor&lt;TMatters, TRoute&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, matters<span class="tsd-signature-symbol">: </span><a href="../interfaces/@hatsy_hatsy.RouteMatters.html" class="tsd-signature-type">RouteMatters</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TRoute</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">TMatters</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">TRoute</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/07eec53/src/router/route-handler.ts#L56">hatsy/hatsy/src/router/route-handler.ts:56</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Matching route tail extractor.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>param</dt>
+							<dd><p>Request processing matters of the matching route.</p>
+							</dd>
+							<dt>returns</dt>
+							<dd><p>Extracted tail of the matching route.</p>
+							</dd>
+						</dl>
+					</div>
+					<h4 class="tsd-type-parameters-title">Type parameters</h4>
+					<ul class="tsd-type-parameters">
+						<li>
+							<h4>TMatters</h4>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>A type of request processing matters required in addition to <a href="../interfaces/@hatsy_hatsy.RouteMatters.html">request route</a> ones.</p>
+								</div>
+							</div>
+						</li>
+						<li>
+							<h4>TRoute<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PathRoute</span></h4>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>A type of matching route.</p>
+								</div>
+							</div>
+						</li>
+					</ul>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter-signature">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias">
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, matters<span class="tsd-signature-symbol">: </span><a href="../interfaces/@hatsy_hatsy.RouteMatters.html" class="tsd-signature-type">RouteMatters</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TRoute</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">TMatters</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TRoute</span></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>this: <span class="tsd-signature-type">void</span></h5>
+											</li>
+											<li>
+												<h5>matters: <a href="../interfaces/@hatsy_hatsy.RouteMatters.html" class="tsd-signature-type">RouteMatters</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TRoute</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">TMatters</span></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">TRoute</span></h4>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Core Functions</h2>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
 					<a name="requestHandler" class="tsd-anchor"></a>
@@ -271,7 +436,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/60b340b/src/request-handler.ts#L43">hatsy/hatsy/src/request-handler.ts:43</a></li>
+									<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/07eec53/src/request-handler.ts#L43">hatsy/hatsy/src/request-handler.ts:43</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -317,7 +482,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/60b340b/src/http/http-listener.ts#L69">hatsy/hatsy/src/http/http-listener.ts:69</a></li>
+									<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/07eec53/src/http/http-listener.ts#L69">hatsy/hatsy/src/http/http-listener.ts:69</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -400,7 +565,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/60b340b/src/http/handlers/render-html.ts#L17">hatsy/hatsy/src/http/handlers/render-html.ts:17</a></li>
+									<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/07eec53/src/http/handlers/render-html.ts#L17">hatsy/hatsy/src/http/handlers/render-html.ts:17</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -432,7 +597,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/60b340b/src/http/handlers/render-http-error.ts#L21">hatsy/hatsy/src/http/handlers/render-http-error.ts:21</a></li>
+									<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/07eec53/src/http/handlers/render-http-error.ts#L21">hatsy/hatsy/src/http/handlers/render-http-error.ts:21</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -465,7 +630,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/60b340b/src/http/handlers/render-json.ts#L17">hatsy/hatsy/src/http/handlers/render-json.ts:17</a></li>
+									<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/07eec53/src/http/handlers/render-json.ts#L17">hatsy/hatsy/src/http/handlers/render-json.ts:17</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -489,18 +654,150 @@
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Utilities Functions</h2>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
-					<a name="requestURL" class="tsd-anchor"></a>
-					<h3>requestURL</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-						<li class="tsd-signature tsd-kind-icon">requestURL<span class="tsd-signature-symbol">(</span>request<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IncomingMessage</span>, forwardingPolicy<span class="tsd-signature-symbol">?: </span><a href="../interfaces/_util_trusted-forwarded_.ProxyForwardingTrustPolicy.html" class="tsd-signature-type">ProxyForwardingTrustPolicy</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">URL</span></li>
+				<h2>Router Functions</h2>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+					<a name="routeHandler" class="tsd-anchor"></a>
+					<h3>route<wbr>Handler</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+						<li class="tsd-signature tsd-kind-icon">route<wbr>Handler&lt;TMatters, TRoute&gt;<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>routes<span class="tsd-signature-symbol">: </span><a href="@hatsy_hatsy.html#RouteSpec" class="tsd-signature-type">RouteSpec</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TMatters</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TRoute</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="@hatsy_hatsy.html#RouteHandler" class="tsd-signature-type">RouteHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TMatters</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TRoute</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/60b340b/src/util/request-url.ts#L22">hatsy/hatsy/src/util/request-url.ts:22</a></li>
+									<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/07eec53/src/router/route-handler.ts#L91">hatsy/hatsy/src/router/route-handler.ts:91</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Builds a request route handler that delegates to matching route handlers.</p>
+								</div>
+								<p>Selects the first matching route and delegates request processing to its handler. If the handler not responded,
+								then tries the next matching route and so on, until the responded or no routes left.</p>
+							</div>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>TMatters</h4>
+									<div class="tsd-comment tsd-typography">
+										<p>A type of request processing matters required in addition to <a href="../interfaces/@hatsy_hatsy.RouteMatters.html">request route</a> ones.</p>
+									</div>
+								</li>
+								<li>
+									<h4>TRoute<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PathRoute</span></h4>
+									<div class="tsd-comment tsd-typography">
+										<p>A type of supported route.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>routes: <a href="@hatsy_hatsy.html#RouteSpec" class="tsd-signature-type">RouteSpec</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TMatters</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TRoute</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Route handler specifiers.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="@hatsy_hatsy.html#RouteHandler" class="tsd-signature-type">RouteHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TMatters</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TRoute</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>Request route handler.</p>
+						</li>
+					</ul>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Other Functions</h2>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+					<a name="router" class="tsd-anchor"></a>
+					<h3>router</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+						<li class="tsd-signature tsd-kind-icon">router&lt;TMatters&gt;<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>routes<span class="tsd-signature-symbol">: </span><a href="@hatsy_hatsy.html#RouteSpec" class="tsd-signature-type">RouteSpec</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TMatters</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="@hatsy_hatsy.html#RouteHandler" class="tsd-signature-type">RouteHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TMatters</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">URLRoute</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">router&lt;TMatters, TRoute&gt;<span class="tsd-signature-symbol">(</span>buildRoute<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, matters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TMatters</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">TRoute</span>, <span class="tsd-signature-symbol">...</span>routes<span class="tsd-signature-symbol">: </span><a href="@hatsy_hatsy.html#RouteSpec" class="tsd-signature-type">RouteSpec</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TMatters</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TRoute</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="@hatsy_hatsy.html#RouteHandler" class="tsd-signature-type">RouteHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TMatters</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TRoute</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/07eec53/src/router/router.ts#L20">hatsy/hatsy/src/router/router.ts:20</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>TMatters<span class="tsd-signature-symbol">: </span><a href="../interfaces/@hatsy_hatsy.HttpMatters.html" class="tsd-signature-type">HttpMatters</a></h4>
+								</li>
+							</ul>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>routes: <a href="@hatsy_hatsy.html#RouteSpec" class="tsd-signature-type">RouteSpec</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TMatters</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="@hatsy_hatsy.html#RouteHandler" class="tsd-signature-type">RouteHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TMatters</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">URLRoute</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/07eec53/src/router/router.ts#L24">hatsy/hatsy/src/router/router.ts:24</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>TMatters</h4>
+								</li>
+								<li>
+									<h4>TRoute<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">URLRoute</span></h4>
+								</li>
+							</ul>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>buildRoute: <span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, matters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TMatters</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">TRoute</span></h5>
+									<ul class="tsd-parameters">
+										<li class="tsd-parameter-signature">
+											<ul class="tsd-signatures tsd-kind-type-literal">
+												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, matters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TMatters</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TRoute</span></li>
+											</ul>
+											<ul class="tsd-descriptions">
+												<li class="tsd-description">
+													<h4 class="tsd-parameters-title">Parameters</h4>
+													<ul class="tsd-parameters">
+														<li>
+															<h5>this: <span class="tsd-signature-type">void</span></h5>
+														</li>
+														<li>
+															<h5>matters: <span class="tsd-signature-type">TMatters</span></h5>
+														</li>
+													</ul>
+													<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">TRoute</span></h4>
+												</li>
+											</ul>
+										</li>
+									</ul>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>routes: <a href="@hatsy_hatsy.html#RouteSpec" class="tsd-signature-type">RouteSpec</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TMatters</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TRoute</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="@hatsy_hatsy.html#RouteHandler" class="tsd-signature-type">RouteHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TMatters</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TRoute</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Utilities Functions</h2>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="requestURL" class="tsd-anchor"></a>
+					<h3>requestURL</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">requestURL<span class="tsd-signature-symbol">(</span>request<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IncomingMessage</span>, forwardingPolicy<span class="tsd-signature-symbol">?: </span><a href="../interfaces/@hatsy_hatsy.ProxyForwardingTrustPolicy.html" class="tsd-signature-type">ProxyForwardingTrustPolicy</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">URL</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/07eec53/src/util/request-url.ts#L22">hatsy/hatsy/src/util/request-url.ts:22</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -518,7 +815,7 @@
 									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> forwardingPolicy: <a href="../interfaces/_util_trusted-forwarded_.ProxyForwardingTrustPolicy.html" class="tsd-signature-type">ProxyForwardingTrustPolicy</a></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> forwardingPolicy: <a href="../interfaces/@hatsy_hatsy.ProxyForwardingTrustPolicy.html" class="tsd-signature-type">ProxyForwardingTrustPolicy</a></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>A trust policy to proxy forwarding information.</p>
 									</div>
@@ -529,6 +826,46 @@
 						</li>
 					</ul>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="trustedForward" class="tsd-anchor"></a>
+					<h3>trusted<wbr>Forward</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">trusted<wbr>Forward<span class="tsd-signature-symbol">(</span>request<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IncomingMessage</span>, policy<span class="tsd-signature-symbol">?: </span><a href="../interfaces/@hatsy_hatsy.ProxyForwardingTrustPolicy.html" class="tsd-signature-type">ProxyForwardingTrustPolicy</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HthvItem</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/07eec53/src/util/trusted-forward.ts#L41">hatsy/hatsy/src/util/trusted-forward.ts:41</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Extracts a proxy forwarding info from the given HTTP request accordingly to the give trust policy.</p>
+								</div>
+								<p>The forwarding information is extracted from <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Forwarded">Forwarded</a> header.</p>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>request: <span class="tsd-signature-type">IncomingMessage</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Source HTTP request.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> policy: <a href="../interfaces/@hatsy_hatsy.ProxyForwardingTrustPolicy.html" class="tsd-signature-type">ProxyForwardingTrustPolicy</a><span class="tsd-signature-symbol"> = {}</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>A trust policy to proxy forwarding information.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">HthvItem</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h4>
+							<p>Parsed HTTP header value item corresponding to trusted record in <code>Forwarded</code> header value, or <code>undefined</code>
+							when either <code>Forwarded</code> header is missing, or does not contain trusted records.</p>
+						</li>
+					</ul>
+				</section>
 			</section>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
@@ -536,15 +873,6 @@
 				<ul>
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="_router_route-handler_.html">&quot;router/route-<wbr>handler&quot;</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="_router_router_.html">&quot;router/router&quot;</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="_util_trusted-forwarded_.html">&quot;util/trusted-<wbr>forwarded&quot;</a>
 					</li>
 					<li class="current tsd-kind-module">
 						<a href="@hatsy_hatsy.html">@hatsy/hatsy</a>
@@ -565,6 +893,9 @@
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="../interfaces/@hatsy_hatsy.HttpMatters.html" class="tsd-kind-icon">Http<wbr>Matters</a>
 					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/@hatsy_hatsy.ProxyForwardingTrustPolicy.html" class="tsd-kind-icon">Proxy<wbr>Forwarding<wbr>Trust<wbr>Policy</a>
+					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="../interfaces/@hatsy_hatsy.RouteMatters.html" class="tsd-kind-icon">Route<wbr>Matters</a>
 					</li>
@@ -576,6 +907,15 @@
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="@hatsy_hatsy.html#RequestHandler" class="tsd-kind-icon">Request<wbr>Handler</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="@hatsy_hatsy.html#RouteHandler" class="tsd-kind-icon">Route<wbr>Handler</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="@hatsy_hatsy.html#RouteSpec" class="tsd-kind-icon">Route<wbr>Spec</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="@hatsy_hatsy.html#RouteTailExtractor" class="tsd-kind-icon">Route<wbr>Tail<wbr>Extractor</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="@hatsy_hatsy.html#httpListener" class="tsd-kind-icon">http<wbr>Listener</a>
@@ -594,6 +934,15 @@
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module">
 						<a href="@hatsy_hatsy.html#requestURL" class="tsd-kind-icon">requestURL</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="@hatsy_hatsy.html#routeHandler" class="tsd-kind-icon">route<wbr>Handler</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="@hatsy_hatsy.html#router" class="tsd-kind-icon">router</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="@hatsy_hatsy.html#trustedForward" class="tsd-kind-icon">trusted<wbr>Forward</a>
 					</li>
 				</ul>
 			</nav>
