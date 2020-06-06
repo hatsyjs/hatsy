@@ -11,11 +11,7 @@ import { RoutingMatters } from './routing-matters';
  * @category Router
  * @typeparam TMatters  A type of request processing matters required in addition to {@link RoutingMatters request
  * routing} ones.
- * @typeparam TEntry  A type of supported route entries.
  * @typeparam TRoute  A type of supported route.
  */
-export type RouteHandler<
-    TMatters,
-    TEntry extends PathRoute.Entry = PathRoute.Entry,
-    TRoute extends PathRoute<TEntry> = PathRoute<TEntry>> =
-    RequestHandler<RoutingMatters<TEntry, TRoute> & TMatters>;
+export type RouteHandler<TMatters, TRoute extends PathRoute = PathRoute> =
+    RequestHandler<RoutingMatters<TRoute> & TMatters>;

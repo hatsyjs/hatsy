@@ -29,7 +29,7 @@
     "hatsy": "dist/hatsy.cli.js"
   },
   "dependencies": {
-    "@hatsy/route-match": "^1.0.0-dev.0",
+    "@hatsy/route-match": "^1.0.0-dev.1",
     "send": "^0.17.1"
   },
   "engines": {
