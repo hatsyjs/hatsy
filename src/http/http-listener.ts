@@ -64,7 +64,7 @@ export interface HttpConfig<TMatters extends HttpMatters = HttpMatters> {
  *
  * @returns HTTP request listener to pass to Node.js HTTP server.
  *
- * @see {@link hatsyHandler}
+ * @see requestHandler
  */
 export function httpListener<TRequest extends IncomingMessage, TResponse extends ServerResponse>(
     handlers: HttpHandler<HttpMatters<TRequest, TResponse>> | Iterable<HttpHandler<HttpMatters<TRequest, TResponse>>>,
