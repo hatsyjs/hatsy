@@ -8,12 +8,16 @@ import { IncomingMessage } from 'http';
 /**
  * A trust policy to proxy forwarding records.
  *
+ * Defines how to treat proxy forwarding information contained in request headers.
+ *
  * @category Utilities
  */
 export interface ProxyForwardingTrustPolicy {
 
   /**
    * Whether to trust forwarding records in `Forwarded` HTTP request header.
+   *
+   * When this information is trusted, the host and protocol in request header is used as a request one.
    *
    * Either a boolean flag, or a list of trusted proxies. The latter can be either a string (trusted `by` attribute),
    * or a tuple consisting of attribute name and value (e.g. `['secret', 'some_secret_hash']`).
@@ -33,17 +37,17 @@ export interface ProxyForwardingTrustPolicy {
  *
  * @category Utilities
  * @param request  Source HTTP request.
- * @param policy  A trust policy to proxy forwarding information.
+ * @param forwardingTrust  A trust policy to proxy forwarding records.
  *
  * @returns Parsed HTTP header value item corresponding to trusted record in `Forwarded` header value, or `undefined`
  * when either `Forwarded` header is missing, or does not contain trusted records.
  */
 export function trustedForward(
     request: IncomingMessage,
-    policy: ProxyForwardingTrustPolicy = {},
+    forwardingTrust: ProxyForwardingTrustPolicy = {},
 ): HthvItem | undefined {
 
-  const { trustForwarded = false } = policy;
+  const { trustForwarded = false } = forwardingTrust;
 
   if (!trustForwarded) {
     return;

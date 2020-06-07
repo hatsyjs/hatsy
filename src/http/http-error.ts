@@ -9,7 +9,7 @@
  * corresponding error page then.
  *
  * @category HTTP
- * @see {@link HttpConfig.errorHandler}
+ * @see HttpConfig.errorHandler
  */
 export class HttpError extends Error {
 
