@@ -26,25 +26,35 @@ export type RouteHandler<TMatters, TRoute extends PathRoute = PathRoute> =
 /**
  * A specifier of route handler to delegate request processing to when it matches the given
  *
- * This is a tuple consisting of:
- * - A route pattern to match the route against to call the handler.
- *   When specified as a string, a {@link RouteMatters.routePattern pattern parser} is used to parse it.
- * - A route handler to call when the route matches the pattern.
- * - Optional matching route tail extractor function.
- *   The extracted route tail is passed to the handler.
- *
- * If route tail extractor is not specified, the route tail is extracted starting from the first match in the pattern.
- *
  * @category Router
  * @typeparam TMatters  A type of request processing matters required in addition to {@link RouteMatters request
  * route} ones.
  * @typeparam TRoute  A type of matching route.
  */
-export type RouteSpec<TMatters, TRoute extends PathRoute = PathRoute> = readonly [
-  RoutePattern<TRoute> | string,
-  RouteHandler<TMatters, TRoute>,
-  RouteTailExtractor<TMatters, TRoute>?
-];
+export interface RouteSpec<TMatters, TRoute extends PathRoute = PathRoute> {
+
+  /**
+   * A route pattern that should match the route in order the {@link to handler} to be called.
+   *
+   * When specified as a string, a {@link RouteMatters.routePattern pattern parser} is used to parse it.
+   */
+  readonly on: RoutePattern<TRoute> | string;
+
+  /**
+   * A route handler to call when the route matches the pattern.
+   */
+  readonly to: RouteHandler<TMatters, TRoute>,
+
+  /**
+   * Matching route tail extractor.
+   *
+   * The extracted route tail is passed to the {@link to handler}.
+   *
+   * @default Extracts a matching route tail starting from the first capture/wildcard.
+   */
+  readonly tail?: RouteTailExtractor<TMatters, TRoute>;
+
+}
 
 /**
  * Matching route tail extractor.
@@ -82,27 +92,27 @@ function defaultRouteTailExtractor<TRoute extends PathRoute>({ route, routeMatch
  * @internal
  */
 function routeHandlerBySpec<TMatters, TRoute extends PathRoute>(
-    [pattern, handler, extractTail = defaultRouteTailExtractor]: RouteSpec<TMatters, TRoute>,
+    { on, to, tail = defaultRouteTailExtractor }: RouteSpec<TMatters, TRoute>,
 ): RouteHandler<TMatters, TRoute> {
   return async (context: RequestContext<RouteMatters<TRoute> & TMatters>) => {
 
     const { route, routeMatch: prevMatch, next } = context;
     const specMatch = routeMatch(
         route,
-        typeof pattern === 'string' ? context.routePattern(pattern) : pattern,
+        typeof on === 'string' ? context.routePattern(on) : on,
     );
 
     if (!specMatch) {
       return;
     }
 
-    let tail: TRoute | undefined;
+    let extractedTail: TRoute | undefined;
 
     await next(
-        handler,
+        to,
         {
           get route() {
-            return tail || (tail = extractTail({ ...context, routeMatch: specMatch }));
+            return extractedTail || (extractedTail = tail({ ...context, routeMatch: specMatch }));
           },
           routeMatch(captor: RouteCaptor<TRoute>): void {
             prevMatch(captor);
@@ -130,8 +140,7 @@ function routeHandlerBySpec<TMatters, TRoute extends PathRoute>(
 export function routeHandler<TMatters, TRoute extends PathRoute = PathRoute>(
     routes: RouteSpec<TMatters, TRoute> | Iterable<RouteSpec<TMatters, TRoute>>,
 ): RouteHandler<TMatters, TRoute> {
-  if (isIterable<RouteSpec<TMatters, TRoute>>(routes)) {
-    return requestHandler(mapIt(routes, routeHandlerBySpec));
-  }
-  return routeHandlerBySpec(routes);
+  return isIterable(routes)
+      ? requestHandler(mapIt(routes, routeHandlerBySpec))
+      : routeHandlerBySpec(routes);
 }

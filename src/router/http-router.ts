@@ -142,10 +142,14 @@ export function httpRouter<TMatters extends HttpMatters, TRoute extends URLRoute
   const { routePattern = simpleRoutePattern } = config;
 
   return async context => {
+
+    const route: TRoute = config.buildRoute ? config.buildRoute(context) : buildURLRoute(context, config);
+
     await context.next(
         routeHandler(routes),
         {
-          route: config.buildRoute ? config.buildRoute(context) : buildURLRoute(context, config),
+          fullRoute: route,
+          route,
           routeMatch: noop,
           routePattern,
         } as RouteMatters<TRoute> & Partial<unknown>,

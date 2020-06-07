@@ -2,7 +2,7 @@
  * @packageDocumentation
  * @module @hatsy/hatsy
  */
-import { HthvItem, hthvParse } from '@hatsy/http-header-value';
+import { hthvFlatten, HthvItems, hthvParse } from '@hatsy/http-header-value';
 import { IncomingMessage } from 'http';
 
 /**
@@ -29,6 +29,41 @@ export interface ProxyForwardingTrustPolicy {
 }
 
 /**
+ * Proxy forwarding info.
+ *
+ * Corresponds to parameters of [Forwarded] header.
+ *
+ * [Forwarded]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Forwarded
+ *
+ * @category Utilities
+ */
+export interface ProxyForward {
+
+  readonly by?: string;
+  readonly for?: string;
+  readonly host?: string;
+  readonly proto?: string;
+  readonly [key: string]: string | undefined;
+
+}
+
+/**
+ * @internal
+ */
+function proxyForwardByHeaderItems(items: HthvItems): ProxyForward {
+
+  const result: Record<string, string> = {};
+
+  for (const { n, v } of items.list) {
+    if (n) {
+      result[n] = v;
+    }
+  }
+
+  return result;
+}
+
+/**
  * Extracts a proxy forwarding info from the given HTTP request accordingly to the give trust policy.
  *
  * The forwarding information is extracted from [Forwarded] header.
@@ -39,13 +74,13 @@ export interface ProxyForwardingTrustPolicy {
  * @param request  Source HTTP request.
  * @param forwardingTrust  A trust policy to proxy forwarding records.
  *
- * @returns Parsed HTTP header value item corresponding to trusted record in `Forwarded` header value, or `undefined`
+ * @returns Proxy forwarding info extracted from trusted record of `Forwarded` header value, or `undefined`
  * when either `Forwarded` header is missing, or does not contain trusted records.
  */
 export function trustedForward(
     request: IncomingMessage,
     forwardingTrust: ProxyForwardingTrustPolicy = {},
-): HthvItem | undefined {
+): ProxyForward | undefined {
 
   const { trustForwarded = false } = forwardingTrust;
 
@@ -58,13 +93,16 @@ export function trustedForward(
     return;
   }
 
-  for (const record of hthvParse(forwarded)) {
+  for (const rawRecord of hthvParse(forwarded)) {
+
+    const items = hthvFlatten([rawRecord]);
+
     if (trustForwarded === true) {
-      return record;
+      return proxyForwardByHeaderItems(items);
     }
     for (const policy of trustForwarded) {
-      if (typeof policy === 'string' ? record.p.by.v === policy : record.p[policy[0]].v === policy[1]) {
-        return record;
+      if (typeof policy === 'string' ? items.map.by.v === policy : items.map[policy[0]].v === policy[1]) {
+        return proxyForwardByHeaderItems(items);
       }
     }
   }

@@ -13,7 +13,16 @@ import { PathRoute, RouteMatch, RoutePattern } from '@hatsy/route-match';
 export interface RouteMatters<TRoute extends PathRoute = PathRoute> {
 
   /**
+   * Original route.
+   *
+   * This should never be changed.
+   */
+  readonly fullRoute: TRoute;
+
+  /**
    * Matching route.
+   *
+   * This is either an original route, or its tail.
    */
   readonly route: TRoute;
 
