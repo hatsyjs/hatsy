@@ -12,19 +12,19 @@ import { IncomingMessage } from 'http';
  *
  * @category Utilities
  */
-export interface ProxyForwardingTrustPolicy {
+export interface ProxyForwardTrust {
 
   /**
-   * Whether to trust forwarding records in `Forwarded` HTTP request header.
+   * Whether the forwarding records in `Forwarded` HTTP request header are trusted.
    *
    * When this information is trusted, the host and protocol in request header is used as a request one.
    *
-   * Either a boolean flag, or a list of trusted proxies. The latter can be either a string (trusted `by` attribute),
+   * Either a boolean flag, a list of trusted proxies. The latter can be either a string (trusted `by` attribute),
    * or a tuple consisting of attribute name and value (e.g. `['secret', 'some_secret_hash']`).
    *
    * @default `false`, which means the `Forwarded` header won't be parsed.
    */
-  readonly trustForwarded?: boolean | readonly (string | [string, string])[];
+  readonly trusted?: boolean | readonly (string | readonly [string, string])[];
 
 }
 
@@ -72,21 +72,22 @@ function proxyForwardByHeaderItems(items: HthvItems): ProxyForward {
  *
  * @category Utilities
  * @param request  Source HTTP request.
- * @param forwardingTrust  A trust policy to proxy forwarding records.
+ * @param forwardTrust  A trust policy to proxy forwarding records.
  *
  * @returns Proxy forwarding info extracted from trusted record of `Forwarded` header value, or `undefined`
  * when either `Forwarded` header is missing, or does not contain trusted records.
  */
 export function trustedForward(
     request: IncomingMessage,
-    forwardingTrust: ProxyForwardingTrustPolicy = {},
+    forwardTrust: ProxyForwardTrust = {},
 ): ProxyForward | undefined {
 
-  const { trustForwarded = false } = forwardingTrust;
+  const { trusted = false } = forwardTrust;
 
-  if (!trustForwarded) {
+  if (!trusted) {
     return;
   }
+
   const { forwarded } = request.headers;
 
   if (!forwarded) {
@@ -97,11 +98,13 @@ export function trustedForward(
 
     const items = hthvFlatten([rawRecord]);
 
-    if (trustForwarded === true) {
+    if (trusted === true) {
       return proxyForwardByHeaderItems(items);
     }
-    for (const policy of trustForwarded) {
-      if (typeof policy === 'string' ? items.map.by.v === policy : items.map[policy[0]].v === policy[1]) {
+    for (const policy of trusted) {
+      if (typeof policy === 'string'
+          ? items.map.by?.v === policy
+          : items.map[policy[0]]?.v === policy[1]) {
         return proxyForwardByHeaderItems(items);
       }
     }

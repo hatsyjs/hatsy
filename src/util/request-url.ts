@@ -4,7 +4,7 @@
  */
 import { IncomingMessage } from 'http';
 import { TLSSocket } from 'tls';
-import { ProxyForwardingTrustPolicy, trustedForward } from './trusted-forward';
+import { ProxyForwardTrust, trustedForward } from './trusted-forward';
 
 /**
  * Builds full request URL.
@@ -15,16 +15,16 @@ import { ProxyForwardingTrustPolicy, trustedForward } from './trusted-forward';
  *
  * @category Utilities
  * @param request  HTTP request.
- * @param forwardingPolicy  A trust policy to proxy forwarding information.
+ * @param forwardTrust  A trust policy to proxy forwarding information.
  *
  * @returns Request URL.
  */
 export function requestURL(
     request: IncomingMessage,
-    forwardingPolicy?: ProxyForwardingTrustPolicy,
+    forwardTrust?: ProxyForwardTrust,
 ): URL {
 
-  const forwarded = trustedForward(request, forwardingPolicy);
+  const forwarded = trustedForward(request, forwardTrust);
   const { connection, url = '', headers } = request;
   const protocol = forwarded?.proto || ((connection as TLSSocket).encrypted ? 'https' : 'http');
   const host = forwarded?.host || headers.host || connection.localAddress;

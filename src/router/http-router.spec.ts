@@ -124,7 +124,7 @@ describe('httpRouter', () => {
             },
             {
               buildRoute({ request }) {
-                return matrixRoute(requestURL(request, this.forwardingTrust));
+                return matrixRoute(requestURL(request, this.forwardTrust));
               },
             },
         ),
@@ -144,8 +144,8 @@ describe('httpRouter', () => {
               },
             },
             {
-              forwardingTrust: {
-                trustForwarded: true,
+              forwardTrust: {
+                trusted: true,
               },
             },
         ),

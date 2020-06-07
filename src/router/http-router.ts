@@ -6,7 +6,7 @@ import { RoutePattern, simpleRoutePattern, urlRoute, URLRoute } from '@hatsy/rou
 import { noop } from '@proc7ts/primitives';
 import { HttpMatters } from '../http';
 import { RequestHandler } from '../request-handler';
-import { ProxyForwardingTrustPolicy, requestURL } from '../util';
+import { ProxyForwardTrust, requestURL } from '../util';
 import { routeHandler, RouteSpec } from './route-handler';
 import { RouteMatters } from './route-matters';
 
@@ -38,7 +38,7 @@ export namespace HttpRouterConfig {
      *
      * @see trustedForward
      */
-    readonly forwardingTrust?: ProxyForwardingTrustPolicy;
+    readonly forwardTrust?: ProxyForwardTrust;
 
     /**
      * A parser of route pattern string.
@@ -96,9 +96,9 @@ export namespace HttpRouterConfig {
  */
 function buildURLRoute<TRoute extends URLRoute>(
     matters: HttpMatters,
-    { forwardingTrust }: HttpRouterConfig,
+    { forwardTrust }: HttpRouterConfig,
 ): TRoute {
-  return urlRoute(requestURL(matters.request, forwardingTrust)) as TRoute;
+  return urlRoute(requestURL(matters.request, forwardTrust)) as TRoute;
 }
 
 /**
