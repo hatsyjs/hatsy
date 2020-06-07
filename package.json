@@ -32,6 +32,7 @@
     "@hatsy/http-header-value": "^3.0.0",
     "@hatsy/route-match": "^1.0.0-dev.1",
     "@proc7ts/a-iterable": "^2.7.0",
+    "@proc7ts/call-thru": "^4.0.0",
     "@proc7ts/primitives": "^1.0.3",
     "send": "^0.17.1"
   },
