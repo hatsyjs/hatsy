@@ -27,7 +27,7 @@ export function requestURL(
   const forwarded = trustedForward(request, forwardTrust);
   const { connection, url = '', headers } = request;
   const protocol = forwarded?.proto || ((connection as TLSSocket).encrypted ? 'https' : 'http');
-  const host = forwarded?.host || headers.host || connection.localAddress;
+  const host = forwarded?.host || headers.host || (`${connection.localAddress}:${connection.localPort}`);
 
   return new URL(url, `${protocol}://${host}`);
 }
