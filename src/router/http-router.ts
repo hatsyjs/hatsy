@@ -2,7 +2,7 @@
  * @packageDocumentation
  * @module @hatsy/hatsy
  */
-import { urlRoute, URLRoute } from '@hatsy/route-match';
+import { RoutePattern, simpleRoutePattern, urlRoute, URLRoute } from '@hatsy/route-match';
 import { noop } from '@proc7ts/primitives';
 import { HttpMatters } from '../http';
 import { RequestHandler } from '../request-handler';
@@ -17,11 +17,11 @@ import { RouteMatters } from './route-matters';
  * @typeparam TMatters  A type of supported HTTP request processing matters.
  * @typeparam TRoute  A type of supported URL route.
  */
-export type RouterConfig<TMatters extends HttpMatters = HttpMatters, TRoute extends URLRoute = URLRoute> =
-    | RouterConfig.DefaultRoute
-    | RouterConfig.CustomRoute<TMatters, TRoute>;
+export type HttpRouterConfig<TMatters extends HttpMatters = HttpMatters, TRoute extends URLRoute = URLRoute> =
+    | HttpRouterConfig.DefaultRoute
+    | HttpRouterConfig.CustomRoute<TMatters, TRoute>;
 
-export namespace RouterConfig {
+export namespace HttpRouterConfig {
 
   /**
    * Base router configuration.
@@ -29,7 +29,7 @@ export namespace RouterConfig {
    * @typeparam TMatters  A type of supported HTTP request processing matters.
    * @typeparam TRoute  A type of supported URL route.
    */
-  export interface Base {
+  export interface Base<TMatters extends HttpMatters = HttpMatters, TRoute extends URLRoute = URLRoute> {
 
     /**
      * A trust policy to proxy forwarding records.
@@ -39,6 +39,17 @@ export namespace RouterConfig {
      * @see trustedForward
      */
     readonly forwardingTrust?: ProxyForwardingTrustPolicy;
+
+    /**
+     * A parser of route pattern string.
+     *
+     * The `this` parameter is bound to current request processing matters.
+     *
+     * @param pattern  Pattern string in supported format.
+     *
+     * @default Supports patterns in simple format (`simpleRoutePattern()`).
+     */
+    routePattern?(this: TMatters & RouteMatters<TRoute>, pattern: string): RoutePattern<TRoute>;
 
   }
 
@@ -85,7 +96,7 @@ export namespace RouterConfig {
  */
 function buildURLRoute<TRoute extends URLRoute>(
     matters: HttpMatters,
-    { forwardingTrust }: RouterConfig,
+    { forwardingTrust }: HttpRouterConfig,
 ): TRoute {
   return urlRoute(requestURL(matters.request, forwardingTrust)) as TRoute;
 }
@@ -104,7 +115,7 @@ function buildURLRoute<TRoute extends URLRoute>(
  */
 export function httpRouter<TMatters extends HttpMatters, TRoute extends URLRoute>(
     routes: RouteSpec<TMatters, TRoute> | Iterable<RouteSpec<TMatters, TRoute>>,
-    config?: RouterConfig.DefaultRoute,
+    config?: HttpRouterConfig.DefaultRoute,
 ): RequestHandler<TMatters>;
 
 /**
@@ -120,19 +131,23 @@ export function httpRouter<TMatters extends HttpMatters, TRoute extends URLRoute
  */
 export function httpRouter<TMatters extends HttpMatters, TRoute extends URLRoute>(
     routes: RouteSpec<TMatters, TRoute> | Iterable<RouteSpec<TMatters, TRoute>>,
-    config: RouterConfig.CustomRoute<TMatters, TRoute>,
+    config: HttpRouterConfig.CustomRoute<TMatters, TRoute>,
 ): RequestHandler<TMatters>;
 
 export function httpRouter<TMatters extends HttpMatters, TRoute extends URLRoute>(
     routes: RouteSpec<TMatters, TRoute> | Iterable<RouteSpec<TMatters, TRoute>>,
-    config: RouterConfig<TMatters, TRoute> = {},
+    config: HttpRouterConfig<TMatters, TRoute> = {},
 ): RequestHandler<TMatters> {
+
+  const { routePattern = simpleRoutePattern } = config;
+
   return async context => {
     await context.next(
         routeHandler(routes),
         {
           route: config.buildRoute ? config.buildRoute(context) : buildURLRoute(context, config),
-          match: noop,
+          routeMatch: noop,
+          routePattern,
         } as RouteMatters<TRoute> & Partial<unknown>,
     );
   };

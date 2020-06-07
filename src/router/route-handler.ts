@@ -27,9 +27,11 @@ export type RouteHandler<TMatters, TRoute extends PathRoute = PathRoute> =
  * A specifier of route handler to delegate request processing to when it matches the given
  *
  * This is a tuple consisting of:
- * - a route pattern to match the route against to call the handler,
- * - a route handler to call when the route matches the pattern, and
- * - optionally a matching route tail extractor function. The extracted route tail is passed to the handler.
+ * - A route pattern to match the route against to call the handler.
+ *   When specified as a string, a {@link RouteMatters.routePattern pattern parser} is used to parse it.
+ * - A route handler to call when the route matches the pattern.
+ * - Optional matching route tail extractor function.
+ *   The extracted route tail is passed to the handler.
  *
  * If route tail extractor is not specified, the route tail is extracted starting from the first match in the pattern.
  *
@@ -39,7 +41,7 @@ export type RouteHandler<TMatters, TRoute extends PathRoute = PathRoute> =
  * @typeparam TRoute  A type of matching route.
  */
 export type RouteSpec<TMatters, TRoute extends PathRoute = PathRoute> = readonly [
-  RoutePattern<TRoute>,
+  RoutePattern<TRoute> | string,
   RouteHandler<TMatters, TRoute>,
   RouteTailExtractor<TMatters, TRoute>?
 ];
@@ -63,11 +65,11 @@ export type RouteTailExtractor<TMatters, TRoute extends PathRoute> = (
 /**
  * @internal
  */
-function defaultRouteTailExtractor<TRoute extends PathRoute>({ route, match }: RouteMatters<TRoute>): TRoute {
+function defaultRouteTailExtractor<TRoute extends PathRoute>({ route, routeMatch }: RouteMatters<TRoute>): TRoute {
 
   let fromEntry: number | undefined;
 
-  match((_type, _name, _arg, position: RouteMatcher.Position<TRoute>) => {
+  routeMatch((_type, _name, _arg, position: RouteMatcher.Position<TRoute>) => {
     if (fromEntry == null) {
       fromEntry = position.entryIndex;
     }
@@ -84,8 +86,11 @@ function routeHandlerBySpec<TMatters, TRoute extends PathRoute>(
 ): RouteHandler<TMatters, TRoute> {
   return async (context: RequestContext<RouteMatters<TRoute> & TMatters>) => {
 
-    const { route, match, next } = context;
-    const specMatch = routeMatch(route, pattern);
+    const { route, routeMatch: prevMatch, next } = context;
+    const specMatch = routeMatch(
+        route,
+        typeof pattern === 'string' ? context.routePattern(pattern) : pattern,
+    );
 
     if (!specMatch) {
       return;
@@ -97,10 +102,10 @@ function routeHandlerBySpec<TMatters, TRoute extends PathRoute>(
         handler,
         {
           get route() {
-            return tail || (tail = extractTail({ ...context, match: specMatch }));
+            return tail || (tail = extractTail({ ...context, routeMatch: specMatch }));
           },
-          match(captor: RouteCaptor<TRoute>): void {
-            match(captor);
+          routeMatch(captor: RouteCaptor<TRoute>): void {
+            prevMatch(captor);
             specMatch(captor);
           },
         } as RequestContext.Modifications<RouteMatters<TRoute> & TMatters>,

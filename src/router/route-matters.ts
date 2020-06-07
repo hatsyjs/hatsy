@@ -2,7 +2,7 @@
  * @packageDocumentation
  * @module @hatsy/hatsy
  */
-import { PathRoute, RouteMatch } from '@hatsy/route-match';
+import { PathRoute, RouteMatch, RoutePattern } from '@hatsy/route-match';
 
 /**
  * Matters of request that matches a route pattern.
@@ -18,8 +18,13 @@ export interface RouteMatters<TRoute extends PathRoute = PathRoute> {
   readonly route: TRoute;
 
   /**
-   * A successful match of the route against pattern.
+   * A successful match of the route(s) against pattern(s).
    */
-  readonly match: RouteMatch<TRoute>;
+  readonly routeMatch: RouteMatch<TRoute>;
+
+  /**
+   * A parser of route pattern string.
+   */
+  routePattern(pattern: string): RoutePattern<TRoute>;
 
 }
