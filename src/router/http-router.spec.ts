@@ -93,7 +93,7 @@ describe('httpRouter', () => {
 
               routeMatch((_type, key, _value, position: RouteMatcher.Position<URLRoute>) => {
                 if (key === 'tail') {
-                  tail = position.route.segment(position.entryIndex);
+                  tail = position.route.section(position.entryIndex);
                 }
               });
 

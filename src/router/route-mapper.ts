@@ -32,7 +32,7 @@ export function routeMapper<TRoute extends PathRoute, TMeans extends RouteMeans<
         await next(
             handler,
             {
-              route: route.segment(1),
+              route: route.section(1),
             } as RequestModifications<TMeans>,
         );
       }

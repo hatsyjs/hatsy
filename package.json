@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "@hatsy/http-header-value": "^3.0.0",
-    "@hatsy/route-match": "^1.0.0-dev.2",
+    "@hatsy/route-match": "^1.0.0-dev.3",
     "@proc7ts/a-iterable": "^2.7.0",
     "@proc7ts/call-thru": "^4.0.0",
     "@proc7ts/primitives": "^1.0.3",
