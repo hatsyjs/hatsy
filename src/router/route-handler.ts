@@ -4,7 +4,7 @@
  */
 import { PathRoute, RouteCaptor, routeMatch, RouteMatcher, RoutePattern, routeTail } from '@hatsy/route-match';
 import { mapIt } from '@proc7ts/a-iterable';
-import { isIterable } from '@proc7ts/primitives';
+import { isIterable, lazyValue } from '@proc7ts/primitives';
 import { RequestContext, RequestModifications } from '../request-context';
 import { requestHandler, RequestHandler } from '../request-handler';
 import { RouteMeans } from './route-means';
@@ -122,13 +122,13 @@ function routeHandlerByRule<TRoute extends PathRoute, TMeans extends RouteMeans<
       return;
     }
 
-    let extractedTail: TRoute | undefined;
+    const getTail = lazyValue(() => tail({ ...context, routeMatch: specMatch }));
 
     await next(
         to,
         {
           get route() {
-            return extractedTail || (extractedTail = tail({ ...context, routeMatch: specMatch }));
+            return getTail();
           },
           routeMatch(captor: RouteCaptor<TRoute>): void {
             prevMatch(captor);
