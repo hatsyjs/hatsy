@@ -7,46 +7,46 @@ import { RequestContext } from './request-context';
 /**
  * Request processing handler signature.
  *
- * Handler implementations expect a request processing context containing specific processing matters.
- * E.g. the ones for {@link HttpMatters HTTP request processing}. The handler may either respond using the provided
- * matters, or delegate to {@link RequestContext.Agent.next next handler}.
+ * Handler implementations expect a request processing context containing specific processing means.
+ * E.g. the ones for {@link HttpMeans HTTP request processing}. The handler may either respond using the provided means,
+ * or delegate to {@link RequestContext.Agent.next next handler}.
  *
  * The handler may be asynchronous.
  *
  * @category Core
- * @typeparam TMatter  A type of request processing matters this handler expects.
+ * @typeparam TMeans  A type of request processing means this handler expects.
  */
-export type RequestHandler<TMatters> =
+export type RequestHandler<TMeans> =
 /**
- * @param context  Request processing context containing processing matters.
+ * @param context  Request processing context containing the necessary means.
  *
  * @returns Either nothing if the handler completed its work synchronously, or a promise resolved when the handler
  * completed its work asynchronously.
  */
     (
         this: void,
-        context: RequestContext<TMatters>,
+        context: RequestContext<TMeans>,
     ) => PromiseLike<void> | void;
 
 /**
  * Builds a request processing handler that delegates request processing to other handlers.
  *
- * It iterates over the given handlers in order and delegates the request processing to them. It stops when either
- * response is complete, an error thrown, or there is no more handlers.
+ * Iterates over the given handlers in order and delegates the request processing to them. It stops when either
+ * response is generated, an error thrown, or no handlers left.
  *
  * @category Core
- * @typeparam TMatters  A type of request processing matters the `handlers` expect.
+ * @typeparam TMeans  A type of request processing means `handlers` expect.
  * @param handlers  Either single handler or iterable of handlers to delegate request processing to.
  *
  * @returns Request processing handler.
  */
-export function requestHandler<TMatters>(
-    handlers: RequestHandler<TMatters> | Iterable<RequestHandler<TMatters>>,
-): RequestHandler<TMatters> {
+export function requestHandler<TMeans>(
+    handlers: RequestHandler<TMeans> | Iterable<RequestHandler<TMeans>>,
+): RequestHandler<TMeans> {
   if (typeof handlers === 'function') {
     return handlers;
   }
-  return async (context: RequestContext<TMatters>): Promise<void> => {
+  return async (context: RequestContext<TMeans>): Promise<void> => {
     for (const handler of handlers) {
       if (await context.next(handler)) {
         return;

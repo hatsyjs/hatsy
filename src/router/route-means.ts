@@ -5,12 +5,12 @@
 import { PathRoute, RouteMatch, RoutePattern } from '@hatsy/route-match';
 
 /**
- * Matters of request that matches a route pattern.
+ * Route processing means.
  *
  * @category Router
- * @typeparam TRoute  A type of route.
+ * @typeparam TRoute  A type of supported route.
  */
-export interface RouteMatters<TRoute extends PathRoute = PathRoute> {
+export interface RouteMeans<TRoute extends PathRoute = PathRoute> {
 
   /**
    * Original route.

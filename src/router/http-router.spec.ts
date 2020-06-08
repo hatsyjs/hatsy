@@ -8,7 +8,7 @@ import {
   URLRoute,
 } from '@hatsy/route-match';
 import { RouteMatcher } from '@hatsy/route-match/d.ts/route-matcher';
-import { httpListener, HttpMatters, renderJson } from '../http';
+import { httpListener, HttpMeans, renderJson } from '../http';
 import { readAll, testServer, TestServer } from '../spec';
 import { requestURL } from '../util';
 import { httpRouter } from './http-router';
@@ -33,7 +33,7 @@ describe('httpRouter', () => {
     const wrongHandler = jest.fn();
 
     server.listener.mockImplementation(httpListener(
-        httpRouter<HttpMatters, URLRoute>([
+        httpRouter<HttpMeans, URLRoute>([
           {
             on: 'wrong',
             to: wrongHandler,
@@ -54,7 +54,7 @@ describe('httpRouter', () => {
   });
   it('extracts route tail', async () => {
     server.listener.mockImplementation(httpListener(
-        httpRouter<HttpMatters, URLRoute>({
+        httpRouter<HttpMeans, URLRoute>({
           on: 'test/**',
           async to({ next, route }) {
             await next(renderJson({ route: route.toString() }));
@@ -68,7 +68,7 @@ describe('httpRouter', () => {
   });
   it('extracts route tail with custom function', async () => {
     server.listener.mockImplementation(httpListener(
-        httpRouter<HttpMatters, URLRoute>({
+        httpRouter<HttpMeans, URLRoute>({
           on: 'test/{tail:**}',
           async to({ next, route }) {
             await next(renderJson({ route: String(route) }));
@@ -94,7 +94,7 @@ describe('httpRouter', () => {
   });
   it('captures route matches', async () => {
     server.listener.mockImplementation(httpListener(
-        httpRouter<HttpMatters, URLRoute>({
+        httpRouter<HttpMeans, URLRoute>({
           on: [rcaptureEntry('dir'), rmatchDirSep, rmatchDirs],
           async to({ next, routeMatch }) {
 
@@ -115,7 +115,7 @@ describe('httpRouter', () => {
   });
   it('builds custom route', async () => {
     server.listener.mockImplementation(httpListener(
-        httpRouter<HttpMatters, MatrixRoute>(
+        httpRouter<HttpMeans, MatrixRoute>(
             {
               on: 'test/**',
               async to({ next, fullRoute }) {
@@ -136,7 +136,7 @@ describe('httpRouter', () => {
   });
   it('extracts URL from trusted forwarding info', async () => {
     server.listener.mockImplementation(httpListener(
-        httpRouter<HttpMatters, URLRoute>(
+        httpRouter<HttpMeans, URLRoute>(
             {
               on: 'test/**',
               async to({ next, fullRoute: { url: { href } } }) {

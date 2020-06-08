@@ -4,32 +4,32 @@
  */
 import { RoutePattern, simpleRoutePattern, urlRoute, URLRoute } from '@hatsy/route-match';
 import { noop } from '@proc7ts/primitives';
-import { HttpMatters } from '../http';
+import { HttpMeans } from '../http';
 import { RequestHandler } from '../request-handler';
 import { ProxyForwardTrust, requestURL } from '../util';
 import { routeHandler, RouteSpec } from './route-handler';
-import { RouteMatters } from './route-matters';
+import { RouteMeans } from './route-means';
 
 /**
  * Router configuration.
  *
  * @category Router
- * @typeparam TMatters  A type of supported HTTP request processing matters.
+ * @typeparam TMeans  A type of incoming HTTP request processing means.
  * @typeparam TRoute  A type of supported URL route.
  */
-export type HttpRouterConfig<TMatters extends HttpMatters = HttpMatters, TRoute extends URLRoute = URLRoute> =
+export type HttpRouterConfig<TMeans extends HttpMeans = HttpMeans, TRoute extends URLRoute = URLRoute> =
     | HttpRouterConfig.DefaultRoute
-    | HttpRouterConfig.CustomRoute<TMatters, TRoute>;
+    | HttpRouterConfig.CustomRoute<TMeans, TRoute>;
 
 export namespace HttpRouterConfig {
 
   /**
    * Base router configuration.
    *
-   * @typeparam TMatters  A type of supported HTTP request processing matters.
+   * @typeparam TMeans  A type of incoming HTTP request processing means.
    * @typeparam TRoute  A type of supported URL route.
    */
-  export interface Base<TMatters extends HttpMatters = HttpMatters, TRoute extends URLRoute = URLRoute> {
+  export interface Base<TMeans extends HttpMeans = HttpMeans, TRoute extends URLRoute = URLRoute> {
 
     /**
      * A trust policy to proxy forwarding records.
@@ -43,13 +43,13 @@ export namespace HttpRouterConfig {
     /**
      * A parser of route pattern string.
      *
-     * The `this` parameter is bound to current request processing matters.
+     * The `this` parameter is bound to current request processing means.
      *
      * @param pattern  Pattern string in supported format.
      *
      * @default Supports patterns in simple format (`simpleRoutePattern()`).
      */
-    routePattern?(this: TMatters & RouteMatters<TRoute>, pattern: string): RoutePattern<TRoute>;
+    routePattern?(this: TMeans & RouteMeans<TRoute>, pattern: string): RoutePattern<TRoute>;
 
   }
 
@@ -57,8 +57,6 @@ export namespace HttpRouterConfig {
    * Router configuration with default route builder.
    *
    * @category Router
-   * @typeparam TMatters  A type of supported HTTP request processing matters.
-   * @typeparam TRoute  A type of supported URL route.
    */
   export interface DefaultRoute extends Base {
 
@@ -70,22 +68,22 @@ export namespace HttpRouterConfig {
    * Router configuration with custom route builder.
    *
    * @category Router
-   * @typeparam TMatters  A type of supported HTTP request processing matters.
+   * @typeparam TMeans  A type of incoming HTTP request processing means.
    * @typeparam TRoute  A type of supported URL route.
    */
-  export interface CustomRoute<TMatters extends HttpMatters = HttpMatters, TRoute extends URLRoute = URLRoute>
+  export interface CustomRoute<TMeans extends HttpMeans = HttpMeans, TRoute extends URLRoute = URLRoute>
       extends Base {
 
     /**
-     * Builds a route based on HTTP request processing matters.
+     * Builds a route based on HTTP request processing means.
      *
-     * @param matters  HTTP request processing matters.
+     * @param means  HTTP request processing means.
      *
      * @returns New URL route.
      *
      * @default Builds a route based on {@link requestURL request URL}.
      */
-    buildRoute(matters: TMatters): TRoute;
+    buildRoute(means: TMeans): TRoute;
 
   }
 
@@ -95,33 +93,35 @@ export namespace HttpRouterConfig {
  * @internal
  */
 function buildURLRoute<TRoute extends URLRoute>(
-    matters: HttpMatters,
+    { request }: HttpMeans,
     { forwardTrust }: HttpRouterConfig,
 ): TRoute {
-  return urlRoute(requestURL(matters.request, forwardTrust)) as TRoute;
+  return urlRoute(requestURL(request, forwardTrust)) as TRoute;
 }
 
 /**
  * Builds HTTP router with URL route.
  *
- * The router is an HTTP request processing handler that builds {@link RouteMatters route matters} and delegates
- * to matching route handlers.
+ * The router is an HTTP request processing handler that builds {@link RouteMeans route processing means} and delegates
+ * to matching route handler(s).
  *
  * @category Router
+ * @typeparam TMeans  A type of incoming HTTP request processing means.
+ * @typeparam TRoute  A type of supported route.
  * @param routes  Either route handler specifier, or iterable of route handler specifiers.
  * @param config  Router configuration.
  *
  * @returns HTTP request processing handler.
  */
-export function httpRouter<TMatters extends HttpMatters, TRoute extends URLRoute>(
-    routes: RouteSpec<TMatters, TRoute> | Iterable<RouteSpec<TMatters, TRoute>>,
+export function httpRouter<TMeans extends HttpMeans, TRoute extends URLRoute>(
+    routes: RouteSpec<TRoute, TMeans & RouteMeans<TRoute>> | Iterable<RouteSpec<TRoute, TMeans & RouteMeans<TRoute>>>,
     config?: HttpRouterConfig.DefaultRoute,
-): RequestHandler<TMatters>;
+): RequestHandler<TMeans>;
 
 /**
  * Builds HTTP router with custom route.
  *
- * The router is an HTTP request processing handler that builds {@link RouteMatters route matters} and delegates
+ * The router is an HTTP request processing handler that builds {@link RouteMeans route processing means} and delegates
  * to matching route handlers.
  *
  * @param routes  Either route handler specifier, or iterable of route handler specifiers.
@@ -129,15 +129,15 @@ export function httpRouter<TMatters extends HttpMatters, TRoute extends URLRoute
  *
  * @returns HTTP request processing handler.
  */
-export function httpRouter<TMatters extends HttpMatters, TRoute extends URLRoute>(
-    routes: RouteSpec<TMatters, TRoute> | Iterable<RouteSpec<TMatters, TRoute>>,
-    config: HttpRouterConfig.CustomRoute<TMatters, TRoute>,
-): RequestHandler<TMatters>;
+export function httpRouter<TMeans extends HttpMeans, TRoute extends URLRoute>(
+    routes: RouteSpec<TRoute, TMeans & RouteMeans<TRoute>> | Iterable<RouteSpec<TRoute, TMeans & RouteMeans<TRoute>>>,
+    config: HttpRouterConfig.CustomRoute<TMeans, TRoute>,
+): RequestHandler<TMeans>;
 
-export function httpRouter<TMatters extends HttpMatters, TRoute extends URLRoute>(
-    routes: RouteSpec<TMatters, TRoute> | Iterable<RouteSpec<TMatters, TRoute>>,
-    config: HttpRouterConfig<TMatters, TRoute> = {},
-): RequestHandler<TMatters> {
+export function httpRouter<TMeans extends HttpMeans, TRoute extends URLRoute>(
+    routes: RouteSpec<TRoute, TMeans & RouteMeans<TRoute>> | Iterable<RouteSpec<TRoute, TMeans & RouteMeans<TRoute>>>,
+    config: HttpRouterConfig<TMeans, TRoute> = {},
+): RequestHandler<TMeans> {
 
   const { routePattern = simpleRoutePattern } = config;
 
@@ -152,7 +152,7 @@ export function httpRouter<TMatters extends HttpMatters, TRoute extends URLRoute
           route,
           routeMatch: noop,
           routePattern,
-        } as RouteMatters<TRoute> & Partial<unknown>,
+        } as RouteMeans<TRoute> & Partial<unknown>,
     );
   };
 }

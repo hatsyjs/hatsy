@@ -3,8 +3,8 @@
  * @module @hatsy/hatsy
  */
 import { RequestContext } from '../../request-context';
-import { HttpHandler } from '../http-handler';
-import { HttpMatters } from '../http-matters';
+import { RequestHandler } from '../../request-handler';
+import { HttpMeans } from '../http-means';
 
 /**
  * Builds HTTP request handler that renders provided HTML on response.
@@ -14,8 +14,8 @@ import { HttpMatters } from '../http-matters';
  *
  * @returns HTTP request handler.
  */
-export function renderHtml(html: string | PromiseLike<string>): HttpHandler {
-  return async ({ response }: RequestContext<HttpMatters>): Promise<void> => {
+export function renderHtml(html: string | PromiseLike<string>): RequestHandler<HttpMeans> {
+  return async ({ response }: RequestContext<HttpMeans>): Promise<void> => {
 
     const content = await html;
 

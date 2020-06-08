@@ -1,9 +1,9 @@
-import { ErrorMatters } from '../errors';
+import { ErrorMeans } from '../error-means';
 import { RequestContext } from '../request-context';
 import { readAll, suppressedLog, testServer, TestServer } from '../spec';
 import { HttpError } from './http-error';
 import { httpListener } from './http-listener';
-import { HttpMatters } from './http-matters';
+import { HttpMeans } from './http-means';
 
 describe('httpListener', () => {
 
@@ -22,7 +22,7 @@ describe('httpListener', () => {
 
   it('invokes handler', async () => {
 
-    const handler = jest.fn(({ response }: RequestContext<HttpMatters>) => {
+    const handler = jest.fn(({ response }: RequestContext<HttpMeans>) => {
       response.end('TEST');
     });
 
@@ -85,7 +85,7 @@ describe('httpListener', () => {
   });
   it('invokes provided default handler when handler not responding', async () => {
 
-    const defaultHandler = jest.fn(({ response }: RequestContext<HttpMatters>) => {
+    const defaultHandler = jest.fn(({ response }: RequestContext<HttpMeans>) => {
       response.end('DEFAULT');
     });
 
@@ -106,7 +106,7 @@ describe('httpListener', () => {
     const error = new Error('test');
     const log = suppressedLog();
     const logErrorSpy = jest.spyOn(log, 'error');
-    const errorHandler = jest.fn(({ response, error }: RequestContext<ErrorMatters & HttpMatters>) => {
+    const errorHandler = jest.fn(({ response, error }: RequestContext<ErrorMeans & HttpMeans>) => {
       response.end(`ERROR ${error.message}`);
     });
 
@@ -126,7 +126,7 @@ describe('httpListener', () => {
     const error = new HttpError(404, 'Never Found');
     const log = suppressedLog();
     const logErrorSpy = jest.spyOn(log, 'error');
-    const errorHandler = jest.fn(({ response, error }: RequestContext<ErrorMatters & HttpMatters>) => {
+    const errorHandler = jest.fn(({ response, error }: RequestContext<ErrorMeans & HttpMeans>) => {
       response.end(`ERROR ${error.message}`);
     });
 

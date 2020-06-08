@@ -3,24 +3,23 @@
  * @module @hatsy/hatsy
  */
 import { IncomingMessage, ServerResponse } from 'http';
-import { ErrorHandler, ErrorMatters } from '../errors';
-import { RequestContext } from '../request-context';
+import { ErrorMeans } from '../error-means';
+import { RequestContext, RequestExtensions } from '../request-context';
 import { requestHandler, RequestHandler } from '../request-handler';
 import { renderHttpError } from './handlers';
 import { HttpError } from './http-error';
-import { HttpHandler } from './http-handler';
-import { HttpMatters } from './http-matters';
+import { HttpMeans } from './http-means';
 
 /**
  * HTTP processing configuration.
  *
  * @category HTTP
- * @typeparam TMatters  A type of supported HTTP request processing matters.
+ * @typeparam TMeans  A type of supported HTTP request processing means.
  */
-export interface HttpConfig<TMatters extends HttpMatters = HttpMatters> {
+export interface HttpConfig<TMeans extends HttpMeans = HttpMeans> {
 
   /**
-   * A {@link HttpMatters.log logger} to use.
+   * A {@link HttpMeans.log logger} to use.
    *
    * @default `console.log`
    */
@@ -35,20 +34,20 @@ export interface HttpConfig<TMatters extends HttpMatters = HttpMatters> {
    *
    * @default `true`, which means a `404 Not Found` error will be raised if there is no response.
    */
-  defaultHandler?: HttpHandler<TMatters> | boolean;
+  defaultHandler?: RequestHandler<TMeans> | boolean;
 
   /**
    * Error processing handler.
    *
    * This handler will be called once request processing error occurred. Such handler would receive
-   * a {@link ErrorMatters error processing matters} along with {@link HttpMatters HTTP processing matter}.
+   * a {@link ErrorMeans error processing means} along with {@link HttpMeans HTTP processing ones}.
    *
    * When set to `false` the request processing errors will be logged, but otherwise ignored.
    *
    * @default `true`, which means the request processing error page will be rendered by {@link renderHttpError}
    * handler.
    */
-  errorHandler?: ErrorHandler<TMatters> | boolean;
+  errorHandler?: RequestHandler<TMeans & ErrorMeans> | boolean;
 
 }
 
@@ -67,8 +66,8 @@ export interface HttpConfig<TMatters extends HttpMatters = HttpMatters> {
  * @see requestHandler
  */
 export function httpListener<TRequest extends IncomingMessage, TResponse extends ServerResponse>(
-    handlers: HttpHandler<HttpMatters<TRequest, TResponse>> | Iterable<HttpHandler<HttpMatters<TRequest, TResponse>>>,
-    config: HttpConfig<HttpMatters<TRequest, TResponse>> = {},
+    handlers: RequestHandler<HttpMeans<TRequest, TResponse>> | Iterable<RequestHandler<HttpMeans<TRequest, TResponse>>>,
+    config: HttpConfig<HttpMeans<TRequest, TResponse>> = {},
 ): (this: void, req: TRequest, res: TResponse) => void {
 
   const { log = console } = config;
@@ -76,8 +75,8 @@ export function httpListener<TRequest extends IncomingMessage, TResponse extends
   const defaultHandler = defaultHttpHandler(config);
   const errorHandler = httpErrorHandler(config);
 
-  const fullHandler: HttpHandler<HttpMatters<TRequest, TResponse>> = async (
-      { next }: RequestContext<HttpMatters<TRequest, TResponse>>,
+  const fullHandler: RequestHandler<HttpMeans<TRequest, TResponse>> = async (
+      { next }: RequestContext<HttpMeans<TRequest, TResponse>>,
   ): Promise<void> => {
     try {
       if (!await next(handler)) {
@@ -105,23 +104,23 @@ export function httpListener<TRequest extends IncomingMessage, TResponse extends
 function toHttpContext<
     TRequest extends IncomingMessage,
     TResponse extends ServerResponse,
-    TMatters extends HttpMatters<TRequest, TResponse>,
+    TMeans extends HttpMeans<TRequest, TResponse>,
 >(
-    matters: TMatters,
-): RequestContext<TMatters> {
+    means: TMeans,
+): RequestContext<TMeans> {
 
-  const context = matters as RequestContext<TMatters>;
+  const context = means as RequestContext<TMeans>;
 
   context.next = async <TExt>(
-      handler: RequestHandler<TMatters & TExt>,
-      extensions?: RequestContext.Extensions<HttpMatters<TRequest, TResponse>, TExt>,
+      handler: RequestHandler<TMeans & TExt>,
+      extensions?: RequestExtensions<HttpMeans<TRequest, TResponse>, TExt>,
   ): Promise<boolean> => {
 
     await handler(extensions
-        ? toHttpContext({ ...matters, ...extensions } as TMatters & TExt)
-        : context as RequestContext<TMatters & TExt>);
+        ? toHttpContext({ ...means, ...extensions } as TMeans & TExt)
+        : context as RequestContext<TMeans & TExt>);
 
-    return matters.response.writableEnded;
+    return means.response.writableEnded;
   };
 
   return context;
@@ -130,11 +129,11 @@ function toHttpContext<
 /**
  * @internal
  */
-function defaultHttpHandler<TMatters extends HttpMatters>(
+function defaultHttpHandler<TMeans extends HttpMeans>(
     {
       defaultHandler = true,
-    }: HttpConfig<TMatters>,
-): HttpHandler<TMatters> {
+    }: HttpConfig<TMeans>,
+): RequestHandler<TMeans> {
   if (!defaultHandler) {
     return () => {/* no default handler */};
   }
@@ -146,12 +145,12 @@ function defaultHttpHandler<TMatters extends HttpMatters>(
 /**
  * @internal
  */
-function httpErrorHandler<TMatters extends HttpMatters>(
+function httpErrorHandler<TMeans extends HttpMeans>(
     {
       defaultHandler = true,
       errorHandler = true,
-    }: HttpConfig<TMatters>,
-): ErrorHandler<TMatters> {
+    }: HttpConfig<TMeans>,
+): RequestHandler<TMeans & ErrorMeans> {
   if (!errorHandler) {
     return defaultHandler ? renderEmptyHttpError : logHttpError;
   }
@@ -168,7 +167,7 @@ function httpErrorHandler<TMatters extends HttpMatters>(
  * @internal
  */
 function logHttpError(
-    { request, log, error }: RequestContext<HttpMatters & ErrorMatters>,
+    { request, log, error }: RequestContext<HttpMeans & ErrorMeans>,
 ): void {
   if (error instanceof HttpError) {
     log.error(`[${request.method} ${request.url}]`, `ERROR ${error.message}`);
@@ -180,7 +179,7 @@ function logHttpError(
 /**
  * @internal
  */
-function renderEmptyHttpError(context: RequestContext<HttpMatters & ErrorMatters>): void {
+function renderEmptyHttpError(context: RequestContext<HttpMeans & ErrorMeans>): void {
   logHttpError(context);
   context.response.end();
 }

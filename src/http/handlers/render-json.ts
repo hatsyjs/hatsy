@@ -3,8 +3,8 @@
  * @module @hatsy/hatsy
  */
 import { RequestContext } from '../../request-context';
-import { HttpHandler } from '../http-handler';
-import { HttpMatters } from '../http-matters';
+import { RequestHandler } from '../../request-handler';
+import { HttpMeans } from '../http-means';
 
 /**
  * Builds HTTP request handler that renders the given value as JSON on response.
@@ -14,8 +14,8 @@ import { HttpMatters } from '../http-matters';
  *
  * @returns HTTP request handler.
  */
-export function renderJson(value: any | PromiseLike<any>): HttpHandler {
-  return async ({ response }: RequestContext<HttpMatters>): Promise<void> => {
+export function renderJson(value: any | PromiseLike<any>): RequestHandler<HttpMeans> {
+  return async ({ response }: RequestContext<HttpMeans>): Promise<void> => {
 
     const content = await value;
 

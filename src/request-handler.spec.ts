@@ -52,10 +52,9 @@ describe('requestHandler', () => {
     expect(await call().catch(err => err)).toBe(error);
     expect(calls).toEqual([1, 2]);
   });
-  it('stops handlers execution once response written throws', async () => {
+  it('stops handlers execution once response written', async () => {
 
     const calls: number[] = [];
-
     const call = async (): Promise<void> => await requestHandler([
       () => { calls.push(1); },
       () => { calls.push(2); (response as any).writableEnded = true; },

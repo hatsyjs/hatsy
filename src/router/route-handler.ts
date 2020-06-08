@@ -5,45 +5,33 @@
 import { PathRoute, RouteCaptor, routeMatch, RouteMatcher, RoutePattern, routeTail } from '@hatsy/route-match';
 import { mapIt } from '@proc7ts/a-iterable';
 import { isIterable } from '@proc7ts/primitives';
-import { RequestContext } from '../request-context';
+import { RequestContext, RequestModifications } from '../request-context';
 import { requestHandler, RequestHandler } from '../request-handler';
-import { RouteMatters } from './route-matters';
+import { RouteMeans } from './route-means';
 
 /**
- * Request route handler signature.
- *
- * Accepts a {@link RequestContext request processing context} containing {@link RouteMatters request routing matters}
- * used to respond or to delegate to another handler.
+ * A specifier of route handler to delegate request processing to when it matches target {@link on pattern}.
  *
  * @category Router
- * @typeparam TMatters  A type of request processing matters required in addition to {@link RouteMatters request
- * routing} ones.
- * @typeparam TRoute  A type of supported route.
- */
-export type RouteHandler<TMatters, TRoute extends PathRoute = PathRoute> =
-    RequestHandler<RouteMatters<TRoute> & TMatters>;
-
-/**
- * A specifier of route handler to delegate request processing to when it matches the given
- *
- * @category Router
- * @typeparam TMatters  A type of request processing matters required in addition to {@link RouteMatters request
- * route} ones.
  * @typeparam TRoute  A type of matching route.
+ * @typeparam TMeans  A type of route processing means.
  */
-export interface RouteSpec<TMatters, TRoute extends PathRoute = PathRoute> {
+export interface RouteSpec<
+    TRoute extends PathRoute = PathRoute,
+    TMeans extends RouteMeans<TRoute> = RouteMeans<TRoute>,
+    > {
 
   /**
    * A route pattern that should match the route in order the {@link to handler} to be called.
    *
-   * When specified as a string, a {@link RouteMatters.routePattern pattern parser} is used to parse it.
+   * When specified as a string, a {@link RouteMeans.routePattern pattern parser} is used to parse it.
    */
   readonly on: RoutePattern<TRoute> | string;
 
   /**
    * A route handler to call when the route matches the pattern.
    */
-  readonly to: RouteHandler<TMatters, TRoute>,
+  readonly to: RequestHandler<TMeans>,
 
   /**
    * Matching route tail extractor.
@@ -52,7 +40,7 @@ export interface RouteSpec<TMatters, TRoute extends PathRoute = PathRoute> {
    *
    * @default Extracts a matching route tail starting from the first capture/wildcard.
    */
-  readonly tail?: RouteTailExtractor<TMatters, TRoute>;
+  readonly tail?: RouteTailExtractor<TRoute, TMeans>;
 
 }
 
@@ -60,22 +48,21 @@ export interface RouteSpec<TMatters, TRoute extends PathRoute = PathRoute> {
  * Matching route tail extractor.
  *
  * @category Router
- * @typeparam TMatters  A type of request processing matters required in addition to {@link RouteMatters request
- * route} ones.
  * @typeparam TRoute  A type of matching route.
- * @param matters  Request processing matters of the matching route.
+ * @typeparam TMeans  A type of route processing means.
+ */
+export type RouteTailExtractor<TRoute extends PathRoute, TMeans extends RouteMeans<TRoute> = RouteMeans<TRoute>> =
+/**
+ * @param means  Route processing means of the matching route.
  *
  * @returns  Extracted tail of the matching route.
  */
-export type RouteTailExtractor<TMatters, TRoute extends PathRoute> = (
-    this: void,
-    matters: RouteMatters<TRoute> & TMatters,
-) => TRoute;
+    (this: void, means: TMeans) => TRoute;
 
 /**
  * @internal
  */
-function defaultRouteTailExtractor<TRoute extends PathRoute>({ route, routeMatch }: RouteMatters<TRoute>): TRoute {
+function defaultRouteTailExtractor<TRoute extends PathRoute>({ route, routeMatch }: RouteMeans<TRoute>): TRoute {
 
   let fromEntry: number | undefined;
 
@@ -91,10 +78,10 @@ function defaultRouteTailExtractor<TRoute extends PathRoute>({ route, routeMatch
 /**
  * @internal
  */
-function routeHandlerBySpec<TMatters, TRoute extends PathRoute>(
-    { on, to, tail = defaultRouteTailExtractor }: RouteSpec<TMatters, TRoute>,
-): RouteHandler<TMatters, TRoute> {
-  return async (context: RequestContext<RouteMatters<TRoute> & TMatters>) => {
+function routeHandlerBySpec<TRoute extends PathRoute, TMeans extends RouteMeans<TRoute>>(
+    { on, to, tail = defaultRouteTailExtractor }: RouteSpec<TRoute, TMeans>,
+): RequestHandler<TMeans> {
+  return async (context: RequestContext<RouteMeans<TRoute> & TMeans>) => {
 
     const { route, routeMatch: prevMatch, next } = context;
     const specMatch = routeMatch(
@@ -118,7 +105,7 @@ function routeHandlerBySpec<TMatters, TRoute extends PathRoute>(
             prevMatch(captor);
             specMatch(captor);
           },
-        } as RequestContext.Modifications<RouteMatters<TRoute> & TMatters>,
+        } as RequestModifications<RouteMeans<TRoute> & TMeans>,
     );
   };
 }
@@ -130,16 +117,15 @@ function routeHandlerBySpec<TMatters, TRoute extends PathRoute>(
  * then tries the next matching route and so on, until responded or no routes left.
  *
  * @category Router
- * @typeparam TMatters  A type of request processing matters required in addition to {@link RouteMatters request
- * route} ones.
  * @typeparam TRoute  A type of supported route.
+ * @typeparam TMeans  A type of route processing means.
  * @param routes  Either route handler specifier, or iterable of route handler specifiers.
  *
  * @returns Request route handler.
  */
-export function routeHandler<TMatters, TRoute extends PathRoute = PathRoute>(
-    routes: RouteSpec<TMatters, TRoute> | Iterable<RouteSpec<TMatters, TRoute>>,
-): RouteHandler<TMatters, TRoute> {
+export function routeHandler<TRoute extends PathRoute, TMeans extends RouteMeans<TRoute>>(
+    routes: RouteSpec<TRoute, TMeans> | Iterable<RouteSpec<TRoute, TMeans>>,
+): RequestHandler<TMeans> {
   return isIterable(routes)
       ? requestHandler(mapIt(routes, routeHandlerBySpec))
       : routeHandlerBySpec(routes);
