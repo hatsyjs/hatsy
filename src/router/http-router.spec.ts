@@ -33,18 +33,20 @@ describe('httpRouter', () => {
     const wrongHandler = jest.fn();
 
     server.listener.mockImplementation(httpListener(
-        httpRouter<HttpMeans, URLRoute>([
-          {
-            on: 'wrong',
-            to: wrongHandler,
-          },
-          {
-            on: 'test',
-            async to({ next }) {
-              await next(renderJson({ response: 'test' }));
+        httpRouter({
+          routes: [
+            {
+              on: 'wrong',
+              to: wrongHandler,
             },
-          },
-        ]),
+            {
+              on: 'test',
+              async to({ next }) {
+                await next(renderJson({ response: 'test' }));
+              },
+            },
+          ],
+        }),
     ));
 
     const response = await server.get('/test');
@@ -52,12 +54,31 @@ describe('httpRouter', () => {
     expect(JSON.parse(await readAll(response))).toEqual({ response: 'test' });
     expect(wrongHandler).not.toHaveBeenCalled();
   });
+  it('delegates to route handler', async () => {
+
+    const wrongHandler = jest.fn();
+
+    server.listener.mockImplementation(httpListener(
+        httpRouter({
+          routes: async ({ route, next }) => {
+            await next(renderJson({ route: String(route) }));
+          },
+        }),
+    ));
+
+    const response = await server.get('/test.html');
+
+    expect(JSON.parse(await readAll(response))).toEqual({ route: 'test.html' });
+    expect(wrongHandler).not.toHaveBeenCalled();
+  });
   it('extracts route tail', async () => {
     server.listener.mockImplementation(httpListener(
-        httpRouter<HttpMeans, URLRoute>({
-          on: 'test/**',
-          async to({ next, route }) {
-            await next(renderJson({ route: route.toString() }));
+        httpRouter({
+          routes: {
+            on: 'test/**',
+            async to({ next, route }) {
+              await next(renderJson({ route: route.toString() }));
+            },
           },
         }),
     ));
@@ -68,22 +89,24 @@ describe('httpRouter', () => {
   });
   it('extracts route tail with custom function', async () => {
     server.listener.mockImplementation(httpListener(
-        httpRouter<HttpMeans, URLRoute>({
-          on: 'test/{tail:**}',
-          async to({ next, route }) {
-            await next(renderJson({ route: String(route) }));
-          },
-          tail({ routeMatch }) {
+        httpRouter({
+          routes: {
+            on: 'test/{tail:**}',
+            async to({ next, route }) {
+              await next(renderJson({ route: String(route) }));
+            },
+            tail({ routeMatch }) {
 
-            let tail!: URLRoute;
+              let tail!: URLRoute;
 
-            routeMatch((_type, key, _value, position: RouteMatcher.Position<URLRoute>) => {
-              if (key === 'tail') {
-                tail = routeTail(position.route, position.entryIndex);
-              }
-            });
+              routeMatch((_type, key, _value, position: RouteMatcher.Position<URLRoute>) => {
+                if (key === 'tail') {
+                  tail = routeTail(position.route, position.entryIndex);
+                }
+              });
 
-            return tail;
+              return tail;
+            },
           },
         }),
     ));
@@ -94,17 +117,19 @@ describe('httpRouter', () => {
   });
   it('captures route matches', async () => {
     server.listener.mockImplementation(httpListener(
-        httpRouter<HttpMeans, URLRoute>({
-          on: [rcaptureEntry('dir'), rmatchDirSep, rmatchDirs],
-          async to({ next, routeMatch }) {
+        httpRouter({
+          routes: {
+            on: [rcaptureEntry('dir'), rmatchDirSep, rmatchDirs],
+            async to({ next, routeMatch }) {
 
-            const captured: (readonly [string, string | number, any])[] = [];
+              const captured: (readonly [string, string | number, any])[] = [];
 
-            routeMatch((type, key, value, _position): void => {
-              captured.push([type, key, value]);
-            });
+              routeMatch((type, key, value, _position): void => {
+                captured.push([type, key, value]);
+              });
 
-            await next(renderJson(captured));
+              await next(renderJson(captured));
+            },
           },
         }),
     ));
@@ -115,19 +140,17 @@ describe('httpRouter', () => {
   });
   it('builds custom route', async () => {
     server.listener.mockImplementation(httpListener(
-        httpRouter<HttpMeans, MatrixRoute>(
-            {
-              on: 'test/**',
-              async to({ next, fullRoute }) {
-                await next(renderJson({ attr: fullRoute.path[0].attrs.get('attr') }));
-              },
+        httpRouter<HttpMeans, MatrixRoute>({
+          routes: {
+            on: 'test/**',
+            async to({ next, fullRoute }) {
+              await next(renderJson({ attr: fullRoute.path[0].attrs.get('attr') }));
             },
-            {
-              buildRoute({ request }) {
-                return matrixRoute(requestURL(request, this.forwardTrust));
-              },
-            },
-        ),
+          },
+          buildRoute({ request }) {
+            return matrixRoute(requestURL(request, this.forwardTrust));
+          },
+        }),
     ));
 
     const response = await server.get('/test;attr=val/nested?param=value');
@@ -136,19 +159,17 @@ describe('httpRouter', () => {
   });
   it('extracts URL from trusted forwarding info', async () => {
     server.listener.mockImplementation(httpListener(
-        httpRouter<HttpMeans, URLRoute>(
-            {
-              on: 'test/**',
-              async to({ next, fullRoute: { url: { href } } }) {
-                await next(renderJson({ href }));
-              },
+        httpRouter({
+          routes: {
+            on: 'test/**',
+            async to({ next, fullRoute: { url: { href } } }) {
+              await next(renderJson({ href }));
             },
-            {
-              forwardTrust: {
-                trusted: true,
-              },
-            },
-        ),
+          },
+          forwardTrust: {
+            trusted: true,
+          },
+        }),
     ));
 
     const response = await server.get(

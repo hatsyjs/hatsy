@@ -5,13 +5,14 @@
 import { RoutePattern, simpleRoutePattern, urlRoute, URLRoute } from '@hatsy/route-match';
 import { noop } from '@proc7ts/primitives';
 import { HttpMeans } from '../http';
+import { RequestContext, RequestExtensions } from '../request-context';
 import { RequestHandler } from '../request-handler';
 import { ProxyForwardTrust, requestURL } from '../util';
-import { routeHandler, RouteSpec } from './route-handler';
+import { routeHandler, RoutingConfig } from './route-handler';
 import { RouteMeans } from './route-means';
 
 /**
- * Router configuration.
+ * HTTP router configuration.
  *
  * @category Router
  * @typeparam TMeans  A type of incoming HTTP request processing means.
@@ -29,7 +30,8 @@ export namespace HttpRouterConfig {
    * @typeparam TMeans  A type of incoming HTTP request processing means.
    * @typeparam TRoute  A type of supported URL route.
    */
-  export interface Base<TMeans extends HttpMeans = HttpMeans, TRoute extends URLRoute = URLRoute> {
+  export interface Base<TMeans extends HttpMeans = HttpMeans, TRoute extends URLRoute = URLRoute>
+      extends RoutingConfig<TRoute, TMeans & RouteMeans<TRoute>> {
 
     /**
      * A trust policy to proxy forwarding records.
@@ -57,8 +59,10 @@ export namespace HttpRouterConfig {
    * Router configuration with default route builder.
    *
    * @category Router
+   * @typeparam TMeans  A type of incoming HTTP request processing means.
+   * @typeparam TRoute  A type of supported URL route.
    */
-  export interface DefaultRoute extends Base {
+  export interface DefaultRoute<TMeans extends HttpMeans = HttpMeans> extends Base<TMeans> {
 
     readonly buildRoute?: undefined;
 
@@ -69,10 +73,9 @@ export namespace HttpRouterConfig {
    *
    * @category Router
    * @typeparam TMeans  A type of incoming HTTP request processing means.
-   * @typeparam TRoute  A type of supported URL route.
    */
   export interface CustomRoute<TMeans extends HttpMeans = HttpMeans, TRoute extends URLRoute = URLRoute>
-      extends Base {
+      extends Base<TMeans, TRoute> {
 
     /**
      * Builds a route based on HTTP request processing means.
@@ -108,14 +111,12 @@ function buildURLRoute<TRoute extends URLRoute>(
  * @category Router
  * @typeparam TMeans  A type of incoming HTTP request processing means.
  * @typeparam TRoute  A type of supported route.
- * @param routes  Either route handler specifier, or iterable of route handler specifiers.
- * @param config  Router configuration.
+ * @param config  HTTP router configuration.
  *
  * @returns HTTP request processing handler.
  */
-export function httpRouter<TMeans extends HttpMeans, TRoute extends URLRoute>(
-    routes: RouteSpec<TRoute, TMeans & RouteMeans<TRoute>> | Iterable<RouteSpec<TRoute, TMeans & RouteMeans<TRoute>>>,
-    config?: HttpRouterConfig.DefaultRoute,
+export function httpRouter<TMeans extends HttpMeans>(
+    config: HttpRouterConfig.DefaultRoute<TMeans>,
 ): RequestHandler<TMeans>;
 
 /**
@@ -124,35 +125,33 @@ export function httpRouter<TMeans extends HttpMeans, TRoute extends URLRoute>(
  * The router is an HTTP request processing handler that builds {@link RouteMeans route processing means} and delegates
  * to matching route handlers.
  *
- * @param routes  Either route handler specifier, or iterable of route handler specifiers.
- * @param config  Router configuration.
+ * @param config  HTTP router configuration.
  *
  * @returns HTTP request processing handler.
  */
 export function httpRouter<TMeans extends HttpMeans, TRoute extends URLRoute>(
-    routes: RouteSpec<TRoute, TMeans & RouteMeans<TRoute>> | Iterable<RouteSpec<TRoute, TMeans & RouteMeans<TRoute>>>,
     config: HttpRouterConfig.CustomRoute<TMeans, TRoute>,
 ): RequestHandler<TMeans>;
 
 export function httpRouter<TMeans extends HttpMeans, TRoute extends URLRoute>(
-    routes: RouteSpec<TRoute, TMeans & RouteMeans<TRoute>> | Iterable<RouteSpec<TRoute, TMeans & RouteMeans<TRoute>>>,
-    config: HttpRouterConfig<TMeans, TRoute> = {},
+    config: HttpRouterConfig<TMeans, TRoute>,
 ): RequestHandler<TMeans> {
 
   const { routePattern = simpleRoutePattern } = config;
 
-  return async context => {
+  return async (context: RequestContext<TMeans>) => {
 
     const route: TRoute = config.buildRoute ? config.buildRoute(context) : buildURLRoute(context, config);
+    const ext: RouteMeans<TRoute> = {
+      fullRoute: route,
+      route,
+      routeMatch: noop,
+      routePattern,
+    };
 
-    await context.next(
-        routeHandler(routes),
-        {
-          fullRoute: route,
-          route,
-          routeMatch: noop,
-          routePattern,
-        } as RouteMeans<TRoute> & Partial<unknown>,
+    await context.next<RouteMeans<TRoute>>(
+        routeHandler(config as RoutingConfig<TRoute, TMeans & RouteMeans<TRoute>>),
+        ext as RequestExtensions<unknown, RouteMeans<TRoute>>,
     );
   };
 }

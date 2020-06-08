@@ -10,13 +10,34 @@ import { requestHandler, RequestHandler } from '../request-handler';
 import { RouteMeans } from './route-means';
 
 /**
- * A specifier of route handler to delegate request processing to when it matches target {@link on pattern}.
+ * Routing configuration.
+ *
+ * @category Router
+ * @typeparam TRoute  A type of supported URL route.
+ * @typeparam TMeans  A type of supported route processing means.
+ */
+export interface RoutingConfig<TRoute extends PathRoute, TMeans extends RouteMeans<TRoute>> {
+
+  /**
+   * Either a route processing handler, a routing rule, or iterable of the above.
+   */
+  routes:
+      | RequestHandler<TMeans>
+      | RoutingRule<TRoute, TMeans>
+      | Iterable<RequestHandler<TMeans> | RoutingRule<TRoute, TMeans>>,
+
+}
+
+/**
+ * Routing rule.
+ *
+ * Declares a route handler to delegate request processing to when the route matches target {@link on pattern}.
  *
  * @category Router
  * @typeparam TRoute  A type of matching route.
  * @typeparam TMeans  A type of route processing means.
  */
-export interface RouteSpec<
+export interface RoutingRule<
     TRoute extends PathRoute = PathRoute,
     TMeans extends RouteMeans<TRoute> = RouteMeans<TRoute>,
     > {
@@ -30,6 +51,8 @@ export interface RouteSpec<
 
   /**
    * A route handler to call when the route matches the pattern.
+   *
+   * This handler would receive a [[tail]] of the matching route.
    */
   readonly to: RequestHandler<TMeans>,
 
@@ -78,9 +101,15 @@ function defaultRouteTailExtractor<TRoute extends PathRoute>({ route, routeMatch
 /**
  * @internal
  */
-function routeHandlerBySpec<TRoute extends PathRoute, TMeans extends RouteMeans<TRoute>>(
-    { on, to, tail = defaultRouteTailExtractor }: RouteSpec<TRoute, TMeans>,
+function routeHandlerByRule<TRoute extends PathRoute, TMeans extends RouteMeans<TRoute>>(
+    rule: RequestHandler<TMeans> | RoutingRule<TRoute, TMeans>,
 ): RequestHandler<TMeans> {
+  if (typeof rule === 'function') {
+    return rule;
+  }
+
+  const { on, to, tail = defaultRouteTailExtractor } = rule;
+
   return async (context: RequestContext<RouteMeans<TRoute> & TMeans>) => {
 
     const { route, routeMatch: prevMatch, next } = context;
@@ -111,7 +140,7 @@ function routeHandlerBySpec<TRoute extends PathRoute, TMeans extends RouteMeans<
 }
 
 /**
- * Builds a request route handler that delegates to matching route handlers.
+ * Builds a route processing handler that delegates to route handlers accordingly to routing configuration.
  *
  * Selects the first matching route and delegates request processing to its handler. If the handler not responded,
  * then tries the next matching route and so on, until responded or no routes left.
@@ -119,14 +148,17 @@ function routeHandlerBySpec<TRoute extends PathRoute, TMeans extends RouteMeans<
  * @category Router
  * @typeparam TRoute  A type of supported route.
  * @typeparam TMeans  A type of route processing means.
- * @param routes  Either route handler specifier, or iterable of route handler specifiers.
+ * @param config  Routing configuration.
  *
- * @returns Request route handler.
+ * @returns Route processing handler.
  */
 export function routeHandler<TRoute extends PathRoute, TMeans extends RouteMeans<TRoute>>(
-    routes: RouteSpec<TRoute, TMeans> | Iterable<RouteSpec<TRoute, TMeans>>,
+    config: RoutingConfig<TRoute, TMeans>,
 ): RequestHandler<TMeans> {
+
+  const { routes } = config;
+
   return isIterable(routes)
-      ? requestHandler(mapIt(routes, routeHandlerBySpec))
-      : routeHandlerBySpec(routes);
+      ? requestHandler(mapIt(routes, routeHandlerByRule))
+      : routeHandlerByRule(routes);
 }
