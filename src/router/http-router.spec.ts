@@ -1,12 +1,4 @@
-import {
-  MatrixRoute,
-  matrixRoute,
-  rcaptureEntry,
-  rmatchDirs,
-  rmatchDirSep,
-  routeTail,
-  URLRoute,
-} from '@hatsy/route-match';
+import { MatrixRoute, matrixRoute, rcaptureEntry, rmatchDirs, rmatchDirSep, URLRoute } from '@hatsy/route-match';
 import { RouteMatcher } from '@hatsy/route-match/d.ts/route-matcher';
 import { httpListener, HttpMeans, renderJson } from '../http';
 import { readAll, testServer, TestServer } from '../spec';
@@ -101,7 +93,7 @@ describe('httpRouter', () => {
 
               routeMatch((_type, key, _value, position: RouteMatcher.Position<URLRoute>) => {
                 if (key === 'tail') {
-                  tail = routeTail(position.route, position.entryIndex);
+                  tail = position.route.segment(position.entryIndex);
                 }
               });
 

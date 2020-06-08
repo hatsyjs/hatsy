@@ -2,7 +2,7 @@
  * @packageDocumentation
  * @module @hatsy/hatsy
  */
-import { PathRoute, RouteCaptor, routeMatch, RouteMatcher, RoutePattern, routeTail } from '@hatsy/route-match';
+import { PathRoute, RouteCaptor, routeMatch, RouteMatcher, RoutePattern } from '@hatsy/route-match';
 import { mapIt } from '@proc7ts/a-iterable';
 import { isIterable, lazyValue } from '@proc7ts/primitives';
 import { RequestContext, RequestModifications } from '../request-context';
@@ -95,7 +95,7 @@ function defaultRouteTailExtractor<TRoute extends PathRoute>({ route, routeMatch
     }
   });
 
-  return fromEntry ? routeTail(route, fromEntry) : route;
+  return fromEntry ? route.segment(fromEntry) as TRoute : route;
 }
 
 /**

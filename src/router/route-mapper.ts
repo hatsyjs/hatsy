@@ -2,7 +2,7 @@
  * @packageDocumentation
  * @module @hatsy/hatsy
  */
-import { PathRoute, routeTail } from '@hatsy/route-match';
+import { PathRoute } from '@hatsy/route-match';
 import { RequestModifications } from '../request-context';
 import { RequestHandler } from '../request-handler';
 import { RouteMeans } from './route-means';
@@ -32,7 +32,7 @@ export function routeMapper<TRoute extends PathRoute, TMeans extends RouteMeans<
         await next(
             handler,
             {
-              route: routeTail(route, 1),
+              route: route.segment(1),
             } as RequestModifications<TMeans>,
         );
       }
