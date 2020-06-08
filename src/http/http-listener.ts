@@ -52,7 +52,7 @@ export interface HttpConfig<TMeans extends HttpMeans = HttpMeans> {
 }
 
 /**
- * Creates Node.js HTTP request listener by processing requests by {@link HttpHandler HTTP handler(s)}.
+ * Creates Node.js HTTP request listener by processing requests by HTTP request processing handler(s).
  *
  * @category HTTP
  * @typeparam TRequest  A type of supported HTTP request.

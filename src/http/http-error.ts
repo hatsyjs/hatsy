@@ -5,10 +5,11 @@
 /**
  * A error corresponding to the given HTTP status code.
  *
- * {@link HttpHandler HTTP handlers} may raise this error. The {@link renderHttpError} handler would render
+ * HTTP request processing handlers may raise this error. The {@link renderHttpError error handler} would render
  * corresponding error page then.
  *
  * @category HTTP
+ *
  * @see HttpConfig.errorHandler
  */
 export class HttpError extends Error {
