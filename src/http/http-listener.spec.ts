@@ -16,7 +16,7 @@ describe('httpListener', () => {
     await server.stop();
   });
 
-  beforeEach(() => {
+  afterEach(() => {
     server.listener.mockReset();
   });
 
