@@ -1,4 +1,4 @@
-import { httpListener, renderJson } from '../http';
+import { httpListener, httpRenderer } from '../http';
 import { readAll, suppressedLog, testServer, TestServer } from '../spec';
 import { httpRouter } from './http-router';
 import { routeMapper } from './route-mapper';
@@ -16,16 +16,18 @@ describe('routeMapper', () => {
 
   beforeEach(() => {
     server.listener.mockImplementation(httpListener(
-        httpRouter({
-          routes: routeMapper({
-            async first({ route, next }) {
-              await next(renderJson({ first: String(route) }));
-            },
-            async second({ route, next }) {
-              await next(renderJson({ second: String(route) }));
-            },
-          }),
-        }),
+        httpRenderer(
+            httpRouter({
+              routes: routeMapper({
+                first({ route, renderJson }) {
+                  renderJson({ first: String(route) });
+                },
+                second({ route, renderJson }) {
+                  renderJson({ second: String(route) });
+                },
+              }),
+            }),
+        ),
         {
           log: suppressedLog(),
         },
