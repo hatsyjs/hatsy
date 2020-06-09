@@ -1,6 +1,6 @@
 import { MatrixRoute, matrixRoute, rcaptureEntry, rmatchDirs, rmatchDirSep, URLRoute } from '@hatsy/route-match';
 import { RouteMatcher } from '@hatsy/route-match/d.ts/route-matcher';
-import { httpListener, HttpMeans, renderJson } from '../http';
+import { httpListener, httpRenderer, RenderMeans } from '../http';
 import { readAll, testServer, TestServer } from '../spec';
 import { requestURL } from '../util';
 import { httpRouter } from './http-router';
@@ -24,7 +24,7 @@ describe('httpRouter', () => {
 
     const wrongHandler = jest.fn();
 
-    server.listener.mockImplementation(httpListener(
+    server.listener.mockImplementation(httpListener(httpRenderer(
         httpRouter({
           routes: [
             {
@@ -33,13 +33,13 @@ describe('httpRouter', () => {
             },
             {
               on: 'test',
-              async to({ next }) {
-                await next(renderJson({ response: 'test' }));
+              to({ renderJson }) {
+                renderJson({ response: 'test' });
               },
             },
           ],
         }),
-    ));
+    )));
 
     const response = await server.get('/test');
 
@@ -50,13 +50,13 @@ describe('httpRouter', () => {
 
     const wrongHandler = jest.fn();
 
-    server.listener.mockImplementation(httpListener(
+    server.listener.mockImplementation(httpListener(httpRenderer(
         httpRouter({
-          routes: async ({ route, next }) => {
-            await next(renderJson({ route: String(route) }));
+          routes: ({ route, renderJson }) => {
+            renderJson({ route: String(route) });
           },
         }),
-    ));
+    )));
 
     const response = await server.get('/test.html');
 
@@ -64,28 +64,28 @@ describe('httpRouter', () => {
     expect(wrongHandler).not.toHaveBeenCalled();
   });
   it('extracts route tail', async () => {
-    server.listener.mockImplementation(httpListener(
+    server.listener.mockImplementation(httpListener(httpRenderer(
         httpRouter({
           routes: {
             on: 'test/**',
-            async to({ next, route }) {
-              await next(renderJson({ route: route.toString() }));
+            to({ route, renderJson }) {
+              renderJson({ route: route.toString() });
             },
           },
         }),
-    ));
+    )));
 
     const response = await server.get('/test/nested?param=value');
 
     expect(JSON.parse(await readAll(response))).toEqual({ route: 'nested?param=value' });
   });
   it('extracts route tail with custom function', async () => {
-    server.listener.mockImplementation(httpListener(
+    server.listener.mockImplementation(httpListener(httpRenderer(
         httpRouter({
           routes: {
             on: 'test/{tail:**}',
-            async to({ next, route }) {
-              await next(renderJson({ route: String(route) }));
+            to({ route, renderJson }) {
+              renderJson({ route: String(route) });
             },
             tail({ routeMatch }) {
 
@@ -101,18 +101,18 @@ describe('httpRouter', () => {
             },
           },
         }),
-    ));
+    )));
 
     const response = await server.get('/test/nested?param=value');
 
     expect(JSON.parse(await readAll(response))).toEqual({ route: 'nested?param=value' });
   });
   it('captures route matches', async () => {
-    server.listener.mockImplementation(httpListener(
+    server.listener.mockImplementation(httpListener(httpRenderer(
         httpRouter({
           routes: {
             on: [rcaptureEntry('dir'), rmatchDirSep, rmatchDirs],
-            async to({ next, routeMatch }) {
+            to({ routeMatch, renderJson }) {
 
               const captured: (readonly [string, string | number, any])[] = [];
 
@@ -120,49 +120,49 @@ describe('httpRouter', () => {
                 captured.push([type, key, value]);
               });
 
-              await next(renderJson(captured));
+              renderJson(captured);
             },
           },
         }),
-    ));
+    )));
 
     const response = await server.get('/test/nested');
 
     expect(JSON.parse(await readAll(response))).toEqual([['capture', 'dir', 'test'], ['dirs', 1, 2]]);
   });
   it('builds custom route', async () => {
-    server.listener.mockImplementation(httpListener(
-        httpRouter<HttpMeans, MatrixRoute>({
+    server.listener.mockImplementation(httpListener(httpRenderer(
+        httpRouter<RenderMeans, MatrixRoute>({
           routes: {
             on: 'test/**',
-            async to({ next, fullRoute }) {
-              await next(renderJson({ attr: fullRoute.path[0].attrs.get('attr') }));
+            to({ fullRoute, renderJson }) {
+              renderJson({ attr: fullRoute.path[0].attrs.get('attr') });
             },
           },
           buildRoute({ request }) {
             return matrixRoute(requestURL(request, this.forwardTrust));
           },
         }),
-    ));
+    )));
 
     const response = await server.get('/test;attr=val/nested?param=value');
 
     expect(JSON.parse(await readAll(response))).toEqual({ attr: 'val' });
   });
   it('extracts URL from trusted forwarding info', async () => {
-    server.listener.mockImplementation(httpListener(
+    server.listener.mockImplementation(httpListener(httpRenderer(
         httpRouter({
           routes: {
             on: 'test/**',
-            async to({ next, fullRoute: { url: { href } } }) {
-              await next(renderJson({ href }));
+            to({ fullRoute: { url: { href } }, renderJson }) {
+              renderJson({ href });
             },
           },
           forwardTrust: {
             trusted: true,
           },
         }),
-    ));
+    )));
 
     const response = await server.get(
         '/test/nested?param=value',
