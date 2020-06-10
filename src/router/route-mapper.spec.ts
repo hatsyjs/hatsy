@@ -16,8 +16,9 @@ describe('routeMapper', () => {
 
   beforeEach(() => {
     server.listener.mockImplementation(httpListener(
-        RenderMeans.handler(
-            HttpRouterMeans.handler(routeMapper({
+        RenderMeans
+            .and(HttpRouterMeans)
+            .handler(routeMapper({
               first({ route, renderJson }) {
                 renderJson({ first: String(route) });
               },
@@ -25,7 +26,6 @@ describe('routeMapper', () => {
                 renderJson({ second: String(route) });
               },
             })),
-        ),
         {
           log: suppressedLog(),
         },
