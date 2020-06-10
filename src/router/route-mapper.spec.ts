@@ -1,4 +1,4 @@
-import { httpListener, httpRenderer } from '../http';
+import { httpListener, RenderMeans } from '../http';
 import { readAll, suppressedLog, testServer, TestServer } from '../spec';
 import { httpRouter } from './http-router';
 import { routeMapper } from './route-mapper';
@@ -16,7 +16,7 @@ describe('routeMapper', () => {
 
   beforeEach(() => {
     server.listener.mockImplementation(httpListener(
-        httpRenderer(
+        RenderMeans.handler(
             httpRouter({
               routes: routeMapper({
                 first({ route, renderJson }) {

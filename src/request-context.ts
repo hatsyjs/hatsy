@@ -3,6 +3,7 @@
  * @module @hatsy/hatsy
  */
 import { RequestHandler } from './request-handler';
+import { RequestModifier } from './request-modifier';
 
 /**
  * Request processing context.
@@ -18,20 +19,6 @@ import { RequestHandler } from './request-handler';
  * @typeparam TMeans  Request processing means of this context.
  */
 export type RequestContext<TMeans> = TMeans & RequestContext.Agent<TMeans>;
-
-/**
- * Modification or extension definition of {@link RequestContext request processing means}.
- *
- * The properties present here are added to new context potentially replacing the original ones.
- *
- * @typeparam TMeans  A type of request processing means to modify.
- * @typeparam TExt  A type of request processing means extension.
- */
-export type RequestModification<TMeans, TExt = object> = {
-  [K in keyof TMeans]?: TMeans[K];
-} & {
-  [K in Exclude<keyof TExt, keyof TMeans>]: TExt[K];
-};
 
 export namespace RequestContext {
 
@@ -50,8 +37,8 @@ export namespace RequestContext {
      * context with the given `modifications` applied. The rest of the properties remain unchanged.
      *
      * @param handler  Target handler to delegate request processing to.
-     * @param modification  Request processing means modification. `this` context will be passed to the next
-     * `handler` when omitted
+     * @param modification  Request processing means modification or modifier. `this` context will be passed to the next
+     * `handler` when omitted.
      *
      * @returns A promise resolved when request processing finishes. Resolves to `true` when request is responded,
      * or to `false` otherwise.
@@ -59,9 +46,35 @@ export namespace RequestContext {
     next<TExt = object>(
         this: void,
         handler: RequestHandler<TMeans & TExt>,
-        modification?: RequestModification<TMeans, TExt>,
+        modification?: RequestModification<TMeans, TExt> | RequestModifier<TMeans, TExt>,
     ): Promise<boolean>;
+
+    /**
+     * Checks whether request modified with the given request modifier.
+     *
+     * @param modifierId  An {@link RequestModifier__symbol identifier} of target request modifier.
+     *
+     * @returns `true` if modifier with the given identifier applied its modifications to request already,
+     * or `false` otherwise.
+     */
+    modifiedBy(modifierId: any): boolean;
 
   }
 
 }
+
+/**
+ * Modification or extension of {@link RequestContext request processing means}.
+ *
+ * The properties present here are added to new context potentially replacing the original ones.
+ *
+ * @category Core
+ * @typeparam TMeans  A type of request processing means to modify.
+ * @typeparam TExt  A type of request processing means extension.
+ */
+export type RequestModification<TMeans, TExt = object> = {
+  [K in keyof TMeans]?: TMeans[K];
+} & {
+  [K in Exclude<keyof TExt, keyof TMeans>]: TExt[K];
+};
+

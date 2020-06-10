@@ -1,9 +1,9 @@
 import { TextEncoder } from 'util';
 import { readAll, testServer, TestServer } from '../../spec';
 import { httpListener } from '../http-listener';
-import { httpRenderer } from './http-renderer';
+import { RenderMeans } from './render-means';
 
-describe('httpRenderer', () => {
+describe('RenderMeans', () => {
 
   let server: TestServer;
 
@@ -21,7 +21,7 @@ describe('httpRenderer', () => {
   describe('renderHtml', () => {
 
     beforeEach(() => {
-      server.listener.mockImplementation(httpListener(httpRenderer(({ renderHtml }) => {
+      server.listener.mockImplementation(httpListener(RenderMeans.handler(({ renderHtml }) => {
         renderHtml('TEST');
       })));
     });
@@ -36,7 +36,7 @@ describe('httpRenderer', () => {
       expect(response.headers['content-length']).toBe('4');
     });
     it('renders HTML as buffer', async () => {
-      server.listener.mockImplementation(httpListener(httpRenderer(({ renderHtml }) => {
+      server.listener.mockImplementation(httpListener(RenderMeans.handler(({ renderHtml }) => {
         renderHtml(Buffer.from(new TextEncoder().encode('TEST')));
       })));
 
@@ -61,7 +61,7 @@ describe('httpRenderer', () => {
   describe('renderJson', () => {
 
     beforeEach(() => {
-      server.listener.mockImplementation(httpListener(httpRenderer(({ renderJson }) => {
+      server.listener.mockImplementation(httpListener(RenderMeans.handler(({ renderJson }) => {
         renderJson('TEST');
       })));
     });

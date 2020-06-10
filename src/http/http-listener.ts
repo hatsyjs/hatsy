@@ -6,6 +6,7 @@ import { IncomingMessage, ServerResponse } from 'http';
 import { ErrorMeans } from '../error-means';
 import { RequestContext, RequestModification } from '../request-context';
 import { requestHandler, RequestHandler } from '../request-handler';
+import { isRequestModifier, RequestModifier, RequestModifier__symbol } from '../request-modifier';
 import { renderHttpError } from './handlers';
 import { HttpError } from './http-error';
 import { HttpMeans } from './http-means';
@@ -88,42 +89,133 @@ export function httpListener<TRequest extends IncomingMessage, TResponse extends
   };
 
   return (request: TRequest, response: TResponse): void => {
-    toHttpContext({
-      request,
-      response,
-      log,
-    }).next(fullHandler).catch(
-        error => log.error(`[${request.method} ${request.url}]`, 'Unhandled error', error),
-    );
+    new RootHttpRequestAgent({ request, response, log })
+        .next(fullHandler)
+        .catch(
+            error => log.error(`[${request.method} ${request.url}]`, 'Unhandled error', error),
+        );
   };
 }
 
 /**
  * @internal
  */
-function toHttpContext<
+abstract class HttpRequestAgent<
+    TRequest extends IncomingMessage,
+    TResponse extends ServerResponse,
+    TMeans extends HttpMeans<TRequest, TResponse> = HttpMeans<TRequest, TResponse>,
+    > {
+
+  abstract readonly context: RequestContext<TMeans>;
+
+  async next<TExt>(
+      handler: RequestHandler<TMeans & TExt>,
+      modification?: RequestModification<TMeans, TExt> | RequestModifier<TMeans, TExt>,
+  ): Promise<boolean> {
+    if (!modification) {
+      await handler(this.context as RequestContext<TMeans & TExt>);
+    } else {
+      await handler(new ModifiedHttpRequestAgent<TRequest, TResponse, TMeans, TExt>(this, modification).context);
+    }
+
+    return this.context.response.writableEnded;
+  }
+
+  abstract modify<TExt>(
+      this: void,
+      modification: RequestModification<TMeans, TExt>,
+  ): RequestModification<TMeans, TExt>;
+
+  abstract modifiedBy(this: void, id: any): boolean;
+
+}
+
+class RootHttpRequestAgent<
+    TRequest extends IncomingMessage,
+    TResponse extends ServerResponse,
+    > extends HttpRequestAgent<TRequest, TResponse> {
+
+  readonly context: RequestContext<HttpMeans<TRequest, TResponse>>;
+
+  constructor(means: HttpMeans<TRequest, TResponse>) {
+    super();
+    this.context = {
+      ...means,
+      next: this.next.bind(this),
+      modifiedBy: this.modifiedBy,
+    };
+  }
+
+  modifiedBy(this: void): boolean {
+    return false;
+  }
+
+  modify<TExt>(
+      this: void,
+      modification: RequestModification<HttpMeans<TRequest, TResponse>, TExt>,
+  ): RequestModification<HttpMeans<TRequest, TResponse>, TExt> {
+    return modification;
+  }
+
+}
+
+class ModifiedHttpRequestAgent<
     TRequest extends IncomingMessage,
     TResponse extends ServerResponse,
     TMeans extends HttpMeans<TRequest, TResponse>,
->(
-    means: TMeans,
-): RequestContext<TMeans> {
+    TExt,
+    > extends HttpRequestAgent<TRequest, TResponse, TMeans & TExt> {
 
-  const context = means as RequestContext<TMeans>;
+  readonly context: RequestContext<TMeans & TExt>;
 
-  context.next = async <TExt>(
-      handler: RequestHandler<TMeans & TExt>,
-      modification?: RequestModification<TMeans, TExt>,
-  ): Promise<boolean> => {
+  readonly modify: <TNext>(
+      this: void,
+      modification: RequestModification<TMeans & TExt, TNext>,
+  ) => RequestModification<TMeans & TExt, TNext>;
 
-    await handler(modification
-        ? toHttpContext({ ...means, ...modification } as TMeans & TExt)
-        : context as RequestContext<TMeans & TExt>);
+  readonly modifiedBy: (this: void, id: any) => boolean;
 
-    return means.response.writableEnded;
-  };
+  constructor(
+      prev: HttpRequestAgent<TRequest, TResponse, TMeans>,
+      modification?: RequestModification<TMeans, TExt> | RequestModifier<TMeans, TExt>,
+  ) {
+    super();
 
-  return context;
+    let modify = prev.modify as <TNext>(
+        this: void,
+        modification: RequestModification<TMeans & TExt, TNext>,
+    ) => RequestModification<TMeans & TExt, TNext>;
+
+    if (modification && isRequestModifier(modification)) {
+
+      const modifier = modification;
+
+      modification = prev.modify(modifier.modification(prev.context));
+
+      if (modifier.modify) {
+        modify = <TNext>(mod: RequestModification<TMeans & TExt, TNext>) => prev.modify(
+            modifier.modify!(this.context, mod) as RequestModification<TMeans, TNext>,
+        ) as RequestModification<TMeans & TExt, TNext>;
+      }
+
+      this.modifiedBy = id => modifier[RequestModifier__symbol] === id || prev.modifiedBy(id);
+
+    } else {
+      if (!modification) {
+        modification = {} as RequestModification<TMeans, TExt>;
+      }
+      this.modifiedBy = prev.modifiedBy;
+    }
+
+    this.modify = modify;
+    this.context = {
+      ...prev.context,
+      ...modification,
+      next: this.next.bind(this),
+      modifiedBy: this.modifiedBy,
+    } as RequestContext<TMeans & TExt>;
+  }
+
 }
 
 /**
