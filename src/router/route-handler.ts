@@ -76,7 +76,7 @@ function defaultRouteTailExtractor<TRoute extends PathRoute>({ route, routeMatch
     }
   });
 
-  return fromEntry ? route.section(fromEntry) : route;
+  return fromEntry ? route.section(fromEntry) : route.section(route.path.length);
 }
 
 /**

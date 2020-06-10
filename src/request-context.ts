@@ -52,12 +52,11 @@ export namespace RequestContext {
     /**
      * Checks whether request modified with the given request modifier.
      *
-     * @param modifierId  An {@link RequestModifier__symbol identifier} of target request modifier.
+     * @param modifier  Target request modifier.
      *
-     * @returns `true` if modifier with the given identifier applied its modifications to request already,
-     * or `false` otherwise.
+     * @returns `true` if modifier applied modifications to request already, or `false` otherwise.
      */
-    modifiedBy(modifierId: any): boolean;
+    modifiedBy(modifier: RequestModifier<any, any>): boolean;
 
   }
 

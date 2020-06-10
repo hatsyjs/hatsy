@@ -217,7 +217,7 @@ class ModifiedHttpRequestAgent<
         modification: RequestModification<TMeans & TExt, TNext>,
     ) => RequestModification<TMeans & TExt, TNext>;
 
-    if (modification && isRequestModifier(modification)) {
+    if (isRequestModifier(modification)) {
 
       const modifier = modification;
 
@@ -229,9 +229,11 @@ class ModifiedHttpRequestAgent<
         ) as RequestModification<TMeans & TExt, TNext>;
       }
 
-      this.modifiedBy = id => modifier[RequestModifier__symbol] === id || prev.modifiedBy(id);
+      this.modifiedBy = requested => modifier[RequestModifier__symbol] === requested[RequestModifier__symbol]
+          || prev.modifiedBy(requested);
 
     } else {
+      modification = prev.modify(modification);
       this.modifiedBy = prev.modifiedBy;
     }
 

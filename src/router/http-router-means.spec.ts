@@ -1,10 +1,20 @@
-import { MatrixRoute, matrixRoute, rcaptureEntry, rmatchDirs, rmatchDirSep, URLRoute } from '@hatsy/route-match';
+import {
+  MatrixRoute,
+  matrixRoute,
+  matrixRoutePattern,
+  rcaptureEntry,
+  rmatchDirs,
+  rmatchDirSep,
+  URLRoute,
+} from '@hatsy/route-match';
 import { RouteMatcher } from '@hatsy/route-match/d.ts/route-matcher';
 import { httpListener, RenderMeans } from '../http';
+import { RequestContext } from '../request-context';
 import { readAll, testServer, TestServer } from '../spec';
 import { requestURL } from '../util';
 import { HttpRouterMeans } from './http-router-means';
 import { routeHandler } from './route-handler';
+import { RouterMeans } from './router-means';
 
 describe('HttpRouterMeans', () => {
 
@@ -43,6 +53,62 @@ describe('HttpRouterMeans', () => {
     ));
 
     const response = await server.get('/test');
+
+    expect(JSON.parse(await readAll(response))).toEqual({ response: 'test' });
+    expect(wrongHandler).not.toHaveBeenCalled();
+  });
+  it('follows nested route', async () => {
+
+    const wrongHandler = jest.fn();
+
+    server.listener.mockImplementation(httpListener(
+        RenderMeans
+            .and(HttpRouterMeans)
+            .handler(routeHandler({
+              on: 'dir/**',
+              to: routeHandler({
+                on: 'test',
+                to({ renderJson }: RequestContext<RenderMeans & RouterMeans>) {
+                  renderJson({ response: 'test' });
+                },
+              }),
+            })),
+    ));
+
+    const response = await server.get('/dir/test');
+
+    expect(JSON.parse(await readAll(response))).toEqual({ response: 'test' });
+    expect(wrongHandler).not.toHaveBeenCalled();
+  });
+  it('respects route pattern parser override', async () => {
+
+    const wrongHandler = jest.fn();
+
+    const nested = routeHandler({
+      on: 'test;attr',
+      to({ renderJson }: RequestContext<RenderMeans & RouterMeans<MatrixRoute>>) {
+        renderJson({ response: 'test' });
+      },
+    });
+
+    server.listener.mockImplementation(httpListener(
+        RenderMeans
+            .and(HttpRouterMeans)
+            .handler(routeHandler({
+              on: 'dir/**',
+              async to({ next }) {
+                await next(
+                    nested,
+                    {
+                      route: matrixRoute('test;attr=value'),
+                      routePattern: matrixRoutePattern,
+                    },
+                );
+              },
+            })),
+    ));
+
+    const response = await server.get('/dir/test;attr=value');
 
     expect(JSON.parse(await readAll(response))).toEqual({ response: 'test' });
     expect(wrongHandler).not.toHaveBeenCalled();
@@ -120,8 +186,9 @@ describe('HttpRouterMeans', () => {
           buildRoute({ request }) {
             return matrixRoute(requestURL(request, this.forwardTrust));
           },
+          routePattern: matrixRoutePattern,
         }).handler(routeHandler({
-          on: 'test/**',
+          on: 'test;attr/**',
           to({ fullRoute, renderJson }) {
             renderJson({ attr: fullRoute.path[0].attrs.get('attr') });
           },

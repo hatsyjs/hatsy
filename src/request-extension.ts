@@ -42,17 +42,21 @@ export abstract class RequestExtension<TInput, TExt = object>
   /**
    * Unique modifier identifier.
    *
-   * @default Modifier class constructor instance.
+   * @default This instance.
    */
   get [RequestModifier__symbol](): any {
-    return this.constructor;
+    return this;
   }
 
   abstract modification(context: RequestContext<TInput>): RequestModification<TInput, TExt>;
 
   handler<TMeans extends TInput>(delegate: RequestHandler<TMeans & TExt>): RequestHandler<TMeans> {
-    return async ({ next }) => {
-      await next(delegate, this as unknown as RequestExtension<TMeans, TExt>);
+    return async ({ next, modifiedBy }) => {
+      if (modifiedBy(this[RequestModifier__symbol])) {
+        await next(delegate);
+      } else {
+        await next(delegate, this as unknown as RequestExtension<TMeans, TExt>);
+      }
     };
   }
 
