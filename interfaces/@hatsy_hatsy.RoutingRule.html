@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>RouteMatters | Hatsy</title>
+	<title>RoutingRule | Hatsy</title>
 	<meta name="description" content="Documentation for Hatsy">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -57,10 +57,10 @@
 					<a href="../modules/@hatsy_hatsy.html">@hatsy/hatsy</a>
 				</li>
 				<li>
-					<a href="@hatsy_hatsy.RouteMatters.html">RouteMatters</a>
+					<a href="@hatsy_hatsy.RoutingRule.html">RoutingRule</a>
 				</li>
 			</ul>
-			<h1>Interface RouteMatters&lt;TRoute&gt;</h1>
+			<h1>Interface RoutingRule&lt;TRoute, TMeans&gt;</h1>
 		</div>
 	</div>
 </header>
@@ -70,8 +70,9 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Matters of request that matches a route pattern.</p>
+						<p>Routing rule.</p>
 					</div>
+					<p>Declares a route handler to delegate request processing to when the route matches target <a href="@hatsy_hatsy.RoutingRule.html#on">pattern</a>.</p>
 				</div>
 			</section>
 			<section class="tsd-panel tsd-type-parameters">
@@ -81,7 +82,15 @@
 						<h4>TRoute<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PathRoute</span></h4>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
-								<p>A type of route.</p>
+								<p>A type of matching route.</p>
+							</div>
+						</div>
+					</li>
+					<li>
+						<h4>TMeans<span class="tsd-signature-symbol">: </span><a href="@hatsy_hatsy.RouterMeans.html" class="tsd-signature-type">RouterMeans</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TRoute</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>A type of route processing means.</p>
 							</div>
 						</div>
 					</li>
@@ -91,7 +100,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">RouteMatters</span>
+						<span class="target">RoutingRule</span>
 					</li>
 				</ul>
 			</section>
@@ -102,8 +111,9 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="@hatsy_hatsy.RouteMatters.html#match" class="tsd-kind-icon">match</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="@hatsy_hatsy.RouteMatters.html#route" class="tsd-kind-icon">route</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="@hatsy_hatsy.RoutingRule.html#on" class="tsd-kind-icon">on</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="@hatsy_hatsy.RoutingRule.html#tail" class="tsd-kind-icon">tail</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="@hatsy_hatsy.RoutingRule.html#to" class="tsd-kind-icon">to</a></li>
 							</ul>
 						</section>
 					</div>
@@ -112,33 +122,56 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="match" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> match</h3>
-					<div class="tsd-signature tsd-kind-icon">match<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RouteMatch</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TRoute</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<a name="on" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> on</h3>
+					<div class="tsd-signature tsd-kind-icon">on<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RoutePattern</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TRoute</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/07eec53/src/router/route-matters.ts#L23">hatsy/hatsy/src/router/route-matters.ts:23</a></li>
+							<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/7c0d1a4/src/router/route-handler.ts#L31">hatsy/hatsy/src/router/route-handler.ts:31</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>A successful match of the route against pattern.</p>
+							<p>A route pattern that should match the route in order the <a href="@hatsy_hatsy.RoutingRule.html#to">handler</a> to be called.</p>
 						</div>
+						<p>When specified as a string, a <a href="@hatsy_hatsy.RouterMeans.html#routePattern">pattern parser</a> is used to parse it.</p>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="route" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> route</h3>
-					<div class="tsd-signature tsd-kind-icon">route<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">TRoute</span></div>
+					<a name="tail" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> tail</h3>
+					<div class="tsd-signature tsd-kind-icon">tail<span class="tsd-signature-symbol">:</span> <a href="../modules/@hatsy_hatsy.html#RouteTailExtractor" class="tsd-signature-type">RouteTailExtractor</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TRoute</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TMeans</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/07eec53/src/router/route-matters.ts#L18">hatsy/hatsy/src/router/route-matters.ts:18</a></li>
+							<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/7c0d1a4/src/router/route-handler.ts#L47">hatsy/hatsy/src/router/route-handler.ts:47</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Matching route.</p>
+							<p>Matching route tail extractor.</p>
 						</div>
+						<p>The extracted route tail is passed to the <a href="@hatsy_hatsy.RoutingRule.html#to">handler</a>.</p>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><p>Extracts a matching route tail starting from the first capture/wildcard.</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="to" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> to</h3>
+					<div class="tsd-signature tsd-kind-icon">to<span class="tsd-signature-symbol">:</span> <a href="../modules/@hatsy_hatsy.html#RequestHandler" class="tsd-signature-type">RequestHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TMeans</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/7c0d1a4/src/router/route-handler.ts#L38">hatsy/hatsy/src/router/route-handler.ts:38</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>A route handler to call when the route matches the pattern.</p>
+						</div>
+						<p>This handler would receive a <a href="@hatsy_hatsy.RoutingRule.html#tail">tail</a> of the matching route.</p>
 					</div>
 				</section>
 			</section>
@@ -159,62 +192,80 @@
 					<li class=" tsd-kind-class tsd-parent-kind-module">
 						<a href="../classes/@hatsy_hatsy.HttpError.html" class="tsd-kind-icon">Http<wbr>Error</a>
 					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../classes/@hatsy_hatsy.RequestExtension.html" class="tsd-kind-icon">Request<wbr>Extension</a>
+					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="@hatsy_hatsy.ErrorMatters.html" class="tsd-kind-icon">Error<wbr>Matters</a>
+						<a href="@hatsy_hatsy.ErrorMeans.html" class="tsd-kind-icon">Error<wbr>Means</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="@hatsy_hatsy.HttpConfig.html" class="tsd-kind-icon">Http<wbr>Config</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="@hatsy_hatsy.HttpMatters.html" class="tsd-kind-icon">Http<wbr>Matters</a>
+						<a href="@hatsy_hatsy.HttpMeans.html" class="tsd-kind-icon">Http<wbr>Means</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="@hatsy_hatsy.HttpRouterExtension.html" class="tsd-kind-icon">Http<wbr>Router<wbr>Extension</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="@hatsy_hatsy.ProxyForwardingTrustPolicy.html" class="tsd-kind-icon">Proxy<wbr>Forwarding<wbr>Trust<wbr>Policy</a>
+						<a href="@hatsy_hatsy.ProxyForward.html" class="tsd-kind-icon">Proxy<wbr>Forward</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="@hatsy_hatsy.ProxyForwardTrust.html" class="tsd-kind-icon">Proxy<wbr>Forward<wbr>Trust</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="@hatsy_hatsy.RenderMeans.html" class="tsd-kind-icon">Render<wbr>Means</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="@hatsy_hatsy.RequestModifier.html" class="tsd-kind-icon">Request<wbr>Modifier</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="@hatsy_hatsy.RouterMeans.html" class="tsd-kind-icon">Router<wbr>Means</a>
 					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="@hatsy_hatsy.RouteMatters.html" class="tsd-kind-icon">Route<wbr>Matters</a>
+						<a href="@hatsy_hatsy.RoutingRule.html" class="tsd-kind-icon">Routing<wbr>Rule</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="@hatsy_hatsy.RouteMatters.html#match" class="tsd-kind-icon">match</a>
+								<a href="@hatsy_hatsy.RoutingRule.html#on" class="tsd-kind-icon">on</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="@hatsy_hatsy.RouteMatters.html#route" class="tsd-kind-icon">route</a>
+								<a href="@hatsy_hatsy.RoutingRule.html#tail" class="tsd-kind-icon">tail</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="@hatsy_hatsy.RoutingRule.html#to" class="tsd-kind-icon">to</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../modules/@hatsy_hatsy.html#ErrorHandler" class="tsd-kind-icon">Error<wbr>Handler</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../modules/@hatsy_hatsy.html#HttpHandler" class="tsd-kind-icon">Http<wbr>Handler</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="../modules/@hatsy_hatsy.html#RequestHandler" class="tsd-kind-icon">Request<wbr>Handler</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../modules/@hatsy_hatsy.html#RouteHandler" class="tsd-kind-icon">Route<wbr>Handler</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../modules/@hatsy_hatsy.html#RouteSpec" class="tsd-kind-icon">Route<wbr>Spec</a>
+						<a href="../modules/@hatsy_hatsy.html#RequestModification" class="tsd-kind-icon">Request<wbr>Modification</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="../modules/@hatsy_hatsy.html#RouteTailExtractor" class="tsd-kind-icon">Route<wbr>Tail<wbr>Extractor</a>
 					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module">
+						<a href="../modules/@hatsy_hatsy.html#HttpRouterMeans" class="tsd-kind-icon">Http<wbr>Router<wbr>Means</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module">
+						<a href="../modules/@hatsy_hatsy.html#RenderMeans-1" class="tsd-kind-icon">Render<wbr>Means</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module">
+						<a href="../modules/@hatsy_hatsy.html#RequestModifier__symbol" class="tsd-kind-icon">Request<wbr>Modifier__symbol</a>
+					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="../modules/@hatsy_hatsy.html#httpListener" class="tsd-kind-icon">http<wbr>Listener</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module">
-						<a href="../modules/@hatsy_hatsy.html#renderHtml" class="tsd-kind-icon">render<wbr>Html</a>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../modules/@hatsy_hatsy.html#isRequestModifier" class="tsd-kind-icon">is<wbr>Request<wbr>Modifier</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module">
 						<a href="../modules/@hatsy_hatsy.html#renderHttpError" class="tsd-kind-icon">render<wbr>Http<wbr>Error</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module">
-						<a href="../modules/@hatsy_hatsy.html#renderJson" class="tsd-kind-icon">render<wbr>Json</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="../modules/@hatsy_hatsy.html#requestHandler" class="tsd-kind-icon">request<wbr>Handler</a>
@@ -226,7 +277,7 @@
 						<a href="../modules/@hatsy_hatsy.html#routeHandler" class="tsd-kind-icon">route<wbr>Handler</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../modules/@hatsy_hatsy.html#router" class="tsd-kind-icon">router</a>
+						<a href="../modules/@hatsy_hatsy.html#routeMapper" class="tsd-kind-icon">route<wbr>Mapper</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module">
 						<a href="../modules/@hatsy_hatsy.html#trustedForward" class="tsd-kind-icon">trusted<wbr>Forward</a>
@@ -241,6 +292,7 @@
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
 				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
 				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
 				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
@@ -252,6 +304,7 @@
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
 			</ul>
 		</div>
 	</div>

@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>RequestContext | Hatsy</title>
+	<title>HttpRouterConfig | Hatsy</title>
 	<meta name="description" content="Documentation for Hatsy">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -57,10 +57,10 @@
 					<a href="@hatsy_hatsy.html">@hatsy/hatsy</a>
 				</li>
 				<li>
-					<a href="@hatsy_hatsy.RequestContext.html">RequestContext</a>
+					<a href="@hatsy_hatsy.HttpRouterConfig.html">HttpRouterConfig</a>
 				</li>
 			</ul>
-			<h1>Namespace RequestContext&lt;TMeans&gt;</h1>
+			<h1>Namespace HttpRouterConfig&lt;TMeans, TRoute&gt;</h1>
 		</div>
 	</div>
 </header>
@@ -70,22 +70,26 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Request processing context.</p>
+						<p>HTTP router configuration.</p>
 					</div>
-					<p>It is passed to <a href="@hatsy_hatsy.html#RequestHandler">request processing handler</a>. It the necessary means. The handler can either
-					respond by these means, or delegate processing to the <a href="../interfaces/@hatsy_hatsy.RequestContext.Agent.html#next">next handler</a>.</p>
-					<p>The context instance is immutable. The request processing means it contains can be <a href="@hatsy_hatsy.html#RequestModification">modified</a> or even extended when delegating request processing to the <a href="../interfaces/@hatsy_hatsy.RequestContext.Agent.html#next">next handler</a>
-					by creating another context based on original one.</p>
 				</div>
 			</section>
 			<section class="tsd-panel tsd-type-parameters">
 				<h3>Type parameters</h3>
 				<ul class="tsd-type-parameters">
 					<li>
-						<h4>TMeans</h4>
+						<h4>TMeans<span class="tsd-signature-symbol">: </span><a href="../interfaces/@hatsy_hatsy.HttpMeans.html" class="tsd-signature-type">HttpMeans</a></h4>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
-								<p>Request processing means of this context.</p>
+								<p>A type of incoming HTTP request processing means.</p>
+							</div>
+						</div>
+					</li>
+					<li>
+						<h4>TRoute<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">URLRoute</span></h4>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>A type of supported URL route.</p>
 							</div>
 						</div>
 					</li>
@@ -96,9 +100,14 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Interfaces</h3>
+							<h3>Router Interfaces</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter"><a href="../interfaces/@hatsy_hatsy.RequestContext.Agent.html" class="tsd-kind-icon">Agent</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter"><a href="../interfaces/@hatsy_hatsy.HttpRouterConfig.CustomRoute.html" class="tsd-kind-icon">Custom<wbr>Route</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter"><a href="../interfaces/@hatsy_hatsy.HttpRouterConfig.DefaultRoute.html" class="tsd-kind-icon">Default<wbr>Route</a></li>
+							</ul>
+							<h3>Other Interfaces</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter"><a href="../interfaces/@hatsy_hatsy.HttpRouterConfig.Base.html" class="tsd-kind-icon">Base</a></li>
 							</ul>
 						</section>
 					</div>
@@ -116,7 +125,13 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="../interfaces/@hatsy_hatsy.RequestContext.Agent.html" class="tsd-kind-icon">Agent</a>
+						<a href="../interfaces/@hatsy_hatsy.HttpRouterConfig.Base.html" class="tsd-kind-icon">Base</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
+						<a href="../interfaces/@hatsy_hatsy.HttpRouterConfig.CustomRoute.html" class="tsd-kind-icon">Custom<wbr>Route</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
+						<a href="../interfaces/@hatsy_hatsy.HttpRouterConfig.DefaultRoute.html" class="tsd-kind-icon">Default<wbr>Route</a>
 					</li>
 				</ul>
 			</nav>

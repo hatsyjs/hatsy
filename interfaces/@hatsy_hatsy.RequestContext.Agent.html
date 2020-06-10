@@ -63,7 +63,7 @@
 					<a href="@hatsy_hatsy.RequestContext.Agent.html">Agent</a>
 				</li>
 			</ul>
-			<h1>Interface Agent&lt;TMatters&gt;</h1>
+			<h1>Interface Agent&lt;TMeans&gt;</h1>
 		</div>
 	</div>
 </header>
@@ -83,10 +83,10 @@
 				<h3>Type parameters</h3>
 				<ul class="tsd-type-parameters">
 					<li>
-						<h4>TMatters</h4>
+						<h4>TMeans</h4>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
-								<p>A type of request processing matters.</p>
+								<p>A type of request processing means.</p>
 							</div>
 						</div>
 					</li>
@@ -107,6 +107,7 @@
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="@hatsy_hatsy.RequestContext.Agent.html#modifiedBy" class="tsd-kind-icon">modified<wbr>By</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter"><a href="@hatsy_hatsy.RequestContext.Agent.html#next" class="tsd-kind-icon">next</a></li>
 							</ul>
 						</section>
@@ -115,68 +116,61 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter">
-					<a name="next" class="tsd-anchor"></a>
-					<h3>next</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">next<span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, handler<span class="tsd-signature-symbol">: </span><a href="../modules/@hatsy_hatsy.html#RequestHandler" class="tsd-signature-type">RequestHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TMatters</span><span class="tsd-signature-symbol">&gt;</span>, modifications<span class="tsd-signature-symbol">?: </span><a href="../modules/@hatsy_hatsy.RequestContext.html#Modifications" class="tsd-signature-type">Modifications</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TMatters</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></li>
-						<li class="tsd-signature tsd-kind-icon">next&lt;TExt&gt;<span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, handler<span class="tsd-signature-symbol">: </span><a href="../modules/@hatsy_hatsy.html#RequestHandler" class="tsd-signature-type">RequestHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TMatters</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">TExt</span><span class="tsd-signature-symbol">&gt;</span>, extensions<span class="tsd-signature-symbol">: </span><a href="../modules/@hatsy_hatsy.RequestContext.html#Extensions" class="tsd-signature-type">Extensions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TMatters</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TExt</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></li>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
+					<a name="modifiedBy" class="tsd-anchor"></a>
+					<h3>modified<wbr>By</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">modified<wbr>By<span class="tsd-signature-symbol">(</span>modifier<span class="tsd-signature-symbol">: </span><a href="@hatsy_hatsy.RequestModifier.html" class="tsd-signature-type">RequestModifier</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/07eec53/src/request-context.ts#L66">hatsy/hatsy/src/request-context.ts:66</a></li>
+									<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/7c0d1a4/src/request-context.ts#L59">hatsy/hatsy/src/request-context.ts:59</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Delegates request processing to the next <code>handler</code> and optionally modifies processing matters by creating a new
-									context with the given <code>modifications</code> applied. The rest of the properties remain unchanged.</p>
+									<p>Checks whether request modified with the given request modifier.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>this: <span class="tsd-signature-type">void</span></h5>
-								</li>
-								<li>
-									<h5>handler: <a href="../modules/@hatsy_hatsy.html#RequestHandler" class="tsd-signature-type">RequestHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TMatters</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>modifier: <a href="@hatsy_hatsy.RequestModifier.html" class="tsd-signature-type">RequestModifier</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Target handler to delegate request processing to.</p>
-									</div>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> modifications: <a href="../modules/@hatsy_hatsy.RequestContext.html#Modifications" class="tsd-signature-type">Modifications</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TMatters</span><span class="tsd-signature-symbol">&gt;</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>Request processing matters modifications. <code>this</code> context will be passed to the next
-										<code>handler</code> when omitted</p>
+										<p>Target request modifier.</p>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></h4>
-							<p>A promise resolved when request processing finishes. Resolves to <code>true</code> when request is responded,
-							or to <code>false</code> otherwise.</p>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+							<p><code>true</code> if modifier applied modifications to request already, or <code>false</code> otherwise.</p>
 						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter">
+					<a name="next" class="tsd-anchor"></a>
+					<h3>next</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter">
+						<li class="tsd-signature tsd-kind-icon">next&lt;TExt&gt;<span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, handler<span class="tsd-signature-symbol">: </span><a href="../modules/@hatsy_hatsy.html#RequestHandler" class="tsd-signature-type">RequestHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TMeans</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">TExt</span><span class="tsd-signature-symbol">&gt;</span>, modification<span class="tsd-signature-symbol">?: </span><a href="../modules/@hatsy_hatsy.html#RequestModification" class="tsd-signature-type">RequestModification</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TMeans</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TExt</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><a href="@hatsy_hatsy.RequestModifier.html" class="tsd-signature-type">RequestModifier</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TMeans</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TExt</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/07eec53/src/request-context.ts#L83">hatsy/hatsy/src/request-context.ts:83</a></li>
+									<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/7c0d1a4/src/request-context.ts#L46">hatsy/hatsy/src/request-context.ts:46</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Delegates request processing to the next <code>handler</code> and extends processing matters by creating a new context with
-									the given <code>extensions</code> applied. The rest of the properties remain unchanged.</p>
+									<p>Delegates request processing to the next <code>handler</code> and optionally modifies processing means by creating a new
+									context with the given <code>modifications</code> applied. The rest of the properties remain unchanged.</p>
 								</div>
 							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
 									<h4>TExt</h4>
-									<div class="tsd-comment tsd-typography">
-										<p>A type of request processing matters extension.</p>
-									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -185,15 +179,16 @@
 									<h5>this: <span class="tsd-signature-type">void</span></h5>
 								</li>
 								<li>
-									<h5>handler: <a href="../modules/@hatsy_hatsy.html#RequestHandler" class="tsd-signature-type">RequestHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TMatters</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">TExt</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>handler: <a href="../modules/@hatsy_hatsy.html#RequestHandler" class="tsd-signature-type">RequestHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TMeans</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">TExt</span><span class="tsd-signature-symbol">&gt;</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Target handler accepting extended context to delegate request processing to.</p>
+										<p>Target handler to delegate request processing to.</p>
 									</div>
 								</li>
 								<li>
-									<h5>extensions: <a href="../modules/@hatsy_hatsy.RequestContext.html#Extensions" class="tsd-signature-type">Extensions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TMatters</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TExt</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> modification: <a href="../modules/@hatsy_hatsy.html#RequestModification" class="tsd-signature-type">RequestModification</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TMeans</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TExt</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><a href="@hatsy_hatsy.RequestModifier.html" class="tsd-signature-type">RequestModifier</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TMeans</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TExt</span><span class="tsd-signature-symbol">&gt;</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Request processing matters extensions.</p>
+										<p>Request processing means modification or modifier. <code>this</code> context will be passed to the next
+										<code>handler</code> when omitted.</p>
 									</div>
 								</li>
 							</ul>
@@ -220,6 +215,9 @@
 					<li class="current tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
 						<a href="@hatsy_hatsy.RequestContext.Agent.html" class="tsd-kind-icon">Agent</a>
 						<ul>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="@hatsy_hatsy.RequestContext.Agent.html#modifiedBy" class="tsd-kind-icon">modified<wbr>By</a>
+							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter">
 								<a href="@hatsy_hatsy.RequestContext.Agent.html#next" class="tsd-kind-icon">next</a>
 							</li>
@@ -227,12 +225,6 @@
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="../modules/@hatsy_hatsy.RequestContext.html#Extensions" class="tsd-kind-icon">Extensions</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="../modules/@hatsy_hatsy.RequestContext.html#Modifications" class="tsd-kind-icon">Modifications</a>
-					</li>
 				</ul>
 			</nav>
 		</div>
@@ -243,6 +235,7 @@
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
 				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
 				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
 				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
@@ -250,9 +243,11 @@
 			<ul class="tsd-legend">
 				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
 				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
 			</ul>
 		</div>
 	</div>
