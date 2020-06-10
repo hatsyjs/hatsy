@@ -10,25 +10,6 @@ import { requestHandler, RequestHandler } from '../request-handler';
 import { RouterMeans } from './router-means';
 
 /**
- * Routing configuration.
- *
- * @category Router
- * @typeparam TRoute  A type of supported URL route.
- * @typeparam TMeans  A type of supported route processing means.
- */
-export interface RoutingConfig<TRoute extends PathRoute, TMeans extends RouterMeans<TRoute>> {
-
-  /**
-   * Either a route processing handler, a routing rule, or iterable of the above.
-   */
-  routes:
-      | RequestHandler<TMeans>
-      | RoutingRule<TRoute, TMeans>
-      | Iterable<RequestHandler<TMeans> | RoutingRule<TRoute, TMeans>>,
-
-}
-
-/**
  * Routing rule.
  *
  * Declares a route handler to delegate request processing to when the route matches target {@link on pattern}.
@@ -102,11 +83,8 @@ function defaultRouteTailExtractor<TRoute extends PathRoute>({ route, routeMatch
  * @internal
  */
 function routeHandlerByRule<TRoute extends PathRoute, TMeans extends RouterMeans<TRoute>>(
-    rule: RequestHandler<TMeans> | RoutingRule<TRoute, TMeans>,
+    rule: RoutingRule<TRoute, TMeans>,
 ): RequestHandler<TMeans> {
-  if (typeof rule === 'function') {
-    return rule;
-  }
 
   const { on, to, tail = defaultRouteTailExtractor } = rule;
 
@@ -148,16 +126,13 @@ function routeHandlerByRule<TRoute extends PathRoute, TMeans extends RouterMeans
  * @category Router
  * @typeparam TRoute  A type of supported route.
  * @typeparam TMeans  A type of route processing means.
- * @param config  Routing configuration.
+ * @param routes  Routing rules. Either a routing rule, or iterable of routing rules.
  *
  * @returns Route processing handler.
  */
 export function routeHandler<TRoute extends PathRoute, TMeans extends RouterMeans<TRoute>>(
-    config: RoutingConfig<TRoute, TMeans>,
+    routes: RoutingRule<TRoute, TMeans> | Iterable<RoutingRule<TRoute, TMeans>>,
 ): RequestHandler<TMeans> {
-
-  const { routes } = config;
-
   return isIterable(routes)
       ? requestHandler(mapIt(routes, routeHandlerByRule))
       : routeHandlerByRule(routes);
