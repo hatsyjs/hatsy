@@ -15,10 +15,24 @@ import { RequestModifier, RequestModifier__symbol } from './request-modifier';
  * It also contains method for request modifications chaining.
  *
  * @category Core
+ * @typeparam TInput  A type of request processing means expected by handlers created by this extension.
+ * @typeparam TExt  A type of request processing means extension applied by this extension.
  */
 export abstract class RequestExtension<TInput, TExt = object>
     implements RequestModifier<TInput, TExt>, RequestExtension.Chain<TInput, TExt> {
 
+  /**
+   * Combines two request extension chains into one.
+   *
+   * @typeparam TInput  A type of request processing means expected by first chain.
+   * @typeparam TExt  A type of request processing means extension applied by first chain.
+   * @typeparam TNext  A type of request processing means extension applied by second chain.
+   * @param first  First chain to combine.
+   * @param second  Second chain to combine. Receives requests modified by first chain.
+   *
+   * @return New request processing chain that applies modifications to request by `first` chain, and then - by
+   * `second` one.
+   */
   static chain<TInput, TExt, TNext>(
       first: RequestExtension.Chain<TInput, TExt>,
       second: RequestExtension.Chain<TInput & TExt, TNext>,
@@ -50,6 +64,14 @@ export abstract class RequestExtension<TInput, TExt = object>
 
   abstract modification(context: RequestContext<TInput>): RequestModification<TInput, TExt>;
 
+  /**
+   * Builds request processing handler that {@link modification modifies request} and delegates to another handler.
+   *
+   * @typeparam TMeans  Request processing means expected by new handler.
+   * @param delegate  Request processing handler that will receive modified request context.
+   *
+   * @returns New request processing handler.
+   */
   handler<TMeans extends TInput>(delegate: RequestHandler<TMeans & TExt>): RequestHandler<TMeans> {
     return async ({ next, modifiedBy }) => {
       if (modifiedBy(this[RequestModifier__symbol])) {
@@ -60,6 +82,17 @@ export abstract class RequestExtension<TInput, TExt = object>
     };
   }
 
+  /**
+   * Combines this extension with extension chain.
+   *
+   * @typeparam TNext  A type of request processing means extension applied by next chain.
+   * @param next  Next request processing chain that receives requests modified by this extension.
+   *
+   * @return New request processing chain that {@link modification modifies request}, and then applies modifications
+   * by next chain.
+   *
+   * @see RequestExtension.chain
+   */
   and<TNext>(next: RequestExtension.Chain<TInput & TExt, TNext>): RequestExtension.Chain<TInput, TExt & TNext> {
     return RequestExtension.chain<TInput, TExt, TNext>(this, next);
   }
@@ -68,10 +101,37 @@ export abstract class RequestExtension<TInput, TExt = object>
 
 export namespace RequestExtension {
 
+  /**
+   * Request extension chain.
+   *
+   * It is able to construct a request handler that extends the original request processing means.
+   *
+   * @typeparam TInput  A type of request processing means expected by handlers created by this chain.
+   * @typeparam TExt  A type of request processing means extension applied by this chain.
+   */
   export interface Chain<TInput, TExt> {
 
+    /**
+     * Builds request processing handler that modifies request and delegates to another handler.
+     *
+     * @typeparam TMeans  Request processing means expected by new handler.
+     * @param delegate  Request processing handler that will receive modified request context.
+     *
+     * @returns New request processing handler.
+     */
     handler<TMeans extends TInput>(delegate: RequestHandler<TMeans & TExt>): RequestHandler<TMeans>
 
+    /**
+     * Combines this chain with another one.
+     *
+     * @typeparam TNext  A type of request processing means extension applied by another chain.
+     * @param next  Next request processing chain that receives requests modified by this one.
+     *
+     * @return New request processing chain that applies modifications to request by this chain, and then - by
+     * another one.
+     *
+     * @see RequestExtension.chain
+     */
     and<TNext>(next: Chain<TInput & TExt, TNext>): Chain<TInput, TExt & TNext>;
 
   }
