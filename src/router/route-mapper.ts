@@ -3,7 +3,7 @@
  * @module @hatsy/hatsy
  */
 import { PathRoute } from '@hatsy/route-match';
-import { RequestModifications } from '../request-context';
+import { RequestModification } from '../request-context';
 import { RequestHandler } from '../request-handler';
 import { RouteMeans } from './route-means';
 
@@ -33,7 +33,7 @@ export function routeMapper<TRoute extends PathRoute, TMeans extends RouteMeans<
             handler,
             {
               route: route.section(1),
-            } as RequestModifications<TMeans>,
+            } as RequestModification<TMeans>,
         );
       }
     }

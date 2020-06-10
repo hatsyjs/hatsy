@@ -2,7 +2,7 @@
  * @packageDocumentation
  * @module @hatsy/hatsy
  */
-import { RequestContext, RequestExtensions } from '../../request-context';
+import { RequestContext, RequestModification } from '../../request-context';
 import { requestHandler, RequestHandler } from '../../request-handler';
 import { HttpMeans } from '../index';
 import { RenderMeans } from './render-means';
@@ -55,7 +55,7 @@ export function httpRenderer<TMeans extends HttpMeans>(
 
     await next<RenderMeans>(
         handler,
-        means as RequestExtensions<TMeans, RenderMeans>,
+        means as RequestModification<TMeans, RenderMeans>,
     );
   };
 }

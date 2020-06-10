@@ -4,7 +4,7 @@
  */
 import { IncomingMessage, ServerResponse } from 'http';
 import { ErrorMeans } from '../error-means';
-import { RequestContext, RequestExtensions } from '../request-context';
+import { RequestContext, RequestModification } from '../request-context';
 import { requestHandler, RequestHandler } from '../request-handler';
 import { renderHttpError } from './handlers';
 import { HttpError } from './http-error';
@@ -113,11 +113,11 @@ function toHttpContext<
 
   context.next = async <TExt>(
       handler: RequestHandler<TMeans & TExt>,
-      extensions?: RequestExtensions<HttpMeans<TRequest, TResponse>, TExt>,
+      modification?: RequestModification<TMeans, TExt>,
   ): Promise<boolean> => {
 
-    await handler(extensions
-        ? toHttpContext({ ...means, ...extensions } as TMeans & TExt)
+    await handler(modification
+        ? toHttpContext({ ...means, ...modification } as TMeans & TExt)
         : context as RequestContext<TMeans & TExt>);
 
     return means.response.writableEnded;

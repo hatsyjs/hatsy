@@ -5,7 +5,7 @@
 import { PathRoute, RouteCaptor, routeMatch, RouteMatcher, RoutePattern } from '@hatsy/route-match';
 import { mapIt } from '@proc7ts/a-iterable';
 import { isIterable, lazyValue } from '@proc7ts/primitives';
-import { RequestContext, RequestModifications } from '../request-context';
+import { RequestContext, RequestModification } from '../request-context';
 import { requestHandler, RequestHandler } from '../request-handler';
 import { RouteMeans } from './route-means';
 
@@ -134,7 +134,7 @@ function routeHandlerByRule<TRoute extends PathRoute, TMeans extends RouteMeans<
             prevMatch(captor);
             specMatch(captor);
           },
-        } as RequestModifications<RouteMeans<TRoute> & TMeans>,
+        } as RequestModification<RouteMeans<TRoute> & TMeans>,
     );
   };
 }

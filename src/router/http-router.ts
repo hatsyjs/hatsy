@@ -5,7 +5,7 @@
 import { RoutePattern, simpleRoutePattern, urlRoute, URLRoute } from '@hatsy/route-match';
 import { noop } from '@proc7ts/primitives';
 import { HttpMeans } from '../http';
-import { RequestContext, RequestExtensions } from '../request-context';
+import { RequestContext, RequestModification } from '../request-context';
 import { RequestHandler } from '../request-handler';
 import { ProxyForwardTrust, requestURL } from '../util';
 import { routeHandler, RoutingConfig } from './route-handler';
@@ -151,7 +151,7 @@ export function httpRouter<TMeans extends HttpMeans, TRoute extends URLRoute>(
 
     await context.next<RouteMeans<TRoute>>(
         routeHandler(config as RoutingConfig<TRoute, TMeans & RouteMeans<TRoute>>),
-        ext as RequestExtensions<unknown, RouteMeans<TRoute>>,
+        ext as RequestModification<unknown, RouteMeans<TRoute>>,
     );
   };
 }
