@@ -34,6 +34,6 @@ export interface RouterMeans<TRoute extends PathRoute = PathRoute> {
   /**
    * A parser of route pattern string.
    */
-  routePattern(pattern: string): RoutePattern<TRoute>;
+  routePattern(this: void, pattern: string): RoutePattern<TRoute>;
 
 }

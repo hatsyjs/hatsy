@@ -4,6 +4,7 @@
  */
 import { RoutePattern, URLRoute } from '@hatsy/route-match';
 import { HttpMeans } from '../http';
+import { RequestContext } from '../request-context';
 import { ProxyForwardTrust } from '../util';
 import { RouterMeans } from './router-means';
 
@@ -43,10 +44,11 @@ export namespace HttpRouterConfig {
      * The `this` parameter is bound to current request processing means.
      *
      * @param pattern  Pattern string in supported format.
+     * @param context  Current request processing context.
      *
      * @default Supports patterns in simple format (`simpleRoutePattern()`).
      */
-    routePattern?(this: TMeans & RouterMeans<TRoute>, pattern: string): RoutePattern<TRoute>;
+    routePattern?(pattern: string, context: RequestContext<TMeans & RouterMeans<TRoute>>): RoutePattern<TRoute>;
 
   }
 

@@ -90,10 +90,10 @@ function routeHandlerByRule<TRoute extends PathRoute, TMeans extends RouterMeans
 
   return async (context: RequestContext<RouterMeans<TRoute> & TMeans>) => {
 
-    const { route, routeMatch: prevMatch, next } = context;
+    const { route, routeMatch: prevMatch, routePattern, next } = context;
     const specMatch = routeMatch(
         route,
-        typeof on === 'string' ? context.routePattern(on) : on,
+        typeof on === 'string' ? routePattern(on) : on,
     );
 
     if (!specMatch) {

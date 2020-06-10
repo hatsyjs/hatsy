@@ -2,7 +2,7 @@
  * @packageDocumentation
  * @module @hatsy/hatsy
  */
-import { simpleRoutePattern, urlRoute, URLRoute } from '@hatsy/route-match';
+import { RoutePattern, simpleRoutePattern, urlRoute, URLRoute } from '@hatsy/route-match';
 import { noop } from '@proc7ts/primitives';
 import { HttpMeans } from '../http';
 import { RequestContext, RequestModification } from '../request-context';
@@ -46,11 +46,19 @@ class HttpRouterExtension$<
     > extends RequestExtension<TInput, RouterMeans<TRoute>> implements HttpRouterExtension<TInput, TRoute> {
 
   readonly modification: (context: RequestContext<TInput>) => RequestModification<TInput, RouterMeans<TRoute>>;
+  private readonly _routePattern: (
+      this: void,
+      pattern: string,
+      context: RequestContext<TInput & RouterMeans<TRoute>>,
+  ) => RoutePattern<TRoute>;
 
   constructor(config: HttpRouterConfig<TInput, TRoute>) {
     super();
 
-    const { routePattern = simpleRoutePattern } = config;
+    const routePattern = this._routePattern = config.routePattern
+        ? config.routePattern.bind(config)
+        : simpleRoutePattern;
+
     const buildRoute: <TMeans extends TInput>(context: RequestContext<TMeans>) => TRoute = config.buildRoute
         ? config.buildRoute.bind(config)
         : context => buildURLRoute(context, config);
@@ -64,10 +72,28 @@ class HttpRouterExtension$<
         fullRoute: route,
         route,
         routeMatch: noop,
-        routePattern,
+        routePattern(pattern) {
+          return routePattern(
+              pattern,
+              this as RequestContext<any>,
+          );
+        },
       };
 
       return mod as RequestModification<unknown, RouterMeans<TRoute>>;
+    };
+  }
+
+  modify<TNext>(
+      context: RequestContext<TInput & RouterMeans<TRoute>>,
+      modification: RequestModification<TInput & RouterMeans<TRoute>, TNext>,
+  ): RequestModification<TInput & RouterMeans<TRoute>, TNext> {
+    if (modification.routePattern) {
+      return modification;
+    }
+    return {
+      ...modification,
+      routePattern: pattern => this._routePattern(pattern, context),
     };
   }
 
