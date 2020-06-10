@@ -143,10 +143,10 @@ abstract class HttpRequestAgent<
       handler: RequestHandler<TMeans & TExt>,
       modification?: RequestModification<TMeans, TExt> | RequestModifier<TMeans, TExt>,
   ): Promise<boolean> {
-    if (!modification) {
-      await handler(this.context as RequestContext<TMeans & TExt>);
-    } else {
+    if (modification) {
       await handler(new ModifiedHttpRequestAgent<TRequest, TResponse, TMeans, TExt>(this, modification).context);
+    } else {
+      await handler(this.context as RequestContext<TMeans & TExt>);
     }
 
     return this.context.response.writableEnded;
@@ -208,7 +208,7 @@ class ModifiedHttpRequestAgent<
 
   constructor(
       prev: HttpRequestAgent<TRequest, TResponse, TMeans>,
-      modification?: RequestModification<TMeans, TExt> | RequestModifier<TMeans, TExt>,
+      modification: RequestModification<TMeans, TExt> | RequestModifier<TMeans, TExt>,
   ) {
     super();
 
@@ -232,9 +232,6 @@ class ModifiedHttpRequestAgent<
       this.modifiedBy = id => modifier[RequestModifier__symbol] === id || prev.modifiedBy(id);
 
     } else {
-      if (!modification) {
-        modification = {} as RequestModification<TMeans, TExt>;
-      }
       this.modifiedBy = prev.modifiedBy;
     }
 
