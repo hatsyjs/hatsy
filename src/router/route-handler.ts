@@ -7,7 +7,7 @@ import { mapIt } from '@proc7ts/a-iterable';
 import { isIterable, lazyValue } from '@proc7ts/primitives';
 import { RequestContext, RequestModification } from '../request-context';
 import { requestHandler, RequestHandler } from '../request-handler';
-import { RouteMeans } from './route-means';
+import { RouterMeans } from './router-means';
 
 /**
  * Routing configuration.
@@ -16,7 +16,7 @@ import { RouteMeans } from './route-means';
  * @typeparam TRoute  A type of supported URL route.
  * @typeparam TMeans  A type of supported route processing means.
  */
-export interface RoutingConfig<TRoute extends PathRoute, TMeans extends RouteMeans<TRoute>> {
+export interface RoutingConfig<TRoute extends PathRoute, TMeans extends RouterMeans<TRoute>> {
 
   /**
    * Either a route processing handler, a routing rule, or iterable of the above.
@@ -39,13 +39,13 @@ export interface RoutingConfig<TRoute extends PathRoute, TMeans extends RouteMea
  */
 export interface RoutingRule<
     TRoute extends PathRoute = PathRoute,
-    TMeans extends RouteMeans<TRoute> = RouteMeans<TRoute>,
+    TMeans extends RouterMeans<TRoute> = RouterMeans<TRoute>,
     > {
 
   /**
    * A route pattern that should match the route in order the {@link to handler} to be called.
    *
-   * When specified as a string, a {@link RouteMeans.routePattern pattern parser} is used to parse it.
+   * When specified as a string, a {@link RouterMeans.routePattern pattern parser} is used to parse it.
    */
   readonly on: RoutePattern<TRoute> | string;
 
@@ -74,7 +74,7 @@ export interface RoutingRule<
  * @typeparam TRoute  A type of matching route.
  * @typeparam TMeans  A type of route processing means.
  */
-export type RouteTailExtractor<TRoute extends PathRoute, TMeans extends RouteMeans<TRoute> = RouteMeans<TRoute>> =
+export type RouteTailExtractor<TRoute extends PathRoute, TMeans extends RouterMeans<TRoute> = RouterMeans<TRoute>> =
 /**
  * @param means  Route processing means of the matching route.
  *
@@ -85,7 +85,7 @@ export type RouteTailExtractor<TRoute extends PathRoute, TMeans extends RouteMea
 /**
  * @internal
  */
-function defaultRouteTailExtractor<TRoute extends PathRoute>({ route, routeMatch }: RouteMeans<TRoute>): TRoute {
+function defaultRouteTailExtractor<TRoute extends PathRoute>({ route, routeMatch }: RouterMeans<TRoute>): TRoute {
 
   let fromEntry: number | undefined;
 
@@ -101,7 +101,7 @@ function defaultRouteTailExtractor<TRoute extends PathRoute>({ route, routeMatch
 /**
  * @internal
  */
-function routeHandlerByRule<TRoute extends PathRoute, TMeans extends RouteMeans<TRoute>>(
+function routeHandlerByRule<TRoute extends PathRoute, TMeans extends RouterMeans<TRoute>>(
     rule: RequestHandler<TMeans> | RoutingRule<TRoute, TMeans>,
 ): RequestHandler<TMeans> {
   if (typeof rule === 'function') {
@@ -110,7 +110,7 @@ function routeHandlerByRule<TRoute extends PathRoute, TMeans extends RouteMeans<
 
   const { on, to, tail = defaultRouteTailExtractor } = rule;
 
-  return async (context: RequestContext<RouteMeans<TRoute> & TMeans>) => {
+  return async (context: RequestContext<RouterMeans<TRoute> & TMeans>) => {
 
     const { route, routeMatch: prevMatch, next } = context;
     const specMatch = routeMatch(
@@ -134,7 +134,7 @@ function routeHandlerByRule<TRoute extends PathRoute, TMeans extends RouteMeans<
             prevMatch(captor);
             specMatch(captor);
           },
-        } as RequestModification<RouteMeans<TRoute> & TMeans>,
+        } as RequestModification<RouterMeans<TRoute> & TMeans>,
     );
   };
 }
@@ -152,7 +152,7 @@ function routeHandlerByRule<TRoute extends PathRoute, TMeans extends RouteMeans<
  *
  * @returns Route processing handler.
  */
-export function routeHandler<TRoute extends PathRoute, TMeans extends RouteMeans<TRoute>>(
+export function routeHandler<TRoute extends PathRoute, TMeans extends RouterMeans<TRoute>>(
     config: RoutingConfig<TRoute, TMeans>,
 ): RequestHandler<TMeans> {
 

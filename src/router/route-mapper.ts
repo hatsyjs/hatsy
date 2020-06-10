@@ -5,7 +5,7 @@
 import { PathRoute } from '@hatsy/route-match';
 import { RequestModification } from '../request-context';
 import { RequestHandler } from '../request-handler';
-import { RouteMeans } from './route-means';
+import { RouterMeans } from './router-means';
 
 /**
  * Builds a route processing handler that maps the first route entry of the path to corresponding handler.
@@ -17,7 +17,7 @@ import { RouteMeans } from './route-means';
  *
  * @returns New route processing handler.
  */
-export function routeMapper<TRoute extends PathRoute, TMeans extends RouteMeans<TRoute>>(
+export function routeMapper<TRoute extends PathRoute, TMeans extends RouterMeans<TRoute>>(
     mapping: { readonly [entry: string]: RequestHandler<TMeans> },
 ): RequestHandler<TMeans> {
   return async ({ route, next }) => {

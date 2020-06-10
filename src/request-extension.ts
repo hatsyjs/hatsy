@@ -48,7 +48,7 @@ export abstract class RequestExtension<TInput, TExt = object>
     return this.constructor;
   }
 
-  abstract modification<TMeans extends TInput>(context: RequestContext<TMeans>): RequestModification<TInput, TExt>;
+  abstract modification(context: RequestContext<TInput>): RequestModification<TInput, TExt>;
 
   handler<TMeans extends TInput>(delegate: RequestHandler<TMeans & TExt>): RequestHandler<TMeans> {
     return async ({ next }) => {

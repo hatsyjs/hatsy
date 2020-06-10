@@ -3,9 +3,10 @@ import { RouteMatcher } from '@hatsy/route-match/d.ts/route-matcher';
 import { httpListener, RenderMeans } from '../http';
 import { readAll, testServer, TestServer } from '../spec';
 import { requestURL } from '../util';
-import { httpRouter } from './http-router';
+import { HttpRouterMeans } from './http-router-means';
+import { routeHandler } from './route-handler';
 
-describe('httpRouter', () => {
+describe('HttpRouterMeans', () => {
 
   let server: TestServer;
 
@@ -25,7 +26,7 @@ describe('httpRouter', () => {
     const wrongHandler = jest.fn();
 
     server.listener.mockImplementation(httpListener(RenderMeans.handler(
-        httpRouter({
+        HttpRouterMeans.handler(routeHandler({
           routes: [
             {
               on: 'wrong',
@@ -38,7 +39,7 @@ describe('httpRouter', () => {
               },
             },
           ],
-        }),
+        })),
     )));
 
     const response = await server.get('/test');
@@ -51,11 +52,11 @@ describe('httpRouter', () => {
     const wrongHandler = jest.fn();
 
     server.listener.mockImplementation(httpListener(RenderMeans.handler(
-        httpRouter({
+        HttpRouterMeans.handler(routeHandler({
           routes: ({ route, renderJson }) => {
             renderJson({ route: String(route) });
           },
-        }),
+        })),
     )));
 
     const response = await server.get('/test.html');
@@ -65,14 +66,14 @@ describe('httpRouter', () => {
   });
   it('extracts route tail', async () => {
     server.listener.mockImplementation(httpListener(RenderMeans.handler(
-        httpRouter({
+        HttpRouterMeans.handler(routeHandler({
           routes: {
             on: 'test/**',
             to({ route, renderJson }) {
               renderJson({ route: route.toString() });
             },
           },
-        }),
+        })),
     )));
 
     const response = await server.get('/test/nested?param=value');
@@ -81,7 +82,7 @@ describe('httpRouter', () => {
   });
   it('extracts route tail with custom function', async () => {
     server.listener.mockImplementation(httpListener(RenderMeans.handler(
-        httpRouter({
+        HttpRouterMeans.handler(routeHandler({
           routes: {
             on: 'test/{tail:**}',
             to({ route, renderJson }) {
@@ -100,7 +101,7 @@ describe('httpRouter', () => {
               return tail;
             },
           },
-        }),
+        })),
     )));
 
     const response = await server.get('/test/nested?param=value');
@@ -109,7 +110,7 @@ describe('httpRouter', () => {
   });
   it('captures route matches', async () => {
     server.listener.mockImplementation(httpListener(RenderMeans.handler(
-        httpRouter({
+        HttpRouterMeans.handler(routeHandler({
           routes: {
             on: [rcaptureEntry('dir'), rmatchDirSep, rmatchDirs],
             to({ routeMatch, renderJson }) {
@@ -123,7 +124,7 @@ describe('httpRouter', () => {
               renderJson(captured);
             },
           },
-        }),
+        })),
     )));
 
     const response = await server.get('/test/nested');
@@ -132,17 +133,18 @@ describe('httpRouter', () => {
   });
   it('builds custom route', async () => {
     server.listener.mockImplementation(httpListener(RenderMeans.handler(
-        httpRouter<RenderMeans, MatrixRoute>({
+        HttpRouterMeans.with<RenderMeans, MatrixRoute>({
+          buildRoute({ request }) {
+            return matrixRoute(requestURL(request, this.forwardTrust));
+          },
+        }).handler(routeHandler({
           routes: {
             on: 'test/**',
             to({ fullRoute, renderJson }) {
               renderJson({ attr: fullRoute.path[0].attrs.get('attr') });
             },
           },
-          buildRoute({ request }) {
-            return matrixRoute(requestURL(request, this.forwardTrust));
-          },
-        }),
+        })),
     )));
 
     const response = await server.get('/test;attr=val/nested?param=value');
@@ -151,17 +153,18 @@ describe('httpRouter', () => {
   });
   it('extracts URL from trusted forwarding info', async () => {
     server.listener.mockImplementation(httpListener(RenderMeans.handler(
-        httpRouter({
+        HttpRouterMeans.with({
+          forwardTrust: {
+            trusted: true,
+          },
+        }).handler(routeHandler({
           routes: {
             on: 'test/**',
             to({ fullRoute: { url: { href } }, renderJson }) {
               renderJson({ href });
             },
           },
-          forwardTrust: {
-            trusted: true,
-          },
-        }),
+        })),
     )));
 
     const response = await server.get(

@@ -51,11 +51,11 @@ export interface RenderMeans extends HttpMeans {
  */
 class RenderExtension extends RequestExtension<HttpMeans, RenderMeans> {
 
-  modification<TMeans extends HttpMeans>(
+  modification(
       {
         request: { method },
         response,
-      }: RequestContext<TMeans>,
+      }: RequestContext<HttpMeans>,
   ): RequestModification<HttpMeans, RenderMeans> {
 
     const renderBody = (body: string | Buffer, encoding: BufferEncoding = 'utf-8'): void => {

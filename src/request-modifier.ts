@@ -23,7 +23,7 @@ export const RequestModifier__symbol = (/*#__PURE__*/ Symbol('request-modifier')
  * @typeparam TMeans  A type of request processing means to modify.
  * @typeparam TExt  A type of request processing means extension.
  */
-export interface RequestModifier<TMeans, TExt> {
+export interface RequestModifier<TInput, TExt> {
 
   /**
    * Unique modifier identifier.
@@ -42,7 +42,7 @@ export interface RequestModifier<TMeans, TExt> {
    *
    * @returns Request modifications to apply.
    */
-  modification(context: RequestContext<TMeans>): RequestModification<TMeans, TExt>;
+  modification(context: RequestContext<TInput>): RequestModification<TInput, TExt>;
 
   /**
    * Updates subsequent request modifications.
@@ -59,9 +59,9 @@ export interface RequestModifier<TMeans, TExt> {
    * @returns Updated request modification that will be applied to
    */
   modify?<TNext>(
-      context: RequestContext<TMeans & TExt>,
-      modification: RequestModification<TMeans & TExt, TNext>,
-  ): RequestModification<TMeans & TExt, TNext>;
+      context: RequestContext<TInput & TExt>,
+      modification: RequestModification<TInput & TExt, TNext>,
+  ): RequestModification<TInput & TExt, TNext>;
 
 }
 

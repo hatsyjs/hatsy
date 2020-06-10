@@ -1,6 +1,6 @@
 import { httpListener, RenderMeans } from '../http';
 import { readAll, suppressedLog, testServer, TestServer } from '../spec';
-import { httpRouter } from './http-router';
+import { HttpRouterMeans } from './http-router-means';
 import { routeMapper } from './route-mapper';
 
 describe('routeMapper', () => {
@@ -17,16 +17,14 @@ describe('routeMapper', () => {
   beforeEach(() => {
     server.listener.mockImplementation(httpListener(
         RenderMeans.handler(
-            httpRouter({
-              routes: routeMapper({
-                first({ route, renderJson }) {
-                  renderJson({ first: String(route) });
-                },
-                second({ route, renderJson }) {
-                  renderJson({ second: String(route) });
-                },
-              }),
-            }),
+            HttpRouterMeans.handler(routeMapper({
+              first({ route, renderJson }) {
+                renderJson({ first: String(route) });
+              },
+              second({ route, renderJson }) {
+                renderJson({ second: String(route) });
+              },
+            })),
         ),
         {
           log: suppressedLog(),
