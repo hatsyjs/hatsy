@@ -5,7 +5,7 @@
 import { IncomingMessage, ServerResponse } from 'http';
 import { ErrorMeans } from '../error-means';
 import { RequestContext, RequestModification } from '../request-context';
-import { requestHandler, RequestHandler } from '../request-handler';
+import { RequestHandler } from '../request-handler';
 import { isRequestModifier, RequestModifier, RequestModifier__symbol } from '../request-modifier';
 import { renderHttpError } from './handlers';
 import { HttpError } from './http-error';
@@ -53,26 +53,57 @@ export interface HttpConfig<TMeans extends HttpMeans = HttpMeans> {
 }
 
 /**
- * Creates Node.js HTTP request listener by processing requests by HTTP request processing handler(s).
+ * Creates Node.js HTTP request listener that processes requests by HTTP request processing handler(s).
  *
  * @category HTTP
  * @typeparam TRequest  A type of supported HTTP request.
  * @typeparam TResponse  A type of supported HTTP response.
- * @param handlers  Either single HTTP request handler or iterable of HTTP request handlers to delegate request
- * processing to.
  * @param config  HTTP processing configuration.
+ * @param handler  HTTP request processing handler to delegate to.
  *
  * @returns HTTP request listener to pass to Node.js HTTP server.
  *
  * @see requestHandler
  */
 export function httpListener<TRequest extends IncomingMessage, TResponse extends ServerResponse>(
-    handlers: RequestHandler<HttpMeans<TRequest, TResponse>> | Iterable<RequestHandler<HttpMeans<TRequest, TResponse>>>,
-    config: HttpConfig<HttpMeans<TRequest, TResponse>> = {},
+    config: HttpConfig<HttpMeans<TRequest, TResponse>>,
+    handler: RequestHandler<HttpMeans<TRequest, TResponse>>,
+): (this: void, req: TRequest, res: TResponse) => void;
+
+/**
+ * Creates Node.js HTTP request listener that processes requests by HTTP request processing handler(s) according to
+ * default configuration.
+ *
+ * @category HTTP
+ * @typeparam TRequest  A type of supported HTTP request.
+ * @typeparam TResponse  A type of supported HTTP response.
+ * @param handler  HTTP request processing handler to delegate to.
+ *
+ * @returns HTTP request listener to pass to Node.js HTTP server.
+ *
+ * @see requestHandler
+ */
+export function httpListener<TRequest extends IncomingMessage, TResponse extends ServerResponse>(
+    handler: RequestHandler<HttpMeans<TRequest, TResponse>>,
+): (this: void, req: TRequest, res: TResponse) => void;
+
+export function httpListener<TRequest extends IncomingMessage, TResponse extends ServerResponse>(
+    configOrHandler: HttpConfig<HttpMeans<TRequest, TResponse>> | RequestHandler<HttpMeans<TRequest, TResponse>>,
+    optionalHandler?: RequestHandler<HttpMeans<TRequest, TResponse>>,
 ): (this: void, req: TRequest, res: TResponse) => void {
 
+  let config: HttpConfig<HttpMeans<TRequest, TResponse>>;
+  let handler: RequestHandler<HttpMeans<TRequest, TResponse>>;
+
+  if (optionalHandler) {
+    config = configOrHandler as HttpConfig<HttpMeans<TRequest, TResponse>>;
+    handler = optionalHandler;
+  } else {
+    config = {};
+    handler = configOrHandler as RequestHandler<HttpMeans<TRequest, TResponse>>;
+  }
+
   const { log = console } = config;
-  const handler = requestHandler(handlers);
   const defaultHandler = defaultHttpHandler(config);
   const errorHandler = httpErrorHandler(config);
 

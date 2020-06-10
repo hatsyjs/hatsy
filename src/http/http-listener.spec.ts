@@ -1,3 +1,4 @@
+import { noop } from '@proc7ts/primitives';
 import { ErrorMeans } from '../error-means';
 import { RequestContext } from '../request-context';
 import { readAll, suppressedLog, testServer, TestServer } from '../spec';
@@ -36,7 +37,7 @@ describe('httpListener', () => {
     }));
   });
   it('responds with `404` status when handler not responding', async () => {
-    server.listener.mockImplementation(httpListener(() => {/* do not respond */}, { log: suppressedLog() }));
+    server.listener.mockImplementation(httpListener({ log: suppressedLog() }, noop));
 
     const response = await server.get('/');
 
@@ -46,7 +47,7 @@ describe('httpListener', () => {
   });
   it('does not respond when handler not responding ad no default handler', async () => {
 
-    const listener = httpListener(() => {/* do not respond */}, { defaultHandler: false });
+    const listener = httpListener({ defaultHandler: false }, noop);
 
     server.listener.mockImplementation((request, response) => {
       listener(request, response);
@@ -63,7 +64,7 @@ describe('httpListener', () => {
 
     const error = new Error('test');
 
-    server.listener.mockImplementation(httpListener(() => { throw error; }, { log: suppressedLog() }));
+    server.listener.mockImplementation(httpListener({ log: suppressedLog() }, () => { throw error; }));
 
     const response = await server.get('/test');
 
@@ -75,7 +76,7 @@ describe('httpListener', () => {
 
     const error = new HttpError(403);
 
-    server.listener.mockImplementation(httpListener(() => { throw error; }, { log: suppressedLog() }));
+    server.listener.mockImplementation(httpListener({ log: suppressedLog() }, () => { throw error; }));
 
     const response = await server.get('/test');
 
@@ -90,8 +91,8 @@ describe('httpListener', () => {
     });
 
     server.listener.mockImplementation(httpListener(
-        () => {/* do not respond */},
         { log: suppressedLog(), defaultHandler },
+        noop,
     ));
 
     const response = await server.get('/test');
@@ -110,7 +111,7 @@ describe('httpListener', () => {
       response.end(`ERROR ${error.message}`);
     });
 
-    server.listener.mockImplementation(httpListener(() => { throw error; }, { log, errorHandler }));
+    server.listener.mockImplementation(httpListener({ log, errorHandler }, () => { throw error; }));
 
     const response = await server.get('/test');
 
@@ -130,7 +131,7 @@ describe('httpListener', () => {
       response.end(`ERROR ${error.message}`);
     });
 
-    server.listener.mockImplementation(httpListener(() => { throw error; }, { log, errorHandler }));
+    server.listener.mockImplementation(httpListener({ log, errorHandler }, () => { throw error; }));
 
     const response = await server.get('/test');
 
@@ -147,7 +148,7 @@ describe('httpListener', () => {
     const log = suppressedLog();
     const logErrorSpy = jest.spyOn(log, 'error');
 
-    server.listener.mockImplementation(httpListener(() => { throw error; }, { log, errorHandler: false }));
+    server.listener.mockImplementation(httpListener({ log, errorHandler: false }, () => { throw error; }));
 
     const response = await server.get('/test');
 
@@ -160,8 +161,8 @@ describe('httpListener', () => {
     const log = suppressedLog();
     const logErrorSpy = jest.spyOn(log, 'error');
     const listener = httpListener(
-        () => { throw error; },
         { log, defaultHandler: false, errorHandler: false },
+        () => { throw error; },
     );
 
     server.listener.mockImplementation((request, response) => {
@@ -187,8 +188,8 @@ describe('httpListener', () => {
     });
 
     const listener = httpListener(
-        () => { throw error; },
         { log, errorHandler },
+        () => { throw error; },
     );
 
     server.listener.mockImplementation((request, response) => {
