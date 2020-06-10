@@ -47,6 +47,23 @@ describe('RenderMeans', () => {
       expect(response.headers['content-type']).toBe('text/html; charset=utf-8');
       expect(response.headers['content-length']).toBe('4');
     });
+    it('is applied once', async () => {
+      server.listener.mockImplementation(httpListener(
+          RenderMeans
+              .and(RenderMeans)
+              .and(RenderMeans)
+              .handler(({ renderHtml }) => {
+                renderHtml('TEST');
+              }),
+      ));
+
+      const response = await server.get('/test');
+      const body = await readAll(response);
+
+      expect(body).toBe('TEST');
+      expect(response.headers['content-type']).toBe('text/html; charset=utf-8');
+      expect(response.headers['content-length']).toBe('4');
+    });
     it('does not render HTML on HEAD request', async () => {
 
       const response = await server.request('/test', { method: 'head' });
