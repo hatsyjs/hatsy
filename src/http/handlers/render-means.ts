@@ -2,6 +2,8 @@
  * @packageDocumentation
  * @module @hatsy/hatsy
  */
+import { RequestContext, RequestModification } from '../../request-context';
+import { RequestExtension } from '../../request-extension';
 import { HttpMeans } from '../index';
 
 /**
@@ -43,3 +45,48 @@ export interface RenderMeans extends HttpMeans {
   renderJson(this: void, body: any): void;
 
 }
+
+/**
+ * @internal
+ */
+class RenderExtension extends RequestExtension<HttpMeans, RenderMeans> {
+
+  modification(
+      {
+        request: { method },
+        response,
+      }: RequestContext<HttpMeans>,
+  ): RequestModification<HttpMeans, RenderMeans> {
+
+    const renderBody = (body: string | Buffer, encoding: BufferEncoding = 'utf-8'): void => {
+
+      const length = Buffer.isBuffer(body) ? body.byteLength : Buffer.byteLength(body, encoding);
+
+      response.setHeader('Content-Length', length);
+      if (method === 'HEAD') {
+        response.end();
+      } else {
+        response.end(body, encoding);
+      }
+    };
+
+    return {
+
+      renderBody,
+
+      renderHtml(html: string | Buffer) {
+        response.setHeader('Content-Type', 'text/html; charset=utf-8');
+        renderBody(html);
+      },
+
+      renderJson(body: any) {
+        response.setHeader('Content-Type', 'application/json; charset=utf-8');
+        renderBody(JSON.stringify(body));
+      },
+
+    };
+  }
+
+}
+
+export const RenderMeans: RequestExtension<HttpMeans, RenderMeans> = new RenderExtension();

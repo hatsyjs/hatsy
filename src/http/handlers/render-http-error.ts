@@ -6,7 +6,6 @@ import { ErrorMeans } from '../../error-means';
 import { RequestContext } from '../../request-context';
 import { HttpError } from '../http-error';
 import { HttpMeans } from '../http-means';
-import { httpRenderer } from './http-renderer';
 import { RenderMeans } from './render-means';
 
 /**
@@ -48,5 +47,5 @@ function renderHttpErrorPage({ error, response, renderHtml }: RequestContext<Ren
  * @returns New HTTP request handler.
  */
 export async function renderHttpError(context: RequestContext<HttpMeans & ErrorMeans>): Promise<void> {
-  await context.next(httpRenderer<HttpMeans & ErrorMeans>(renderHttpErrorPage));
+  await context.next(RenderMeans.handler<HttpMeans & ErrorMeans>(renderHttpErrorPage));
 }

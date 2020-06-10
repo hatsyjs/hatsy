@@ -1,3 +1,4 @@
+import { valueProvider } from '@proc7ts/primitives';
 import { ServerResponse } from 'http';
 import { RequestContext } from './request-context';
 import { requestHandler, RequestHandler } from './request-handler';
@@ -17,6 +18,7 @@ describe('requestHandler', () => {
         await handler(context);
         return response.writableEnded;
       },
+      modifiedBy: valueProvider(false),
     } as RequestContext<object>;
   });
 

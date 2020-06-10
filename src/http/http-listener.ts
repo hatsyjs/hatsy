@@ -4,8 +4,9 @@
  */
 import { IncomingMessage, ServerResponse } from 'http';
 import { ErrorMeans } from '../error-means';
-import { RequestContext, RequestExtensions } from '../request-context';
-import { requestHandler, RequestHandler } from '../request-handler';
+import { RequestContext, RequestModification } from '../request-context';
+import { RequestHandler } from '../request-handler';
+import { isRequestModifier, RequestModifier, RequestModifier__symbol } from '../request-modifier';
 import { renderHttpError } from './handlers';
 import { HttpError } from './http-error';
 import { HttpMeans } from './http-means';
@@ -52,26 +53,57 @@ export interface HttpConfig<TMeans extends HttpMeans = HttpMeans> {
 }
 
 /**
- * Creates Node.js HTTP request listener by processing requests by HTTP request processing handler(s).
+ * Creates Node.js HTTP request listener that processes requests by HTTP request processing handler(s).
  *
  * @category HTTP
  * @typeparam TRequest  A type of supported HTTP request.
  * @typeparam TResponse  A type of supported HTTP response.
- * @param handlers  Either single HTTP request handler or iterable of HTTP request handlers to delegate request
- * processing to.
  * @param config  HTTP processing configuration.
+ * @param handler  HTTP request processing handler to delegate to.
  *
  * @returns HTTP request listener to pass to Node.js HTTP server.
  *
  * @see requestHandler
  */
 export function httpListener<TRequest extends IncomingMessage, TResponse extends ServerResponse>(
-    handlers: RequestHandler<HttpMeans<TRequest, TResponse>> | Iterable<RequestHandler<HttpMeans<TRequest, TResponse>>>,
-    config: HttpConfig<HttpMeans<TRequest, TResponse>> = {},
+    config: HttpConfig<HttpMeans<TRequest, TResponse>>,
+    handler: RequestHandler<HttpMeans<TRequest, TResponse>>,
+): (this: void, req: TRequest, res: TResponse) => void;
+
+/**
+ * Creates Node.js HTTP request listener that processes requests by HTTP request processing handler(s) according to
+ * default configuration.
+ *
+ * @category HTTP
+ * @typeparam TRequest  A type of supported HTTP request.
+ * @typeparam TResponse  A type of supported HTTP response.
+ * @param handler  HTTP request processing handler to delegate to.
+ *
+ * @returns HTTP request listener to pass to Node.js HTTP server.
+ *
+ * @see requestHandler
+ */
+export function httpListener<TRequest extends IncomingMessage, TResponse extends ServerResponse>(
+    handler: RequestHandler<HttpMeans<TRequest, TResponse>>,
+): (this: void, req: TRequest, res: TResponse) => void;
+
+export function httpListener<TRequest extends IncomingMessage, TResponse extends ServerResponse>(
+    configOrHandler: HttpConfig<HttpMeans<TRequest, TResponse>> | RequestHandler<HttpMeans<TRequest, TResponse>>,
+    optionalHandler?: RequestHandler<HttpMeans<TRequest, TResponse>>,
 ): (this: void, req: TRequest, res: TResponse) => void {
 
+  let config: HttpConfig<HttpMeans<TRequest, TResponse>>;
+  let handler: RequestHandler<HttpMeans<TRequest, TResponse>>;
+
+  if (optionalHandler) {
+    config = configOrHandler as HttpConfig<HttpMeans<TRequest, TResponse>>;
+    handler = optionalHandler;
+  } else {
+    config = {};
+    handler = configOrHandler as RequestHandler<HttpMeans<TRequest, TResponse>>;
+  }
+
   const { log = console } = config;
-  const handler = requestHandler(handlers);
   const defaultHandler = defaultHttpHandler(config);
   const errorHandler = httpErrorHandler(config);
 
@@ -88,42 +120,132 @@ export function httpListener<TRequest extends IncomingMessage, TResponse extends
   };
 
   return (request: TRequest, response: TResponse): void => {
-    toHttpContext({
-      request,
-      response,
-      log,
-    }).next(fullHandler).catch(
-        error => log.error(`[${request.method} ${request.url}]`, 'Unhandled error', error),
-    );
+    new RootHttpRequestAgent({ request, response, log })
+        .next(fullHandler)
+        .catch(
+            error => log.error(`[${request.method} ${request.url}]`, 'Unhandled error', error),
+        );
   };
 }
 
 /**
  * @internal
  */
-function toHttpContext<
+abstract class HttpRequestAgent<
+    TRequest extends IncomingMessage,
+    TResponse extends ServerResponse,
+    TMeans extends HttpMeans<TRequest, TResponse> = HttpMeans<TRequest, TResponse>,
+    > {
+
+  abstract readonly context: RequestContext<TMeans>;
+
+  async next<TExt>(
+      handler: RequestHandler<TMeans & TExt>,
+      modification?: RequestModification<TMeans, TExt> | RequestModifier<TMeans, TExt>,
+  ): Promise<boolean> {
+    if (modification) {
+      await handler(new ModifiedHttpRequestAgent<TRequest, TResponse, TMeans, TExt>(this, modification).context);
+    } else {
+      await handler(this.context as RequestContext<TMeans & TExt>);
+    }
+
+    return this.context.response.writableEnded;
+  }
+
+  abstract modify<TExt>(
+      this: void,
+      modification: RequestModification<TMeans, TExt>,
+  ): RequestModification<TMeans, TExt>;
+
+  abstract modifiedBy(this: void, id: any): boolean;
+
+}
+
+class RootHttpRequestAgent<
+    TRequest extends IncomingMessage,
+    TResponse extends ServerResponse,
+    > extends HttpRequestAgent<TRequest, TResponse> {
+
+  readonly context: RequestContext<HttpMeans<TRequest, TResponse>>;
+
+  constructor(means: HttpMeans<TRequest, TResponse>) {
+    super();
+    this.context = {
+      ...means,
+      next: this.next.bind(this),
+      modifiedBy: this.modifiedBy,
+    };
+  }
+
+  modifiedBy(this: void): boolean {
+    return false;
+  }
+
+  modify<TExt>(
+      this: void,
+      modification: RequestModification<HttpMeans<TRequest, TResponse>, TExt>,
+  ): RequestModification<HttpMeans<TRequest, TResponse>, TExt> {
+    return modification;
+  }
+
+}
+
+class ModifiedHttpRequestAgent<
     TRequest extends IncomingMessage,
     TResponse extends ServerResponse,
     TMeans extends HttpMeans<TRequest, TResponse>,
->(
-    means: TMeans,
-): RequestContext<TMeans> {
+    TExt,
+    > extends HttpRequestAgent<TRequest, TResponse, TMeans & TExt> {
 
-  const context = means as RequestContext<TMeans>;
+  readonly context: RequestContext<TMeans & TExt>;
 
-  context.next = async <TExt>(
-      handler: RequestHandler<TMeans & TExt>,
-      extensions?: RequestExtensions<HttpMeans<TRequest, TResponse>, TExt>,
-  ): Promise<boolean> => {
+  readonly modify: <TNext>(
+      this: void,
+      modification: RequestModification<TMeans & TExt, TNext>,
+  ) => RequestModification<TMeans & TExt, TNext>;
 
-    await handler(extensions
-        ? toHttpContext({ ...means, ...extensions } as TMeans & TExt)
-        : context as RequestContext<TMeans & TExt>);
+  readonly modifiedBy: (this: void, id: any) => boolean;
 
-    return means.response.writableEnded;
-  };
+  constructor(
+      prev: HttpRequestAgent<TRequest, TResponse, TMeans>,
+      modification: RequestModification<TMeans, TExt> | RequestModifier<TMeans, TExt>,
+  ) {
+    super();
 
-  return context;
+    let modify = prev.modify as <TNext>(
+        this: void,
+        modification: RequestModification<TMeans & TExt, TNext>,
+    ) => RequestModification<TMeans & TExt, TNext>;
+
+    if (isRequestModifier(modification)) {
+
+      const modifier = modification;
+
+      modification = prev.modify(modifier.modification(prev.context));
+
+      if (modifier.modify) {
+        modify = <TNext>(mod: RequestModification<TMeans & TExt, TNext>) => prev.modify(
+            modifier.modify!(this.context, mod) as RequestModification<TMeans, TNext>,
+        ) as RequestModification<TMeans & TExt, TNext>;
+      }
+
+      this.modifiedBy = requested => modifier[RequestModifier__symbol] === requested[RequestModifier__symbol]
+          || prev.modifiedBy(requested);
+
+    } else {
+      modification = prev.modify(modification);
+      this.modifiedBy = prev.modifiedBy;
+    }
+
+    this.modify = modify;
+    this.context = {
+      ...prev.context,
+      ...modification,
+      next: this.next.bind(this),
+      modifiedBy: this.modifiedBy,
+    } as RequestContext<TMeans & TExt>;
+  }
+
 }
 
 /**

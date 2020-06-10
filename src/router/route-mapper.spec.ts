@@ -1,7 +1,9 @@
-import { httpListener, httpRenderer } from '../http';
+import { httpListener, RenderMeans } from '../http';
+import { RequestContext } from '../request-context';
 import { readAll, suppressedLog, testServer, TestServer } from '../spec';
-import { httpRouter } from './http-router';
+import { HttpRouterMeans } from './http-router-means';
 import { routeMapper } from './route-mapper';
+import { RouterMeans } from './router-means';
 
 describe('routeMapper', () => {
 
@@ -16,21 +18,23 @@ describe('routeMapper', () => {
 
   beforeEach(() => {
     server.listener.mockImplementation(httpListener(
-        httpRenderer(
-            httpRouter({
-              routes: routeMapper({
-                first({ route, renderJson }) {
-                  renderJson({ first: String(route) });
-                },
-                second({ route, renderJson }) {
-                  renderJson({ second: String(route) });
-                },
-              }),
-            }),
-        ),
         {
           log: suppressedLog(),
         },
+        RenderMeans
+            .and(HttpRouterMeans)
+            .handler(routeMapper({
+              first({ route, renderJson }) {
+                renderJson({ first: String(route) });
+              },
+              second: routeMapper({
+                third: routeMapper({
+                  'test.html'({ route, renderJson }: RequestContext<RenderMeans & RouterMeans>) {
+                    renderJson({ test: String(route) });
+                  },
+                }),
+              }),
+            })),
     ));
   });
 
@@ -40,11 +44,11 @@ describe('routeMapper', () => {
 
     expect(JSON.parse(await readAll(response))).toEqual({ first: '' });
   });
-  it('delegates to matching route prefix', async () => {
+  it('delegates to nested route', async () => {
 
-    const response = await server.get('/second/test.html');
+    const response = await server.get('/second/third/test.html?param=value');
 
-    expect(JSON.parse(await readAll(response))).toEqual({ second: 'test.html' });
+    expect(JSON.parse(await readAll(response))).toEqual({ test: '?param=value' });
   });
   it('does nothing when no routes match', async () => {
 
