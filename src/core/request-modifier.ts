@@ -6,13 +6,13 @@ import { RequestContext } from './request-context';
 import { RequestModification } from './request-modification';
 
 /**
- * A unique key of {@link RequestModifier} property containing its unique identifier.
+ * A unique key of {@link RequestModifier} or {@link RequestModifierRef} property containing a reference to modifier.
  *
  * Used to distinguish request modifiers from raw request modifications.
  *
  * @category Core
  */
-export const RequestModifier__symbol = (/*#__PURE__*/ Symbol('request-modifier'));
+export const RequestModifier__symbol = (/*#__PURE__*/ Symbol('request-modifier-type'));
 
 /**
  * Request modifier.
@@ -21,20 +21,10 @@ export const RequestModifier__symbol = (/*#__PURE__*/ Symbol('request-modifier')
  * processing}.
  *
  * @category Core
- * @typeparam TMeans  A type of request processing means to modify.
- * @typeparam TExt  A type of request processing means extension.
+ * @typeparam TMeans  A type of request processing means this modifier is able to modify.
+ * @typeparam TExt  A type of extension to request processing means applied by this modifier.
  */
-export interface RequestModifier<TInput, TExt> {
-
-  /**
-   * Unique modifier identifier.
-   *
-   * The {@link RequestContext.Agent.modifiedBy} method can be used to check whether this modifier is already
-   * applied to request.
-   *
-   * This is typically used to prevent the modifier from being applied more than once to the same request.
-   */
-  readonly [RequestModifier__symbol]: any;
+export interface RequestModifier<TInput, TExt> extends RequestModifierRef<TInput, TExt> {
 
   /**
    * Builds request modification to apply.
@@ -65,6 +55,27 @@ export interface RequestModifier<TInput, TExt> {
       context: RequestContext<TInput & TExt>,
       modification: RequestModification<TInput & TExt, TNext>,
   ): RequestModification<TInput & TExt, TNext>;
+
+}
+
+/**
+ * Request modifier reference.
+ *
+ * The {@link RequestContext.Agent.modifiedBy} method can be used to check whether the target modifier is applied
+ * to request already.
+ *
+ * This is typically used to prevent the modifier from being applied more than once to the same request.
+ *
+ * @category Core
+ * @typeparam TInput  A type of request processing means the target modifier is able modify.
+ * @typeparam TExt  A type of extension to request processing means applied by the target modifier.
+ */
+export interface RequestModifierRef<TInput, TExt> {
+
+  /**
+   * A reference to request modifier instance.
+   */
+  readonly [RequestModifier__symbol]: RequestModifierRef<TInput, TExt>;
 
 }
 

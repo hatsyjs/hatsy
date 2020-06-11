@@ -11,6 +11,7 @@ import {
   RequestModification,
   RequestModifier,
   RequestModifier__symbol,
+  RequestModifierRef,
 } from '../core';
 import { HttpError } from './http-error';
 import { HttpMeans } from './http-means';
@@ -162,7 +163,10 @@ abstract class HttpRequestAgent<
       modification: RequestModification<TMeans, TExt>,
   ): RequestModification<TMeans, TExt>;
 
-  abstract modifiedBy(this: void, id: any): boolean;
+  abstract modifiedBy<TInput, TExt>(
+      this: void,
+      ref: RequestModifierRef<TInput, TExt>,
+  ): RequestContext<TMeans & TInput & TExt> | undefined;
 
 }
 
@@ -185,8 +189,8 @@ class RootHttpRequestAgent<
     };
   }
 
-  modifiedBy(this: void): boolean {
-    return false;
+  modifiedBy(): undefined {
+    return;
   }
 
   modify<TExt>(
@@ -215,7 +219,10 @@ class ModifiedHttpRequestAgent<
       modification: RequestModification<TMeans & TExt, TNext>,
   ) => RequestModification<TMeans & TExt, TNext>;
 
-  readonly modifiedBy: (this: void, id: any) => boolean;
+  readonly modifiedBy: <TModifierInput, TModifierExt>(
+      this: void,
+      ref: RequestModifierRef<TModifierInput, TModifierExt>,
+  ) => RequestContext<TMeans & TExt & TModifierInput & TModifierExt> | undefined;
 
   constructor(
       prev: HttpRequestAgent<TRequest, TResponse, TMeans>,
@@ -240,12 +247,19 @@ class ModifiedHttpRequestAgent<
         ) as RequestModification<TMeans & TExt, TNext>;
       }
 
-      this.modifiedBy = requested => modifier[RequestModifier__symbol] === requested[RequestModifier__symbol]
-          || prev.modifiedBy(requested);
+      this.modifiedBy = <TModifierInput, TModifierExt>(
+          ref: RequestModifierRef<TModifierInput, TModifierExt>,
+      ) => (modifier[RequestModifier__symbol] === ref[RequestModifier__symbol]
+          ? this.context
+          : prev.modifiedBy(ref)
+      ) as RequestContext<TMeans & TExt & TModifierInput & TModifierExt> | undefined;
 
     } else {
       modification = prev.modify(modification);
-      this.modifiedBy = prev.modifiedBy;
+      this.modifiedBy = prev.modifiedBy as <TModifierInput, TModifierExt>(
+          this: void,
+          ref: RequestModifierRef<TModifierInput, TModifierExt>,
+      ) => RequestContext<TMeans & TExt & TModifierInput & TModifierExt> | undefined;
     }
 
     this.modify = modify;

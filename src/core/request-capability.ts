@@ -24,11 +24,11 @@ export abstract class RequestCapability<TInput, TExt = object>
     implements RequestModifier<TInput, TExt>, RequestCapabilities<TInput, TExt> {
 
   /**
-   * Unique modifier identifier.
+   * A reference to request modifier.
    *
-   * @default This instance.
+   * @default `this` instance.
    */
-  get [RequestModifier__symbol](): any {
+  get [RequestModifier__symbol](): RequestModifier<TInput, TExt> {
     return this;
   }
 
