@@ -14,7 +14,7 @@ import {
 } from '../core';
 import { HttpError } from './http-error';
 import { HttpMeans } from './http-means';
-import { renderHttpError } from './rendering';
+import { renderHttpError } from './render';
 
 /**
  * HTTP processing configuration.
