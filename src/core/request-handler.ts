@@ -20,11 +20,32 @@ export type RequestHandler<TMeans> =
 /**
  * @param context  Request processing context containing the necessary means.
  *
- * @returns Either nothing if the handler completed its work synchronously, or a promise resolved when the handler
- * completed its work asynchronously.
+ * @returns Either nothing if the handler completed its work synchronously, or a promise-like instance resolved when
+ * the handler completed its work asynchronously.
  */
     (
         this: void,
+        context: RequestContext<TMeans>,
+    ) => PromiseLike<void> | void;
+
+/**
+ * Request processing method signature.
+ *
+ * This is a {@link RequestHandler request handler} that requires a `this` object.
+ *
+ * @category Core
+ * @typeparam TThis  A type of `this` object.
+ * @typeparam TMeans  A type of request processing means this handler expects.
+ */
+export type RequestHandlerMethod<TThis, TMeans> =
+/**
+ * @param context  Request processing context containing the necessary means.
+ *
+ * @returns Either nothing if the handler completed its work synchronously, or a promise-like instance resolved when
+ * the handler completed its work asynchronously.
+ */
+    (
+        this: TThis,
         context: RequestContext<TMeans>,
     ) => PromiseLike<void> | void;
 

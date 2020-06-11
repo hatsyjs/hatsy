@@ -5,7 +5,7 @@
 import { PathRoute, RouteCaptor, routeMatch, RouteMatcher, RoutePattern } from '@hatsy/route-match';
 import { mapIt } from '@proc7ts/a-iterable';
 import { isIterable, lazyValue } from '@proc7ts/primitives';
-import { RequestContext, requestHandler, RequestHandler, RequestModification } from '../../core';
+import { RequestContext, requestHandler, RequestHandler, RequestHandlerMethod, RequestModification } from '../../core';
 import { RouterMeans } from '../router-means';
 
 /**
@@ -34,34 +34,23 @@ export interface DispatchPattern<
    *
    * This handler would receive a [[tail]] of the matching route.
    */
-  readonly to: RequestHandler<TMeans>,
+  readonly to: RequestHandlerMethod<this, TMeans>,
 
   /**
-   * Matching route tail extractor.
+   * Extracts route tail from matching route.
    *
    * The extracted route tail is passed to the {@link to handler}.
+   *
+   * @param context  Route processing context of the matching route.
+   *
+   * @returns  Extracted tail of the matching route.
    *
    * @default Extracts a matching route tail starting from the first capture/wildcard. If no captures or wildcards
    * present in pattern, then full route extracted.
    */
-  readonly tail?: RouteTailExtractor<TRoute, TMeans>;
+  tail?(context: RequestContext<TMeans>): TRoute;
 
 }
-
-/**
- * Matching route tail extractor.
- *
- * @category Router
- * @typeparam TRoute  A type of matching route.
- * @typeparam TMeans  A type of route processing means.
- */
-export type RouteTailExtractor<TRoute extends PathRoute, TMeans extends RouterMeans<TRoute> = RouterMeans<TRoute>> =
-/**
- * @param context  Route processing context of the matching route.
- *
- * @returns  Extracted tail of the matching route.
- */
-    (this: void, context: RequestContext<TMeans>) => TRoute;
 
 /**
  * @internal
@@ -88,7 +77,8 @@ function handlerByDispatchPattern<TRoute extends PathRoute, TMeans extends Route
     pattern: DispatchPattern<TRoute, TMeans>,
 ): RequestHandler<TMeans> {
 
-  const { on, to, tail = defaultRouteTailExtractor } = pattern;
+  const { on } = pattern;
+  const tail = pattern.tail ? pattern.tail.bind(pattern) : defaultRouteTailExtractor;
 
   return async (context: RequestContext<RouterMeans<TRoute> & TMeans>) => {
 
@@ -105,7 +95,7 @@ function handlerByDispatchPattern<TRoute extends PathRoute, TMeans extends Route
     const getTail = lazyValue(() => tail({ ...context, routeMatch: patternMatch }));
 
     await next(
-        to,
+        pattern.to.bind(pattern),
         {
           get route() {
             return getTail();
