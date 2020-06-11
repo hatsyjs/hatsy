@@ -2,7 +2,7 @@
  * @packageDocumentation
  * @module @hatsy/hatsy
  */
-import { RequestContext, RequestExtension, RequestModification } from '../../core';
+import { RequestCapability, RequestContext, RequestModification } from '../../core';
 import { HttpMeans } from '../index';
 
 /**
@@ -48,7 +48,7 @@ export interface RenderMeans extends HttpMeans {
 /**
  * @internal
  */
-class RenderExtension extends RequestExtension<HttpMeans, RenderMeans> {
+class RenderExtension extends RequestCapability<HttpMeans, RenderMeans> {
 
   modification<TMeans extends HttpMeans>(
       {
@@ -88,4 +88,4 @@ class RenderExtension extends RequestExtension<HttpMeans, RenderMeans> {
 
 }
 
-export const RenderMeans: RequestExtension<HttpMeans, RenderMeans> = new RenderExtension();
+export const RenderMeans: RequestCapability<HttpMeans, RenderMeans> = new RenderExtension();

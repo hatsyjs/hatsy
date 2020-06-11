@@ -21,7 +21,7 @@ describe('RenderMeans', () => {
   describe('renderHtml', () => {
 
     beforeEach(() => {
-      server.listener.mockImplementation(httpListener(RenderMeans.handler(({ renderHtml }) => {
+      server.listener.mockImplementation(httpListener(RenderMeans.for(({ renderHtml }) => {
         renderHtml('TEST');
       })));
     });
@@ -36,7 +36,7 @@ describe('RenderMeans', () => {
       expect(response.headers['content-length']).toBe('4');
     });
     it('renders HTML as buffer', async () => {
-      server.listener.mockImplementation(httpListener(RenderMeans.handler(({ renderHtml }) => {
+      server.listener.mockImplementation(httpListener(RenderMeans.for(({ renderHtml }) => {
         renderHtml(Buffer.from(new TextEncoder().encode('TEST')));
       })));
 
@@ -52,7 +52,7 @@ describe('RenderMeans', () => {
           RenderMeans
               .and(RenderMeans)
               .and(RenderMeans)
-              .handler(({ renderHtml }) => {
+              .for(({ renderHtml }) => {
                 renderHtml('TEST');
               }),
       ));
@@ -78,7 +78,7 @@ describe('RenderMeans', () => {
   describe('renderJson', () => {
 
     beforeEach(() => {
-      server.listener.mockImplementation(httpListener(RenderMeans.handler(({ renderJson }) => {
+      server.listener.mockImplementation(httpListener(RenderMeans.for(({ renderJson }) => {
         renderJson('TEST');
       })));
     });

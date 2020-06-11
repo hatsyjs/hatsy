@@ -23,7 +23,7 @@ describe('routeMapper', () => {
         },
         RenderMeans
             .and(HttpRouterMeans)
-            .handler(routeMapper({
+            .for(routeMapper({
               first({ route, renderJson }) {
                 renderJson({ first: String(route) });
               },

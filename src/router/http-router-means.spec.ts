@@ -38,7 +38,7 @@ describe('HttpRouterMeans', () => {
     server.listener.mockImplementation(httpListener(
         RenderMeans
             .and(HttpRouterMeans)
-            .handler(routeHandler([
+            .for(routeHandler([
               {
                 on: 'wrong',
                 to: wrongHandler,
@@ -64,7 +64,7 @@ describe('HttpRouterMeans', () => {
     server.listener.mockImplementation(httpListener(
         RenderMeans
             .and(HttpRouterMeans)
-            .handler(routeHandler({
+            .for(routeHandler({
               on: 'dir/**',
               to: routeHandler({
                 on: 'test',
@@ -94,7 +94,7 @@ describe('HttpRouterMeans', () => {
     server.listener.mockImplementation(httpListener(
         RenderMeans
             .and(HttpRouterMeans)
-            .handler(routeHandler({
+            .for(routeHandler({
               on: 'dir/**',
               async to({ next }) {
                 await next(
@@ -117,7 +117,7 @@ describe('HttpRouterMeans', () => {
     server.listener.mockImplementation(httpListener(
         RenderMeans
             .and(HttpRouterMeans)
-            .handler(routeHandler({
+            .for(routeHandler({
               on: 'test/**',
               to({ route, renderJson }) {
                 renderJson({ route: route.toString() });
@@ -133,7 +133,7 @@ describe('HttpRouterMeans', () => {
     server.listener.mockImplementation(httpListener(
         RenderMeans
             .and(HttpRouterMeans)
-            .handler(routeHandler({
+            .for(routeHandler({
               on: 'test/{tail:**}',
               to({ route, renderJson }) {
                 renderJson({ route: String(route) });
@@ -161,7 +161,7 @@ describe('HttpRouterMeans', () => {
     server.listener.mockImplementation(httpListener(
         RenderMeans
             .and(HttpRouterMeans)
-            .handler(routeHandler({
+            .for(routeHandler({
               on: [rcaptureEntry('dir'), rmatchDirSep, rmatchDirs],
               to({ routeMatch, renderJson }) {
 
@@ -181,13 +181,13 @@ describe('HttpRouterMeans', () => {
     expect(JSON.parse(await readAll(response))).toEqual([['capture', 'dir', 'test'], ['dirs', 1, 2]]);
   });
   it('builds custom route', async () => {
-    server.listener.mockImplementation(httpListener(RenderMeans.handler(
+    server.listener.mockImplementation(httpListener(RenderMeans.for(
         HttpRouterMeans.with<RenderMeans, MatrixRoute>({
           buildRoute({ request }) {
             return matrixRoute(requestURL(request, this.forwardTrust));
           },
           routePattern: matrixRoutePattern,
-        }).handler(routeHandler({
+        }).for(routeHandler({
           on: 'test;attr/**',
           to({ fullRoute, renderJson }) {
             renderJson({ attr: fullRoute.path[0].attrs.get('attr') });
@@ -207,7 +207,7 @@ describe('HttpRouterMeans', () => {
                 trusted: true,
               },
             }))
-            .handler(routeHandler({
+            .for(routeHandler({
               on: 'test/**',
               to({ fullRoute: { url: { href } }, renderJson }) {
                 renderJson({ href });

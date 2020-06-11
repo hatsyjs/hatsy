@@ -4,7 +4,7 @@
  */
 import { RoutePattern, simpleRoutePattern, urlRoute, URLRoute } from '@hatsy/route-match';
 import { noop } from '@proc7ts/primitives';
-import { RequestContext, RequestExtension, RequestModification } from '../core';
+import { RequestCapability, RequestContext, RequestModification } from '../core';
 import { HttpMeans } from '../http';
 import { requestURL } from '../util';
 import { HttpRouterConfig } from './http-router-config';
@@ -14,7 +14,7 @@ export interface HttpRouterExtension<
     TInput extends HttpMeans = HttpMeans,
     TRoute extends URLRoute = URLRoute,
     >
-    extends RequestExtension<TInput, RouterMeans<TRoute>> {
+    extends RequestCapability<TInput, RouterMeans<TRoute>> {
 
   with<TInput extends HttpMeans>(
       config: HttpRouterConfig.DefaultRoute<TInput>,
@@ -42,7 +42,7 @@ function buildURLRoute<TRoute extends URLRoute>(
 class HttpRouterExtension$<
     TInput extends HttpMeans = HttpMeans,
     TRoute extends URLRoute = URLRoute,
-    > extends RequestExtension<TInput, RouterMeans<TRoute>> implements HttpRouterExtension<TInput, TRoute> {
+    > extends RequestCapability<TInput, RouterMeans<TRoute>> implements HttpRouterExtension<TInput, TRoute> {
 
   readonly modification: <TMeans extends TInput>(
       context: RequestContext<TMeans>,
