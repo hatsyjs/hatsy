@@ -1,6 +1,6 @@
 {
   "categorizeByGroup": true,
-  "categoryOrder": ["Core", "HTTP", "Router", "*"],
+  "categoryOrder": ["Core", "HTTP", "Router", "Utility", "*"],
   "disableAutoModuleName": true,
   "exclude": [
     "**/index.ts",
@@ -10,7 +10,7 @@
     "**/*.spec.ts"
   ],
   "excludeNotExported": true,
-  "mode": "modules",
+  "mode": "file",
   "name": "Hatsy",
   "out": "./target/typedoc",
   "tsconfig": "tsconfig.main.json"

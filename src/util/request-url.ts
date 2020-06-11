@@ -13,7 +13,7 @@ import { ProxyForwardTrust, trustedForward } from './trusted-forward';
  *
  * [Forwarded]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Forwarded
  *
- * @category Utilities
+ * @category Utility
  * @param request  HTTP request.
  * @param forwardTrust  A trust policy to proxy forwarding information.
  *

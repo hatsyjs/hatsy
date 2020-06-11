@@ -10,7 +10,7 @@ import { IncomingMessage } from 'http';
  *
  * Defines how to treat proxy forwarding information contained in request headers.
  *
- * @category Utilities
+ * @category Utility
  */
 export interface ProxyForwardTrust {
 
@@ -35,7 +35,7 @@ export interface ProxyForwardTrust {
  *
  * [Forwarded]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Forwarded
  *
- * @category Utilities
+ * @category Utility
  */
 export interface ProxyForward {
 
@@ -70,7 +70,7 @@ function proxyForwardByHeaderItems(items: HthvItems): ProxyForward {
  *
  * [Forwarded]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Forwarded
  *
- * @category Utilities
+ * @category Utility
  * @param request  Source HTTP request.
  * @param forwardTrust  A trust policy to proxy forwarding records.
  *
