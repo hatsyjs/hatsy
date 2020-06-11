@@ -12,9 +12,9 @@ import {
   RequestModifier,
   RequestModifier__symbol,
 } from '../core';
-import { renderHttpError } from './handlers';
 import { HttpError } from './http-error';
 import { HttpMeans } from './http-means';
+import { renderHttpError } from './rendering';
 
 /**
  * HTTP processing configuration.

@@ -9,7 +9,7 @@ import {
 } from '@hatsy/route-match';
 import { RouteMatcher } from '@hatsy/route-match/d.ts/route-matcher';
 import { RequestContext } from '../core';
-import { httpListener, RenderMeans } from '../http';
+import { httpListener, Rendering, RenderMeans } from '../http';
 import { readAll, testServer, TestServer } from '../spec';
 import { requestURL } from '../util';
 import { HttpRouterMeans } from './http-router-means';
@@ -36,7 +36,7 @@ describe('HttpRouterMeans', () => {
     const wrongHandler = jest.fn();
 
     server.listener.mockImplementation(httpListener(
-        RenderMeans
+        Rendering
             .and(HttpRouterMeans)
             .for(routeHandler([
               {
@@ -62,7 +62,7 @@ describe('HttpRouterMeans', () => {
     const wrongHandler = jest.fn();
 
     server.listener.mockImplementation(httpListener(
-        RenderMeans
+        Rendering
             .and(HttpRouterMeans)
             .for(routeHandler({
               on: 'dir/**',
@@ -92,7 +92,7 @@ describe('HttpRouterMeans', () => {
     });
 
     server.listener.mockImplementation(httpListener(
-        RenderMeans
+        Rendering
             .and(HttpRouterMeans)
             .for(routeHandler({
               on: 'dir/**',
@@ -115,7 +115,7 @@ describe('HttpRouterMeans', () => {
   });
   it('extracts route tail', async () => {
     server.listener.mockImplementation(httpListener(
-        RenderMeans
+        Rendering
             .and(HttpRouterMeans)
             .for(routeHandler({
               on: 'test/**',
@@ -131,7 +131,7 @@ describe('HttpRouterMeans', () => {
   });
   it('extracts route tail with custom function', async () => {
     server.listener.mockImplementation(httpListener(
-        RenderMeans
+        Rendering
             .and(HttpRouterMeans)
             .for(routeHandler({
               on: 'test/{tail:**}',
@@ -159,7 +159,7 @@ describe('HttpRouterMeans', () => {
   });
   it('captures route matches', async () => {
     server.listener.mockImplementation(httpListener(
-        RenderMeans
+        Rendering
             .and(HttpRouterMeans)
             .for(routeHandler({
               on: [rcaptureEntry('dir'), rmatchDirSep, rmatchDirs],
@@ -181,7 +181,7 @@ describe('HttpRouterMeans', () => {
     expect(JSON.parse(await readAll(response))).toEqual([['capture', 'dir', 'test'], ['dirs', 1, 2]]);
   });
   it('builds custom route', async () => {
-    server.listener.mockImplementation(httpListener(RenderMeans.for(
+    server.listener.mockImplementation(httpListener(Rendering.for(
         HttpRouterMeans.with<RenderMeans, MatrixRoute>({
           buildRoute({ request }) {
             return matrixRoute(requestURL(request, this.forwardTrust));
@@ -201,7 +201,7 @@ describe('HttpRouterMeans', () => {
   });
   it('extracts URL from trusted forwarding info', async () => {
     server.listener.mockImplementation(httpListener(
-        RenderMeans
+        Rendering
             .and(HttpRouterMeans.with({
               forwardTrust: {
                 trusted: true,
