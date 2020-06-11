@@ -6,13 +6,16 @@ import { RequestHandler, RequestHandlerMethod, RequestModification } from '../..
 import { RouterMeans } from '../router-means';
 
 /**
- * A map of request processing handlers for corresponding route entry names.
+ * Request processing handlers for route entry names.
  *
  * @category Router
  * @typeparam TMeans  Supported route processing means.
  */
 export interface DispatchNames<TMeans extends RouterMeans> {
 
+  /**
+   * Request handler method with entry name as its key.
+   */
   readonly [entry: string]: RequestHandlerMethod<this, TMeans> | undefined
 
 }

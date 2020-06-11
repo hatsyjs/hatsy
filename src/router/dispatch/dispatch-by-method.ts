@@ -7,9 +7,7 @@ import { HttpMeans } from '../../http';
 import { RouterMeans } from '../router-means';
 
 /**
- * A map of request processing handlers for corresponding to HTTP request methods.
- *
- * HTTP method names are lower-case.
+ * Request processing handlers for HTTP request methods.
  *
  * @category Router
  * @typeparam TMeans  Supported HTTP route processing means.
@@ -53,6 +51,9 @@ export interface DispatchMethods<TMeans extends HttpMeans & RouterMeans = HttpMe
    */
   readonly put?: RequestHandlerMethod<this, TMeans>;
 
+  /**
+   * Request handler method with lower-case HTTP method name as its key.
+   */
   readonly [method: string]: RequestHandlerMethod<this, TMeans> | undefined;
 
 }
