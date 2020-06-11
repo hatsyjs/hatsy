@@ -2,9 +2,21 @@
  * @packageDocumentation
  * @module @hatsy/hatsy
  */
-import { PathRoute } from '@hatsy/route-match';
-import { RequestHandler, RequestModification } from '../../core';
+import { RequestHandler, RequestHandlerMethod, RequestModification } from '../../core';
 import { RouterMeans } from '../router-means';
+
+/**
+ * A map of request processing handlers for corresponding route entry names.
+ *
+ * @category Router
+ * @typeparam TMeans  Supported route processing means.
+ */
+export interface DispatchNames<TMeans extends RouterMeans> {
+
+  readonly [entry: string]: RequestHandlerMethod<this, TMeans> | undefined
+
+}
+
 
 /**
  * Dispatches request processing by route entry name.
@@ -15,12 +27,13 @@ import { RouterMeans } from '../router-means';
  * Target route handler receives a route tail without first entry.
  *
  * @category Router
- * @param mapping  A map of handlers with matching route entry names as keys.
+ * @typeparam TMeans  Supported route processing means.
+ * @param names  A map of request processing handlers for corresponding route entry names.
  *
  * @returns New route processing handler.
  */
-export function dispatchByName<TRoute extends PathRoute, TMeans extends RouterMeans<TRoute>>(
-    mapping: { readonly [entry: string]: RequestHandler<TMeans> },
+export function dispatchByName<TMeans extends RouterMeans>(
+    names: DispatchNames<TMeans>,
 ): RequestHandler<TMeans> {
   return async ({ route, next }) => {
 
@@ -28,11 +41,11 @@ export function dispatchByName<TRoute extends PathRoute, TMeans extends RouterMe
 
     if (firstEntry) {
 
-      const handler = mapping[firstEntry.name];
+      const handler = names[firstEntry.name];
 
       if (handler) {
         await next(
-            handler,
+            handler.bind(names),
             {
               route: route.section(1),
             } as RequestModification<TMeans>,
