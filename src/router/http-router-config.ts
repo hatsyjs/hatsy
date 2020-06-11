@@ -3,8 +3,8 @@
  * @module @hatsy/hatsy
  */
 import { RoutePattern, URLRoute } from '@hatsy/route-match';
+import { RequestContext } from '../core';
 import { HttpMeans } from '../http';
-import { RequestContext } from '../request-context';
 import { ProxyForwardTrust } from '../util';
 import { RouterMeans } from './router-means';
 

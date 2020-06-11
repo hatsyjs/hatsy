@@ -8,8 +8,8 @@ import {
   URLRoute,
 } from '@hatsy/route-match';
 import { RouteMatcher } from '@hatsy/route-match/d.ts/route-matcher';
+import { RequestContext } from '../core';
 import { httpListener, RenderMeans } from '../http';
-import { RequestContext } from '../request-context';
 import { readAll, testServer, TestServer } from '../spec';
 import { requestURL } from '../util';
 import { HttpRouterMeans } from './http-router-means';

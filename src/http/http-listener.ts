@@ -3,10 +3,15 @@
  * @module @hatsy/hatsy
  */
 import { IncomingMessage, ServerResponse } from 'http';
-import { ErrorMeans } from '../error-means';
-import { RequestContext, RequestModification } from '../request-context';
-import { RequestHandler } from '../request-handler';
-import { isRequestModifier, RequestModifier, RequestModifier__symbol } from '../request-modifier';
+import {
+  ErrorMeans,
+  isRequestModifier,
+  RequestContext,
+  RequestHandler,
+  RequestModification,
+  RequestModifier,
+  RequestModifier__symbol,
+} from '../core';
 import { renderHttpError } from './handlers';
 import { HttpError } from './http-error';
 import { HttpMeans } from './http-means';

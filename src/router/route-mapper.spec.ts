@@ -1,5 +1,5 @@
+import { RequestContext } from '../core';
 import { httpListener, RenderMeans } from '../http';
-import { RequestContext } from '../request-context';
 import { readAll, suppressedLog, testServer, TestServer } from '../spec';
 import { HttpRouterMeans } from './http-router-means';
 import { routeMapper } from './route-mapper';

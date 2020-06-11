@@ -2,7 +2,8 @@
  * @packageDocumentation
  * @module @hatsy/hatsy
  */
-import { RequestContext, RequestModification } from './request-context';
+import { RequestContext } from './request-context';
+import { RequestModification } from './request-modification';
 
 /**
  * A unique key of {@link RequestModifier} property containing its unique identifier.

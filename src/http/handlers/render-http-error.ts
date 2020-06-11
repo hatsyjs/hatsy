@@ -2,8 +2,7 @@
  * @packageDocumentation
  * @module @hatsy/hatsy
  */
-import { ErrorMeans } from '../../error-means';
-import { RequestContext } from '../../request-context';
+import { ErrorMeans, RequestContext } from '../../core';
 import { HttpError } from '../http-error';
 import { HttpMeans } from '../http-means';
 import { RenderMeans } from './render-means';

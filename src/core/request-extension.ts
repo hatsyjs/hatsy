@@ -2,8 +2,9 @@
  * @packageDocumentation
  * @module @hatsy/hatsy
  */
-import { RequestContext, RequestModification } from './request-context';
+import { RequestContext } from './request-context';
 import { RequestHandler } from './request-handler';
+import { RequestModification } from './request-modification';
 import { RequestModifier, RequestModifier__symbol } from './request-modifier';
 
 /**

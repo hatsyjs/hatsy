@@ -5,8 +5,7 @@
 import { PathRoute, RouteCaptor, routeMatch, RouteMatcher, RoutePattern } from '@hatsy/route-match';
 import { mapIt } from '@proc7ts/a-iterable';
 import { isIterable, lazyValue } from '@proc7ts/primitives';
-import { RequestContext, RequestModification } from '../request-context';
-import { requestHandler, RequestHandler } from '../request-handler';
+import { RequestContext, requestHandler, RequestHandler, RequestModification } from '../core';
 import { RouterMeans } from './router-means';
 
 /**

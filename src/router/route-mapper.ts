@@ -3,8 +3,7 @@
  * @module @hatsy/hatsy
  */
 import { PathRoute } from '@hatsy/route-match';
-import { RequestModification } from '../request-context';
-import { RequestHandler } from '../request-handler';
+import { RequestHandler, RequestModification } from '../core';
 import { RouterMeans } from './router-means';
 
 /**

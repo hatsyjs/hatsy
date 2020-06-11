@@ -2,8 +2,7 @@
  * @packageDocumentation
  * @module @hatsy/hatsy
  */
-import { RequestContext, RequestModification } from '../../request-context';
-import { RequestExtension } from '../../request-extension';
+import { RequestContext, RequestExtension, RequestModification } from '../../core';
 import { HttpMeans } from '../index';
 
 /**

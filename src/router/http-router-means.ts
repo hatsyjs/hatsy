@@ -4,9 +4,8 @@
  */
 import { RoutePattern, simpleRoutePattern, urlRoute, URLRoute } from '@hatsy/route-match';
 import { noop } from '@proc7ts/primitives';
+import { RequestContext, RequestExtension, RequestModification } from '../core';
 import { HttpMeans } from '../http';
-import { RequestContext, RequestModification } from '../request-context';
-import { RequestExtension } from '../request-extension';
 import { requestURL } from '../util';
 import { HttpRouterConfig } from './http-router-config';
 import { RouterMeans } from './router-means';
