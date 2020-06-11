@@ -3,7 +3,7 @@ import { readAll, testServer, TestServer } from '../../spec';
 import { httpListener } from '../http-listener';
 import { Rendering } from './rendering';
 
-describe('RenderMeans', () => {
+describe('Rendering', () => {
 
   let server: TestServer;
 
