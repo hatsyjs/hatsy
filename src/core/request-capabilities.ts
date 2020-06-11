@@ -43,6 +43,9 @@ export interface RequestCapabilities<TInput, TExt> {
 
 }
 
+/**
+ * @category Core
+ */
 export const RequestCapabilities = {
 
   /**

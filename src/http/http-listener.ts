@@ -166,6 +166,9 @@ abstract class HttpRequestAgent<
 
 }
 
+/**
+ * @internal
+ */
 class RootHttpRequestAgent<
     TRequest extends IncomingMessage,
     TResponse extends ServerResponse,
@@ -195,6 +198,9 @@ class RootHttpRequestAgent<
 
 }
 
+/**
+ * @internal
+ */
 class ModifiedHttpRequestAgent<
     TRequest extends IncomingMessage,
     TResponse extends ServerResponse,
