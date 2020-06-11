@@ -5,32 +5,32 @@
 import { PathRoute, RouteCaptor, routeMatch, RouteMatcher, RoutePattern } from '@hatsy/route-match';
 import { mapIt } from '@proc7ts/a-iterable';
 import { isIterable, lazyValue } from '@proc7ts/primitives';
-import { RequestContext, requestHandler, RequestHandler, RequestModification } from '../core';
-import { RouterMeans } from './router-means';
+import { RequestContext, requestHandler, RequestHandler, RequestModification } from '../../core';
+import { RouterMeans } from '../router-means';
 
 /**
- * Routing rule.
+ * Routing dispatch pattern.
  *
  * Declares a route handler to delegate request processing to when the route matches target {@link on pattern}.
  *
  * @category Router
- * @typeparam TRoute  A type of matching route.
+ * @typeparam TRoute  A type of supported route.
  * @typeparam TMeans  A type of route processing means.
  */
-export interface RoutingRule<
+export interface DispatchPattern<
     TRoute extends PathRoute = PathRoute,
     TMeans extends RouterMeans<TRoute> = RouterMeans<TRoute>,
     > {
 
   /**
-   * A route pattern that should match the route in order the {@link to handler} to be called.
+   * A route pattern that should match the route in order to dispatch processing the the {@link to handler}.
    *
-   * When specified as a string, a {@link RouterMeans.routePattern pattern parser} is used to parse it.
+   * When specified as a string, the pre-configured {@link RouterMeans.routePattern pattern parser} is used to parse it.
    */
   readonly on: RoutePattern<TRoute> | string;
 
   /**
-   * A route handler to call when the route matches the pattern.
+   * A route handler to dispatch request processing to when the route matches the {@link on pattern}.
    *
    * This handler would receive a [[tail]] of the matching route.
    */
@@ -41,7 +41,8 @@ export interface RoutingRule<
    *
    * The extracted route tail is passed to the {@link to handler}.
    *
-   * @default Extracts a matching route tail starting from the first capture/wildcard.
+   * @default Extracts a matching route tail starting from the first capture/wildcard. If no captures or wildcards
+   * present in pattern, then full route extracted.
    */
   readonly tail?: RouteTailExtractor<TRoute, TMeans>;
 
@@ -56,16 +57,18 @@ export interface RoutingRule<
  */
 export type RouteTailExtractor<TRoute extends PathRoute, TMeans extends RouterMeans<TRoute> = RouterMeans<TRoute>> =
 /**
- * @param means  Route processing means of the matching route.
+ * @param context  Route processing context of the matching route.
  *
  * @returns  Extracted tail of the matching route.
  */
-    (this: void, means: TMeans) => TRoute;
+    (this: void, context: RequestContext<TMeans>) => TRoute;
 
 /**
  * @internal
  */
-function defaultRouteTailExtractor<TRoute extends PathRoute>({ route, routeMatch }: RouterMeans<TRoute>): TRoute {
+function defaultRouteTailExtractor<TRoute extends PathRoute>(
+    { route, routeMatch }: RequestContext<RouterMeans<TRoute>>,
+): TRoute {
 
   let fromEntry: number | undefined;
 
@@ -75,31 +78,31 @@ function defaultRouteTailExtractor<TRoute extends PathRoute>({ route, routeMatch
     }
   });
 
-  return fromEntry ? route.section(fromEntry) : route.section(route.path.length);
+  return fromEntry ? route.section(fromEntry) : route;
 }
 
 /**
  * @internal
  */
-function routeHandlerByRule<TRoute extends PathRoute, TMeans extends RouterMeans<TRoute>>(
-    rule: RoutingRule<TRoute, TMeans>,
+function handlerByDispatchPattern<TRoute extends PathRoute, TMeans extends RouterMeans<TRoute>>(
+    pattern: DispatchPattern<TRoute, TMeans>,
 ): RequestHandler<TMeans> {
 
-  const { on, to, tail = defaultRouteTailExtractor } = rule;
+  const { on, to, tail = defaultRouteTailExtractor } = pattern;
 
   return async (context: RequestContext<RouterMeans<TRoute> & TMeans>) => {
 
     const { route, routeMatch: prevMatch, routePattern, next } = context;
-    const specMatch = routeMatch(
+    const patternMatch = routeMatch(
         route,
         typeof on === 'string' ? routePattern(on) : on,
     );
 
-    if (!specMatch) {
+    if (!patternMatch) {
       return;
     }
 
-    const getTail = lazyValue(() => tail({ ...context, routeMatch: specMatch }));
+    const getTail = lazyValue(() => tail({ ...context, routeMatch: patternMatch }));
 
     await next(
         to,
@@ -109,7 +112,7 @@ function routeHandlerByRule<TRoute extends PathRoute, TMeans extends RouterMeans
           },
           routeMatch(captor: RouteCaptor<TRoute>): void {
             prevMatch(captor);
-            specMatch(captor);
+            patternMatch(captor);
           },
         } as RequestModification<RouterMeans<TRoute> & TMeans>,
     );
@@ -117,22 +120,24 @@ function routeHandlerByRule<TRoute extends PathRoute, TMeans extends RouterMeans
 }
 
 /**
- * Builds a route processing handler that delegates to route handlers accordingly to routing configuration.
+ * Dispatches request processing by matching route pattern.
  *
- * Selects the first matching route and delegates request processing to its handler. If the handler not responded,
- * then tries the next matching route and so on, until responded or no routes left.
+ * Builds a route processing handler that dispatcher to route handler(s) corresponding to pattern the route matches.
+ *
+ * Selects the first matching pattern and delegates request processing to its handler. If the handler not responded,
+ * then tries the next matching pattern, and so on until responded or no routes left.
  *
  * @category Router
  * @typeparam TRoute  A type of supported route.
  * @typeparam TMeans  A type of route processing means.
- * @param routes  Routing rules. Either a routing rule, or iterable of routing rules.
+ * @param routes  Either a routing dispatch pattern, or iterable of routing dispatch patterns.
  *
  * @returns Route processing handler.
  */
-export function routeHandler<TRoute extends PathRoute, TMeans extends RouterMeans<TRoute>>(
-    routes: RoutingRule<TRoute, TMeans> | Iterable<RoutingRule<TRoute, TMeans>>,
+export function dispatchByPattern<TRoute extends PathRoute, TMeans extends RouterMeans<TRoute>>(
+    routes: DispatchPattern<TRoute, TMeans> | Iterable<DispatchPattern<TRoute, TMeans>>,
 ): RequestHandler<TMeans> {
   return isIterable(routes)
-      ? requestHandler(mapIt(routes, routeHandlerByRule))
-      : routeHandlerByRule(routes);
+      ? requestHandler(mapIt(routes, handlerByDispatchPattern))
+      : handlerByDispatchPattern(routes);
 }

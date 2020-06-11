@@ -8,15 +8,15 @@ import {
   URLRoute,
 } from '@hatsy/route-match';
 import { RouteMatcher } from '@hatsy/route-match/d.ts/route-matcher';
-import { RequestContext } from '../core';
-import { httpListener, Rendering, RenderMeans } from '../http';
-import { readAll, testServer, TestServer } from '../spec';
-import { requestURL } from '../util';
-import { routeHandler } from './route-handler';
-import { RouterMeans } from './router-means';
-import { Routing } from './routing';
+import { RequestContext } from '../../core';
+import { httpListener, Rendering, RenderMeans } from '../../http';
+import { readAll, testServer, TestServer } from '../../spec';
+import { requestURL } from '../../util';
+import { RouterMeans } from '../router-means';
+import { Routing } from '../routing';
+import { dispatchByPattern } from './dispatch-by-pattern';
 
-describe('Routing', () => {
+describe('dispatchByPattern', () => {
 
   let server: TestServer;
 
@@ -38,7 +38,7 @@ describe('Routing', () => {
     server.listener.mockImplementation(httpListener(
         Rendering
             .and(Routing)
-            .for(routeHandler([
+            .for(dispatchByPattern([
               {
                 on: 'wrong',
                 to: wrongHandler,
@@ -64,9 +64,9 @@ describe('Routing', () => {
     server.listener.mockImplementation(httpListener(
         Rendering
             .and(Routing)
-            .for(routeHandler({
+            .for(dispatchByPattern({
               on: 'dir/**',
-              to: routeHandler({
+              to: dispatchByPattern({
                 on: 'test',
                 to({ renderJson }: RequestContext<RenderMeans & RouterMeans>) {
                   renderJson({ response: 'test' });
@@ -84,7 +84,7 @@ describe('Routing', () => {
 
     const wrongHandler = jest.fn();
 
-    const nested = routeHandler({
+    const nested = dispatchByPattern({
       on: 'test;attr',
       to({ renderJson }: RequestContext<RenderMeans & RouterMeans<MatrixRoute>>) {
         renderJson({ response: 'test' });
@@ -94,7 +94,7 @@ describe('Routing', () => {
     server.listener.mockImplementation(httpListener(
         Rendering
             .and(Routing)
-            .for(routeHandler({
+            .for(dispatchByPattern({
               on: 'dir/**',
               async to({ next }) {
                 await next(
@@ -117,7 +117,7 @@ describe('Routing', () => {
     server.listener.mockImplementation(httpListener(
         Rendering
             .and(Routing)
-            .for(routeHandler({
+            .for(dispatchByPattern({
               on: 'test/**',
               to({ route, renderJson }) {
                 renderJson({ route: route.toString() });
@@ -129,11 +129,27 @@ describe('Routing', () => {
 
     expect(JSON.parse(await readAll(response))).toEqual({ route: 'nested?param=value' });
   });
+  it('uses matching route as tail', async () => {
+    server.listener.mockImplementation(httpListener(
+        Rendering
+            .and(Routing)
+            .for(dispatchByPattern({
+              on: 'test/nested',
+              to({ route, renderJson }) {
+                renderJson({ route: route.toString() });
+              },
+            })),
+    ));
+
+    const response = await server.get('/test/nested?param=value');
+
+    expect(JSON.parse(await readAll(response))).toEqual({ route: 'test/nested?param=value' });
+  });
   it('extracts route tail with custom function', async () => {
     server.listener.mockImplementation(httpListener(
         Rendering
             .and(Routing)
-            .for(routeHandler({
+            .for(dispatchByPattern({
               on: 'test/{tail:**}',
               to({ route, renderJson }) {
                 renderJson({ route: String(route) });
@@ -161,7 +177,7 @@ describe('Routing', () => {
     server.listener.mockImplementation(httpListener(
         Rendering
             .and(Routing)
-            .for(routeHandler({
+            .for(dispatchByPattern({
               on: [rcaptureEntry('dir'), rmatchDirSep, rmatchDirs],
               to({ routeMatch, renderJson }) {
 
@@ -187,7 +203,7 @@ describe('Routing', () => {
             return matrixRoute(requestURL(request, this.forwardTrust));
           },
           routePattern: matrixRoutePattern,
-        }).for(routeHandler({
+        }).for(dispatchByPattern({
           on: 'test;attr/**',
           to({ fullRoute, renderJson }) {
             renderJson({ attr: fullRoute.path[0].attrs.get('attr') });
@@ -207,7 +223,7 @@ describe('Routing', () => {
                 trusted: true,
               },
             }))
-            .for(routeHandler({
+            .for(dispatchByPattern({
               on: 'test/**',
               to({ fullRoute: { url: { href } }, renderJson }) {
                 renderJson({ href });

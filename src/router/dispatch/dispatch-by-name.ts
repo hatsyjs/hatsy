@@ -9,7 +9,8 @@ import { RouterMeans } from '../router-means';
 /**
  * Dispatches request processing by route entry name.
  *
- * Selects a route handler to dispatch to according to the name of the first route entry.
+ * Builds a route processing handler that selects a route handler to dispatch to accordingly to the name of the first
+ * route entry.
  *
  * Target route handler receives a route tail without first entry.
  *
