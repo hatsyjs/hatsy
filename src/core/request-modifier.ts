@@ -39,11 +39,12 @@ export interface RequestModifier<TInput, TExt> {
   /**
    * Builds request modification to apply.
    *
+   * @typeparam TMeans  A type of request processing means expected by modifier.
    * @param context  Request processing context to modify.
    *
    * @returns Request modifications to apply.
    */
-  modification(context: RequestContext<TInput>): RequestModification<TInput, TExt>;
+  modification<TMeans extends TInput>(context: RequestContext<TMeans>): RequestModification<TMeans, TExt>;
 
   /**
    * Updates subsequent request modifications.
@@ -54,6 +55,7 @@ export interface RequestModifier<TInput, TExt> {
    * When multiple modifications already applied to request, then this method will be called for each of them
    * in the order reverse to their application (i.e. for the most recent modification first).
    *
+   * @typeparam TNext  A type of extension of subsequent request processing means.
    * @param context  Request context the modification is applied to.
    * @param modification  Request modification applied.
    *
@@ -69,6 +71,8 @@ export interface RequestModifier<TInput, TExt> {
 /**
  * Checks whether the given request modification is request modifier.
  *
+ * @category Core
+ * @typeparam TMeans  A type of request processing means
  * @param modification  Modification to check.
  *
  * @returns `true` if the given modifier contains a {@link RequestModifier__symbol} property, or `false` otherwise.

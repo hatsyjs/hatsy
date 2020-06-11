@@ -63,7 +63,15 @@ export abstract class RequestExtension<TInput, TExt = object>
     return this;
   }
 
-  abstract modification(context: RequestContext<TInput>): RequestModification<TInput, TExt>;
+  /**
+   * Builds request modification to apply by {@link handler}.
+   *
+   * @typeparam TMeans  A type of request processing means expected by {@link handler}.
+   * @param context  Request processing context to modify.
+   *
+   * @returns Request modifications to apply.
+   */
+  abstract modification<TMeans extends TInput>(context: RequestContext<TMeans>): RequestModification<TMeans, TExt>;
 
   /**
    * Builds request processing handler that {@link modification modifies request} and delegates to another handler.

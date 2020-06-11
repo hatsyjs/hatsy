@@ -44,7 +44,10 @@ class HttpRouterExtension$<
     TRoute extends URLRoute = URLRoute,
     > extends RequestExtension<TInput, RouterMeans<TRoute>> implements HttpRouterExtension<TInput, TRoute> {
 
-  readonly modification: (context: RequestContext<TInput>) => RequestModification<TInput, RouterMeans<TRoute>>;
+  readonly modification: <TMeans extends TInput>(
+      context: RequestContext<TMeans>,
+  ) => RequestModification<TMeans, RouterMeans<TRoute>>;
+
   private readonly _routePattern: (
       this: void,
       pattern: string,
