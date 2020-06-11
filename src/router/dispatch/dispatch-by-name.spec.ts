@@ -1,11 +1,11 @@
-import { RequestContext } from '../core';
-import { httpListener, Rendering, RenderMeans } from '../http';
-import { readAll, suppressedLog, testServer, TestServer } from '../spec';
-import { routeMapper } from './route-mapper';
-import { RouterMeans } from './router-means';
-import { Routing } from './routing';
+import { RequestContext } from '../../core';
+import { httpListener, Rendering, RenderMeans } from '../../http';
+import { readAll, suppressedLog, testServer, TestServer } from '../../spec';
+import { RouterMeans } from '../router-means';
+import { Routing } from '../routing';
+import { dispatchByName } from './dispatch-by-name';
 
-describe('routeMapper', () => {
+describe('dispatchByName', () => {
 
   let server: TestServer;
 
@@ -23,12 +23,12 @@ describe('routeMapper', () => {
         },
         Rendering
             .and(Routing)
-            .for(routeMapper({
+            .for(dispatchByName({
               first({ route, renderJson }) {
                 renderJson({ first: String(route) });
               },
-              second: routeMapper({
-                third: routeMapper({
+              second: dispatchByName({
+                third: dispatchByName({
                   'test.html'({ route, renderJson }: RequestContext<RenderMeans & RouterMeans>) {
                     renderJson({ test: String(route) });
                   },
@@ -38,25 +38,25 @@ describe('routeMapper', () => {
     ));
   });
 
-  it('delegates to matching route', async () => {
+  it('dispatches to matching route', async () => {
 
     const response = await server.get('/first');
 
     expect(JSON.parse(await readAll(response))).toEqual({ first: '' });
   });
-  it('delegates to nested route', async () => {
+  it('dispatches to nested route', async () => {
 
     const response = await server.get('/second/third/test.html?param=value');
 
     expect(JSON.parse(await readAll(response))).toEqual({ test: '?param=value' });
   });
-  it('does nothing when no routes match', async () => {
+  it('does not dispatch when no routes match', async () => {
 
     const response = await server.get('/missing/test.html');
 
     expect(response.statusCode).toBe(404);
   });
-  it('does nothing for empty route', async () => {
+  it('does not dispatch when route is empty', async () => {
 
     const response = await server.get('/?param=value');
 

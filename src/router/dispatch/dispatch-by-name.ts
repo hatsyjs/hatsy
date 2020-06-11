@@ -3,20 +3,22 @@
  * @module @hatsy/hatsy
  */
 import { PathRoute } from '@hatsy/route-match';
-import { RequestHandler, RequestModification } from '../core';
-import { RouterMeans } from './router-means';
+import { RequestHandler, RequestModification } from '../../core';
+import { RouterMeans } from '../router-means';
 
 /**
- * Builds a route processing handler that maps the first route entry of the path to corresponding handler.
+ * Dispatches request processing by route entry name.
  *
- * The matching route handler receives a route tail without first entry.
+ * Selects a route handler to dispatch to according to the name of the first route entry.
+ *
+ * Target route handler receives a route tail without first entry.
  *
  * @category Router
- * @param mapping  A mapping of routers with matching route entry names as keys.
+ * @param mapping  A map of handlers with matching route entry names as keys.
  *
  * @returns New route processing handler.
  */
-export function routeMapper<TRoute extends PathRoute, TMeans extends RouterMeans<TRoute>>(
+export function dispatchByName<TRoute extends PathRoute, TMeans extends RouterMeans<TRoute>>(
     mapping: { readonly [entry: string]: RequestHandler<TMeans> },
 ): RequestHandler<TMeans> {
   return async ({ route, next }) => {
