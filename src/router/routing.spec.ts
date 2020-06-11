@@ -12,11 +12,11 @@ import { RequestContext } from '../core';
 import { httpListener, Rendering, RenderMeans } from '../http';
 import { readAll, testServer, TestServer } from '../spec';
 import { requestURL } from '../util';
-import { HttpRouterMeans } from './http-router-means';
 import { routeHandler } from './route-handler';
 import { RouterMeans } from './router-means';
+import { Routing } from './routing';
 
-describe('HttpRouterMeans', () => {
+describe('Routing', () => {
 
   let server: TestServer;
 
@@ -37,7 +37,7 @@ describe('HttpRouterMeans', () => {
 
     server.listener.mockImplementation(httpListener(
         Rendering
-            .and(HttpRouterMeans)
+            .and(Routing)
             .for(routeHandler([
               {
                 on: 'wrong',
@@ -63,7 +63,7 @@ describe('HttpRouterMeans', () => {
 
     server.listener.mockImplementation(httpListener(
         Rendering
-            .and(HttpRouterMeans)
+            .and(Routing)
             .for(routeHandler({
               on: 'dir/**',
               to: routeHandler({
@@ -93,7 +93,7 @@ describe('HttpRouterMeans', () => {
 
     server.listener.mockImplementation(httpListener(
         Rendering
-            .and(HttpRouterMeans)
+            .and(Routing)
             .for(routeHandler({
               on: 'dir/**',
               async to({ next }) {
@@ -116,7 +116,7 @@ describe('HttpRouterMeans', () => {
   it('extracts route tail', async () => {
     server.listener.mockImplementation(httpListener(
         Rendering
-            .and(HttpRouterMeans)
+            .and(Routing)
             .for(routeHandler({
               on: 'test/**',
               to({ route, renderJson }) {
@@ -132,7 +132,7 @@ describe('HttpRouterMeans', () => {
   it('extracts route tail with custom function', async () => {
     server.listener.mockImplementation(httpListener(
         Rendering
-            .and(HttpRouterMeans)
+            .and(Routing)
             .for(routeHandler({
               on: 'test/{tail:**}',
               to({ route, renderJson }) {
@@ -160,7 +160,7 @@ describe('HttpRouterMeans', () => {
   it('captures route matches', async () => {
     server.listener.mockImplementation(httpListener(
         Rendering
-            .and(HttpRouterMeans)
+            .and(Routing)
             .for(routeHandler({
               on: [rcaptureEntry('dir'), rmatchDirSep, rmatchDirs],
               to({ routeMatch, renderJson }) {
@@ -182,7 +182,7 @@ describe('HttpRouterMeans', () => {
   });
   it('builds custom route', async () => {
     server.listener.mockImplementation(httpListener(Rendering.for(
-        HttpRouterMeans.with<RenderMeans, MatrixRoute>({
+        Routing.with<RenderMeans, MatrixRoute>({
           buildRoute({ request }) {
             return matrixRoute(requestURL(request, this.forwardTrust));
           },
@@ -202,7 +202,7 @@ describe('HttpRouterMeans', () => {
   it('extracts URL from trusted forwarding info', async () => {
     server.listener.mockImplementation(httpListener(
         Rendering
-            .and(HttpRouterMeans.with({
+            .and(Routing.with({
               forwardTrust: {
                 trusted: true,
               },
