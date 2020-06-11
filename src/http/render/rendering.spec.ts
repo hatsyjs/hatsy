@@ -1,9 +1,9 @@
 import { TextEncoder } from 'util';
 import { readAll, testServer, TestServer } from '../../spec';
 import { httpListener } from '../http-listener';
-import { RenderMeans } from './render-means';
+import { Rendering } from './rendering';
 
-describe('RenderMeans', () => {
+describe('Rendering', () => {
 
   let server: TestServer;
 
@@ -21,7 +21,7 @@ describe('RenderMeans', () => {
   describe('renderHtml', () => {
 
     beforeEach(() => {
-      server.listener.mockImplementation(httpListener(RenderMeans.handler(({ renderHtml }) => {
+      server.listener.mockImplementation(httpListener(Rendering.for(({ renderHtml }) => {
         renderHtml('TEST');
       })));
     });
@@ -36,7 +36,7 @@ describe('RenderMeans', () => {
       expect(response.headers['content-length']).toBe('4');
     });
     it('renders HTML as buffer', async () => {
-      server.listener.mockImplementation(httpListener(RenderMeans.handler(({ renderHtml }) => {
+      server.listener.mockImplementation(httpListener(Rendering.for(({ renderHtml }) => {
         renderHtml(Buffer.from(new TextEncoder().encode('TEST')));
       })));
 
@@ -49,10 +49,10 @@ describe('RenderMeans', () => {
     });
     it('is applied once', async () => {
       server.listener.mockImplementation(httpListener(
-          RenderMeans
-              .and(RenderMeans)
-              .and(RenderMeans)
-              .handler(({ renderHtml }) => {
+          Rendering
+              .and(Rendering)
+              .and(Rendering)
+              .for(({ renderHtml }) => {
                 renderHtml('TEST');
               }),
       ));
@@ -78,7 +78,7 @@ describe('RenderMeans', () => {
   describe('renderJson', () => {
 
     beforeEach(() => {
-      server.listener.mockImplementation(httpListener(RenderMeans.handler(({ renderJson }) => {
+      server.listener.mockImplementation(httpListener(Rendering.for(({ renderJson }) => {
         renderJson('TEST');
       })));
     });

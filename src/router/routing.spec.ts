@@ -9,14 +9,14 @@ import {
 } from '@hatsy/route-match';
 import { RouteMatcher } from '@hatsy/route-match/d.ts/route-matcher';
 import { RequestContext } from '../core';
-import { httpListener, RenderMeans } from '../http';
+import { httpListener, Rendering, RenderMeans } from '../http';
 import { readAll, testServer, TestServer } from '../spec';
 import { requestURL } from '../util';
-import { HttpRouterMeans } from './http-router-means';
 import { routeHandler } from './route-handler';
 import { RouterMeans } from './router-means';
+import { Routing } from './routing';
 
-describe('HttpRouterMeans', () => {
+describe('Routing', () => {
 
   let server: TestServer;
 
@@ -36,9 +36,9 @@ describe('HttpRouterMeans', () => {
     const wrongHandler = jest.fn();
 
     server.listener.mockImplementation(httpListener(
-        RenderMeans
-            .and(HttpRouterMeans)
-            .handler(routeHandler([
+        Rendering
+            .and(Routing)
+            .for(routeHandler([
               {
                 on: 'wrong',
                 to: wrongHandler,
@@ -62,9 +62,9 @@ describe('HttpRouterMeans', () => {
     const wrongHandler = jest.fn();
 
     server.listener.mockImplementation(httpListener(
-        RenderMeans
-            .and(HttpRouterMeans)
-            .handler(routeHandler({
+        Rendering
+            .and(Routing)
+            .for(routeHandler({
               on: 'dir/**',
               to: routeHandler({
                 on: 'test',
@@ -92,9 +92,9 @@ describe('HttpRouterMeans', () => {
     });
 
     server.listener.mockImplementation(httpListener(
-        RenderMeans
-            .and(HttpRouterMeans)
-            .handler(routeHandler({
+        Rendering
+            .and(Routing)
+            .for(routeHandler({
               on: 'dir/**',
               async to({ next }) {
                 await next(
@@ -115,9 +115,9 @@ describe('HttpRouterMeans', () => {
   });
   it('extracts route tail', async () => {
     server.listener.mockImplementation(httpListener(
-        RenderMeans
-            .and(HttpRouterMeans)
-            .handler(routeHandler({
+        Rendering
+            .and(Routing)
+            .for(routeHandler({
               on: 'test/**',
               to({ route, renderJson }) {
                 renderJson({ route: route.toString() });
@@ -131,9 +131,9 @@ describe('HttpRouterMeans', () => {
   });
   it('extracts route tail with custom function', async () => {
     server.listener.mockImplementation(httpListener(
-        RenderMeans
-            .and(HttpRouterMeans)
-            .handler(routeHandler({
+        Rendering
+            .and(Routing)
+            .for(routeHandler({
               on: 'test/{tail:**}',
               to({ route, renderJson }) {
                 renderJson({ route: String(route) });
@@ -159,9 +159,9 @@ describe('HttpRouterMeans', () => {
   });
   it('captures route matches', async () => {
     server.listener.mockImplementation(httpListener(
-        RenderMeans
-            .and(HttpRouterMeans)
-            .handler(routeHandler({
+        Rendering
+            .and(Routing)
+            .for(routeHandler({
               on: [rcaptureEntry('dir'), rmatchDirSep, rmatchDirs],
               to({ routeMatch, renderJson }) {
 
@@ -181,13 +181,13 @@ describe('HttpRouterMeans', () => {
     expect(JSON.parse(await readAll(response))).toEqual([['capture', 'dir', 'test'], ['dirs', 1, 2]]);
   });
   it('builds custom route', async () => {
-    server.listener.mockImplementation(httpListener(RenderMeans.handler(
-        HttpRouterMeans.with<RenderMeans, MatrixRoute>({
+    server.listener.mockImplementation(httpListener(Rendering.for(
+        Routing.with<RenderMeans, MatrixRoute>({
           buildRoute({ request }) {
             return matrixRoute(requestURL(request, this.forwardTrust));
           },
           routePattern: matrixRoutePattern,
-        }).handler(routeHandler({
+        }).for(routeHandler({
           on: 'test;attr/**',
           to({ fullRoute, renderJson }) {
             renderJson({ attr: fullRoute.path[0].attrs.get('attr') });
@@ -201,13 +201,13 @@ describe('HttpRouterMeans', () => {
   });
   it('extracts URL from trusted forwarding info', async () => {
     server.listener.mockImplementation(httpListener(
-        RenderMeans
-            .and(HttpRouterMeans.with({
+        Rendering
+            .and(Routing.with({
               forwardTrust: {
                 trusted: true,
               },
             }))
-            .handler(routeHandler({
+            .for(routeHandler({
               on: 'test/**',
               to({ fullRoute: { url: { href } }, renderJson }) {
                 renderJson({ href });

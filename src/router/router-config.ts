@@ -2,32 +2,32 @@
  * @packageDocumentation
  * @module @hatsy/hatsy
  */
-import { RoutePattern, URLRoute } from '@hatsy/route-match';
+import { PathRoute, RoutePattern, URLRoute } from '@hatsy/route-match';
 import { RequestContext } from '../core';
 import { HttpMeans } from '../http';
 import { ProxyForwardTrust } from '../util';
 import { RouterMeans } from './router-means';
 
 /**
- * HTTP router configuration.
+ * Router configuration.
  *
  * @category Router
- * @typeparam TMeans  A type of incoming HTTP request processing means.
- * @typeparam TRoute  A type of supported URL route.
+ * @typeparam TMeans  A type of incoming request processing means.
+ * @typeparam TRoute  Supported route type.
  */
-export type HttpRouterConfig<TMeans extends HttpMeans = HttpMeans, TRoute extends URLRoute = URLRoute> =
-    | HttpRouterConfig.DefaultRoute
-    | HttpRouterConfig.CustomRoute<TMeans, TRoute>;
+export type RouterConfig<TMeans = HttpMeans, TRoute extends PathRoute = URLRoute> =
+    | RouterConfig.DefaultRoute<TMeans, TRoute>
+    | RouterConfig.CustomRoute<TMeans, TRoute>;
 
-export namespace HttpRouterConfig {
+export namespace RouterConfig {
 
   /**
    * Base router configuration.
    *
-   * @typeparam TMeans  A type of incoming HTTP request processing means.
-   * @typeparam TRoute  A type of supported URL route.
+   * @typeparam TMeans  A type of incoming request processing means.
+   * @typeparam TRoute  Supported route type.
    */
-  export interface Base<TMeans extends HttpMeans = HttpMeans, TRoute extends URLRoute = URLRoute> {
+  export interface Base<TMeans = HttpMeans, TRoute extends PathRoute = URLRoute> {
 
     /**
      * A trust policy to proxy forwarding records.
@@ -56,10 +56,10 @@ export namespace HttpRouterConfig {
    * Router configuration with default route builder.
    *
    * @category Router
-   * @typeparam TMeans  A type of incoming HTTP request processing means.
-   * @typeparam TRoute  A type of supported URL route.
+   * @typeparam TMeans  A type of incoming request processing means.
+   * @typeparam TRoute  Supported route type.
    */
-  export interface DefaultRoute<TMeans extends HttpMeans = HttpMeans> extends Base<TMeans> {
+  export interface DefaultRoute<TMeans = HttpMeans, TRoute extends PathRoute = URLRoute> extends Base<TMeans, TRoute> {
 
     readonly buildRoute?: undefined;
 
@@ -71,19 +71,18 @@ export namespace HttpRouterConfig {
    * @category Router
    * @typeparam TMeans  A type of incoming HTTP request processing means.
    */
-  export interface CustomRoute<TMeans extends HttpMeans = HttpMeans, TRoute extends URLRoute = URLRoute>
-      extends Base<TMeans, TRoute> {
+  export interface CustomRoute<TMeans = HttpMeans, TRoute extends PathRoute = URLRoute> extends Base<TMeans, TRoute> {
 
     /**
-     * Builds a route based on HTTP request processing means.
+     * Builds a route based on incoming request.
      *
-     * @param means  HTTP request processing means.
+     * @param context  Request processing context.
      *
      * @returns New URL route.
      *
-     * @default Builds a route based on {@link requestURL request URL}.
+     * @default Builds a route based on {@link requestURL request URL} (for HTTP requests).
      */
-    buildRoute(means: TMeans): TRoute;
+    buildRoute(context: RequestContext<TMeans>): TRoute;
 
   }
 

@@ -1,9 +1,9 @@
 import { RequestContext } from '../core';
-import { httpListener, RenderMeans } from '../http';
+import { httpListener, Rendering, RenderMeans } from '../http';
 import { readAll, suppressedLog, testServer, TestServer } from '../spec';
-import { HttpRouterMeans } from './http-router-means';
 import { routeMapper } from './route-mapper';
 import { RouterMeans } from './router-means';
+import { Routing } from './routing';
 
 describe('routeMapper', () => {
 
@@ -21,9 +21,9 @@ describe('routeMapper', () => {
         {
           log: suppressedLog(),
         },
-        RenderMeans
-            .and(HttpRouterMeans)
-            .handler(routeMapper({
+        Rendering
+            .and(Routing)
+            .for(routeMapper({
               first({ route, renderJson }) {
                 renderJson({ first: String(route) });
               },
