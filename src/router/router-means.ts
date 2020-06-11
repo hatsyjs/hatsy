@@ -2,7 +2,7 @@
  * @packageDocumentation
  * @module @hatsy/hatsy
  */
-import { PathRoute, RouteMatch, RoutePattern } from '@hatsy/route-match';
+import { PathRoute, RouteMatch, RoutePattern, URLRoute } from '@hatsy/route-match';
 
 /**
  * Request routing means.
@@ -10,7 +10,7 @@ import { PathRoute, RouteMatch, RoutePattern } from '@hatsy/route-match';
  * @category Router
  * @typeparam TRoute  A type of supported route.
  */
-export interface RouterMeans<TRoute extends PathRoute = PathRoute> {
+export interface RouterMeans<TRoute extends PathRoute = URLRoute> {
 
   /**
    * Original route.

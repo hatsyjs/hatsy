@@ -1,6 +1,7 @@
-import { requestHandler } from '../../core';
-import { httpListener, Rendering } from '../../http';
+import { RequestContext, requestHandler } from '../../core';
+import { httpListener, HttpMeans, Rendering, RenderMeans } from '../../http';
 import { readAll, suppressedLog, testServer, TestServer } from '../../spec';
+import { RouterMeans } from '../router-means';
 import { Routing } from '../routing';
 import { dispatchByMethod } from './dispatch-by-method';
 
@@ -24,7 +25,7 @@ describe('dispatchByName', () => {
         Rendering
             .and(Routing)
             .for(dispatchByMethod({
-              search({ renderJson }): void {
+              search({ renderJson }: RequestContext<HttpMeans & RenderMeans & RouterMeans>): void {
                 renderJson({ response: 'ok' });
               },
             })),

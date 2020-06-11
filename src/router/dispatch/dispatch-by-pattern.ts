@@ -2,7 +2,7 @@
  * @packageDocumentation
  * @module @hatsy/hatsy
  */
-import { PathRoute, RouteCaptor, routeMatch, RouteMatcher, RoutePattern } from '@hatsy/route-match';
+import { PathRoute, RouteCaptor, routeMatch, RouteMatcher, RoutePattern, URLRoute } from '@hatsy/route-match';
 import { mapIt } from '@proc7ts/a-iterable';
 import { isIterable, lazyValue } from '@proc7ts/primitives';
 import { RequestContext, requestHandler, RequestHandler, RequestHandlerMethod, RequestModification } from '../../core';
@@ -18,7 +18,7 @@ import { RouterMeans } from '../router-means';
  * @typeparam TMeans  A type of route processing means.
  */
 export interface DispatchPattern<
-    TRoute extends PathRoute = PathRoute,
+    TRoute extends PathRoute = URLRoute,
     TMeans extends RouterMeans<TRoute> = RouterMeans<TRoute>,
     > {
 
