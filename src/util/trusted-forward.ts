@@ -2,7 +2,7 @@
  * @packageDocumentation
  * @module @hatsy/hatsy
  */
-import { hthvFlatten, HthvItems, hthvParse } from '@hatsy/http-header-value';
+import { HthvItem, hthvParse } from '@hatsy/http-header-value';
 import { IncomingMessage } from 'http';
 
 /**
@@ -50,14 +50,17 @@ export interface ProxyForward {
 /**
  * @internal
  */
-function proxyForwardByHeaderItems(items: HthvItems): ProxyForward {
+function proxyForwardByHeaderItem(item: HthvItem): ProxyForward {
 
   const result: Record<string, string> = {};
 
-  for (const { n, v } of items.list) {
+  for (const { n, v } of item.pl) {
     if (n) {
       result[n] = v;
     }
+  }
+  if (item.n) {
+    result[item.n] = item.v;
   }
 
   return result;
@@ -94,18 +97,15 @@ export function trustedForward(
     return;
   }
 
-  for (const rawRecord of hthvParse(forwarded)) {
-
-    const items = hthvFlatten([rawRecord]);
-
+  for (const record of hthvParse(forwarded)) {
     if (trusted === true) {
-      return proxyForwardByHeaderItems(items);
+      return proxyForwardByHeaderItem(record);
     }
     for (const policy of trusted) {
       if (typeof policy === 'string'
-          ? items.map.by?.v === policy
-          : items.map[policy[0]]?.v === policy[1]) {
-        return proxyForwardByHeaderItems(items);
+          ? record.p.by?.v === policy
+          : record.p[policy[0]]?.v === policy[1]) {
+        return proxyForwardByHeaderItem(record);
       }
     }
   }

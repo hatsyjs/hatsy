@@ -55,4 +55,13 @@ describe('trustedForward', () => {
       secret: 'some',
     });
   });
+  it('handles parameters without names', () => {
+    headers = { forwarded: 'by=proxy1;host=test1;proto=http,by=proxy2;wrong;host=test2;proto=https;secret=some' };
+    expect(trustedForward(request, { trusted: [['secret', 'some']] })).toEqual({
+      by: 'proxy2',
+      host: 'test2',
+      proto: 'https',
+      secret: 'some',
+    });
+  });
 });
