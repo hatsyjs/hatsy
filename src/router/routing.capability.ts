@@ -140,6 +140,4 @@ class RoutingCapability<TInput, TRoute extends PathRoute>
  *
  * @category Router
  */
-export const Routing: Routing = (/*#__PURE__*/ new RoutingCapability<HttpMeans, URLRoute>(
-    {} as RouterConfig.DefaultRoute,
-));
+export const Routing: Routing = (/*#__PURE__*/ new RoutingCapability<HttpMeans, URLRoute>({}));
