@@ -25,6 +25,11 @@ export interface HttpMeans<
   readonly request: TRequest;
 
   /**
+   * HTTP request addressing info.
+   */
+  readonly requestAddresses: HttpMeans.Addresses;
+
+  /**
    * HTTP response.
    */
   readonly response: TResponse;
@@ -33,5 +38,26 @@ export interface HttpMeans<
    * A logger to use.
    */
   readonly log: Console;
+
+}
+
+export namespace HttpMeans {
+
+  /**
+   * HTTP request addressing info.
+   */
+  export interface Addresses {
+
+    /**
+     * Request URL.
+     */
+    readonly url: URL;
+
+    /**
+     * Remote address.
+     */
+    readonly ip: string;
+
+  }
 
 }

@@ -2,6 +2,8 @@
  * @packageDocumentation
  * @module @hatsy/hatsy
  */
+import { HttpAddressRep } from '@hatsy/http-header-value/node';
+import { lazyValue } from '@proc7ts/primitives';
 import { IncomingMessage, ServerResponse } from 'http';
 import {
   ErrorMeans,
@@ -126,7 +128,29 @@ export function httpListener<TRequest extends IncomingMessage, TResponse extends
   };
 
   return (request: TRequest, response: TResponse): void => {
-    new RootHttpRequestAgent({ request, response, log })
+
+    const requestDefaults = lazyValue(() => HttpAddressRep.defaults(request));
+    const requestURL = lazyValue(() => {
+
+      const { host, proto } = requestDefaults();
+      const { url = '' } = request;
+
+      return new URL(url, `${proto}://${host}`);
+    });
+
+    new RootHttpRequestAgent({
+      request,
+      requestAddresses: {
+        get ip() {
+          return requestDefaults().for;
+        },
+        get url() {
+          return requestURL();
+        },
+      },
+      response,
+      log,
+    })
         .next(fullHandler)
         .catch(
             error => log.error(`[${request.method} ${request.url}]`, 'Unhandled error', error),
