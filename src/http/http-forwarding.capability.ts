@@ -58,8 +58,8 @@ class HttpForwardingCapability extends RequestCapability<HttpMeans> implements H
 
     const addresses = lazyValue(() => HttpAddressRep.by(request, this._trust));
 
-    return requestModification({
-      requestAddress: {
+    return requestModification<HttpMeans>({
+      requestAddresses: {
         get url() {
           return addresses().url;
         },

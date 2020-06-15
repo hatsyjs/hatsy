@@ -11,7 +11,6 @@ import { RouteMatcher } from '@hatsy/route-match/d.ts/route-matcher';
 import { RequestContext } from '../../core';
 import { HttpForwarding, httpListener, Rendering, RenderMeans } from '../../http';
 import { readAll, testServer, TestServer } from '../../spec';
-import { requestURL } from '../../util';
 import { RouterMeans } from '../router.means';
 import { Routing } from '../routing.capability';
 import { dispatchByPattern } from './dispatch-by-pattern.handler';
@@ -199,8 +198,8 @@ describe('dispatchByPattern', () => {
   it('builds custom route', async () => {
     server.listener.mockImplementation(httpListener(Rendering.for(
         Routing.with<RenderMeans, MatrixRoute>({
-          buildRoute({ request }) {
-            return matrixRoute(requestURL(request, this.forwardTrust));
+          buildRoute({ requestAddresses }) {
+            return matrixRoute(requestAddresses.url);
           },
           routePattern: matrixRoutePattern,
         }).for(dispatchByPattern({
@@ -220,15 +219,11 @@ describe('dispatchByPattern', () => {
         HttpForwarding
             .with({ trusted: true })
             .and(Rendering)
-            .and(Routing.with({
-              forwardTrust: {
-                trusted: true,
-              },
-            }))
+            .and(Routing)
             .for(dispatchByPattern({
               on: 'test/**',
-              to({ fullRoute: { url: { href } }, renderJson }) {
-                renderJson({ href });
+              to({ requestAddresses: { ip }, fullRoute: { url: { href } }, renderJson }) {
+                renderJson({ href, ip });
               },
             })),
     ));
@@ -236,12 +231,17 @@ describe('dispatchByPattern', () => {
     const response = await server.get(
         '/test/nested?param=value',
         {
+          family: 4,
+          localAddress: '127.0.0.1',
           headers: {
             forwarded: 'host=test.com:8443;proto=https',
           },
         },
     );
 
-    expect(JSON.parse(await readAll(response))).toEqual({ href: 'https://test.com:8443/test/nested?param=value' });
+    expect(JSON.parse(await readAll(response))).toEqual({
+      ip: '127.0.0.1',
+      href: 'https://test.com:8443/test/nested?param=value'
+    });
   });
 });
