@@ -6,7 +6,7 @@ import { PathRoute, RouteCaptor, routeMatch, RouteMatcher, RoutePattern, URLRout
 import { mapIt } from '@proc7ts/a-iterable';
 import { isIterable, lazyValue } from '@proc7ts/primitives';
 import { RequestContext, requestHandler, RequestHandler, RequestHandlerMethod, RequestModification } from '../../core';
-import { RouterMeans } from '../router-means';
+import { RouterMeans } from '../router.means';
 
 /**
  * Routing dispatch pattern.

@@ -6,7 +6,7 @@ import { PathRoute, RoutePattern, URLRoute } from '@hatsy/route-match';
 import { RequestContext } from '../core';
 import { HttpMeans } from '../http';
 import { ProxyForwardTrust } from '../util';
-import { RouterMeans } from './router-means';
+import { RouterMeans } from './router.means';
 
 /**
  * Router configuration.

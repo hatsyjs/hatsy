@@ -4,7 +4,7 @@
  */
 import { RequestHandler, RequestHandlerMethod } from '../../core';
 import { HttpMeans } from '../../http';
-import { RouterMeans } from '../router-means';
+import { RouterMeans } from '../router.means';
 
 /**
  * Request processing handlers for HTTP request methods.

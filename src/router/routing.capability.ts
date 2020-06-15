@@ -8,7 +8,7 @@ import { RequestCapability, RequestContext, RequestModification } from '../core'
 import { HttpMeans } from '../http';
 import { requestURL } from '../util';
 import { RouterConfig } from './router-config';
-import { RouterMeans } from './router-means';
+import { RouterMeans } from './router.means';
 
 /**
  * Request routing capability.

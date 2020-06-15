@@ -12,9 +12,9 @@ import { RequestContext } from '../../core';
 import { HttpForwarding, httpListener, Rendering, RenderMeans } from '../../http';
 import { readAll, testServer, TestServer } from '../../spec';
 import { requestURL } from '../../util';
-import { RouterMeans } from '../router-means';
-import { Routing } from '../routing';
-import { dispatchByPattern } from './dispatch-by-pattern';
+import { RouterMeans } from '../router.means';
+import { Routing } from '../routing.capability';
+import { dispatchByPattern } from './dispatch-by-pattern.handler';
 
 describe('dispatchByPattern', () => {
 

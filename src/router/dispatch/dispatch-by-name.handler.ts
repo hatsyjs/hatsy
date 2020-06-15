@@ -3,7 +3,7 @@
  * @module @hatsy/hatsy
  */
 import { RequestHandler, RequestHandlerMethod, RequestModification } from '../../core';
-import { RouterMeans } from '../router-means';
+import { RouterMeans } from '../router.means';
 
 /**
  * Request processing handlers for route entry names.
