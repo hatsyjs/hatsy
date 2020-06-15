@@ -9,7 +9,7 @@ import {
 } from '@hatsy/route-match';
 import { RouteMatcher } from '@hatsy/route-match/d.ts/route-matcher';
 import { RequestContext } from '../../core';
-import { HttpForwarding, httpListener, Rendering, RenderMeans } from '../../http';
+import { HttpForwarding, httpListener, HttpMeans, Rendering, RenderMeans } from '../../http';
 import { readAll, testServer, TestServer } from '../../spec';
 import { RouterMeans } from '../router.means';
 import { Routing } from '../routing.capability';
@@ -197,7 +197,7 @@ describe('dispatchByPattern', () => {
   });
   it('builds custom route', async () => {
     server.listener.mockImplementation(httpListener(Rendering.for(
-        Routing.with<RenderMeans, MatrixRoute>({
+        Routing.with<HttpMeans & RenderMeans, MatrixRoute>({
           buildRoute({ requestAddresses }) {
             return matrixRoute(requestAddresses.url);
           },
@@ -241,7 +241,7 @@ describe('dispatchByPattern', () => {
 
     expect(JSON.parse(await readAll(response))).toEqual({
       ip: '127.0.0.1',
-      href: 'https://test.com:8443/test/nested?param=value'
+      href: 'https://test.com:8443/test/nested?param=value',
     });
   });
 });
