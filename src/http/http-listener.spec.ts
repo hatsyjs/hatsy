@@ -3,7 +3,7 @@ import { ErrorMeans, RequestContext } from '../core';
 import { readAll, suppressedLog, testServer, TestServer } from '../spec';
 import { HttpError } from './http-error';
 import { httpListener } from './http-listener';
-import { HttpMeans } from './http-means';
+import { HttpMeans } from './http.means';
 import { Rendering } from './render';
 
 describe('httpListener', () => {

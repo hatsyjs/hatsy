@@ -16,7 +16,7 @@ import {
   RequestModifierRef,
 } from '../core';
 import { HttpError } from './http-error';
-import { HttpMeans } from './http-means';
+import { HttpMeans } from './http.means';
 import { renderHttpError } from './render';
 
 /**

@@ -24,7 +24,7 @@ export const RequestModifier__symbol = (/*#__PURE__*/ Symbol('request-modifier-t
  * @typeparam TMeans  A type of request processing means this modifier is able to modify.
  * @typeparam TExt  A type of extension to request processing means applied by this modifier.
  */
-export interface RequestModifier<TInput, TExt> extends RequestModifierRef<TInput, TExt> {
+export interface RequestModifier<TInput, TExt = object> extends RequestModifierRef<TInput, TExt> {
 
   /**
    * Builds request modification to apply.
@@ -70,7 +70,7 @@ export interface RequestModifier<TInput, TExt> extends RequestModifierRef<TInput
  * @typeparam TInput  A type of request processing means the target modifier is able modify.
  * @typeparam TExt  A type of extension to request processing means applied by the target modifier.
  */
-export interface RequestModifierRef<TInput, TExt> {
+export interface RequestModifierRef<TInput, TExt = object> {
 
   /**
    * A reference to request modifier instance.

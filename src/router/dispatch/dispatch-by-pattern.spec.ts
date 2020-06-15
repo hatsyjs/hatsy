@@ -9,7 +9,7 @@ import {
 } from '@hatsy/route-match';
 import { RouteMatcher } from '@hatsy/route-match/d.ts/route-matcher';
 import { RequestContext } from '../../core';
-import { httpListener, Rendering, RenderMeans } from '../../http';
+import { HttpForwarding, httpListener, Rendering, RenderMeans } from '../../http';
 import { readAll, testServer, TestServer } from '../../spec';
 import { requestURL } from '../../util';
 import { RouterMeans } from '../router-means';
@@ -217,7 +217,9 @@ describe('dispatchByPattern', () => {
   });
   it('extracts URL from trusted forwarding info', async () => {
     server.listener.mockImplementation(httpListener(
-        Rendering
+        HttpForwarding
+            .with({ trusted: true })
+            .and(Rendering)
             .and(Routing.with({
               forwardTrust: {
                 trusted: true,

@@ -3,8 +3,8 @@
  * @module @hatsy/hatsy
 */
 import { RequestCapability, RequestContext, RequestModification } from '../../core';
-import { HttpMeans } from '../http-means';
-import { RenderMeans } from './render-means';
+import { HttpMeans } from '../http.means';
+import { RenderMeans } from './render.means';
 
 /**
  * @internal

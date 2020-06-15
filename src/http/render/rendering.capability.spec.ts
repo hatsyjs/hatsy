@@ -1,7 +1,7 @@
 import { TextEncoder } from 'util';
 import { readAll, testServer, TestServer } from '../../spec';
 import { httpListener } from '../http-listener';
-import { Rendering } from './rendering';
+import { Rendering } from './rendering.capability';
 
 describe('Rendering', () => {
 
