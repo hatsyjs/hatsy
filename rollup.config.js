@@ -16,10 +16,7 @@ function external(id) {
 }
 
 export default {
-  input: {
-    hatsy: './src/index.ts',
-    'hatsy.cli': './src/cli/main.ts',
-  },
+  input: './src/index.ts',
   plugins: [
     commonjs(),
     ts({
@@ -34,20 +31,16 @@ export default {
   external,
   output: [
     {
+      file: pkg.main,
       format: 'cjs',
       sourcemap: true,
-      dir: './dist',
-      entryFileNames: '[name].js',
-      chunkFileNames: '_[name].js',
-      hoistTransitiveImports: false,
+      hoistTransitiveImports: true,
     },
     {
+      file: pkg.module,
       format: 'esm',
       sourcemap: true,
-      dir: './dist',
-      entryFileNames: '[name].mjs',
-      chunkFileNames: '_[name].mjs',
-      hoistTransitiveImports: false,
+      hoistTransitiveImports: true,
     },
   ],
 };

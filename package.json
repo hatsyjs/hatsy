@@ -25,16 +25,12 @@
   },
   "main": "dist/hatsy.js",
   "module": "dist/hatsy.mjs",
-  "bin": {
-    "hatsy": "dist/hatsy.cli.js"
-  },
   "dependencies": {
     "@hatsy/http-header-value": "^3.2.0",
     "@hatsy/route-match": "^1.0.0-dev.4",
     "@proc7ts/a-iterable": "^2.7.0",
     "@proc7ts/call-thru": "^4.0.0",
-    "@proc7ts/primitives": "^1.0.3",
-    "send": "^0.17.1"
+    "@proc7ts/primitives": "^1.0.3"
   },
   "engines": {
     "node": ">=12"
@@ -45,7 +41,6 @@
     "@rollup/plugin-node-resolve": "^8.0.1",
     "@types/jest": "^26.0.0",
     "@types/node": "^12.12.47",
-    "@types/send": "^0.14.5",
     "@typescript-eslint/eslint-plugin": "^3.3.0",
     "@typescript-eslint/parser": "^3.3.0",
     "codecov": "^3.7.0",
