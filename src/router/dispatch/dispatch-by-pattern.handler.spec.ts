@@ -9,12 +9,11 @@ import {
 } from '@hatsy/route-match';
 import { RouteMatcher } from '@hatsy/route-match/d.ts/route-matcher';
 import { RequestContext } from '../../core';
-import { httpListener, Rendering, RenderMeans } from '../../http';
+import { HttpForwarding, httpListener, HttpMeans, Rendering, RenderMeans } from '../../http';
 import { readAll, testServer, TestServer } from '../../spec';
-import { requestURL } from '../../util';
-import { RouterMeans } from '../router-means';
-import { Routing } from '../routing';
-import { dispatchByPattern } from './dispatch-by-pattern';
+import { RouterMeans } from '../router.means';
+import { Routing } from '../routing.capability';
+import { dispatchByPattern } from './dispatch-by-pattern.handler';
 
 describe('dispatchByPattern', () => {
 
@@ -198,9 +197,9 @@ describe('dispatchByPattern', () => {
   });
   it('builds custom route', async () => {
     server.listener.mockImplementation(httpListener(Rendering.for(
-        Routing.with<RenderMeans, MatrixRoute>({
-          buildRoute({ request }) {
-            return matrixRoute(requestURL(request, this.forwardTrust));
+        Routing.with<HttpMeans & RenderMeans, MatrixRoute>({
+          buildRoute({ requestAddresses }) {
+            return matrixRoute(requestAddresses.url);
           },
           routePattern: matrixRoutePattern,
         }).for(dispatchByPattern({
@@ -217,16 +216,14 @@ describe('dispatchByPattern', () => {
   });
   it('extracts URL from trusted forwarding info', async () => {
     server.listener.mockImplementation(httpListener(
-        Rendering
-            .and(Routing.with({
-              forwardTrust: {
-                trusted: true,
-              },
-            }))
+        HttpForwarding
+            .with({ trusted: true })
+            .and(Rendering)
+            .and(Routing)
             .for(dispatchByPattern({
               on: 'test/**',
-              to({ fullRoute: { url: { href } }, renderJson }) {
-                renderJson({ href });
+              to({ requestAddresses: { ip }, fullRoute: { url: { href } }, renderJson }) {
+                renderJson({ href, ip });
               },
             })),
     ));
@@ -234,12 +231,17 @@ describe('dispatchByPattern', () => {
     const response = await server.get(
         '/test/nested?param=value',
         {
+          family: 4,
+          localAddress: '127.0.0.1',
           headers: {
             forwarded: 'host=test.com:8443;proto=https',
           },
         },
     );
 
-    expect(JSON.parse(await readAll(response))).toEqual({ href: 'https://test.com:8443/test/nested?param=value' });
+    expect(JSON.parse(await readAll(response))).toEqual({
+      ip: '127.0.0.1',
+      href: 'https://test.com:8443/test/nested?param=value',
+    });
   });
 });

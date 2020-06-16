@@ -4,14 +4,20 @@
  */
 import { ErrorMeans, RequestContext } from '../../core';
 import { HttpError } from '../http-error';
-import { HttpMeans } from '../http-means';
-import { RenderMeans } from './render-means';
-import { Rendering } from './rendering';
+import { HttpMeans } from '../http.means';
+import { RenderMeans } from './render.means';
+import { Rendering } from './rendering.capability';
 
 /**
  * @internal
  */
-function renderHttpErrorPage({ error, response, renderHtml }: RequestContext<RenderMeans & ErrorMeans>): void {
+function renderHttpErrorPage(
+    {
+      error,
+      response,
+      renderHtml,
+    }: RequestContext<HttpMeans & RenderMeans & ErrorMeans>,
+): void {
   if (error instanceof HttpError) {
     response.statusCode = error.statusCode;
     if (error.statusMessage) {

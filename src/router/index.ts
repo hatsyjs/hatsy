@@ -1,4 +1,4 @@
 export * from './dispatch';
+export * from './router.means';
 export * from './router-config';
-export * from './router-means';
-export * from './routing';
+export * from './routing.capability';

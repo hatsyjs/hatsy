@@ -1,4 +1,4 @@
-export * from './error-means';
+export * from './error.means';
 export * from './request-capabilities';
 export * from './request-capability';
 export * from './request-context';

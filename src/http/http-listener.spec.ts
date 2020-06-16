@@ -3,7 +3,8 @@ import { ErrorMeans, RequestContext } from '../core';
 import { readAll, suppressedLog, testServer, TestServer } from '../spec';
 import { HttpError } from './http-error';
 import { httpListener } from './http-listener';
-import { HttpMeans } from './http-means';
+import { HttpMeans } from './http.means';
+import { Rendering } from './render';
 
 describe('httpListener', () => {
 
@@ -202,5 +203,43 @@ describe('httpListener', () => {
 
     expect(await readAll(response)).toBe('NO RESPONSE');
     expect(logErrorSpy).toHaveBeenCalledWith('[GET /test]', 'Unhandled error', error);
+  });
+
+  describe('requestAddresses', () => {
+    it('contain request URL', async () => {
+      server.listener.mockImplementation(httpListener(Rendering.for(({ requestAddresses, renderJson }) => {
+        renderJson({ url: requestAddresses.url.href });
+      })));
+
+      const response = await server.get('/test', { headers: { host: 'localhost' } });
+
+      expect(JSON.parse(await readAll(response))).toEqual({ url: 'http://localhost/test' });
+    });
+    it('contain root request URL when path is unknown', async () => {
+      server.listener.mockImplementation(httpListener(Rendering.for(({ request, requestAddresses, renderJson }) => {
+        delete request.url;
+        renderJson({ url: requestAddresses.url.href });
+      })));
+
+      const response = await server.request('/test', { headers: { host: 'localhost' } });
+
+      expect(JSON.parse(await readAll(response))).toEqual({ url: 'http://localhost/' });
+    });
+    it('contains remote address', async () => {
+      server.listener.mockImplementation(httpListener(Rendering.for(({ requestAddresses, renderJson }) => {
+        renderJson({ ip: requestAddresses.ip });
+      })));
+
+      const response = await server.get(
+          '/test',
+          {
+            family: 4,
+            localAddress: '127.0.0.1',
+            headers: { host: 'localhost' },
+          },
+      );
+
+      expect(JSON.parse(await readAll(response))).toEqual({ ip: '127.0.0.1' });
+    });
   });
 });

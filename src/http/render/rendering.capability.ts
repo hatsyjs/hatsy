@@ -2,9 +2,9 @@
  * @packageDocumentation
  * @module @hatsy/hatsy
 */
-import { RequestCapability, RequestContext, RequestModification } from '../../core';
-import { HttpMeans } from '../http-means';
-import { RenderMeans } from './render-means';
+import { RequestCapability, RequestContext, requestExtension, RequestModification } from '../../core';
+import { HttpMeans } from '../http.means';
+import { RenderMeans } from './render.means';
 
 /**
  * @internal
@@ -30,7 +30,7 @@ class RenderingCapability extends RequestCapability<HttpMeans, RenderMeans> {
       }
     };
 
-    return {
+    return requestExtension<TMeans, RenderMeans>({
 
       renderBody,
 
@@ -44,7 +44,7 @@ class RenderingCapability extends RequestCapability<HttpMeans, RenderMeans> {
         renderBody(JSON.stringify(body));
       },
 
-    } as RequestModification<unknown, RenderMeans>;
+    });
   }
 
 }

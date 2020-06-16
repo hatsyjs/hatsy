@@ -57,7 +57,7 @@ export abstract class RequestCapability<TInput, TExt = object>
       if (modifiedBy(this[RequestModifier__symbol])) {
         await next(handler);
       } else {
-        await next(handler, this as unknown as RequestCapability<TMeans, TExt>);
+        await next(handler, this);
       }
     };
   }

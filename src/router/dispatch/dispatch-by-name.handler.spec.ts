@@ -1,9 +1,9 @@
 import { RequestContext } from '../../core';
 import { httpListener, Rendering, RenderMeans } from '../../http';
 import { readAll, suppressedLog, testServer, TestServer } from '../../spec';
-import { RouterMeans } from '../router-means';
-import { Routing } from '../routing';
-import { dispatchByName } from './dispatch-by-name';
+import { RouterMeans } from '../router.means';
+import { Routing } from '../routing.capability';
+import { dispatchByName } from './dispatch-by-name.handler';
 
 describe('dispatchByName', () => {
 

@@ -5,8 +5,7 @@
 import { PathRoute, RoutePattern, URLRoute } from '@hatsy/route-match';
 import { RequestContext } from '../core';
 import { HttpMeans } from '../http';
-import { ProxyForwardTrust } from '../util';
-import { RouterMeans } from './router-means';
+import { RouterMeans } from './router.means';
 
 /**
  * Router configuration.
@@ -28,15 +27,6 @@ export namespace RouterConfig {
    * @typeparam TRoute  Supported route type.
    */
   export interface Base<TMeans = HttpMeans, TRoute extends PathRoute = URLRoute> {
-
-    /**
-     * A trust policy to proxy forwarding records.
-     *
-     * @default No trust policy. Which means the forwarding information won't be consulted.
-     *
-     * @see trustedForward
-     */
-    readonly forwardTrust?: ProxyForwardTrust;
 
     /**
      * A parser of route pattern string.
@@ -80,7 +70,7 @@ export namespace RouterConfig {
      *
      * @returns New URL route.
      *
-     * @default Builds a route based on {@link requestURL request URL} (for HTTP requests).
+     * @default Builds a route based on {@link HttpMeans.Addresses.url request URL} (for HTTP requests).
      */
     buildRoute(context: RequestContext<TMeans>): TRoute;
 

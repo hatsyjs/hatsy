@@ -4,11 +4,10 @@
  */
 import { PathRoute, RoutePattern, simpleRoutePattern, urlRoute, URLRoute } from '@hatsy/route-match';
 import { noop } from '@proc7ts/primitives';
-import { RequestCapability, RequestContext, RequestModification } from '../core';
+import { RequestCapability, RequestContext, requestExtension, RequestModification } from '../core';
 import { HttpMeans } from '../http';
-import { requestURL } from '../util';
 import { RouterConfig } from './router-config';
-import { RouterMeans } from './router-means';
+import { RouterMeans } from './router.means';
 
 /**
  * Request routing capability.
@@ -51,12 +50,11 @@ export interface Routing<TInput = HttpMeans, TRoute extends PathRoute = URLRoute
  */
 function buildURLRoute<TMeans, TRoute extends PathRoute>(
     context: RequestContext<TMeans>,
-    { forwardTrust }: RouterConfig<TMeans, TRoute>,
 ): TRoute {
 
-  const { request } = context as unknown as HttpMeans;
+  const { requestAddresses } = context as unknown as HttpMeans;
 
-  return urlRoute(requestURL(request, forwardTrust)) as unknown as TRoute;
+  return urlRoute(requestAddresses.url) as unknown as TRoute;
 }
 
 /**
@@ -84,14 +82,15 @@ class RoutingCapability<TInput, TRoute extends PathRoute>
         : simpleRoutePattern;
     const buildRoute: (context: RequestContext<TInput>) => TRoute = config.buildRoute
         ? config.buildRoute.bind(config)
-        : context => buildURLRoute(context, config);
+        : buildURLRoute;
 
     this.modification = <TMeans extends TInput>(
         context: RequestContext<TMeans>,
     ): RequestModification<TMeans, RouterMeans<TRoute>> => {
 
       const route: TRoute = buildRoute(context as RequestContext<TInput>);
-      const mod: Omit<RouterMeans<TRoute>, keyof HttpMeans> = {
+
+      return requestExtension({
         fullRoute: route,
         route,
         routeMatch: noop,
@@ -101,9 +100,7 @@ class RoutingCapability<TInput, TRoute extends PathRoute>
               this as RequestContext<any>,
           );
         },
-      };
-
-      return mod as RequestModification<unknown, RouterMeans<TRoute>>;
+      });
     };
   }
 
@@ -143,6 +140,4 @@ class RoutingCapability<TInput, TRoute extends PathRoute>
  *
  * @category Router
  */
-export const Routing: Routing = (/*#__PURE__*/ new RoutingCapability<HttpMeans, URLRoute>(
-    {} as RouterConfig.DefaultRoute,
-));
+export const Routing: Routing = (/*#__PURE__*/ new RoutingCapability<HttpMeans, URLRoute>({}));

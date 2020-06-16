@@ -1,3 +1,3 @@
-export * from './render-http-error';
-export * from './render-means';
-export * from './rendering';
+export * from './render.means';
+export * from './render-http-error.handler';
+export * from './rendering.capability';

@@ -2,8 +2,6 @@
  * @packageDocumentation
  * @module @hatsy/hatsy
  */
-import { HttpMeans } from '../index';
-
 /**
  * HTTP response body render means.
  *
@@ -14,7 +12,7 @@ import { HttpMeans } from '../index';
  *
  * @category HTTP
  */
-export interface RenderMeans extends HttpMeans {
+export interface RenderMeans {
 
   /**
    * Renders response body.
