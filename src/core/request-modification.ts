@@ -18,7 +18,7 @@ export type RequestModification<TMeans, TExt = object> = {
 };
 
 /**
- * Builds request modification.
+ * Builds request modification that updates some of the existing properties of request processing means.
  *
  * This is a helper function to avoid TypeScript limitation. It is a good idea to inline it.
  *
@@ -28,12 +28,12 @@ export type RequestModification<TMeans, TExt = object> = {
  *
  * @returns Request modification cast to {@link RequestModification}.
  */
-export function requestModification<TMeans>(modification: Partial<TMeans>): RequestModification<TMeans> {
+export function requestUpdate<TMeans>(modification: Partial<TMeans>): RequestModification<TMeans> {
   return modification;
 }
 
 /**
- * Builds request extension.
+ * Builds request modification that adds new properties to request processing means.
  *
  * This is a helper function to avoid TypeScript limitation. It is a good idea to inline it.
  *

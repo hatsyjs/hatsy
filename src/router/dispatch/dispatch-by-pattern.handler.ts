@@ -5,7 +5,7 @@
 import { PathRoute, RouteCaptor, routeMatch, RouteMatcher, RoutePattern, URLRoute } from '@hatsy/route-match';
 import { mapIt } from '@proc7ts/a-iterable';
 import { isIterable, lazyValue } from '@proc7ts/primitives';
-import { RequestContext, requestHandler, RequestHandler, RequestHandlerMethod, requestModification } from '../../core';
+import { RequestContext, requestHandler, RequestHandler, RequestHandlerMethod, requestUpdate } from '../../core';
 import { RouterMeans } from '../router.means';
 
 /**
@@ -96,7 +96,7 @@ function handlerByDispatchPattern<TRoute extends PathRoute, TMeans extends Route
 
     await next(
         pattern.to.bind(pattern),
-        requestModification<RouterMeans<TRoute>>({
+        requestUpdate<RouterMeans<TRoute>>({
           get route() {
             return getTail();
           },

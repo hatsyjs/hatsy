@@ -8,9 +8,9 @@ import { lazyValue } from '@proc7ts/primitives';
 import {
   RequestCapability,
   RequestContext,
-  requestModification,
   RequestModification,
   RequestModifier__symbol,
+  requestUpdate,
 } from '../core';
 import { HttpMeans } from './http.means';
 
@@ -58,7 +58,7 @@ class HttpForwardingCapability extends RequestCapability<HttpMeans> implements H
 
     const addresses = lazyValue(() => HttpAddressRep.by(request, this._trust));
 
-    return requestModification<HttpMeans>({
+    return requestUpdate<HttpMeans>({
       requestAddresses: {
         get url() {
           return addresses().url;
