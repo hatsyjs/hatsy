@@ -3,18 +3,9 @@
  * @module @hatsy/hatsy
  */
 import { HttpAddressRep } from '@hatsy/http-header-value/node';
-import { lazyValue } from '@proc7ts/primitives';
+import { lazyValue, noop } from '@proc7ts/primitives';
 import { IncomingMessage, ServerResponse } from 'http';
-import {
-  ErrorMeans,
-  isRequestModifier,
-  RequestContext,
-  RequestHandler,
-  RequestModification,
-  RequestModifier,
-  RequestModifier__symbol,
-  RequestModifierRef,
-} from '../core';
+import { ErrorMeans, RequestContext, RequestHandler, requestProcessor } from '../core';
 import { HttpError } from './http-error';
 import { HttpMeans } from './http.means';
 import { renderHttpError } from './render';
@@ -112,22 +103,38 @@ export function httpListener<TRequest extends IncomingMessage, TResponse extends
   }
 
   const { log = console } = config;
-  const defaultHandler = defaultHttpHandler(config);
-  const errorHandler = httpErrorHandler(config);
-
-  const fullHandler: RequestHandler<HttpMeans<TRequest, TResponse>> = async (
-      { next }: RequestContext<HttpMeans<TRequest, TResponse>>,
-  ): Promise<void> => {
-    try {
-      if (!await next(handler)) {
-        await next(defaultHandler);
-      }
-    } catch (error) {
-      await next(errorHandler, { error });
-    }
-  };
+  const processor = requestProcessor<IncomingHttpMeans<TRequest, TResponse>>({
+    handler: incomingHttpHandler(fullHttpHandler(config, handler)),
+    async next(handler, context) {
+      await handler(context);
+      return context.response.writableEnded;
+    },
+  });
 
   return (request: TRequest, response: TResponse): void => {
+    processor({ request, response, log })
+        .catch(
+            error => log.error(`[${request.method} ${request.url}]`, 'Unhandled error', error),
+        );
+  };
+}
+
+/**
+ * @internal
+ */
+interface IncomingHttpMeans<TRequest extends IncomingMessage, TResponse extends ServerResponse> {
+  readonly request: TRequest;
+  readonly response: TResponse;
+  readonly log: Console;
+}
+
+/**
+ * @internal
+ */
+function incomingHttpHandler<TRequest extends IncomingMessage, TResponse extends ServerResponse>(
+    handler: RequestHandler<HttpMeans<TRequest, TResponse>>,
+): RequestHandler<IncomingHttpMeans<TRequest, TResponse>> {
+  return async ({ request, next }) => {
 
     const requestDefaults = lazyValue(() => HttpAddressRep.defaults(request));
     const requestURL = lazyValue(() => {
@@ -138,163 +145,44 @@ export function httpListener<TRequest extends IncomingMessage, TResponse extends
       return new URL(url, `${proto}://${host}`);
     });
 
-    new RootHttpRequestAgent({
-      request,
-      requestAddresses: {
-        get ip() {
-          return requestDefaults().for;
+    await next(
+        handler,
+        {
+          requestAddresses: {
+            get ip() {
+              return requestDefaults().for;
+            },
+            get url() {
+              return requestURL();
+            },
+          },
         },
-        get url() {
-          return requestURL();
-        },
-      },
-      response,
-      log,
-    })
-        .next(fullHandler)
-        .catch(
-            error => log.error(`[${request.method} ${request.url}]`, 'Unhandled error', error),
-        );
+    );
   };
 }
 
 /**
  * @internal
  */
-abstract class HttpRequestAgent<
-    TRequest extends IncomingMessage,
-    TResponse extends ServerResponse,
-    TMeans extends HttpMeans<TRequest, TResponse> = HttpMeans<TRequest, TResponse>,
-    > {
+function fullHttpHandler<TRequest extends IncomingMessage, TResponse extends ServerResponse>(
+    config: HttpConfig<HttpMeans<TRequest, TResponse>>,
+    handler: RequestHandler<HttpMeans<TRequest, TResponse>>,
+):
+    RequestHandler<HttpMeans<TRequest, TResponse>> {
+  const defaultHandler = defaultHttpHandler(config);
+  const errorHandler = httpErrorHandler(config);
 
-  abstract readonly context: RequestContext<TMeans>;
-
-  async next<TExt>(
-      handler: RequestHandler<TMeans & TExt>,
-      modification?: RequestModification<TMeans, TExt> | RequestModifier<TMeans, TExt>,
-  ): Promise<boolean> {
-    if (modification) {
-      await handler(new ModifiedHttpRequestAgent<TRequest, TResponse, TMeans, TExt>(this, modification).context);
-    } else {
-      await handler(this.context as RequestContext<TMeans & TExt>);
-    }
-
-    return this.context.response.writableEnded;
-  }
-
-  abstract modify<TExt>(
-      this: void,
-      modification: RequestModification<TMeans, TExt>,
-  ): RequestModification<TMeans, TExt>;
-
-  abstract modifiedBy<TInput, TExt>(
-      this: void,
-      ref: RequestModifierRef<TInput, TExt>,
-  ): RequestContext<TMeans & TInput & TExt> | undefined;
-
-}
-
-/**
- * @internal
- */
-class RootHttpRequestAgent<
-    TRequest extends IncomingMessage,
-    TResponse extends ServerResponse,
-    > extends HttpRequestAgent<TRequest, TResponse> {
-
-  readonly context: RequestContext<HttpMeans<TRequest, TResponse>>;
-
-  constructor(means: HttpMeans<TRequest, TResponse>) {
-    super();
-    this.context = {
-      ...means,
-      next: this.next.bind(this),
-      modifiedBy: this.modifiedBy,
-    };
-  }
-
-  modifiedBy(): undefined {
-    return;
-  }
-
-  modify<TExt>(
-      this: void,
-      modification: RequestModification<HttpMeans<TRequest, TResponse>, TExt>,
-  ): RequestModification<HttpMeans<TRequest, TResponse>, TExt> {
-    return modification;
-  }
-
-}
-
-/**
- * @internal
- */
-class ModifiedHttpRequestAgent<
-    TRequest extends IncomingMessage,
-    TResponse extends ServerResponse,
-    TMeans extends HttpMeans<TRequest, TResponse>,
-    TExt,
-    > extends HttpRequestAgent<TRequest, TResponse, TMeans & TExt> {
-
-  readonly context: RequestContext<TMeans & TExt>;
-
-  readonly modify: <TNext>(
-      this: void,
-      modification: RequestModification<TMeans & TExt, TNext>,
-  ) => RequestModification<TMeans & TExt, TNext>;
-
-  readonly modifiedBy: <TModifierInput, TModifierExt>(
-      this: void,
-      ref: RequestModifierRef<TModifierInput, TModifierExt>,
-  ) => RequestContext<TMeans & TExt & TModifierInput & TModifierExt> | undefined;
-
-  constructor(
-      prev: HttpRequestAgent<TRequest, TResponse, TMeans>,
-      modification: RequestModification<TMeans, TExt> | RequestModifier<TMeans, TExt>,
-  ) {
-    super();
-
-    let modify = prev.modify as <TNext>(
-        this: void,
-        modification: RequestModification<TMeans & TExt, TNext>,
-    ) => RequestModification<TMeans & TExt, TNext>;
-
-    if (isRequestModifier(modification)) {
-
-      const modifier = modification;
-
-      modification = prev.modify(modifier.modification(prev.context));
-
-      if (modifier.modify) {
-        modify = <TNext>(mod: RequestModification<TMeans & TExt, TNext>) => prev.modify(
-            modifier.modify!(this.context, mod) as RequestModification<TMeans, TNext>,
-        ) as RequestModification<TMeans & TExt, TNext>;
+  return async (
+      { next }: RequestContext<HttpMeans<TRequest, TResponse>>,
+  ): Promise<void> => {
+    try {
+      if (!await next(handler)) {
+        await next(defaultHandler);
       }
-
-      this.modifiedBy = <TModifierInput, TModifierExt>(
-          ref: RequestModifierRef<TModifierInput, TModifierExt>,
-      ) => (modifier[RequestModifier__symbol] === ref[RequestModifier__symbol]
-          ? this.context
-          : prev.modifiedBy(ref)
-      ) as RequestContext<TMeans & TExt & TModifierInput & TModifierExt> | undefined;
-
-    } else {
-      modification = prev.modify(modification);
-      this.modifiedBy = prev.modifiedBy as <TModifierInput, TModifierExt>(
-          this: void,
-          ref: RequestModifierRef<TModifierInput, TModifierExt>,
-      ) => RequestContext<TMeans & TExt & TModifierInput & TModifierExt> | undefined;
+    } catch (error) {
+      await next(errorHandler, { error });
     }
-
-    this.modify = modify;
-    this.context = {
-      ...prev.context,
-      ...modification,
-      next: this.next.bind(this),
-      modifiedBy: this.modifiedBy,
-    } as RequestContext<TMeans & TExt>;
-  }
-
+  };
 }
 
 /**
@@ -306,7 +194,7 @@ function defaultHttpHandler<TMeans extends HttpMeans>(
     }: HttpConfig<TMeans>,
 ): RequestHandler<TMeans> {
   if (!defaultHandler) {
-    return () => {/* no default handler */};
+    return noop;
   }
   return defaultHandler !== true
       ? defaultHandler
