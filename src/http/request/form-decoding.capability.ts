@@ -35,6 +35,7 @@ const URL_ENCODED_MIMES: Record<string, number> = {
  *
  * @category HTTP
  * @typeparam TInput  Input HTTP request processing means.
+ * @typeparam TBody  Request body type.
  */
 export interface FormDecoding<TInput extends HttpMeans = HttpMeans, TBody = URLSearchParams>
     extends RequestCapability<TInput, RequestBodyMeans<TBody>> {
@@ -83,10 +84,10 @@ class FormDecodingCapability<TInput extends HttpMeans, TBody>
     });
   }
 
-  withBody<TMeans extends TInput, TNextBody>(
-      transformer: RequestValueTransformer<TMeans, URLSearchParams, TNextBody>,
-  ): FormDecoding<TMeans, TNextBody> {
-    return new FormDecodingCapability<TMeans, TNextBody>(transformer);
+  withBody<TMeans extends TInput, TTransformed>(
+      transformer: RequestValueTransformer<TMeans, URLSearchParams, TTransformed>,
+  ): FormDecoding<TMeans, TTransformed> {
+    return new FormDecodingCapability<TMeans, TTransformed>(transformer);
   }
 
 }
