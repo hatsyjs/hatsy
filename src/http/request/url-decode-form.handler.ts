@@ -63,7 +63,7 @@ export function urlDecodeForm<TMeans extends HttpMeans, TBody = URLSearchParams>
     handler?: RequestHandler<TMeans & RequestBodyMeans<TBody>>,
 ): RequestHandler<TMeans> {
 
-  let transformer: RequestBodyTransformer<TMeans, URLSearchParams, TBody>
+  let transformer: RequestBodyTransformer<TMeans, URLSearchParams, TBody>;
   let bodyHandler: RequestHandler<TMeans & RequestBodyMeans<TBody>>;
 
   if (handler) {
