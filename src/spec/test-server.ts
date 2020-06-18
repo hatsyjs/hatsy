@@ -10,13 +10,13 @@ export class TestServer {
     this.address = server.address() as AddressInfo;
   }
 
-  request(path: string, options?: RequestOptions): Promise<IncomingMessage> {
+  post(path: string, body?: string | Buffer, options?: RequestOptions): Promise<IncomingMessage> {
     return new Promise((resolve, reject) => {
 
       const req = request(
           `http://${this.address.address}:${this.address.port}${path}`,
           {
-            method: 'GET',
+            method: 'POST',
             host: this.address.address,
             port: this.address.port,
             ...options,
@@ -26,12 +26,16 @@ export class TestServer {
 
       req.on('close', reject);
       req.on('error', reject);
-      req.end();
+      req.end(body);
     });
   }
 
+  request(path: string, options?: RequestOptions): Promise<IncomingMessage> {
+    return this.post(path, undefined, { method: 'GET', ...options });
+  }
+
   get(path: string, options?: RequestOptions): Promise<IncomingMessage> {
-    return this.request(path, { ...options, method: 'GET' });
+    return this.request(path, options);
   }
 
   stop(): Promise<void> {
