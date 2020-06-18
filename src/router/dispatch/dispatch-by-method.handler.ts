@@ -9,7 +9,7 @@ import { HttpMeans } from '../../http';
  * Request processing handlers for HTTP request methods.
  *
  * @category Router
- * @typeparam TMeans  Supported HTTP route processing means.
+ * @typeparam TMeans  Supported HTTP request processing means.
  */
 export interface DispatchMethods<TMeans extends HttpMeans = HttpMeans> {
 
@@ -64,7 +64,7 @@ export interface DispatchMethods<TMeans extends HttpMeans = HttpMeans> {
  * @typeparam TMeans  Supported HTTP route processing means.
  * @param methods  A map of request processing handlers corresponding to HTTP request methods.
  *
- * @returns New HTTP route processing handler.
+ * @returns New HTTP request processing handler.
  */
 export function dispatchByMethod<TMeans extends HttpMeans>(
     methods: DispatchMethods<TMeans>,
