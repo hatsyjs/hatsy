@@ -32,9 +32,11 @@ export interface RequestModifier<TInput, TExt = object> extends RequestModifierR
    * @typeparam TMeans  A type of request processing means expected by modifier.
    * @param context  Request processing context to modify.
    *
-   * @returns Request modifications to apply.
+   * @returns Request modifications to apply, or promise-like instance resolving to it.
    */
-  modification<TMeans extends TInput>(context: RequestContext<TMeans>): RequestModification<TMeans, TExt>;
+  modification<TMeans extends TInput>(
+      context: RequestContext<TMeans>,
+  ): RequestModification<TMeans, TExt> | PromiseLike<RequestModification<TMeans, TExt>>;
 
   /**
    * Updates subsequent request modifications.
@@ -51,7 +53,7 @@ export interface RequestModifier<TInput, TExt = object> extends RequestModifierR
    *
    * @returns Updated request modification that will be applied to
    */
-  modify?<TNext>(
+  modifyNext?<TNext>(
       context: RequestContext<TInput & TExt>,
       modification: RequestModification<TInput & TExt, TNext>,
   ): RequestModification<TInput & TExt, TNext>;
