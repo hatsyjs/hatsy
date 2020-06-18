@@ -1,5 +1,6 @@
 import { TextEncoder } from 'util';
-import { readAll, testServer, TestServer } from '../../spec';
+import { readAll } from '../../impl';
+import { testServer, TestServer } from '../../spec';
 import { httpListener } from '../http-listener';
 import { Rendering } from './rendering.capability';
 

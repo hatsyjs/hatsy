@@ -1,5 +1,6 @@
 import { httpListener, Rendering } from '../../http';
-import { readAll, suppressedLog, testServer, TestServer } from '../../spec';
+import { readAll } from '../../impl';
+import { suppressedLog, testServer, TestServer } from '../../spec';
 import { dispatchByLanguage } from './dispatch-by-language.handler';
 
 describe('dispatchByLanguage', () => {

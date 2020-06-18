@@ -10,7 +10,8 @@ import {
 import { RouteMatcher } from '@hatsy/route-match/d.ts/route-matcher';
 import { RequestContext } from '../../core';
 import { HttpForwarding, httpListener, HttpMeans, Rendering, RenderMeans } from '../../http';
-import { readAll, testServer, TestServer } from '../../spec';
+import { readAll } from '../../impl';
+import { testServer, TestServer } from '../../spec';
 import { RouterMeans } from '../router.means';
 import { Routing } from '../routing.capability';
 import { dispatchByPattern } from './dispatch-by-pattern.handler';
