@@ -4,8 +4,8 @@
   "disableAutoModuleName": true,
   "exclude": [
     "**/index.ts",
-    "**/cli/**/*.ts",
     "**/*.impl.ts",
+    "**/impl/**/*.ts",
     "**/spec/**/*.ts",
     "**/*.spec.ts"
   ],
