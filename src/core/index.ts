@@ -7,3 +7,4 @@ export * from './request-handler';
 export * from './request-modification';
 export * from './request-modifier';
 export * from './request-processor';
+export * from './request-value-transformer';

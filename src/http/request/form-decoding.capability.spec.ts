@@ -2,9 +2,9 @@ import { readAll } from '../../impl';
 import { suppressedLog, testServer, TestServer } from '../../spec';
 import { httpListener } from '../http-listener';
 import { Rendering } from '../render';
-import { urlDecodeForm } from './url-decode-form.handler';
+import { FormDecoding } from './form-decoding.capability';
 
-describe('urlDecodeForm', () => {
+describe('FormDecoding', () => {
 
   let server: TestServer;
 
@@ -21,11 +21,11 @@ describe('urlDecodeForm', () => {
             {
               log: suppressedLog(),
             },
-            Rendering.for(urlDecodeForm(
-                ({ requestBody, renderJson }) => {
+            Rendering
+                .and(FormDecoding)
+                .for(({ requestBody, renderJson }) => {
                   renderJson({ request: Array.from(requestBody.entries()) });
-                },
-            )),
+                }),
         ),
     );
   });
@@ -50,12 +50,11 @@ describe('urlDecodeForm', () => {
             {
               log: suppressedLog(),
             },
-            Rendering.for(urlDecodeForm(
-                params => Array.from(params.entries()),
-                ({ requestBody, renderJson }) => {
+            Rendering
+                .and(FormDecoding.withBody(params => Array.from(params.entries())))
+                .for(({ requestBody, renderJson }) => {
                   renderJson(requestBody);
-                },
-            )),
+                }),
         ),
     );
 

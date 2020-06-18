@@ -1,1 +1,1 @@
-export * from './url-decode-form.handler';
+export * from './form-decoding.capability';
