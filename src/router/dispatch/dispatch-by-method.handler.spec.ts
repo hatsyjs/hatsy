@@ -3,7 +3,7 @@ import { httpListener, HttpMeans, Rendering, RenderMeans } from '../../http';
 import { readAll, suppressedLog, testServer, TestServer } from '../../spec';
 import { RouterMeans } from '../router.means';
 import { Routing } from '../routing.capability';
-import { dispatchByMethod } from './dispatch-by.method.handler';
+import { dispatchByMethod } from './dispatch-by-method.handler';
 
 describe('dispatchByName', () => {
 
