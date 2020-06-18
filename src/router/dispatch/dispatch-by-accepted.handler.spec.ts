@@ -69,7 +69,7 @@ describe('dispatchByAccepted', () => {
     const response = await server.get('/test');
 
     expect(JSON.parse(await readAll(response))).toEqual({ response: 'fallback' });
-    expect(response.headers.vary).toBe('Accept,Accept-Language');
+    expect(response.headers.vary).toBe('Accept, Accept-Language');
   });
   it('sends with 406 (No Acceptable) when no matching handler found', async () => {
 

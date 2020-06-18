@@ -1,17 +1,14 @@
-import { itsReduction } from '@proc7ts/a-iterable';
-import { setOfElements } from '@proc7ts/primitives';
+import { mapIt } from '@proc7ts/a-iterable';
+import { arrayOfElements, elementOrArray } from '@proc7ts/primitives';
 import { ServerResponse } from 'http';
 
 /**
  * @internal
  */
 export function addResponseHeader(response: ServerResponse, name: string, value: string): void {
-  response.setHeader(
-      name,
-      itsReduction(
-          setOfElements(response.getHeader(name)).add(value),
-          (prev, next) => prev ? `${prev},${next}` : String(next),
-          '',
-      ),
-  );
+
+  const oldValues = mapIt(arrayOfElements(response.getHeader(name)), String);
+  const newValues = elementOrArray(new Set<string>(oldValues).add(value))!;
+
+  response.setHeader(name, newValues);
 }
