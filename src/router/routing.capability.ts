@@ -104,7 +104,7 @@ class RoutingCapability<TInput, TRoute extends PathRoute>
     };
   }
 
-  modify<TNext>(
+  modifyNext<TNext>(
       context: RequestContext<TInput & RouterMeans<TRoute>>,
       modification: RequestModification<TInput & RouterMeans<TRoute>, TNext>,
   ): RequestModification<TInput & RouterMeans<TRoute>, TNext> {

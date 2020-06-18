@@ -1,7 +1,7 @@
 import { RequestContext } from '../../core';
 import { httpListener, HttpMeans, Rendering, RenderMeans } from '../../http';
-import { addResponseHeader } from '../../impl';
-import { readAll, suppressedLog, testServer, TestServer } from '../../spec';
+import { addResponseHeader, readAll } from '../../impl';
+import { suppressedLog, testServer, TestServer } from '../../spec';
 import { dispatchByAccepted } from './dispatch-by-accepted.handler';
 
 describe('dispatchByAccepted', () => {

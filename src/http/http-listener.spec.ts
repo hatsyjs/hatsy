@@ -1,6 +1,7 @@
 import { noop } from '@proc7ts/primitives';
 import { ErrorMeans, RequestContext } from '../core';
-import { readAll, suppressedLog, testServer, TestServer } from '../spec';
+import { readAll } from '../impl';
+import { suppressedLog, testServer, TestServer } from '../spec';
 import { HttpError } from './http-error';
 import { httpListener } from './http-listener';
 import { HttpMeans } from './http.means';

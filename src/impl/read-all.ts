@@ -1,5 +1,8 @@
 import { Readable } from 'stream';
 
+/**
+ * @internal
+ */
 export async function readAll(input: Readable): Promise<string> {
 
   let output = '';

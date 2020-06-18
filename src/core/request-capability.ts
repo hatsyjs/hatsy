@@ -38,9 +38,11 @@ export abstract class RequestCapability<TInput, TExt = object>
    * @typeparam TMeans  A type of request processing means to modify.
    * @param context  Request processing context to modify.
    *
-   * @returns Request modification to apply.
+   * @returns Request modifications to apply, or promise-like instance resolving to it.
    */
-  abstract modification<TMeans extends TInput>(context: RequestContext<TMeans>): RequestModification<TMeans, TExt>;
+  abstract modification<TMeans extends TInput>(
+      context: RequestContext<TMeans>,
+  ): RequestModification<TMeans, TExt> | PromiseLike<RequestModification<TMeans, TExt>>;
 
   /**
    * Provides request processing capability to the given handler.

@@ -1,6 +1,7 @@
 import { RequestContext, requestHandler } from '../../core';
 import { httpListener, HttpMeans, Rendering, RenderMeans } from '../../http';
-import { readAll, suppressedLog, testServer, TestServer } from '../../spec';
+import { readAll } from '../../impl';
+import { suppressedLog, testServer, TestServer } from '../../spec';
 import { Routing } from '../routing.capability';
 import { dispatchByMethod } from './dispatch-by-method.handler';
 
