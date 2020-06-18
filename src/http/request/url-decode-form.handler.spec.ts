@@ -1,8 +1,7 @@
 import { readAll } from '../../impl';
 import { suppressedLog, testServer, TestServer } from '../../spec';
 import { httpListener } from '../http-listener';
-import { HttpMeans } from '../http.means';
-import { Rendering, RenderMeans } from '../render';
+import { Rendering } from '../render';
 import { urlDecodeForm } from './url-decode-form.handler';
 
 describe('urlDecodeForm', () => {
@@ -22,7 +21,7 @@ describe('urlDecodeForm', () => {
             {
               log: suppressedLog(),
             },
-            Rendering.for(urlDecodeForm<HttpMeans & RenderMeans>(
+            Rendering.for(urlDecodeForm(
                 ({ requestBody, renderJson }) => {
                   renderJson({ request: Array.from(requestBody.entries()) });
                 },
@@ -51,7 +50,7 @@ describe('urlDecodeForm', () => {
             {
               log: suppressedLog(),
             },
-            Rendering.for(urlDecodeForm<HttpMeans & RenderMeans, any[]>(
+            Rendering.for(urlDecodeForm(
                 params => Array.from(params.entries()),
                 ({ requestBody, renderJson }) => {
                   renderJson(requestBody);
