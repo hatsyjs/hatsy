@@ -45,6 +45,33 @@ describe('urlDecodeForm', () => {
 
     expect(JSON.parse(await readAll(response))).toEqual({ request: [['param1', 'value1'], ['param2', 'value2']] });
   });
+  it('transforms submitted form', async () => {
+    server.listener.mockImplementation(
+        httpListener(
+            {
+              log: suppressedLog(),
+            },
+            Rendering.for(urlDecodeForm<HttpMeans & RenderMeans, any[]>(
+                params => Array.from(params.entries()),
+                ({ requestBody, renderJson }) => {
+                  renderJson(requestBody);
+                },
+            )),
+        ),
+    );
+
+    const response = await server.post(
+        '/test',
+        'param1=value1&param2=value2',
+        {
+          headers: {
+            'content-type': 'application/x-www-form-urlencoded',
+          },
+        },
+    );
+
+    expect(JSON.parse(await readAll(response))).toEqual([['param1', 'value1'], ['param2', 'value2']]);
+  });
   it('processes submitted form with text/plain content type', async () => {
 
     const response = await server.post(
