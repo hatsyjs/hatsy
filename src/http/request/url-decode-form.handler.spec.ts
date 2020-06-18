@@ -37,7 +37,6 @@ describe('urlDecodeForm', () => {
         '/test',
         'param1=value1&param2=value2',
         {
-          method: 'POST',
           headers: {
             'content-type': 'application/x-www-form-urlencoded',
           },
@@ -46,9 +45,41 @@ describe('urlDecodeForm', () => {
 
     expect(JSON.parse(await readAll(response))).toEqual({ request: [['param1', 'value1'], ['param2', 'value2']] });
   });
-  it('responds with 415 (Unsupported Media Type) with wrong request type', async () => {
+  it('processes submitted form with text/plain content type', async () => {
 
-    const response = await server.get('/test?param1=value1&param2=value2');
+    const response = await server.post(
+        '/test',
+        'param1=value1&param2=value2',
+        {
+          headers: {
+            'content-type': 'text/plain',
+          },
+        },
+    );
+
+    expect(JSON.parse(await readAll(response))).toEqual({ request: [['param1', 'value1'], ['param2', 'value2']] });
+  });
+  it('processes submitted form without content type', async () => {
+
+    const response = await server.post(
+        '/test',
+        'param1=value1&param2=value2',
+        {
+          method: 'POST',
+        },
+    );
+
+    expect(JSON.parse(await readAll(response))).toEqual({ request: [['param1', 'value1'], ['param2', 'value2']] });
+  });
+  it('responds with 415 (Unsupported Media Type) with unsupported request type', async () => {
+
+    const response = await server.post(
+        '/test',
+        'param1=value1&param2=value2',
+        {
+          headers: { 'content-type': 'application/json' },
+        },
+    );
 
     expect(response.statusCode).toBe(415);
     expect(response.statusMessage).toBe('application/x-www-form-urlencoded request expected');

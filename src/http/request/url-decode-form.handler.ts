@@ -4,9 +4,14 @@
  */
 import { URLSearchParams } from 'url';
 import { RequestBodyMeans, requestExtension, RequestHandler } from '../../core';
-import { readAll } from '../../impl';
+import { readAll, Text__MIME, URLEncoded__MIME } from '../../impl';
 import { HttpError } from '../http-error';
 import { HttpMeans } from '../http.means';
+
+/**
+ * @internal
+ */
+const URL_ENCODED_MIME: Record<string, number> = { [Text__MIME]: 1, [URLEncoded__MIME]: 1 };
 
 /**
  * Builds HTTP request processing handler that decodes submitted URL-encoded forms.
@@ -14,7 +19,8 @@ import { HttpMeans } from '../http.means';
  * Represents form data submitted as `application/x-www-form-urlencoded` as a {@link RequestBodyMeans.requestBody
  * request body} of type `URLSearchParams`. Then delegates to the next handler accepting it.
  *
- * Responds with 415 (Unsupported Media Type) status code if request is not `application/x-www-form-urlencoded`.
+ * Responds with 415 (Unsupported Media Type) status code if request has content type specified, and it is not
+ * `application/x-www-form-urlencoded` or `text/plain`.
  *
  * @category HTTP
  * @typeparam TMeans  HTTP request processing means.
@@ -26,8 +32,11 @@ export function urlDecodeForm<TMeans extends HttpMeans>(
     handler: RequestHandler<TMeans & RequestBodyMeans<URLSearchParams>>,
 ): RequestHandler<TMeans> {
   return async ({ request, next }) => {
-    if (request.headers['content-type'] !== 'application/x-www-form-urlencoded') {
-      return Promise.reject(new HttpError(415, 'application/x-www-form-urlencoded request expected'));
+
+    const { 'content-type': contentType = Text__MIME } = request.headers;
+
+    if (!URL_ENCODED_MIME[contentType]) {
+      return Promise.reject(new HttpError(415, `${URLEncoded__MIME} request expected`));
     }
 
     await next(
