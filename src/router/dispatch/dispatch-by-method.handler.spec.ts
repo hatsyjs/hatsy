@@ -1,9 +1,8 @@
 import { RequestContext, requestHandler } from '../../core';
 import { httpListener, HttpMeans, Rendering, RenderMeans } from '../../http';
 import { readAll, suppressedLog, testServer, TestServer } from '../../spec';
-import { RouterMeans } from '../router.means';
 import { Routing } from '../routing.capability';
-import { dispatchByMethod } from './dispatch-by.method.handler';
+import { dispatchByMethod } from './dispatch-by-method.handler';
 
 describe('dispatchByName', () => {
 
@@ -23,9 +22,8 @@ describe('dispatchByName', () => {
   it('dispatches by method', async () => {
     server.listener.mockImplementation(httpListener(
         Rendering
-            .and(Routing)
             .for(dispatchByMethod({
-              search({ renderJson }: RequestContext<HttpMeans & RenderMeans & RouterMeans>): void {
+              search({ renderJson }: RequestContext<HttpMeans & RenderMeans>): void {
                 renderJson({ response: 'ok' });
               },
             })),
@@ -39,7 +37,6 @@ describe('dispatchByName', () => {
   it('dispatches to HEAD', async () => {
     server.listener.mockImplementation(httpListener(
         Rendering
-            .and(Routing)
             .for(dispatchByMethod({
               head({ renderJson }): void {
                 renderJson({ response: 'ok' });
@@ -55,7 +52,6 @@ describe('dispatchByName', () => {
   it('dispatches to GET on HEAD request', async () => {
     server.listener.mockImplementation(httpListener(
         Rendering
-            .and(Routing)
             .for(dispatchByMethod({
               get({ renderJson }): void {
                 renderJson({ response: 'ok' });
@@ -71,7 +67,6 @@ describe('dispatchByName', () => {
   it('dispatches to GET without method specified', async () => {
     server.listener.mockImplementation(httpListener(
         Rendering
-            .and(Routing)
             .for(requestHandler([
                 ({ request }) => {
                   delete request.method;

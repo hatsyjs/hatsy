@@ -4,15 +4,14 @@
  */
 import { RequestHandler, RequestHandlerMethod } from '../../core';
 import { HttpMeans } from '../../http';
-import { RouterMeans } from '../router.means';
 
 /**
  * Request processing handlers for HTTP request methods.
  *
  * @category Router
- * @typeparam TMeans  Supported HTTP route processing means.
+ * @typeparam TMeans  Supported HTTP request processing means.
  */
-export interface DispatchMethods<TMeans extends HttpMeans & RouterMeans = HttpMeans & RouterMeans> {
+export interface DispatchMethods<TMeans extends HttpMeans = HttpMeans> {
 
   /**
    * Request processing handler for HTTP DELETE.
@@ -65,9 +64,9 @@ export interface DispatchMethods<TMeans extends HttpMeans & RouterMeans = HttpMe
  * @typeparam TMeans  Supported HTTP route processing means.
  * @param methods  A map of request processing handlers corresponding to HTTP request methods.
  *
- * @returns New HTTP route processing handler.
+ * @returns New HTTP request processing handler.
  */
-export function dispatchByMethod<TMeans extends HttpMeans & RouterMeans>(
+export function dispatchByMethod<TMeans extends HttpMeans>(
     methods: DispatchMethods<TMeans>,
 ): RequestHandler<TMeans> {
   return async ({ request: { method }, next }) => {
