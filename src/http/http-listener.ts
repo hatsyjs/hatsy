@@ -155,10 +155,17 @@ function incomingHttpHandler<TRequest extends IncomingMessage, TResponse extends
     response,
     next,
   }) => {
+    response.once('error', onError);
+    response.once('finish', onResponse);
+    response.once('close', onResponse);
 
-    response.on('error', onError);
-    response.on('finish', onResponse);
-    response.on('close', onResponse);
+    const end = response.end.bind(response);
+
+    // Finish request processing immediately after calling `response.end()`
+    response.end = ((chunk: any, encoding: string, cb?: () => void) => {
+      end(chunk, encoding, cb);
+      onResponse();
+    }) as typeof response['end'];
 
     const requestDefaults = lazyValue(() => HttpAddressRep.defaults(request));
     const requestURL = lazyValue(() => {
