@@ -11,8 +11,8 @@ import {
   RequestModification,
   RequestModifier__symbol,
   requestUpdate,
-} from '../core';
-import { HttpMeans } from './http.means';
+} from '../../core';
+import { HttpMeans } from '../http.means';
 
 /**
  * HTTP proxy forwarding capability.
