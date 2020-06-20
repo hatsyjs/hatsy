@@ -103,11 +103,19 @@ export function httpListener<TRequest extends IncomingMessage, TResponse extends
   }
 
   const { log = console } = config;
+  const [incomingHandler, whenResponded] = incomingHttpHandler(fullHttpHandler(config, handler));
   const processor = requestProcessor<IncomingHttpMeans<TRequest, TResponse>>({
-    handler: incomingHttpHandler(fullHttpHandler(config, handler)),
-    async next(handler, context) {
-      await handler(context);
-      return context.response.writableEnded;
+    handler: incomingHandler,
+    next(handler, context): Promise<boolean> {
+
+      const { response } = context;
+
+      return Promise.race([
+        whenResponded,
+        Promise.resolve(context)
+            .then(handler)
+            .then(() => response.writableEnded),
+      ]);
     },
   });
 
@@ -133,8 +141,24 @@ interface IncomingHttpMeans<TRequest extends IncomingMessage, TResponse extends 
  */
 function incomingHttpHandler<TRequest extends IncomingMessage, TResponse extends ServerResponse>(
     handler: RequestHandler<HttpMeans<TRequest, TResponse>>,
-): RequestHandler<IncomingHttpMeans<TRequest, TResponse>> {
-  return async ({ request, next }) => {
+): [RequestHandler<IncomingHttpMeans<TRequest, TResponse>>, Promise<boolean>] {
+
+  let onResponse: () => void;
+  let onError: (error: any) => void;
+  const whenResponded = new Promise<boolean>((resolve, reject) => {
+    onResponse = () => resolve(true);
+    onError = reject;
+  });
+
+  const incomingHandler: RequestHandler<IncomingHttpMeans<TRequest, TResponse>> = async ({
+    request,
+    response,
+    next,
+  }) => {
+
+    response.on('error', onError);
+    response.on('finish', onResponse);
+    response.on('close', onResponse);
 
     const requestDefaults = lazyValue(() => HttpAddressRep.defaults(request));
     const requestURL = lazyValue(() => {
@@ -159,6 +183,8 @@ function incomingHttpHandler<TRequest extends IncomingMessage, TResponse extends
         },
     );
   };
+
+  return [incomingHandler, whenResponded];
 }
 
 /**
