@@ -14,7 +14,7 @@ import { RequestHandler } from './request-handler';
  * @typeparam TInput  A type of request processing means required by this capability set.
  * @typeparam TExt  A type of extension to request processing means this capability set applies.
  */
-export interface RequestCapabilities<TInput, TExt> {
+export interface RequestCapabilities<TInput, TExt = object> {
 
   /**
    * Provides request processing capabilities to the given handler.
@@ -43,10 +43,59 @@ export interface RequestCapabilities<TInput, TExt> {
 
 }
 
+export namespace RequestCapabilities {
+
+  /**
+   * Request processing capabilities provider signature.
+   *
+   * Builds a request processing handler that modifies request and delegates to another one.
+   *
+   * @typeparam TInput  A type of request processing means required by this provider.
+   * @typeparam TExt  A type of extension to request processing means this provider applies.
+   */
+  export type Provider<TInput, TExt = object> =
+  /**
+   * @typeparam TMeans  A type of request processing means expected by constructed handler.
+   *
+   * @param handler  Request processing handler that will receive modified request context.
+   *
+   * @returns New request processing handler.
+   */
+      <TMeans extends TInput>(
+          this: void,
+          handler: RequestHandler<TMeans & TExt>,
+      ) => RequestHandler<TMeans>;
+
+}
+
 /**
  * @category Core
  */
 export const RequestCapabilities = {
+
+  /**
+   * Builds request capability set by the given `provider`.
+   *
+   * @typeparam TInput  A type of request processing means required by this provider.
+   * @typeparam TExt  A type of extension to request processing means this provider applies.
+   * @param provider  Request processing capabilities provider.
+   *
+   * @returns Request processing capability set that call the given `provider` to apply capabilities.
+   */
+  of<TInput, TExt>(
+      this: void,
+      provider: RequestCapabilities.Provider<TInput, TExt>,
+  ): RequestCapabilities<TInput, TExt> {
+
+    const capabilities: RequestCapabilities<TInput, TExt> = {
+      for: provider,
+      and<TNext>(next: RequestCapabilities<TInput & TExt, TNext>): RequestCapabilities<TInput, TExt & TNext> {
+        return RequestCapabilities.combine(capabilities, next);
+      },
+    };
+
+    return capabilities;
+  },
 
   /**
    * Combines two request processing capability sets.
