@@ -3,8 +3,8 @@
  * @module @hatsy/hatsy
  */
 import { IncomingMessage, ServerResponse } from 'http';
-import { RequestContext, RequestModification } from '../../core';
-import { HttpMeans } from '../http.means';
+import { RequestCapabilities, RequestContext, RequestHandler, RequestModification } from '../core';
+import { HttpMeans } from './http.means';
 
 /**
  * HTTP middleware signature.
@@ -63,48 +63,31 @@ export namespace Middleware {
 }
 
 /**
+ * Involves the given `middleware` into HTTP request processing.
+ *
  * @category HTTP
+ * @typeparam TInput  A type of input HTTP request processing means.
+ * @param middleware  Middleware to apply.
+ *
+ * @returns New request processing capability set that processes HTTP requests by the given `middleware`.
  */
-export const Middleware = {
+export function middleware<TInput extends HttpMeans>(
+    middleware: Middleware,
+): RequestCapabilities<TInput> {
+  return RequestCapabilities.of(
+      <TMeans extends TInput>(handler: RequestHandler<TMeans>) => async (
+          { request, response, next }: RequestContext<TMeans>,
+      ) => new Promise<void>((resolve, reject) => {
 
-  /**
-   * Executes middleware in the given HTTP request processing context.
-   *
-   * @param middleware  Middleware to execute.
-   * @param context  HTTP request processing context.
-   *
-   * @returns A promise resolved to `true` when middleware responded, or to `false` when it delegated to the `next`
-   * handler.
-   */
-  exec(
-      this: void,
-      middleware: Middleware,
-      context: RequestContext<HttpMeans>,
-  ): Promise<boolean> {
+        const mdNext = (error?: any): void => {
+          if (error !== undefined) {
+            reject(error);
+          } else {
+            next(handler).then(() => resolve(), reject);
+          }
+        };
 
-    const { request, response } = context;
-
-    return new Promise<boolean>((resolve, reject) => {
-
-      const respond = (): void => resolve(true);
-
-      response.on('error', reject);
-      response.on('finish', respond);
-      response.on('close', respond);
-
-      const next = (error?: any): void => {
-        if (error !== undefined) {
-          reject(error);
-        } else {
-          resolve();
-        }
-      };
-
-      middleware(request, response, next);
-      if (response.writableEnded || response.destroyed) {
-        respond();
-      }
-    });
-  },
-
-};
+        middleware(request, response, mdNext);
+      }),
+  );
+}
