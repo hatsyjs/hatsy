@@ -26,6 +26,14 @@
   "main": "dist/hatsy.js",
   "module": "dist/hatsy.mjs",
   "types": "d.ts/index.d.ts",
+  "peerDependencies": {
+    "jest": "^26.0.1"
+  },
+  "peerDependenciesMeta": {
+    "jest": {
+      "optional": true
+    }
+  },
   "dependencies": {
     "@hatsy/http-header-value": "^3.3.0",
     "@hatsy/route-match": "^1.0.0-dev.4",
