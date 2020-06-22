@@ -114,10 +114,11 @@ describe('JsonParsing', () => {
     );
 
     expect(response.statusCode).toBe(415);
-    expect(response.statusMessage).toBe('application/json request expected');
+    expect(await response.body()).toContain('application/json request expected');
   });
   it('responds with 400 (Bad Request) with non-JSON content', async () => {
 
+    const errorSpy = jest.spyOn(suppressedLog, 'error');
     const response = await server.post(
         '/test',
         'param1=value1&param2=value2',
@@ -127,6 +128,12 @@ describe('JsonParsing', () => {
     );
 
     expect(response.statusCode).toBe(400);
-    expect(response.statusMessage).toContain('Unexpected token');
+    expect(await response.body()).toContain('Malformed JSON');
+    expect(errorSpy).toHaveBeenCalledWith(
+        expect.any(String),
+        '400',
+        'Malformed JSON',
+        expect.objectContaining({ message: expect.stringContaining('Unexpected token') }),
+    );
   });
 });

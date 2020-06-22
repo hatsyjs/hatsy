@@ -65,7 +65,7 @@ export function dispatchByAccepted<TMeans extends HttpMeans>(
     const handler = negotiator(accept);
 
     if (!handler) {
-      return Promise.reject(new HttpError(406, 'Not Acceptable'));
+      return Promise.reject(new HttpError(406));
     }
 
     addResponseHeader(response, 'Vary', 'Accept');

@@ -6,7 +6,10 @@ describe('HttpError', () => {
       expect(new HttpError(404).message).toBe('404');
     });
     it('contains status code and message', () => {
-      expect(new HttpError(404, 'Not Found').message).toBe('404 Not Found');
+      expect(new HttpError(404, { statusMessage: 'Not Found' }).message).toBe('404 Not Found');
+    });
+    it('contains explicit message', () => {
+      expect(new HttpError(404, { message: 'TEST' }).message).toBe('TEST');
     });
   });
 });

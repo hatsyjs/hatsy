@@ -55,7 +55,7 @@ describe('middleware', () => {
     expect(ware).toHaveBeenCalledTimes(1);
   });
   it('allows middleware to error', async () => {
-    ware.mockImplementation((_request, _response, next) => next(new HttpError(503, 'Custom Error')));
+    ware.mockImplementation((_request, _response, next) => next(new HttpError(503, { statusMessage: 'Custom Error' })));
 
     server.listener.mockImplementation(httpListener(
         {

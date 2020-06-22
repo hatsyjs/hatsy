@@ -5,6 +5,7 @@
 import { ErrorMeans, RequestContext } from '../../core';
 import { HttpError } from '../http-error';
 import { HttpMeans } from '../http.means';
+import { escapeHtml } from '../util';
 import { RenderMeans } from './render.means';
 import { Rendering } from './rendering.capability';
 
@@ -18,24 +19,37 @@ function renderHttpErrorPage(
       renderHtml,
     }: RequestContext<HttpMeans & RenderMeans & ErrorMeans>,
 ): void {
+
+  let message: string;
+  let details: string;
+
   if (error instanceof HttpError) {
     response.statusCode = error.statusCode;
-    if (error.statusMessage) {
-      response.statusMessage = error.statusMessage;
+
+    const { statusMessage } = error;
+
+    if (statusMessage) {
+      response.statusMessage = statusMessage;
+      message = ` ${escapeHtml(statusMessage)}`;
     }
+    message = escapeHtml(statusMessage);
+    details = `<p>${escapeHtml(error.details)}</p>`;
   } else {
     response.statusCode = 500;
-    response.statusMessage = 'Internal Server Error';
+    message = ' Internal Server Error';
+    details = '';
   }
 
   renderHtml(
       `<!DOCTYPE html>
 <html lang="en">
 <head>
-<title>ERROR ${response.statusCode} ${response.statusMessage}</title>
+<title>ERROR ${response.statusCode}${message}</title>
 </head>
 <body>
-<h1><strong>ERROR ${response.statusCode}</strong> ${response.statusMessage}</h1>
+<h1><strong>ERROR ${response.statusCode}</strong>${message}</h1>
+<hr/>
+${details}
 </body>
 </html>
 `,

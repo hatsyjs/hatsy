@@ -81,7 +81,7 @@ class JsonParsingCapability<TInput extends HttpMeans, TBody>
     const { 'content-type': contentType = Text__MIME } = request.headers;
 
     if (!JSON_MIMES[contentType]) {
-      return Promise.reject(new HttpError(415, `${JSON__MIME} request expected`));
+      return Promise.reject(new HttpError(415, { details: `${JSON__MIME} request expected` }));
     }
 
     let json: any;
@@ -90,7 +90,7 @@ class JsonParsingCapability<TInput extends HttpMeans, TBody>
     try {
       json = JSON.parse(text);
     } catch (e) {
-      return Promise.reject(new HttpError(400, e.message));
+      return Promise.reject(new HttpError(400, { details: 'Malformed JSON', reason: e }));
     }
 
     return requestExtension<TMeans, RequestBodyMeans<TBody>>({

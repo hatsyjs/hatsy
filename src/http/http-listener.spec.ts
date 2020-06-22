@@ -124,19 +124,20 @@ describe('httpListener', () => {
   });
   it('logs HTTP error and invokes provided error handler', async () => {
 
-    const error = new HttpError(404, 'Never Found');
+    const error = new HttpError(404, { details: 'Never Found' });
     const log = suppressedLog;
     const logErrorSpy = jest.spyOn(log, 'error');
     const errorHandler = jest.fn(({ response, error }: RequestContext<ErrorMeans & HttpMeans>) => {
-      response.end(`ERROR ${error.message}`);
+      response.end(`ERROR ${error.message} ${error.details}`);
     });
 
     server.listener.mockImplementation(httpListener({ log, errorHandler }, () => { throw error; }));
 
     const response = await server.get('/test');
+    const body = await response.body();
 
-    expect(await response.body()).toContain('ERROR 404 Never Found');
-    expect(logErrorSpy).toHaveBeenCalledWith('[GET /test]', 'ERROR 404 Never Found');
+    expect(body).toContain('ERROR 404 Never Found');
+    expect(logErrorSpy).toHaveBeenCalledWith('[GET /test]', '404', 'Never Found');
     expect(errorHandler).toHaveBeenCalledWith(expect.objectContaining({
       request: expect.objectContaining({ method: 'GET', url: '/test' }),
       error,
