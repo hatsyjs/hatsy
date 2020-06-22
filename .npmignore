@@ -35,5 +35,5 @@ node_modules
 # Include type definitions
 !/d.ts
 # ...but exclude implementations
-/d.ts/impl
+/d.ts/**/impl
 /d.ts/**/*.impl.*

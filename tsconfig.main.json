@@ -7,7 +7,6 @@
     "stripInternal": true
   },
   "exclude": [
-    "src/**/*.spec.ts",
-    "src/testing/**/*"
+    "src/**/*.spec.ts"
   ]
 }
