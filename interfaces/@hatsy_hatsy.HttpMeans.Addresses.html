@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>DispatchLanguages | Hatsy</title>
+	<title>Addresses | Hatsy</title>
 	<meta name="description" content="Documentation for Hatsy">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,10 +54,16 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="DispatchLanguages.html">DispatchLanguages</a>
+					<a href="../modules/@hatsy_hatsy.html">@hatsy/hatsy</a>
+				</li>
+				<li>
+					<a href="../modules/@hatsy_hatsy.HttpMeans.html">HttpMeans</a>
+				</li>
+				<li>
+					<a href="@hatsy_hatsy.HttpMeans.Addresses.html">Addresses</a>
 				</li>
 			</ul>
-			<h1>Interface DispatchLanguages&lt;TMeans&gt;</h1>
+			<h1>Interface Addresses</h1>
 		</div>
 	</div>
 </header>
@@ -67,40 +73,17 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Request processing handlers for accepted languages.</p>
+						<p>HTTP request addressing info.</p>
 					</div>
 				</div>
-			</section>
-			<section class="tsd-panel tsd-type-parameters">
-				<h3>Type parameters</h3>
-				<ul class="tsd-type-parameters">
-					<li>
-						<h4>TMeans<span class="tsd-signature-symbol">: </span><a href="../modules/HttpMeans.html" class="tsd-signature-type">HttpMeans</a></h4>
-						<div class="tsd-comment tsd-typography">
-							<div class="lead">
-								<p>Supported HTTP request processing means.</p>
-							</div>
-						</div>
-					</li>
-				</ul>
 			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">DispatchLanguages</span>
+						<span class="target">Addresses</span>
 					</li>
 				</ul>
-			</section>
-			<section class="tsd-panel tsd-kind-interface tsd-has-type-parameter">
-				<h3 class="tsd-before-signature">Indexable</h3>
-				<div class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">[</span>code: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]: </span><a href="../globals.html#RequestHandlerMethod" class="tsd-signature-type">RequestHandlerMethod</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TMeans</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></div>
-				<div class="tsd-comment tsd-typography">
-					<div class="lead">
-						<p>Request processing method with language code as its key.</p>
-					</div>
-					<p>Language code can be a <code>*</code> wildcard.</p>
-				</div>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
@@ -109,8 +92,8 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="DispatchLanguages.html#_" class="tsd-kind-icon">*</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="DispatchLanguages.html#en" class="tsd-kind-icon">en</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="@hatsy_hatsy.HttpMeans.Addresses.html#ip" class="tsd-kind-icon">ip</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="@hatsy_hatsy.HttpMeans.Addresses.html#url" class="tsd-kind-icon">url</a></li>
 							</ul>
 						</section>
 					</div>
@@ -119,33 +102,32 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="_" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> *</h3>
-					<div class="tsd-signature tsd-kind-icon">*<span class="tsd-signature-symbol">:</span> <a href="../globals.html#RequestHandlerMethod" class="tsd-signature-type">RequestHandlerMethod</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TMeans</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<a name="ip" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> ip</h3>
+					<div class="tsd-signature tsd-kind-icon">ip<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/d2115f2/src/router/dispatch/dispatch-by-language.handler.ts#L28">hatsy/hatsy/src/router/dispatch/dispatch-by-language.handler.ts:28</a></li>
+							<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/8a6b683/src/http/http.means.ts#L58">hatsy/hatsy/src/http/http.means.ts:58</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Response in any language.</p>
+							<p>Remote address.</p>
 						</div>
-						<p>This is a fallback handler typically.</p>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="en" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> en</h3>
-					<div class="tsd-signature tsd-kind-icon">en<span class="tsd-signature-symbol">:</span> <a href="../globals.html#RequestHandlerMethod" class="tsd-signature-type">RequestHandlerMethod</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TMeans</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<a name="url" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> url</h3>
+					<div class="tsd-signature tsd-kind-icon">url<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">URL</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/d2115f2/src/router/dispatch/dispatch-by-language.handler.ts#L21">hatsy/hatsy/src/router/dispatch/dispatch-by-language.handler.ts:21</a></li>
+							<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/8a6b683/src/http/http.means.ts#L53">hatsy/hatsy/src/http/http.means.ts:53</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>English response.</p>
+							<p>Request URL.</p>
 						</div>
 					</div>
 				</section>
@@ -163,19 +145,31 @@
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-interface tsd-has-type-parameter">
-						<a href="DispatchLanguages.html" class="tsd-kind-icon">Dispatch<wbr>Languages</a>
+					<li class="current tsd-kind-interface tsd-parent-kind-namespace">
+						<a href="@hatsy_hatsy.HttpMeans.Addresses.html" class="tsd-kind-icon">Addresses</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="DispatchLanguages.html#_" class="tsd-kind-icon">*</a>
+								<a href="@hatsy_hatsy.HttpMeans.Addresses.html#ip" class="tsd-kind-icon">ip</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="DispatchLanguages.html#en" class="tsd-kind-icon">en</a>
+								<a href="@hatsy_hatsy.HttpMeans.Addresses.html#url" class="tsd-kind-icon">url</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-property tsd-parent-kind-namespace">
+						<a href="../modules/@hatsy_hatsy.HttpMeans.html#log" class="tsd-kind-icon">log</a>
+					</li>
+					<li class=" tsd-kind-property tsd-parent-kind-namespace">
+						<a href="../modules/@hatsy_hatsy.HttpMeans.html#request" class="tsd-kind-icon">request</a>
+					</li>
+					<li class=" tsd-kind-property tsd-parent-kind-namespace">
+						<a href="../modules/@hatsy_hatsy.HttpMeans.html#requestAddresses" class="tsd-kind-icon">request<wbr>Addresses</a>
+					</li>
+					<li class=" tsd-kind-property tsd-parent-kind-namespace">
+						<a href="../modules/@hatsy_hatsy.HttpMeans.html#response" class="tsd-kind-icon">response</a>
+					</li>
 				</ul>
 			</nav>
 		</div>
@@ -186,18 +180,20 @@
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
+				<li class="tsd-kind-namespace"><span class="tsd-kind-icon">Namespace</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
 				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
 			</ul>
 		</div>
 	</div>

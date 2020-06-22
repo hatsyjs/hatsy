@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>RequestContext | Hatsy</title>
+	<title>RequestProcessor | Hatsy</title>
 	<meta name="description" content="Documentation for Hatsy">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,10 +54,13 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="RequestContext.html">RequestContext</a>
+					<a href="@hatsy_hatsy_core.html">@hatsy/hatsy/core</a>
+				</li>
+				<li>
+					<a href="@hatsy_hatsy_core.RequestProcessor.html">RequestProcessor</a>
 				</li>
 			</ul>
-			<h1>Namespace RequestContext&lt;TMeans&gt;</h1>
+			<h1>Namespace RequestProcessor&lt;TMeans&gt;</h1>
 		</div>
 	</div>
 </header>
@@ -67,12 +70,9 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Request processing context.</p>
+						<p>Generic request processor.</p>
 					</div>
-					<p>It is passed to <a href="../globals.html#RequestHandler">request processing handler</a>. It the necessary means. The handler can either
-					respond by these means, or delegate processing to the <a href="../interfaces/RequestContext.Agent.html#next">next handler</a>.</p>
-					<p>The context instance is immutable. The request processing means it contains can be <a href="../globals.html#RequestModification">modified</a> or even extended when delegating request processing to the <a href="../interfaces/RequestContext.Agent.html#next">next handler</a>
-					by creating another context based on original one.</p>
+					<p>Can be constructed by <a href="@hatsy_hatsy_core.html#requestProcessor">requestProcessor</a> function.</p>
 				</div>
 			</section>
 			<section class="tsd-panel tsd-type-parameters">
@@ -82,7 +82,7 @@
 						<h4>TMeans</h4>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
-								<p>Request processing means of this context.</p>
+								<p>A type of initial request processing means.</p>
 							</div>
 						</div>
 					</li>
@@ -95,7 +95,7 @@
 						<section class="tsd-index-section ">
 							<h3>Interfaces</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter"><a href="../interfaces/RequestContext.Agent.html" class="tsd-kind-icon">Agent</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter"><a href="../interfaces/@hatsy_hatsy_core.RequestProcessor.Config.html" class="tsd-kind-icon">Config</a></li>
 							</ul>
 						</section>
 					</div>
@@ -108,27 +108,12 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
-					<li class=" tsd-kind-namespace tsd-has-type-parameter">
-						<a href="HttpMeans.html">Http<wbr>Means</a>
-					</li>
-					<li class=" tsd-kind-namespace">
-						<a href="Middleware.html">Middleware</a>
-					</li>
-					<li class="current tsd-kind-namespace tsd-has-type-parameter">
-						<a href="RequestContext.html">Request<wbr>Context</a>
-					</li>
-					<li class=" tsd-kind-namespace tsd-has-type-parameter">
-						<a href="RequestProcessor.html">Request<wbr>Processor</a>
-					</li>
-					<li class=" tsd-kind-namespace tsd-has-type-parameter">
-						<a href="RouterConfig.html">Router<wbr>Config</a>
-					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="../interfaces/RequestContext.Agent.html" class="tsd-kind-icon">Agent</a>
+						<a href="../interfaces/@hatsy_hatsy_core.RequestProcessor.Config.html" class="tsd-kind-icon">Config</a>
 					</li>
 				</ul>
 			</nav>
@@ -140,18 +125,19 @@
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-namespace"><span class="tsd-kind-icon">Namespace</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
 			</ul>
 		</div>
 	</div>

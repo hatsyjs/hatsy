@@ -54,7 +54,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="Middleware.html">Middleware</a>
+					<a href="@hatsy_hatsy.html">@hatsy/hatsy</a>
+				</li>
+				<li>
+					<a href="@hatsy_hatsy.Middleware.html">Middleware</a>
 				</li>
 			</ul>
 			<h1>Namespace Middleware</h1>
@@ -79,8 +82,8 @@
 						<section class="tsd-index-section ">
 							<h3>Type aliases</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter"><a href="Middleware.html#Modification" class="tsd-kind-icon">Modification</a></li>
-								<li class="tsd-kind-type-alias tsd-parent-kind-namespace"><a href="Middleware.html#Next" class="tsd-kind-icon">Next</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter"><a href="@hatsy_hatsy.Middleware.html#Modification" class="tsd-kind-icon">Modification</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-namespace"><a href="@hatsy_hatsy.Middleware.html#Next" class="tsd-kind-icon">Next</a></li>
 							</ul>
 						</section>
 					</div>
@@ -91,10 +94,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter">
 					<a name="Modification" class="tsd-anchor"></a>
 					<h3>Modification</h3>
-					<div class="tsd-signature tsd-kind-icon">Modification&lt;TInput, TExt&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, context<span class="tsd-signature-symbol">: </span><a href="RequestContext.html" class="tsd-signature-type">RequestContext</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TInput</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><a href="../globals.html#RequestModification" class="tsd-signature-type">RequestModification</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TInput</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TExt</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">PromiseLike</span><span class="tsd-signature-symbol">&lt;</span><a href="../globals.html#RequestModification" class="tsd-signature-type">RequestModification</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TInput</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TExt</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">Modification&lt;TInput, TExt&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, context<span class="tsd-signature-symbol">: </span><a href="@hatsy_hatsy_core.RequestContext.html" class="tsd-signature-type">RequestContext</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TInput</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><a href="@hatsy_hatsy_core.html#RequestModification" class="tsd-signature-type">RequestModification</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TInput</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TExt</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">PromiseLike</span><span class="tsd-signature-symbol">&lt;</span><a href="@hatsy_hatsy_core.html#RequestModification" class="tsd-signature-type">RequestModification</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TInput</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TExt</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/d2115f2/src/http/middleware.ts#L52">hatsy/hatsy/src/http/middleware.ts:52</a></li>
+							<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/8a6b683/src/http/middleware.ts#L50">hatsy/hatsy/src/http/middleware.ts:50</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -107,7 +110,7 @@
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
 					<ul class="tsd-type-parameters">
 						<li>
-							<h4>TInput<span class="tsd-signature-symbol">: </span><a href="HttpMeans.html" class="tsd-signature-type">HttpMeans</a></h4>
+							<h4>TInput<span class="tsd-signature-symbol">: </span><a href="@hatsy_hatsy.HttpMeans.html" class="tsd-signature-type">HttpMeans</a></h4>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>A type of input HTTP request processing means.</p>
@@ -128,7 +131,7 @@
 						<ul class="tsd-parameters">
 							<li class="tsd-parameter-signature">
 								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias">
-									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, context<span class="tsd-signature-symbol">: </span><a href="RequestContext.html" class="tsd-signature-type">RequestContext</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TInput</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../globals.html#RequestModification" class="tsd-signature-type">RequestModification</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TInput</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TExt</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">PromiseLike</span><span class="tsd-signature-symbol">&lt;</span><a href="../globals.html#RequestModification" class="tsd-signature-type">RequestModification</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TInput</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TExt</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, context<span class="tsd-signature-symbol">: </span><a href="@hatsy_hatsy_core.RequestContext.html" class="tsd-signature-type">RequestContext</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TInput</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="@hatsy_hatsy_core.html#RequestModification" class="tsd-signature-type">RequestModification</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TInput</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TExt</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">PromiseLike</span><span class="tsd-signature-symbol">&lt;</span><a href="@hatsy_hatsy_core.html#RequestModification" class="tsd-signature-type">RequestModification</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TInput</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TExt</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
 								</ul>
 								<ul class="tsd-descriptions">
 									<li class="tsd-description">
@@ -140,7 +143,7 @@
 												<h5>this: <span class="tsd-signature-type">void</span></h5>
 											</li>
 											<li>
-												<h5>context: <a href="RequestContext.html" class="tsd-signature-type">RequestContext</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TInput</span><span class="tsd-signature-symbol">&gt;</span></h5>
+												<h5>context: <a href="@hatsy_hatsy_core.RequestContext.html" class="tsd-signature-type">RequestContext</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TInput</span><span class="tsd-signature-symbol">&gt;</span></h5>
 												<div class="tsd-comment tsd-typography">
 													<div class="lead">
 														<p>HTTP request processing context the middleware received request and response from.</p>
@@ -148,7 +151,7 @@
 												</div>
 											</li>
 										</ul>
-										<h4 class="tsd-returns-title">Returns <a href="../globals.html#RequestModification" class="tsd-signature-type">RequestModification</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TInput</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TExt</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">PromiseLike</span><span class="tsd-signature-symbol">&lt;</span><a href="../globals.html#RequestModification" class="tsd-signature-type">RequestModification</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TInput</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TExt</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
+										<h4 class="tsd-returns-title">Returns <a href="@hatsy_hatsy_core.html#RequestModification" class="tsd-signature-type">RequestModification</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TInput</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TExt</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">PromiseLike</span><span class="tsd-signature-symbol">&lt;</span><a href="@hatsy_hatsy_core.html#RequestModification" class="tsd-signature-type">RequestModification</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TInput</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">TExt</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
 										<p>Extracted request modification or a promise-like instance resolving to it.</p>
 									</li>
 								</ul>
@@ -162,12 +165,12 @@
 					<div class="tsd-signature tsd-kind-icon">Next<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, error<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/d2115f2/src/http/middleware.ts#L37">hatsy/hatsy/src/http/middleware.ts:37</a></li>
+							<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/8a6b683/src/http/middleware.ts#L35">hatsy/hatsy/src/http/middleware.ts:35</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>A signature of the function the <a href="Middleware.html">middleware</a> may call to delegate request processing
+							<p>A signature of the function the <a href="@hatsy_hatsy.Middleware.html">middleware</a> may call to delegate request processing
 							or report error with.</p>
 						</div>
 					</div>
@@ -211,30 +214,15 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
-					<li class=" tsd-kind-namespace tsd-has-type-parameter">
-						<a href="HttpMeans.html">Http<wbr>Means</a>
-					</li>
-					<li class="current tsd-kind-namespace">
-						<a href="Middleware.html">Middleware</a>
-					</li>
-					<li class=" tsd-kind-namespace tsd-has-type-parameter">
-						<a href="RequestContext.html">Request<wbr>Context</a>
-					</li>
-					<li class=" tsd-kind-namespace tsd-has-type-parameter">
-						<a href="RequestProcessor.html">Request<wbr>Processor</a>
-					</li>
-					<li class=" tsd-kind-namespace tsd-has-type-parameter">
-						<a href="RouterConfig.html">Router<wbr>Config</a>
-					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-type-alias tsd-parent-kind-namespace tsd-has-type-parameter">
-						<a href="Middleware.html#Modification" class="tsd-kind-icon">Modification</a>
+						<a href="@hatsy_hatsy.Middleware.html#Modification" class="tsd-kind-icon">Modification</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-namespace">
-						<a href="Middleware.html#Next" class="tsd-kind-icon">Next</a>
+						<a href="@hatsy_hatsy.Middleware.html#Next" class="tsd-kind-icon">Next</a>
 					</li>
 				</ul>
 			</nav>
@@ -246,18 +234,19 @@
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-namespace"><span class="tsd-kind-icon">Namespace</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
 			</ul>
 		</div>
 	</div>

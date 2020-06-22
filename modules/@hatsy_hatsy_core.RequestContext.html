@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>ErrorMeans | Hatsy</title>
+	<title>RequestContext | Hatsy</title>
 	<meta name="description" content="Documentation for Hatsy">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,10 +54,13 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="ErrorMeans.html">ErrorMeans</a>
+					<a href="@hatsy_hatsy_core.html">@hatsy/hatsy/core</a>
+				</li>
+				<li>
+					<a href="@hatsy_hatsy_core.RequestContext.html">RequestContext</a>
 				</li>
 			</ul>
-			<h1>Interface ErrorMeans</h1>
+			<h1>Namespace RequestContext&lt;TMeans&gt;</h1>
 		</div>
 	</div>
 </header>
@@ -67,17 +70,24 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Error processing means.</p>
+						<p>Request processing context.</p>
 					</div>
-					<p>A context with these means is created once error is thrown by one of the handlers right before passing it to error
-					handler.</p>
+					<p>It is passed to <a href="@hatsy_hatsy_core.html#RequestHandler">request processing handler</a>. It the necessary means. The handler can either
+					respond by these means, or delegate processing to the <a href="../interfaces/@hatsy_hatsy_core.RequestContext.Agent.html#next">next handler</a>.</p>
+					<p>The context instance is immutable. The request processing means it contains can be <a href="@hatsy_hatsy_core.html#RequestModification">modified</a> or even extended when delegating request processing to the <a href="../interfaces/@hatsy_hatsy_core.RequestContext.Agent.html#next">next handler</a>
+					by creating another context based on original one.</p>
 				</div>
 			</section>
-			<section class="tsd-panel tsd-hierarchy">
-				<h3>Hierarchy</h3>
-				<ul class="tsd-hierarchy">
+			<section class="tsd-panel tsd-type-parameters">
+				<h3>Type parameters</h3>
+				<ul class="tsd-type-parameters">
 					<li>
-						<span class="target">ErrorMeans</span>
+						<h4>TMeans</h4>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Request processing means of this context.</p>
+							</div>
+						</div>
 					</li>
 				</ul>
 			</section>
@@ -86,29 +96,11 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Properties</h3>
+							<h3>Interfaces</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="ErrorMeans.html#error" class="tsd-kind-icon">error</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter"><a href="../interfaces/@hatsy_hatsy_core.RequestContext.Agent.html" class="tsd-kind-icon">Agent</a></li>
 							</ul>
 						</section>
-					</div>
-				</section>
-			</section>
-			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="error" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> error</h3>
-					<div class="tsd-signature tsd-kind-icon">error<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/d2115f2/src/core/error.means.ts#L18">hatsy/hatsy/src/core/error.means.ts:18</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Error thrown.</p>
-						</div>
 					</div>
 				</section>
 			</section>
@@ -123,18 +115,9 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-				</ul>
-				<ul class="current">
-					<li class="current tsd-kind-interface">
-						<a href="ErrorMeans.html" class="tsd-kind-icon">Error<wbr>Means</a>
-						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="ErrorMeans.html#error" class="tsd-kind-icon">error</a>
-							</li>
-						</ul>
+					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
+						<a href="../interfaces/@hatsy_hatsy_core.RequestContext.Agent.html" class="tsd-kind-icon">Agent</a>
 					</li>
-				</ul>
-				<ul class="after-current">
 				</ul>
 			</nav>
 		</div>
@@ -145,18 +128,19 @@
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-namespace"><span class="tsd-kind-icon">Namespace</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
 			</ul>
 		</div>
 	</div>
