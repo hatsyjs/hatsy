@@ -2,26 +2,24 @@
  * @packageDocumentation
  * @module @hatsy/hatsy
  */
-import { ErrorMeans, RequestContext } from '../../core';
+import { STATUS_CODES } from 'http';
+import { ErrorMeans, RequestContext, RequestHandler } from '../../core';
+import { dispatchByAccepted } from '../dispatch';
 import { HttpError } from '../http-error';
 import { HttpMeans } from '../http.means';
-import { escapeHtml } from '../util';
+import { escapeHtml, HTML__MIME, JSON__MIME, TextJSON__MIME } from '../util';
 import { RenderMeans } from './render.means';
 import { Rendering } from './rendering.capability';
 
 /**
  * @internal
  */
-function renderHttpErrorPage(
-    {
-      error,
-      response,
-      renderHtml,
-    }: RequestContext<HttpMeans & RenderMeans & ErrorMeans>,
-): void {
+function errorDetails(
+    { error, response }: RequestContext<HttpMeans & ErrorMeans>,
+): { code: number, message?: string, details?: string } {
 
-  let message: string;
-  let details: string;
+  let message: string | undefined;
+  let details: string | undefined;
 
   if (error instanceof HttpError) {
     response.statusCode = error.statusCode;
@@ -30,26 +28,39 @@ function renderHttpErrorPage(
 
     if (statusMessage) {
       response.statusMessage = statusMessage;
-      message = ` ${escapeHtml(statusMessage)}`;
+      message = statusMessage;
+    } else {
+      message = STATUS_CODES[error.statusCode];
     }
-    message = escapeHtml(statusMessage);
-    details = `<p>${escapeHtml(error.details)}</p>`;
+    details = error.details;
   } else {
     response.statusCode = 500;
-    message = ' Internal Server Error';
-    details = '';
+    message = 'Internal Server Error';
   }
 
-  renderHtml(
+  return { code: response.statusCode, message, details };
+}
+
+/**
+ * @internal
+ */
+function renderHtmlError(
+    context: RequestContext<HttpMeans & RenderMeans & ErrorMeans>,
+): void {
+
+  const details = errorDetails(context);
+  const message = escapeHtml(details.message);
+
+  context.renderHtml(
       `<!DOCTYPE html>
 <html lang="en">
 <head>
-<title>ERROR ${response.statusCode}${message}</title>
+<title>ERROR ${details.code} ${message}</title>
 </head>
 <body>
-<h1><strong>ERROR ${response.statusCode}</strong>${message}</h1>
+<h1><strong>ERROR ${details.code}</strong> ${message}</h1>
 <hr/>
-${details}
+${escapeHtml(details.details)}
 </body>
 </html>
 `,
@@ -57,14 +68,27 @@ ${details}
 }
 
 /**
+ * @internal
+ */
+function renderJsonError(context: RequestContext<HttpMeans & RenderMeans & ErrorMeans>): void {
+  context.renderJson({ error: errorDetails(context) });
+}
+
+/**
  * HTTP request processing error handler that renders HTML page with error info.
  *
  * Threats {@link HttpError HTTP status error} as HTTP status code to set for error page.
  *
- * @param context  HTTP error processing context.
- *
- * @returns New HTTP request handler.
+ * Renders either JSON or HTML error page.
  */
-export async function renderHttpError(context: RequestContext<HttpMeans & ErrorMeans>): Promise<void> {
-  await context.next(Rendering.for<HttpMeans & ErrorMeans>(renderHttpErrorPage));
-}
+export const renderHttpError: RequestHandler<HttpMeans & ErrorMeans> = (/*#__PURE__*/ Rendering.for(
+    /*#__PURE__*/ dispatchByAccepted<HttpMeans & ErrorMeans & RenderMeans>(
+        {
+          [JSON__MIME]: renderJsonError,
+          [TextJSON__MIME]: renderJsonError,
+          [HTML__MIME]: renderHtmlError,
+          '*/*': renderHtmlError,
+        },
+        renderHtmlError,
+    ),
+));

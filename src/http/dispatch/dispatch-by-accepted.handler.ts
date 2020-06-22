@@ -18,19 +18,19 @@ export interface DispatchMimeTypes<TMeans extends HttpMeans = HttpMeans> {
   /**
    * Produces HTML.
    */
-  'text/html'?: RequestHandlerMethod<this, TMeans>;
+  readonly 'text/html'?: RequestHandlerMethod<this, TMeans>;
 
   /**
    * Produces JSON.
    */
-  'application/json'?: RequestHandlerMethod<this, TMeans>
+  readonly 'application/json'?: RequestHandlerMethod<this, TMeans>
 
   /**
    * Produces any content.
    *
    * This is a fallback handler typically.
    */
-  '*/*'?: RequestHandlerMethod<this, TMeans>
+  readonly '*/*'?: RequestHandlerMethod<this, TMeans>
 
   /**
    * Request processing method with MIME type as its key.
@@ -48,13 +48,17 @@ export interface DispatchMimeTypes<TMeans extends HttpMeans = HttpMeans> {
  *
  * Appends `Vary: Accept` header to the response.
  *
- * Issues 406 (Not Acceptable) error if no matching handler found.
- *
  * [content negotiation]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Content_negotiation
  * [Accept]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept
+ *
+ * @param mimeTypes  Request processing handlers for accepted MIME types.
+ * @param fallback  Fallback request handler to call when negotiation failed. Issues 406 (Not Acceptable) by default.
+ *
+ * @returns New HTTP request processing handler.
  */
 export function dispatchByAccepted<TMeans extends HttpMeans>(
     mimeTypes: DispatchMimeTypes<TMeans>,
+    fallback: RequestHandler<TMeans> = () => Promise.reject(new HttpError(406)),
 ): RequestHandler<TMeans> {
 
   const negotiator = httpMimeNegotiator(mimeTypes);
@@ -64,12 +68,11 @@ export function dispatchByAccepted<TMeans extends HttpMeans>(
     const { accept = '*/*' } = request.headers;
     const handler = negotiator(accept);
 
-    if (!handler) {
-      return Promise.reject(new HttpError(406));
+    if (handler) {
+      addResponseHeader(response, 'Vary', 'Accept');
+      await next(handler.bind(mimeTypes));
+    } else {
+      await next(fallback);
     }
-
-    addResponseHeader(response, 'Vary', 'Accept');
-
-    await next(handler.bind(mimeTypes));
   };
 }
