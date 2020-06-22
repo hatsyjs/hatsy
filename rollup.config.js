@@ -9,6 +9,7 @@ import typescript from 'typescript';
 export default {
   input: {
     hatsy: './src/index.ts',
+    'hatsy.impl': './src/impl/index.ts',
     'hatsy.core': './src/core/index.ts',
     'hatsy.testing': './src/testing/index.ts',
   },
@@ -33,9 +34,6 @@ export default {
     }
     if (id.startsWith(path.join(__dirname, 'src', 'impl') + path.sep)) {
       return 'hatsy.impl';
-    }
-    if (id.startsWith(path.join(__dirname, 'src', 'http') + path.sep)) {
-      return 'hatsy.http';
     }
     return 'hatsy';
   },
