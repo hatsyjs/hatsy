@@ -1,15 +1,14 @@
-import { readAll } from '../../impl';
-import { suppressedLog, testServer, TestServer } from '../../spec';
+import { suppressedLog, TestHttpServer } from '../../testing';
 import { httpListener } from '../http-listener';
 import { Rendering } from '../render';
 import { JsonParsing } from './json-parsing.capability';
 
 describe('JsonParsing', () => {
 
-  let server: TestServer;
+  let server: TestHttpServer;
 
   beforeAll(async () => {
-    server = await testServer();
+    server = await TestHttpServer.start();
   });
   afterAll(async () => {
     await server.stop();
@@ -19,7 +18,7 @@ describe('JsonParsing', () => {
     server.listener.mockImplementation(
         httpListener(
             {
-              log: suppressedLog(),
+              log: suppressedLog,
             },
             Rendering
                 .and(JsonParsing)
@@ -42,13 +41,13 @@ describe('JsonParsing', () => {
         },
     );
 
-    expect(JSON.parse(await readAll(response))).toEqual({ request: { text: 'hello' } });
+    expect(JSON.parse(await response.body())).toEqual({ request: { text: 'hello' } });
   });
   it('transforms JSON body form', async () => {
     server.listener.mockImplementation(
         httpListener(
             {
-              log: suppressedLog(),
+              log: suppressedLog,
             },
             Rendering
                 .and(JsonParsing.withBody(json => ({ json })))
@@ -68,7 +67,7 @@ describe('JsonParsing', () => {
         },
     );
 
-    expect(JSON.parse(await readAll(response))).toEqual({ json: { text: 'hello' } });
+    expect(JSON.parse(await response.body())).toEqual({ json: { text: 'hello' } });
   });
   it('processes JSON body with text/json content type', async () => {
 
@@ -82,7 +81,7 @@ describe('JsonParsing', () => {
         },
     );
 
-    expect(JSON.parse(await readAll(response))).toEqual({ request: { text: 'hello' } });
+    expect(JSON.parse(await response.body())).toEqual({ request: { text: 'hello' } });
   });
   it('processes JSON body with text/plain content type', async () => {
 
@@ -96,13 +95,13 @@ describe('JsonParsing', () => {
         },
     );
 
-    expect(JSON.parse(await readAll(response))).toEqual({ request: { text: 'hello' } });
+    expect(JSON.parse(await response.body())).toEqual({ request: { text: 'hello' } });
   });
   it('processes JSON body without content type', async () => {
 
     const response = await server.post('/test', `{ "text": "hello" }`);
 
-    expect(JSON.parse(await readAll(response))).toEqual({ request: { text: 'hello' } });
+    expect(JSON.parse(await response.body())).toEqual({ request: { text: 'hello' } });
   });
   it('responds with 415 (Unsupported Media Type) with unsupported request type', async () => {
 

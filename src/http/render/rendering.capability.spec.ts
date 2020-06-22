@@ -1,15 +1,14 @@
 import { TextEncoder } from 'util';
-import { readAll } from '../../impl';
-import { testServer, TestServer } from '../../spec';
+import { TestHttpServer } from '../../testing';
 import { httpListener } from '../http-listener';
 import { Rendering } from './rendering.capability';
 
 describe('Rendering', () => {
 
-  let server: TestServer;
+  let server: TestHttpServer;
 
   beforeAll(async () => {
-    server = await testServer();
+    server = await TestHttpServer.start();
   });
   afterAll(async () => {
     await server.stop();
@@ -30,7 +29,7 @@ describe('Rendering', () => {
     it('renders HTML', async () => {
 
       const response = await server.get('/test');
-      const body = await readAll(response);
+      const body = await response.body();
 
       expect(body).toBe('TEST');
       expect(response.headers['content-type']).toBe('text/html; charset=utf-8');
@@ -42,7 +41,7 @@ describe('Rendering', () => {
       })));
 
       const response = await server.get('/test');
-      const body = await readAll(response);
+      const body = await response.body();
 
       expect(body).toBe('TEST');
       expect(response.headers['content-type']).toBe('text/html; charset=utf-8');
@@ -59,7 +58,7 @@ describe('Rendering', () => {
       ));
 
       const response = await server.get('/test');
-      const body = await readAll(response);
+      const body = await response.body();
 
       expect(body).toBe('TEST');
       expect(response.headers['content-type']).toBe('text/html; charset=utf-8');
@@ -67,8 +66,8 @@ describe('Rendering', () => {
     });
     it('does not render HTML on HEAD request', async () => {
 
-      const response = await server.request('/test', { method: 'head' });
-      const body = await readAll(response);
+      const response = await server.get('/test', { method: 'head' });
+      const body = await response.body();
 
       expect(body).toBe('');
       expect(response.headers['content-type']).toBe('text/html; charset=utf-8');
@@ -87,7 +86,7 @@ describe('Rendering', () => {
     it('renders JSON', async () => {
 
       const response = await server.get('/test');
-      const body = await readAll(response);
+      const body = await response.body();
 
       expect(body).toBe('"TEST"');
       expect(response.headers['content-type']).toBe('application/json; charset=utf-8');
@@ -95,8 +94,8 @@ describe('Rendering', () => {
     });
     it('does not render JSON on HEAD request', async () => {
 
-      const response = await server.request('/test', { method: 'head' });
-      const body = await readAll(response);
+      const response = await server.get('/test', { method: 'head' });
+      const body = await response.body();
 
       expect(body).toBe('');
       expect(response.headers['content-type']).toBe('application/json; charset=utf-8');

@@ -1,5 +1,6 @@
 /**
- * @internal
+ * @packageDocumentation
+ * @module @hatsy/hatsy
  */
 export const HTML__MIME = 'text/html';
 export const JSON__MIME = 'application/json';

@@ -14,7 +14,6 @@ import { RouterMeans } from './router.means';
  *
  * Provides {@link RouterMeans request routing means} for handlers.
  *
- * @category Router
  * @typeparam TInput  A type of request processing means required in order to apply this capability.
  * @typeparam TRoute  Supported route type.
  */
@@ -137,7 +136,5 @@ class RoutingCapability<TInput, TRoute extends PathRoute>
  * Request routing capability instance.
  *
  * Can be used directly (for HTTP requests), or {@link Routing.with configured} first.
- *
- * @category Router
  */
 export const Routing: Routing = (/*#__PURE__*/ new RoutingCapability<HttpMeans, URLRoute>({}));

@@ -12,9 +12,10 @@ import {
   RequestModifier__symbol,
   RequestValueTransformer,
 } from '../../core';
-import { JSON__MIME, readAll, Text__MIME, TextJSON__MIME } from '../../impl';
+import { readAll } from '../../impl';
 import { HttpError } from '../http-error';
 import { HttpMeans } from '../http.means';
+import { JSON__MIME, Text__MIME, TextJSON__MIME } from '../util';
 import { FormDecoding } from './form-decoding.capability';
 
 /**
@@ -36,7 +37,6 @@ const JSON_MIMES: Record<string, number> = {
  *
  * Responds with 400 (Bad Request) status code if failed to parse JSON.
  *
- * @category HTTP
  * @typeparam TInput  Input HTTP request processing means.
  * @typeparam TBody  Request body type.
  */
@@ -110,7 +110,5 @@ class JsonParsingCapability<TInput extends HttpMeans, TBody>
  * JSON request body parsing capability.
  *
  * Parses request body as JSON.
- *
- * @category HTTP
  */
 export const JsonParsing: JsonParsing = new JsonParsingCapability(asis);

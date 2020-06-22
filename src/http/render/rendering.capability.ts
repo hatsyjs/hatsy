@@ -3,8 +3,8 @@
  * @module @hatsy/hatsy
 */
 import { RequestCapability, RequestContext, requestExtension, RequestModification } from '../../core';
-import { HTML__MIME, JSON__MIME } from '../../impl';
 import { HttpMeans } from '../http.means';
+import { HTML__MIME, JSON__MIME } from '../util';
 import { RenderMeans } from './render.means';
 
 /**
@@ -54,7 +54,5 @@ class RenderingCapability extends RequestCapability<HttpMeans, RenderMeans> {
  * HTTP response rendering capability.
  *
  * Provides {@link RenderMeans HTTP response body render means} for handlers.
- *
- * @category HTTP
  */
 export const Rendering: RequestCapability<HttpMeans, RenderMeans> = (/*#__PURE__*/ new RenderingCapability());

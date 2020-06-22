@@ -10,7 +10,6 @@ import { IncomingMessage, ServerResponse } from 'http';
  * When passed to HTTP handler the latter responds by utilizing the passed in [[response]], or delegates to the
  * {@link RequestContext.Agent.next next handler}.
  *
- * @category HTTP
  * @typeparam TRequest  HTTP request type.
  * @typeparam TResponse  HTTP response type.
  */

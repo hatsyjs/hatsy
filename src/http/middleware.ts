@@ -12,8 +12,6 @@ import { HttpMeans } from './http.means';
  * This is a [connect]-style middleware.
  *
  * [connect]: https://github.com/senchalabs/connect
- *
- * @category HTTP
  */
 export type Middleware =
 /**
@@ -65,7 +63,6 @@ export namespace Middleware {
 /**
  * Involves the given `middleware` into HTTP request processing.
  *
- * @category HTTP
  * @typeparam TInput  A type of input HTTP request processing means.
  * @param middleware  Middleware to apply.
  *

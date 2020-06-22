@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * @module @hatsy/hatsy
+ * @module @hatsy/hatsy/core
  */
 import { RequestContext } from './request-context';
 import { RequestModification } from './request-modification';
@@ -9,8 +9,6 @@ import { RequestModification } from './request-modification';
  * A unique key of {@link RequestModifier} or {@link RequestModifierRef} property containing a reference to modifier.
  *
  * Used to distinguish request modifiers from raw request modifications.
- *
- * @category Core
  */
 export const RequestModifier__symbol = (/*#__PURE__*/ Symbol('request-modifier-type'));
 
@@ -20,7 +18,6 @@ export const RequestModifier__symbol = (/*#__PURE__*/ Symbol('request-modifier-t
  * Customizes {@link RequestModification request modification} when {@link RequestContext.Agent.next delegating request
  * processing}.
  *
- * @category Core
  * @typeparam TMeans  A type of request processing means this modifier is able to modify.
  * @typeparam TExt  A type of extension to request processing means applied by this modifier.
  */
@@ -68,7 +65,6 @@ export interface RequestModifier<TInput, TExt = object> extends RequestModifierR
  *
  * This is typically used to prevent the modifier from being applied more than once to the same request.
  *
- * @category Core
  * @typeparam TInput  A type of request processing means the target modifier is able modify.
  * @typeparam TExt  A type of extension to request processing means applied by the target modifier.
  */
@@ -84,7 +80,6 @@ export interface RequestModifierRef<TInput, TExt = object> {
 /**
  * Checks whether the given request modification is request modifier.
  *
- * @category Core
  * @typeparam TMeans  A type of request processing means
  * @param modification  Modification to check.
  *

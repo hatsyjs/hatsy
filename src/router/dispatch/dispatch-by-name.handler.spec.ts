@@ -1,17 +1,16 @@
 import { RequestContext } from '../../core';
 import { httpListener, Rendering, RenderMeans } from '../../http';
-import { readAll } from '../../impl';
-import { suppressedLog, testServer, TestServer } from '../../spec';
+import { suppressedLog, TestHttpServer } from '../../testing';
 import { RouterMeans } from '../router.means';
 import { Routing } from '../routing.capability';
 import { dispatchByName } from './dispatch-by-name.handler';
 
 describe('dispatchByName', () => {
 
-  let server: TestServer;
+  let server: TestHttpServer;
 
   beforeAll(async () => {
-    server = await testServer();
+    server = await TestHttpServer.start();
   });
   afterAll(async () => {
     await server.stop();
@@ -20,7 +19,7 @@ describe('dispatchByName', () => {
   beforeEach(() => {
     server.listener.mockImplementation(httpListener(
         {
-          log: suppressedLog(),
+          log: suppressedLog,
         },
         Rendering
             .and(Routing)
@@ -43,13 +42,13 @@ describe('dispatchByName', () => {
 
     const response = await server.get('/first');
 
-    expect(JSON.parse(await readAll(response))).toEqual({ first: '' });
+    expect(JSON.parse(await response.body())).toEqual({ first: '' });
   });
   it('dispatches to nested route', async () => {
 
     const response = await server.get('/second/third/test.html?param=value');
 
-    expect(JSON.parse(await readAll(response))).toEqual({ test: '?param=value' });
+    expect(JSON.parse(await response.body())).toEqual({ test: '?param=value' });
   });
   it('does not dispatch when no routes match', async () => {
 

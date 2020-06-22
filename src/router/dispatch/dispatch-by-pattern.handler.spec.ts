@@ -10,18 +10,17 @@ import {
 import { RouteMatcher } from '@hatsy/route-match/d.ts/route-matcher';
 import { RequestContext } from '../../core';
 import { HttpForwarding, httpListener, HttpMeans, Rendering, RenderMeans } from '../../http';
-import { readAll } from '../../impl';
-import { testServer, TestServer } from '../../spec';
+import { TestHttpServer } from '../../testing';
 import { RouterMeans } from '../router.means';
 import { Routing } from '../routing.capability';
 import { dispatchByPattern } from './dispatch-by-pattern.handler';
 
 describe('dispatchByPattern', () => {
 
-  let server: TestServer;
+  let server: TestHttpServer;
 
   beforeAll(async () => {
-    server = await testServer();
+    server = await TestHttpServer.start();
   });
   afterAll(async () => {
     await server.stop();
@@ -54,7 +53,7 @@ describe('dispatchByPattern', () => {
 
     const response = await server.get('/test');
 
-    expect(JSON.parse(await readAll(response))).toEqual({ response: 'test' });
+    expect(JSON.parse(await response.body())).toEqual({ response: 'test' });
     expect(wrongHandler).not.toHaveBeenCalled();
   });
   it('follows nested route', async () => {
@@ -77,7 +76,7 @@ describe('dispatchByPattern', () => {
 
     const response = await server.get('/dir/test');
 
-    expect(JSON.parse(await readAll(response))).toEqual({ response: 'test' });
+    expect(JSON.parse(await response.body())).toEqual({ response: 'test' });
     expect(wrongHandler).not.toHaveBeenCalled();
   });
   it('respects route pattern parser override', async () => {
@@ -110,7 +109,7 @@ describe('dispatchByPattern', () => {
 
     const response = await server.get('/dir/test;attr=value');
 
-    expect(JSON.parse(await readAll(response))).toEqual({ response: 'test' });
+    expect(JSON.parse(await response.body())).toEqual({ response: 'test' });
     expect(wrongHandler).not.toHaveBeenCalled();
   });
   it('extracts route tail', async () => {
@@ -127,7 +126,7 @@ describe('dispatchByPattern', () => {
 
     const response = await server.get('/test/nested?param=value');
 
-    expect(JSON.parse(await readAll(response))).toEqual({ route: 'nested?param=value' });
+    expect(JSON.parse(await response.body())).toEqual({ route: 'nested?param=value' });
   });
   it('uses matching route as tail', async () => {
     server.listener.mockImplementation(httpListener(
@@ -143,7 +142,7 @@ describe('dispatchByPattern', () => {
 
     const response = await server.get('/test/nested?param=value');
 
-    expect(JSON.parse(await readAll(response))).toEqual({ route: 'test/nested?param=value' });
+    expect(JSON.parse(await response.body())).toEqual({ route: 'test/nested?param=value' });
   });
   it('extracts route tail with custom function', async () => {
     server.listener.mockImplementation(httpListener(
@@ -171,7 +170,7 @@ describe('dispatchByPattern', () => {
 
     const response = await server.get('/test/nested?param=value');
 
-    expect(JSON.parse(await readAll(response))).toEqual({ route: 'nested?param=value' });
+    expect(JSON.parse(await response.body())).toEqual({ route: 'nested?param=value' });
   });
   it('captures route matches', async () => {
     server.listener.mockImplementation(httpListener(
@@ -194,7 +193,7 @@ describe('dispatchByPattern', () => {
 
     const response = await server.get('/test/nested');
 
-    expect(JSON.parse(await readAll(response))).toEqual([['capture', 'dir', 'test'], ['dirs', 1, 2]]);
+    expect(JSON.parse(await response.body())).toEqual([['capture', 'dir', 'test'], ['dirs', 1, 2]]);
   });
   it('builds custom route', async () => {
     server.listener.mockImplementation(httpListener(Rendering.for(
@@ -213,7 +212,7 @@ describe('dispatchByPattern', () => {
 
     const response = await server.get('/test;attr=val/nested?param=value');
 
-    expect(JSON.parse(await readAll(response))).toEqual({ attr: 'val' });
+    expect(JSON.parse(await response.body())).toEqual({ attr: 'val' });
   });
   it('extracts URL from trusted forwarding info', async () => {
     server.listener.mockImplementation(httpListener(
@@ -240,7 +239,7 @@ describe('dispatchByPattern', () => {
         },
     );
 
-    expect(JSON.parse(await readAll(response))).toEqual({
+    expect(JSON.parse(await response.body())).toEqual({
       ip: '127.0.0.1',
       href: 'https://test.com:8443/test/nested?param=value',
     });

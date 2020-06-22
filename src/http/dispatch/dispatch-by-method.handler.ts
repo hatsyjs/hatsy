@@ -3,12 +3,11 @@
  * @module @hatsy/hatsy
  */
 import { RequestHandler, RequestHandlerMethod } from '../../core';
-import { HttpMeans } from '../../http';
+import { HttpMeans } from '../http.means';
 
 /**
  * Request processing handlers for HTTP request methods.
  *
- * @category Router
  * @typeparam TMeans  Supported HTTP request processing means.
  */
 export interface DispatchMethods<TMeans extends HttpMeans = HttpMeans> {
@@ -60,7 +59,6 @@ export interface DispatchMethods<TMeans extends HttpMeans = HttpMeans> {
 /**
  * Dispatches request processing by HTTP request method.
  *
- * @category Router
  * @typeparam TMeans  Supported HTTP route processing means.
  * @param methods  A map of request processing handlers corresponding to HTTP request methods.
  *

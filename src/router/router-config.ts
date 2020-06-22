@@ -10,7 +10,6 @@ import { RouterMeans } from './router.means';
 /**
  * Router configuration.
  *
- * @category Router
  * @typeparam TMeans  A type of incoming request processing means.
  * @typeparam TRoute  Supported route type.
  */
@@ -45,7 +44,6 @@ export namespace RouterConfig {
   /**
    * Router configuration with default route builder.
    *
-   * @category Router
    * @typeparam TMeans  A type of incoming request processing means.
    * @typeparam TRoute  Supported route type.
    */
@@ -58,7 +56,6 @@ export namespace RouterConfig {
   /**
    * Router configuration with custom route builder.
    *
-   * @category Router
    * @typeparam TMeans  A type of incoming HTTP request processing means.
    */
   export interface CustomRoute<TMeans = HttpMeans, TRoute extends PathRoute = URLRoute> extends Base<TMeans, TRoute> {

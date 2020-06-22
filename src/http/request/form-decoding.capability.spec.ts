@@ -1,15 +1,14 @@
-import { readAll } from '../../impl';
-import { suppressedLog, testServer, TestServer } from '../../spec';
+import { suppressedLog, TestHttpServer } from '../../testing';
 import { httpListener } from '../http-listener';
 import { Rendering } from '../render';
 import { FormDecoding } from './form-decoding.capability';
 
 describe('FormDecoding', () => {
 
-  let server: TestServer;
+  let server: TestHttpServer;
 
   beforeAll(async () => {
-    server = await testServer();
+    server = await TestHttpServer.start();
   });
   afterAll(async () => {
     await server.stop();
@@ -19,7 +18,7 @@ describe('FormDecoding', () => {
     server.listener.mockImplementation(
         httpListener(
             {
-              log: suppressedLog(),
+              log: suppressedLog,
             },
             Rendering
                 .and(FormDecoding)
@@ -42,13 +41,13 @@ describe('FormDecoding', () => {
         },
     );
 
-    expect(JSON.parse(await readAll(response))).toEqual({ request: [['param1', 'value1'], ['param2', 'value2']] });
+    expect(JSON.parse(await response.body())).toEqual({ request: [['param1', 'value1'], ['param2', 'value2']] });
   });
   it('transforms submitted form', async () => {
     server.listener.mockImplementation(
         httpListener(
             {
-              log: suppressedLog(),
+              log: suppressedLog,
             },
             Rendering
                 .and(FormDecoding.withBody(params => Array.from(params.entries())))
@@ -68,7 +67,7 @@ describe('FormDecoding', () => {
         },
     );
 
-    expect(JSON.parse(await readAll(response))).toEqual([['param1', 'value1'], ['param2', 'value2']]);
+    expect(JSON.parse(await response.body())).toEqual([['param1', 'value1'], ['param2', 'value2']]);
   });
   it('processes submitted form with text/plain content type', async () => {
 
@@ -82,7 +81,7 @@ describe('FormDecoding', () => {
         },
     );
 
-    expect(JSON.parse(await readAll(response))).toEqual({ request: [['param1', 'value1'], ['param2', 'value2']] });
+    expect(JSON.parse(await response.body())).toEqual({ request: [['param1', 'value1'], ['param2', 'value2']] });
   });
   it('processes submitted form without content type', async () => {
 
@@ -94,7 +93,7 @@ describe('FormDecoding', () => {
         },
     );
 
-    expect(JSON.parse(await readAll(response))).toEqual({ request: [['param1', 'value1'], ['param2', 'value2']] });
+    expect(JSON.parse(await response.body())).toEqual({ request: [['param1', 'value1'], ['param2', 'value2']] });
   });
   it('responds with 415 (Unsupported Media Type) with unsupported request type', async () => {
 

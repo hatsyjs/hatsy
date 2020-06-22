@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * @module @hatsy/hatsy
+ * @module @hatsy/hatsy/core
  */
 import { RequestContext } from './request-context';
 
@@ -13,7 +13,6 @@ import { RequestContext } from './request-context';
  *
  * The handler may be asynchronous.
  *
- * @category Core
  * @typeparam TMeans  A type of request processing means this handler expects.
  */
 export type RequestHandler<TMeans> =
@@ -33,7 +32,6 @@ export type RequestHandler<TMeans> =
  *
  * This is a {@link RequestHandler request handler} that requires a `this` object.
  *
- * @category Core
  * @typeparam TThis  A type of `this` object.
  * @typeparam TMeans  A type of request processing means this handler expects.
  */
@@ -55,7 +53,6 @@ export type RequestHandlerMethod<TThis, TMeans> =
  * Iterates over the given handlers in order and delegates the request processing to them. It stops when either
  * response is generated, an error thrown, or no handlers left.
  *
- * @category Core
  * @typeparam TMeans  A type of request processing means `handlers` expect.
  * @param handlers  Either single handler or iterable of handlers to delegate request processing to.
  *

@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * @module @hatsy/hatsy
+ * @module @hatsy/hatsy/core
  */
 import { RequestContext } from './request-context';
 
@@ -9,7 +9,6 @@ import { RequestContext } from './request-context';
  *
  * It is used to transform values in context of request processing.
  *
- * @category Core
  * @typeparam TMeans  A type of request processing means.
  * @typeparam TFrom  A type of original, non-transformed value.
  * @typeparam TTo  A type of transformed value.

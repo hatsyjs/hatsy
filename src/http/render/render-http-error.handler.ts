@@ -47,7 +47,6 @@ function renderHttpErrorPage(
  *
  * Threats {@link HttpError HTTP status error} as HTTP status code to set for error page.
  *
- * @category HTTP
  * @param context  HTTP error processing context.
  *
  * @returns New HTTP request handler.

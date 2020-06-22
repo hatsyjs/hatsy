@@ -1,15 +1,17 @@
 import { RequestContext } from '../../core';
-import { httpListener, HttpMeans, Rendering, RenderMeans } from '../../http';
-import { addResponseHeader, readAll } from '../../impl';
-import { suppressedLog, testServer, TestServer } from '../../spec';
+import { suppressedLog, TestHttpServer } from '../../testing';
+import { httpListener } from '../http-listener';
+import { HttpMeans } from '../http.means';
+import { Rendering, RenderMeans } from '../render';
+import { addResponseHeader } from '../util';
 import { dispatchByAccepted } from './dispatch-by-accepted.handler';
 
 describe('dispatchByAccepted', () => {
 
-  let server: TestServer;
+  let server: TestHttpServer;
 
   beforeAll(async () => {
-    server = await testServer();
+    server = await TestHttpServer.start();
   });
   afterAll(async () => {
     await server.stop();
@@ -18,7 +20,7 @@ describe('dispatchByAccepted', () => {
   beforeEach(() => {
     server.listener.mockImplementation(httpListener(
         {
-          log: suppressedLog(),
+          log: suppressedLog,
         },
         Rendering
             .for(dispatchByAccepted({
@@ -49,7 +51,7 @@ describe('dispatchByAccepted', () => {
         },
     );
 
-    expect(await readAll(response)).toContain('HTML');
+    expect(await response.body()).toContain('HTML');
     expect(response.headers.vary).toBe('Accept');
   });
   it('dispatches to preferred MIME', async () => {
@@ -61,14 +63,14 @@ describe('dispatchByAccepted', () => {
         },
     );
 
-    expect(JSON.parse(await readAll(response))).toEqual({ response: 'json' });
+    expect(JSON.parse(await response.body())).toEqual({ response: 'json' });
     expect(response.headers.vary).toBe('Accept');
   });
   it('dispatches to fallback', async () => {
 
     const response = await server.get('/test');
 
-    expect(JSON.parse(await readAll(response))).toEqual({ response: 'fallback' });
+    expect(JSON.parse(await response.body())).toEqual({ response: 'fallback' });
     expect(response.headers.vary).toBe('Accept, Accept-Language');
   });
   it('sends with 406 (No Acceptable) when no matching handler found', async () => {

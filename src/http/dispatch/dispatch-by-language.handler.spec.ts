@@ -1,14 +1,14 @@
-import { httpListener, Rendering } from '../../http';
-import { readAll } from '../../impl';
-import { suppressedLog, testServer, TestServer } from '../../spec';
+import { suppressedLog, TestHttpServer } from '../../testing';
+import { httpListener } from '../http-listener';
+import { Rendering } from '../render';
 import { dispatchByLanguage } from './dispatch-by-language.handler';
 
 describe('dispatchByLanguage', () => {
 
-  let server: TestServer;
+  let server: TestHttpServer;
 
   beforeAll(async () => {
-    server = await testServer();
+    server = await TestHttpServer.start();
   });
   afterAll(async () => {
     await server.stop();
@@ -17,7 +17,7 @@ describe('dispatchByLanguage', () => {
   beforeEach(() => {
     server.listener.mockImplementation(httpListener(
         {
-          log: suppressedLog(),
+          log: suppressedLog,
         },
         Rendering
             .for(dispatchByLanguage({
@@ -47,7 +47,7 @@ describe('dispatchByLanguage', () => {
         },
     );
 
-    expect(JSON.parse(await readAll(response))).toEqual({ lang: 'en' });
+    expect(JSON.parse(await response.body())).toEqual({ lang: 'en' });
     expect(response.headers.vary).toBe('Accept-Language');
   });
   it('dispatches by preferred language', async () => {
@@ -59,14 +59,14 @@ describe('dispatchByLanguage', () => {
         },
     );
 
-    expect(JSON.parse(await readAll(response))).toEqual({ lang: 'en-US' });
+    expect(JSON.parse(await response.body())).toEqual({ lang: 'en-US' });
     expect(response.headers.vary).toBe('Accept-Language');
   });
   it('dispatches to fallback', async () => {
 
     const response = await server.get('/test');
 
-    expect(JSON.parse(await readAll(response))).toEqual({ lang: 'any' });
+    expect(JSON.parse(await response.body())).toEqual({ lang: 'any' });
     expect(response.headers.vary).toBe('Accept-Language');
   });
   it('sends with 406 (No Acceptable) when no matching handler found', async () => {

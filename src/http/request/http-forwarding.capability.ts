@@ -21,8 +21,6 @@ import { HttpMeans } from '../http.means';
  * addressing info} accordingly.
  *
  * The proxy forwarding information is not trusted by default.
- *
- * @category HTTP
  */
 export interface HttpForwarding extends RequestCapability<HttpMeans> {
 
@@ -76,7 +74,5 @@ class HttpForwardingCapability extends RequestCapability<HttpMeans> implements H
  * HTTP proxy forwarding capability.
  *
  * Can be used directly, or {@link HttpForwarding.with configured} first.
- *
- * @category Core
  */
 export const HttpForwarding: HttpForwarding = (/*#__PURE__*/ new HttpForwardingCapability({}));

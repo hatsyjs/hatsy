@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * @module @hatsy/hatsy
+ * @module @hatsy/hatsy/core
  */
 import { RequestCapabilities } from './request-capabilities';
 import { RequestContext } from './request-context';
@@ -16,7 +16,6 @@ import { RequestModifier, RequestModifier__symbol } from './request-modifier';
  *
  * Request processing capabilities could be be {@link RequestCapabilities combined}.
  *
- * @category Core
  * @typeparam TInput  A type of request processing means required in order to apply this capability.
  * @typeparam TExt  A type of extension to request processing means this capability applies.
  */

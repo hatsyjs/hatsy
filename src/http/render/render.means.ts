@@ -9,8 +9,6 @@
  * directly.
  *
  * All `renderXXX` methods write `Content-Length` header. They skip writing content body when request method is `HEAD`.
- *
- * @category HTTP
  */
 export interface RenderMeans {
 

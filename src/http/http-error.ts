@@ -8,8 +8,6 @@
  * HTTP request processing handlers may raise this error. The {@link renderHttpError error handler} would render
  * corresponding error page then.
  *
- * @category HTTP
- *
  * @see HttpConfig.errorHandler
  */
 export class HttpError extends Error {

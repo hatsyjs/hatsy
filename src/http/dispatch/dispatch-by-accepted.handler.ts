@@ -4,13 +4,13 @@
  */
 import { httpMimeNegotiator } from '@hatsy/http-header-value/headers';
 import { RequestHandler, RequestHandlerMethod } from '../../core';
-import { HttpError, HttpMeans } from '../../http';
-import { addResponseHeader } from '../../impl';
+import { HttpError } from '../http-error';
+import { HttpMeans } from '../http.means';
+import { addResponseHeader } from '../util';
 
 /**
  * Request processing handlers for accepted MIME types.
  *
- * @category Router
  * @typeparam TMeans  Supported HTTP request processing means.
  */
 export interface DispatchMimeTypes<TMeans extends HttpMeans = HttpMeans> {
@@ -52,8 +52,6 @@ export interface DispatchMimeTypes<TMeans extends HttpMeans = HttpMeans> {
  *
  * [content negotiation]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Content_negotiation
  * [Accept]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept
- *
- * @category Router
  */
 export function dispatchByAccepted<TMeans extends HttpMeans>(
     mimeTypes: DispatchMimeTypes<TMeans>,

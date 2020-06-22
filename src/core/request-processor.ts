@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * @module @hatsy/hatsy
+ * @module @hatsy/hatsy/core
  */
 import { RequestContext } from './request-context';
 import { RequestHandler, RequestHandlerMethod } from './request-handler';
@@ -12,7 +12,6 @@ import { isRequestModifier, RequestModifier, RequestModifier__symbol, RequestMod
  *
  * Can be constructed by {@link requestProcessor} function.
  *
- * @category Core
  * @typeparam TMeans  A type of initial request processing means.
  */
 export type RequestProcessor<TMeans> =
@@ -65,7 +64,6 @@ export namespace RequestProcessor {
 /**
  * Builds a request processor.
  *
- * @category Core
  * @typeparam TMeans  A type of initial request processing means.
  * @param config  Request processor configuration.
  *

@@ -12,9 +12,10 @@ import {
   RequestModification,
   RequestValueTransformer,
 } from '../../core';
-import { readAll, Text__MIME, URLEncoded__MIME } from '../../impl';
+import { readAll } from '../../impl';
 import { HttpError } from '../http-error';
 import { HttpMeans } from '../http.means';
+import { Text__MIME, URLEncoded__MIME } from '../util';
 
 /**
  * @internal
@@ -33,7 +34,6 @@ const URL_ENCODED_MIMES: Record<string, number> = {
  * Responds with 415 (Unsupported Media Type) status code if request has content type specified, and it is not
  * `application/x-www-form-urlencoded` or `text/plain`.
  *
- * @category HTTP
  * @typeparam TInput  Input HTTP request processing means.
  * @typeparam TBody  Request body type.
  */
@@ -97,7 +97,5 @@ class FormDecodingCapability<TInput extends HttpMeans, TBody>
  *
  * Represents form data submitted as `application/x-www-form-urlencoded` as a {@link RequestBodyMeans.requestBody
  * request body} of type `URLSearchParams`.
- *
- * @category HTTP
  */
 export const FormDecoding: FormDecoding = new FormDecodingCapability(asis);

@@ -1,6 +1,5 @@
 import { noop } from '@proc7ts/primitives';
-import { readAll } from '../impl';
-import { suppressedLog, testServer, TestServer } from '../spec';
+import { suppressedLog, TestHttpServer } from '../testing';
 import { HttpError } from './http-error';
 import { httpListener } from './http-listener';
 import { middleware, Middleware } from './middleware';
@@ -8,10 +7,10 @@ import { Rendering } from './render';
 
 describe('middleware', () => {
 
-  let server: TestServer;
+  let server: TestHttpServer;
 
   beforeAll(async () => {
-    server = await testServer();
+    server = await TestHttpServer.start();
   });
   afterAll(async () => {
     await server.stop();
@@ -38,7 +37,7 @@ describe('middleware', () => {
 
     const response = await server.get('/test');
 
-    expect(JSON.parse(await readAll(response))).toEqual({ response: 'ok' });
+    expect(JSON.parse(await response.body())).toEqual({ response: 'ok' });
     expect(ware).toHaveBeenCalledTimes(1);
   });
   it('applies capabilities after middleware', async () => {
@@ -52,7 +51,7 @@ describe('middleware', () => {
 
     const response = await server.get('/test');
 
-    expect(JSON.parse(await readAll(response))).toEqual({ response: 'ok' });
+    expect(JSON.parse(await response.body())).toEqual({ response: 'ok' });
     expect(ware).toHaveBeenCalledTimes(1);
   });
   it('allows middleware to error', async () => {
@@ -60,7 +59,7 @@ describe('middleware', () => {
 
     server.listener.mockImplementation(httpListener(
         {
-          log: suppressedLog(),
+          log: suppressedLog,
         },
         middleware(ware).for(noop),
     ));
@@ -82,6 +81,6 @@ describe('middleware', () => {
     const response = await server.get('/test');
 
     expect(response.statusCode).toBe(200);
-    expect(await readAll(response)).toBe('TEST');
+    expect(await response.body()).toBe('TEST');
   });
 });

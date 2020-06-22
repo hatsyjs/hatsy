@@ -4,13 +4,13 @@
  */
 import { httpLanguageNegotiator } from '@hatsy/http-header-value/headers';
 import { RequestHandler, RequestHandlerMethod } from '../../core';
-import { HttpError, HttpMeans } from '../../http';
-import { addResponseHeader } from '../../impl';
+import { HttpError } from '../http-error';
+import { HttpMeans } from '../http.means';
+import { addResponseHeader } from '../util';
 
 /**
  * Request processing handlers for accepted languages.
  *
- * @category Router
  * @typeparam TMeans  Supported HTTP request processing means.
  */
 export interface DispatchLanguages<TMeans extends HttpMeans = HttpMeans> {
@@ -47,8 +47,6 @@ export interface DispatchLanguages<TMeans extends HttpMeans = HttpMeans> {
  *
  * [content negotiation]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Content_negotiation
  * [Accept-Language]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language
- *
- * @category Router
  */
 export function dispatchByLanguage<TMeans extends HttpMeans>(
     languages: DispatchLanguages<TMeans>,

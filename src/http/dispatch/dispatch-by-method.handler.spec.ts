@@ -1,16 +1,16 @@
 import { RequestContext, requestHandler } from '../../core';
-import { httpListener, HttpMeans, Rendering, RenderMeans } from '../../http';
-import { readAll } from '../../impl';
-import { suppressedLog, testServer, TestServer } from '../../spec';
-import { Routing } from '../routing.capability';
+import { suppressedLog, TestHttpServer } from '../../testing';
+import { httpListener } from '../http-listener';
+import { HttpMeans } from '../http.means';
+import { Rendering, RenderMeans } from '../render';
 import { dispatchByMethod } from './dispatch-by-method.handler';
 
 describe('dispatchByName', () => {
 
-  let server: TestServer;
+  let server: TestHttpServer;
 
   beforeAll(async () => {
-    server = await testServer();
+    server = await TestHttpServer.start();
   });
   afterAll(async () => {
     await server.stop();
@@ -30,10 +30,10 @@ describe('dispatchByName', () => {
             })),
     ));
 
-    const response = await server.request('/', { method: 'SEARCH' });
+    const response = await server.get('/', { method: 'SEARCH' });
 
     expect(response.statusCode).toBe(200);
-    expect(JSON.parse(await readAll(response))).toEqual({ response: 'ok' });
+    expect(JSON.parse(await response.body())).toEqual({ response: 'ok' });
   });
   it('dispatches to HEAD', async () => {
     server.listener.mockImplementation(httpListener(
@@ -45,10 +45,10 @@ describe('dispatchByName', () => {
             })),
     ));
 
-    const response = await server.request('/', { method: 'HEAD' });
+    const response = await server.get('/', { method: 'HEAD' });
 
     expect(response.statusCode).toBe(200);
-    expect(await readAll(response)).toBe('');
+    expect(await response.body()).toBe('');
   });
   it('dispatches to GET on HEAD request', async () => {
     server.listener.mockImplementation(httpListener(
@@ -60,10 +60,10 @@ describe('dispatchByName', () => {
             })),
     ));
 
-    const response = await server.request('/', { method: 'HEAD' });
+    const response = await server.get('/', { method: 'HEAD' });
 
     expect(response.statusCode).toBe(200);
-    expect(await readAll(response)).toBe('');
+    expect(await response.body()).toBe('');
   });
   it('dispatches to GET without method specified', async () => {
     server.listener.mockImplementation(httpListener(
@@ -80,18 +80,17 @@ describe('dispatchByName', () => {
             ])),
     ));
 
-    const response = await server.request('/', { method: 'HEAD' });
+    const response = await server.get('/', { method: 'HEAD' });
 
     expect(response.statusCode).toBe(200);
-    expect(await readAll(response)).toBe('');
+    expect(await response.body()).toBe('');
   });
   it('does not dispatch without corresponding handler', async () => {
     server.listener.mockImplementation(httpListener(
         {
-          log: suppressedLog(),
+          log: suppressedLog,
         },
         Rendering
-            .and(Routing)
             .for(dispatchByMethod({
               get({ renderJson }): void {
                 renderJson({ response: 'ok' });
@@ -99,7 +98,7 @@ describe('dispatchByName', () => {
             })),
     ));
 
-    const response = await server.request('/', { method: 'PUT' });
+    const response = await server.get('/', { method: 'PUT' });
 
     expect(response.statusCode).toBe(404);
   });

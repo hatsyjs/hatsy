@@ -25,6 +25,7 @@
   },
   "main": "dist/hatsy.js",
   "module": "dist/hatsy.mjs",
+  "types": "d.ts/index.d.ts",
   "dependencies": {
     "@hatsy/http-header-value": "^3.3.0",
     "@hatsy/route-match": "^1.0.0-dev.4",

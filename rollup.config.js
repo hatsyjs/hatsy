@@ -1,13 +1,17 @@
 import { externalModules } from '@proc7ts/rollup-helpers';
 import commonjs from '@rollup/plugin-commonjs';
 import nodeResolve from '@rollup/plugin-node-resolve';
+import path from 'path';
 import sourcemaps from 'rollup-plugin-sourcemaps';
 import ts from 'rollup-plugin-typescript2';
 import typescript from 'typescript';
-import pkg from './package.json';
 
 export default {
-  input: './src/index.ts',
+  input: {
+    hatsy: './src/index.ts',
+    'hatsy.core': './src/core/index.ts',
+    'hatsy.testing': './src/testing/index.ts',
+  },
   plugins: [
     commonjs(),
     ts({
@@ -20,18 +24,37 @@ export default {
     sourcemaps(),
   ],
   external: externalModules(),
+  manualChunks(id) {
+    if (id.startsWith(path.join(__dirname, 'src', 'testing') + path.sep)) {
+      return 'hatsy.testing';
+    }
+    if (id.startsWith(path.join(__dirname, 'src', 'core') + path.sep)) {
+      return 'hatsy.core';
+    }
+    if (id.startsWith(path.join(__dirname, 'src', 'impl') + path.sep)) {
+      return 'hatsy.impl';
+    }
+    if (id.startsWith(path.join(__dirname, 'src', 'http') + path.sep)) {
+      return 'hatsy.http';
+    }
+    return 'hatsy';
+  },
   output: [
     {
-      file: pkg.main,
       format: 'cjs',
       sourcemap: true,
-      hoistTransitiveImports: true,
+      dir: './dist',
+      entryFileNames: '[name].js',
+      chunkFileNames: `_[name].js`,
+      hoistTransitiveImports: false,
     },
     {
-      file: pkg.module,
       format: 'esm',
       sourcemap: true,
-      hoistTransitiveImports: true,
+      dir: './dist',
+      entryFileNames: '[name].mjs',
+      chunkFileNames: `_[name].mjs`,
+      hoistTransitiveImports: false,
     },
   ],
 };

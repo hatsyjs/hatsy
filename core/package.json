@@ -1,0 +1,5 @@
+{
+  "main": "../dist/hatsy.core.js",
+  "module": "../dist/hatsy.core.mjs",
+  "typings": "../d.ts/core/index.d.ts"
+}

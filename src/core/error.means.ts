@@ -1,14 +1,12 @@
 /**
  * @packageDocumentation
- * @module @hatsy/hatsy
+ * @module @hatsy/hatsy/core
  */
 /**
  * Error processing means.
  *
  * A context with these means is created once error is thrown by one of the handlers right before passing it to error
  * handler.
- *
- * @category Core
  */
 export interface ErrorMeans {
 

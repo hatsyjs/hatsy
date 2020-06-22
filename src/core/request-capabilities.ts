@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * @module @hatsy/hatsy
+ * @module @hatsy/hatsy/core
  */
 import { RequestHandler } from './request-handler';
 
@@ -10,7 +10,6 @@ import { RequestHandler } from './request-handler';
  * It is able to construct a request handler that creates request processing means for another one.
  * Thus the latter handler would receive the necessary means to utilize the provided capabilities.
  *
- * @category Core
  * @typeparam TInput  A type of request processing means required by this capability set.
  * @typeparam TExt  A type of extension to request processing means this capability set applies.
  */
@@ -68,9 +67,6 @@ export namespace RequestCapabilities {
 
 }
 
-/**
- * @category Core
- */
 export const RequestCapabilities = {
 
   /**

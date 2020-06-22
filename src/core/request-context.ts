@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * @module @hatsy/hatsy
+ * @module @hatsy/hatsy/core
  */
 import { RequestHandler } from './request-handler';
 import { RequestModification } from './request-modification';
@@ -16,7 +16,6 @@ import { RequestModifier, RequestModifierRef } from './request-modifier';
  * modified} or even extended when delegating request processing to the {@link RequestContext.Agent.next next handler}
  * by creating another context based on original one.
  *
- * @category Core
  * @typeparam TMeans  Request processing means of this context.
  */
 export type RequestContext<TMeans> = TMeans & RequestContext.Agent<TMeans>;
