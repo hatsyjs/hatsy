@@ -228,7 +228,7 @@ function defaultHttpHandler<TMeans extends HttpMeans>(
   }
   return defaultHandler !== true
       ? defaultHandler
-      : () => Promise.reject(new HttpError(404, 'Not Found'));
+      : () => Promise.reject(new HttpError(404));
 }
 
 /**
@@ -258,11 +258,25 @@ function httpErrorHandler<TMeans extends HttpMeans>(
 function logHttpError(
     { request, log, error }: RequestContext<HttpMeans & ErrorMeans>,
 ): void {
+
+  const report: any[] = [`[${request.method} ${request.url}]`];
+
   if (error instanceof HttpError) {
-    log.error(`[${request.method} ${request.url}]`, `ERROR ${error.message}`);
+    report.push(error.message);
+
+    const { details, reason } = error;
+
+    if (details) {
+      report.push(details);
+    }
+    if (reason) {
+      report.push(reason);
+    }
   } else {
-    log.error(`[${request.method} ${request.url}]`, error);
+    report.push(error);
   }
+
+  log.error(...report);
 }
 
 /**

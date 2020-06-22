@@ -74,7 +74,7 @@ class FormDecodingCapability<TInput extends HttpMeans, TBody>
     const { 'content-type': contentType = Text__MIME } = request.headers;
 
     if (!URL_ENCODED_MIMES[contentType]) {
-      return Promise.reject(new HttpError(415, `${URLEncoded__MIME} request expected`));
+      return Promise.reject(new HttpError(415, { details: `${URLEncoded__MIME} request expected` }));
     }
 
     const params = new URLSearchParams(await readAll(request));

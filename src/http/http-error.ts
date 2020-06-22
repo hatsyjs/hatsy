@@ -13,16 +13,82 @@
 export class HttpError extends Error {
 
   /**
+   * HTTP status message.
+   */
+  readonly statusMessage?: string;
+
+  /**
+   * Error details.
+   *
+   * This will be displayed on error page in addition to error code.
+   */
+  readonly details?: string;
+
+  /**
+   * Arbitrary error reason.
+   *
+   * This is another error typically.
+   */
+  readonly reason?: any;
+
+  /**
    * Constructs HTTP status error.
    *
    * @param statusCode  HTTP status code.
-   * @param statusMessage  HTTP status message.
+   * @param options  HTTP error options.
    */
-  constructor(
-      readonly statusCode: number,
-      readonly statusMessage?: string,
-  ) {
-    super(statusMessage ? `${statusCode} ${statusMessage}` : `${statusCode}`);
+  constructor(readonly statusCode: number, options: HttpError.Options = {}) {
+    super(httpErrorMessage(statusCode, options));
+    this.statusMessage = options.statusMessage;
+    this.details = options.details;
+    this.reason = options.reason;
+  }
+
+}
+
+function httpErrorMessage(
+    statusCode: number,
+    {
+      statusMessage,
+      message = statusMessage ? `${statusCode} ${statusMessage}` : `${statusCode}`,
+    }: HttpError.Options,
+): string {
+  return message;
+}
+
+export namespace HttpError {
+
+  /**
+   * Options for {@link HttpError HTTP error} construction.
+   */
+  export interface Options {
+
+    /**
+     * HTTP status message.
+     */
+    readonly statusMessage?: string,
+
+    /**
+     * Error message.
+     *
+     * @default Constructed by status code and status message.
+     */
+    readonly message?: string;
+
+    /**
+     * Error details.
+     *
+     * This will be displayed on error page in addition to error code.
+     */
+    readonly details?: string;
+
+    /**
+     * Arbitrary error reason.
+     *
+     * This is another error typically.
+     */
+    readonly reason?: any;
+
   }
 
 }

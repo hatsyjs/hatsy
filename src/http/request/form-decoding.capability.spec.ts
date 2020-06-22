@@ -106,6 +106,6 @@ describe('FormDecoding', () => {
     );
 
     expect(response.statusCode).toBe(415);
-    expect(response.statusMessage).toBe('application/x-www-form-urlencoded request expected');
+    expect(await response.body()).toContain('application/x-www-form-urlencoded request expected');
   });
 });
