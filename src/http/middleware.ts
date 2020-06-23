@@ -3,7 +3,7 @@
  * @module @hatsy/hatsy
  */
 import { IncomingMessage, ServerResponse } from 'http';
-import { RequestCapabilities, RequestContext, RequestHandler, RequestModification } from '../core';
+import { RequestCapabilities, RequestContext, RequestHandler } from '../core';
 import { HttpMeans } from './http.means';
 
 /**
@@ -12,8 +12,14 @@ import { HttpMeans } from './http.means';
  * This is a [connect]-style middleware.
  *
  * [connect]: https://github.com/senchalabs/connect
+ *
+ * @typeparam TRequest  Supported HTTP request type.
+ * @typeparam TResponse  Supported HTTP response type.
  */
-export type Middleware =
+export type Middleware<
+    TRequest extends IncomingMessage = IncomingMessage,
+    TResponse extends ServerResponse = ServerResponse,
+    > =
 /**
  * @param request  HTTP request.
  * @param response HTTP response.
@@ -21,8 +27,8 @@ export type Middleware =
  */
     (
         this: void,
-        request: IncomingMessage,
-        response: ServerResponse,
+        request: TRequest,
+        response: TResponse,
         next: Middleware.Next,
     ) => void;
 
@@ -38,26 +44,6 @@ export namespace Middleware {
    */
       (this: void, error?: any) => void;
 
-  /**
-   * A signature of function extracting request modification after middleware execution.
-   *
-   * When middleware modifies the request or response objects such function can be used to extract this modification
-   * to pass it downstream.
-   *
-   * @typeparam TInput  A type of input HTTP request processing means.
-   * @typeparam TExt  A type of request processing means extension applied by middleware.
-   */
-  export type Modification<TInput extends HttpMeans, TExt> =
-  /**
-   * @param context  HTTP request processing context the middleware received request and response from.
-   *
-   * @returns Extracted request modification or a promise-like instance resolving to it.
-   */
-      (
-          this: void,
-          context: RequestContext<TInput>,
-      ) => RequestModification<TInput, TExt> | PromiseLike<RequestModification<TInput, TExt>>;
-
 }
 
 /**
@@ -69,7 +55,7 @@ export namespace Middleware {
  * @returns New request processing capability set that processes HTTP requests by the given `middleware`.
  */
 export function middleware<TInput extends HttpMeans>(
-    middleware: Middleware,
+    middleware: Middleware<TInput['request'], TInput['response']>,
 ): RequestCapabilities<TInput> {
   return RequestCapabilities.of(
       <TMeans extends TInput>(handler: RequestHandler<TMeans>) => async (
