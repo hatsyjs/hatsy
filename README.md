@@ -94,7 +94,7 @@ Non-goals:
 HTTP listener
 -------------
 
-`httpListener([config, ] handler)` function creates a Node.js HTTP listener. It accepts an optional configuration and
+`httpListener([config,] handler)` function creates a Node.js HTTP listener. It accepts an optional configuration and
 a [RequestHandler] to process HTTP requests by.
 
 [HTTP processing configuration] has the following options:
@@ -105,7 +105,7 @@ a [RequestHandler] to process HTTP requests by.
 
 - `defaultHandler` - A request handler to call if other handlers did not respond.
 
-  Issued 404 (Not Found) error by default.
+  Issues 404 (Not Found) error by default.
 
 - `errorHandler` - A request handler to call when error occurred.
 
@@ -173,7 +173,7 @@ async function contextExtender(
 }
 
 /**
- * Accepts extends request processing means. I.e. both HTTP and user info.
+ * Accepts extended request processing means. I.e. both HTTP and user info.
  */
 function greeter({ name, response }: RequestContext<HttpMeans & UserMeans>): void {
   // Respond with HTTP response.
@@ -187,9 +187,9 @@ function greeter({ name, response }: RequestContext<HttpMeans & UserMeans>): voi
 Capabilities
 ------------
 
-Request handlers are everything needed to process requests. However, it is quite typical to add more request processing
-means. The request processing capabilities is a conventional API for the task. They also can be combined to add multiple
-processing means at a time.
+Request handlers are everything needed to process the requests. However, it is quite typical to add more request
+processing means. The request processing capabilities is a conventional API for the task. They also can be combined
+to add multiple processing means at a time.
 
 Some capabilities are:
 
@@ -200,7 +200,7 @@ Some capabilities are:
 - `FormDecoding`.
 
   Decodes `application/x-www-form-urlecoded` request.
-  Extends request context with `RequestBodyMeans` containing `body` property with request body decoded to
+  Extends request context with `RequestBodyMeans` containing `body` property with request body decoded as
   `URLSearchParams` or converted to some other representation.
   
 - `JsonParsing`
@@ -211,10 +211,10 @@ Some capabilities are:
 
 - `Routing` from [@hatsy/router] module.
 
-  Initiates routing to different handlers.
+  Initiates routing.
   Extends request context with `RouterMeans` containing request route used to dispatch to handler(s) matching it.
 
-See the very first example for example of capabilities usage. Here is the explanation:
+See the [very first example] containing capabilities usage. Here is the explanation:
 
 ```typescript
 Routing
@@ -224,6 +224,7 @@ Routing
                         // The handler receives a request context extended by both of them.
 ```
 
+[very first example]: #example
 [@hatsy/router]: https://www.npmjs.com/package/@hatsy/router
 
 
@@ -234,9 +235,9 @@ Dispatchers are handlers that delegate processing to other handlers depending on
 
 The following dispatcher implemented:
 
-- [dispatchByAccepted] dispatches depending on [content negotiation] based on [Accept] request header.
-- [dispatchByLanguage] dispatches depending on [content negotiation] based on [Accept-Language] request header.
-- [dispatchByMethod] dispatches request processing by HTTP request method.   
+- [dispatchByAccepted] dispatches accordingly to [content negotiation] based on [Accept] request header.
+- [dispatchByLanguage] dispatches accordingly to [content negotiation] based on [Accept-Language] request header.
+- [dispatchByMethod] dispatches accordingly to HTTP request method.   
 
 [dispatchByAccepted]: https://hatsyjs.github.io/hatsy/modules/@hatsy_hatsy.html#dispatchByAccepted
 [dispatchByLanguage]: https://hatsyjs.github.io/hatsy/modules/@hatsy_hatsy.html#dispatchByLanguage
