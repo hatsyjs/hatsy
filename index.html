@@ -73,6 +73,187 @@
 					<a href="https://codecov.io/gh/hatsyjs/hatsy"><img src="https://codecov.io/gh/hatsyjs/hatsy/branch/master/graph/badge.svg" alt="codecov"></a>
 					<a href="https://github.com/hatsyjs/hatsy"><img src="https://img.shields.io/static/v1?logo=github&label=GitHub&message=project&color=informational" alt="GitHub Project"></a>
 				<a href="https://hatsyjs.github.io/hatsy/"><img src="https://img.shields.io/static/v1?logo=typescript&label=API&message=docs&color=informational" alt="API Documentation"></a></p>
+				<a href="#example" id="example" style="color: inherit; text-decoration: none;">
+					<h2>Example</h2>
+				</a>
+				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { escapeHtml, httpListener, Rendering } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@hatsy/hatsy&#x27;</span>;
+<span class="hljs-keyword">import</span> { dispatchByName, Routing } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@hatsy/router&#x27;</span>;
+<span class="hljs-keyword">import</span> { createServer } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;http&#x27;</span>;
+
+<span class="hljs-keyword">const</span> server = createServer(httpListener(
+    Routing
+        .and(Rendering)
+        .for(dispatchByName({
+          hello({ route: { url: { searchParams } }, renderHtml }) {
+            renderHtml(
+<span class="hljs-string">`&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;body&gt;Hello, <span class="hljs-subst">${escapeHtml(searchParams.get(<span class="hljs-string">&#x27;name&#x27;</span>) || <span class="hljs-string">&#x27;World&#x27;</span>)}</span>!&lt;/body&gt;
+&lt;/html&gt;
+`</span>            
+            );
+          },            
+        })),
+));
+
+server.listen(<span class="hljs-number">8080</span>);</code></pre>
+				<p>The server above responds with <code>Hello, your-name-here!</code> HTML at <a href="http://localhost:8080/hello?name=your-name-here">http://localhost:8080/hello?name=your-name-here</a></p>
+				<a href="#goals" id="goals" style="color: inherit; text-decoration: none;">
+					<h2>Goals</h2>
+				</a>
+				<p>Hatsy is developed with the following goals in mind:</p>
+				<ul>
+					<li><p>Simple API.</p>
+						<p>Hatsy is a thin layer atop of Node.js HTTP listener.
+							Everything in Hatsy implemented as a <a href="#request-handlers">RequestHandler</a> function.
+						There is no API like application, middleware, etc. They all can be boiled down to handlers.</p>
+						<p>More than that, Hatsy is not strictly bound to Node.js API. The core functionality works with any type of requests.</p>
+					</li>
+					<li><p>First-class TypeScript support.</p>
+						<p>No need in declaration merging.
+						The request context can be extended in a type-safe manner when needed.</p>
+					</li>
+					<li><p>Asynchronous processing.</p>
+						<p>A <a href="#request-handlers">RequestHandler</a> can be either synchronous or asynchronous.</p>
+					</li>
+				</ul>
+				<p>Good to have:</p>
+				<ul>
+					<li><p>Existing middleware support. At least at some level.</p>
+						<p><a href="https://github.com/senchalabs/connect">Connect</a>-style middleware supported. Not ExpressJS one.</p>
+					</li>
+				</ul>
+				<p>Non-goals:</p>
+				<ul>
+					<li><p>HTTP/2, TLS support.</p>
+						<p>The typical place of Node.js-driven HTTP server is behind the forwarding proxy. So, there is no need in these
+						technologies supported at Node.js application level.</p>
+						<p>Such support is still possible however. Everything that works with standard HTTP API will work with TLS or HTTP/2
+						compatibility API. Specific functionality can be added by extending a request context. </p>
+					</li>
+				</ul>
+				<a href="#http-listener" id="http-listener" style="color: inherit; text-decoration: none;">
+					<h2>HTTP listener</h2>
+				</a>
+				<p><code>httpListener([config,] handler)</code> function creates a Node.js HTTP listener. It accepts an optional configuration and
+				a <a href="#request-handlers">RequestHandler</a> to process HTTP requests by.</p>
+				<p><a href="https://hatsyjs.github.io/hatsy/interfaces/@hatsy_hatsy.HttpConfig.html">HTTP processing configuration</a> has the following options:</p>
+				<ul>
+					<li><p><code>log</code> - A <code>Console</code> instance to log messages with.</p>
+						<p><code>console</code> by default.</p>
+					</li>
+					<li><p><code>defaultHandler</code> - A request handler to call if other handlers did not respond.</p>
+						<p>Issues 404 (Not Found) error by default.</p>
+					</li>
+					<li><p><code>errorHandler</code> - A request handler to call when error occurred.</p>
+						<p>By default, handles <code>HttpError</code> with corresponding status code and renders error page (either HTML or JSON).</p>
+					</li>
+				</ul>
+				<a href="#request-handlers" id="request-handlers" style="color: inherit; text-decoration: none;">
+					<h2>Request Handlers</h2>
+				</a>
+				<p>Everything in Hatsy is implemented as a request handler, which is a function accepting a <a href="#request-context">RequestContext</a> as its only
+				parameter. The latter contains all means necessary for request processing.</p>
+				<p>The handler can do the following:</p>
+				<ul>
+					<li>Respond synchronously. E.g. by utilizing HTTP response from request context.</li>
+					<li>Respond asynchronously by returning a promise.</li>
+					<li>Delegate request processing to another handler by calling <code>next()</code> function from request context.</li>
+					<li>Modify or even extend with additional properties the request context for the next handler.</li>
+				</ul>
+				<a href="#request-context" id="request-context" style="color: inherit; text-decoration: none;">
+					<h3>Request Context</h3>
+				</a>
+				<p>By default, HTTP request processing context contains the following properties:</p>
+				<ul>
+					<li><code>request</code> - Node.js HTTP request.</li>
+					<li><code>response</code> - Node.js HTTP response.</li>
+					<li><code>requestAddresses</code> object containing request <code>url</code> and remote <code>ip</code>.</li>
+					<li><code>log</code> - A <code>Console</code> instance to log messages with.</li>
+					<li><code>next()</code> method the handler can use to delegate to another one.</li>
+					<li><code>modifiedBy()</code> method to check whether context modified by the specific modifier.</li>
+				</ul>
+				<p>However, the request handler may require more properties to operate. This is where context extension comes into play:</p>
+				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { HttpMeans, RequestContext } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@hatsy/hatsy&#x27;</span>;
+
+<span class="hljs-comment">/**
+ * This is an extended request processing means containing user info.
+ * 
+ * They are applied by [contentExtender] handler and passed to [greeter] one.
+ */</span>
+<span class="hljs-keyword">interface</span> UserMeans {
+  <span class="hljs-keyword">readonly</span> name: <span class="hljs-built_in">string</span>;
+}
+
+<span class="hljs-comment">/**
+ * Accepts context containing HTTP request processing means (`HttpMeans`).
+ *
+ * Delegates to [greeter] handler and extends its context with the necessary means.
+ */</span>
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">contextExtender</span>(<span class="hljs-params">
+    <span class="hljs-comment">// Every context property, including methods, is suitable for destructuring.</span>
+    { requestAddresses, next }: RequestContext&lt;HttpMeans&gt;,
+</span>): <span class="hljs-title">Promise</span>&lt;<span class="hljs-title">void</span>&gt; </span>{
+  <span class="hljs-comment">// The second parameter contains request context properties that will be added or updated.</span>
+  <span class="hljs-comment">// The rest remain unchanged.</span>
+  <span class="hljs-keyword">await</span> next(greeter, { name: requestAddresses.url.searchParams.get(<span class="hljs-string">&#x27;name&#x27;</span>) || <span class="hljs-string">&#x27;anonymous&#x27;</span> });
+}
+
+<span class="hljs-comment">/**
+ * Accepts extended request processing means. I.e. both HTTP and user info.
+ */</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">greeter</span>(<span class="hljs-params">{ name, response }: RequestContext&lt;HttpMeans &amp; UserMeans&gt;</span>): <span class="hljs-title">void</span> </span>{
+  <span class="hljs-comment">// Respond with HTTP response.</span>
+  <span class="hljs-comment">// Hatsy would detect the handler actually responded, because of the `.end()` method call.</span>
+  <span class="hljs-comment">// Otherwise, Hatsy may try other handlers to process the same request.</span>
+  response.end(<span class="hljs-string">`Hello, <span class="hljs-subst">${name}</span>`</span>);
+}</code></pre>
+				<a href="#capabilities" id="capabilities" style="color: inherit; text-decoration: none;">
+					<h2>Capabilities</h2>
+				</a>
+				<p>Request handlers are everything needed to process the requests. However, it is quite typical to add more request
+					processing means. The request processing capabilities is a conventional API for the task. They also can be combined
+				to add multiple processing means at a time.</p>
+				<p>Some capabilities are:</p>
+				<ul>
+					<li><p><code>Rendering</code>.</p>
+						<p>Extends request context with <code>RenderMeans</code> containing <code>renderHtml()</code> and <code>renderJson()</code> methods.</p>
+					</li>
+					<li><p><code>FormDecoding</code>.</p>
+						<p>Decodes <code>application/x-www-form-urlecoded</code> request.
+							Extends request context with <code>RequestBodyMeans</code> containing <code>body</code> property with request body decoded as
+						<code>URLSearchParams</code> or converted to some other representation.</p>
+					</li>
+					<li><p><code>JsonParsing</code></p>
+						<p>Parses <code>application/json</code> request.
+							Extends request context with <code>RequestBodyMeans</code> containing <code>body</code> property with request body optionally
+						converted to other representation.</p>
+					</li>
+					<li><p><code>Routing</code> from <a href="https://www.npmjs.com/package/@hatsy/router">@hatsy/router</a> module.</p>
+						<p>Initiates routing.
+						Extends request context with <code>RouterMeans</code> containing request route used to dispatch to handler(s) matching it.</p>
+					</li>
+				</ul>
+				<p>See the <a href="#example">very first example</a> containing capabilities usage. Here is the explanation:</p>
+				<pre><code class="language-typescript">Routing
+        .and(Rendering) <span class="hljs-comment">// Combine two capabilities. `Rendering` will be applied after `Routing`.</span>
+                        <span class="hljs-comment">// More capabilities can be combined by chaining `.and()` calls.</span>
+        .for(handler)   <span class="hljs-comment">// Apply capabilities to the handler.</span>
+                        <span class="hljs-comment">// The handler receives a request context extended by both of them.</span></code></pre>
+				<a href="#dispatchers" id="dispatchers" style="color: inherit; text-decoration: none;">
+					<h2>Dispatchers</h2>
+				</a>
+				<p>Dispatchers are handlers that delegate processing to other handlers depending on request.</p>
+				<p>The following dispatcher implemented:</p>
+				<ul>
+					<li><a href="https://hatsyjs.github.io/hatsy/modules/@hatsy_hatsy.html#dispatchByAccepted">dispatchByAccepted</a> dispatches accordingly to <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Content_negotiation">content negotiation</a> based on <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept">Accept</a> request header.</li>
+					<li><a href="https://hatsyjs.github.io/hatsy/modules/@hatsy_hatsy.html#dispatchByLanguage">dispatchByLanguage</a> dispatches accordingly to <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Content_negotiation">content negotiation</a> based on <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language">Accept-Language</a> request header.</li>
+					<li><a href="https://hatsyjs.github.io/hatsy/modules/@hatsy_hatsy.html#dispatchByMethod">dispatchByMethod</a> dispatches accordingly to HTTP request method.   </li>
+				</ul>
+				<a href="#middleware" id="middleware" style="color: inherit; text-decoration: none;">
+					<h2>Middleware</h2>
+				</a>
+				<p><a href="https://github.com/senchalabs/connect">Connect</a>-style middleware can be utilized by <a href="https://hatsyjs.github.io/hatsy/modules/@hatsy_hatsy.html#middleware">middleware</a> function.</p>
 			</div>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
@@ -104,7 +285,6 @@
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
-				<li class="tsd-kind-namespace"><span class="tsd-kind-icon">Namespace</span></li>
 				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
 				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
 				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
