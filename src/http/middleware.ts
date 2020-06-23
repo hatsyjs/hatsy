@@ -9,9 +9,9 @@ import { HttpMeans } from './http.means';
 /**
  * HTTP middleware signature.
  *
- * This is a [connect]-style middleware.
+ * This is a [Connect]-style middleware.
  *
- * [connect]: https://github.com/senchalabs/connect
+ * [Connect]: https://github.com/senchalabs/connect
  *
  * @typeparam TRequest  Supported HTTP request type.
  * @typeparam TResponse  Supported HTTP response type.
