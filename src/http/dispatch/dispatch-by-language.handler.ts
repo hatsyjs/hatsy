@@ -54,7 +54,7 @@ export function dispatchByLanguage<TMeans extends HttpMeans>(
 
   const negotiator = httpLanguageNegotiator(languages);
 
-  return async ({ request, response, next }) => {
+  return ({ request, response, next }) => {
 
     const { 'accept-language': acceptLanguage = '*' } = request.headers;
     const handler = negotiator(acceptLanguage);
@@ -65,6 +65,6 @@ export function dispatchByLanguage<TMeans extends HttpMeans>(
 
     addResponseHeader(response, 'Vary', 'Accept-Language');
 
-    await next(handler.bind(languages));
+    return next(handler.bind(languages));
   };
 }

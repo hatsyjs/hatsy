@@ -25,7 +25,7 @@ export type RequestHandler<TMeans> =
     (
         this: void,
         context: RequestContext<TMeans>,
-    ) => PromiseLike<void> | void;
+    ) => PromiseLike<unknown> | void;
 
 /**
  * Request processing method signature.
@@ -45,7 +45,7 @@ export type RequestHandlerMethod<TThis, TMeans> =
     (
         this: TThis,
         context: RequestContext<TMeans>,
-    ) => PromiseLike<void> | void;
+    ) => PromiseLike<unknown> | void;
 
 /**
  * Builds a request processing handler that delegates request processing to other handlers.

@@ -54,13 +54,9 @@ export abstract class RequestCapability<TInput, TExt = object>
    * @returns New request processing handler.
    */
   for<TMeans extends TInput>(handler: RequestHandler<TMeans & TExt>): RequestHandler<TMeans> {
-    return async ({ next, modifiedBy }) => {
-      if (modifiedBy(this[RequestModifier__symbol])) {
-        await next(handler);
-      } else {
-        await next(handler, this);
-      }
-    };
+    return async ({ next, modifiedBy }) => modifiedBy(this[RequestModifier__symbol])
+        ? next(handler)
+        : next(handler, this);
   }
 
   /**

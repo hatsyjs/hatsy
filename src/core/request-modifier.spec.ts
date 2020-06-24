@@ -54,14 +54,10 @@ describe('RequestModifier', () => {
     expect(JSON.parse(await response.body())).toEqual({ test: 'modified' });
   });
   it('alters subsequent requests', async () => {
-    server.listener.mockImplementation(httpListener(Rendering.for(async ({ next }) => {
-      await next(
-          async ({ next }) => {
-            await next(({ renderJson, test }) => renderJson({ test }), { test: 'another' });
-          },
-          modifier,
-      );
-    })));
+    server.listener.mockImplementation(httpListener(Rendering.for(async ({ next }) => next(
+        ({ next }) => next(({ renderJson, test }) => renderJson({ test }), { test: 'another' }),
+        modifier,
+    ))));
 
     const response = await server.get('/');
 

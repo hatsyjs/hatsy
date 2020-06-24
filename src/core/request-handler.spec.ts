@@ -45,7 +45,7 @@ describe('requestHandler', () => {
     const error = new Error('test');
     const calls: number[] = [];
 
-    const call = async (): Promise<void> => await requestHandler([
+    const call = async (): Promise<unknown> => await requestHandler([
       () => { calls.push(1); },
       () => { calls.push(2); throw error; },
       () => { calls.push(3); },
@@ -57,7 +57,7 @@ describe('requestHandler', () => {
   it('stops handlers execution once response written', async () => {
 
     const calls: number[] = [];
-    const call = async (): Promise<void> => await requestHandler([
+    const call = async (): Promise<unknown> => await requestHandler([
       () => { calls.push(1); },
       () => { calls.push(2); (response as any).writableEnded = true; },
       () => { calls.push(3); },

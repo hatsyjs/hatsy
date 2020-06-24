@@ -147,7 +147,7 @@ function incomingHttpHandler<TRequest extends IncomingMessage, TResponse extends
     onError = reject;
   });
 
-  const incomingHandler: RequestHandler<IncomingHttpMeans<TRequest, TResponse>> = async ({
+  const incomingHandler: RequestHandler<IncomingHttpMeans<TRequest, TResponse>> = ({
     request,
     response,
     next,
@@ -173,7 +173,7 @@ function incomingHttpHandler<TRequest extends IncomingMessage, TResponse extends
       return new URL(url, `${proto}://${host}`);
     });
 
-    await next(
+    return next(
         handler,
         {
           requestAddresses: {
@@ -197,14 +197,14 @@ function incomingHttpHandler<TRequest extends IncomingMessage, TResponse extends
 function fullHttpHandler<TRequest extends IncomingMessage, TResponse extends ServerResponse>(
     config: HttpConfig<HttpMeans<TRequest, TResponse>>,
     handler: RequestHandler<HttpMeans<TRequest, TResponse>>,
-):
-    RequestHandler<HttpMeans<TRequest, TResponse>> {
+): RequestHandler<HttpMeans<TRequest, TResponse>> {
+
   const defaultHandler = defaultHttpHandler(config);
   const errorHandler = httpErrorHandler(config);
 
   return async (
       { next }: RequestContext<HttpMeans<TRequest, TResponse>>,
-  ): Promise<void> => {
+  ) => {
     try {
       if (!await next(handler)) {
         await next(defaultHandler);
@@ -246,9 +246,9 @@ function httpErrorHandler<TMeans extends HttpMeans>(
 
   const onError = errorHandler === true ? renderHttpError : errorHandler;
 
-  return async context => {
+  return context => {
     logHttpError(context);
-    await context.next(onError);
+    return context.next(onError);
   };
 }
 

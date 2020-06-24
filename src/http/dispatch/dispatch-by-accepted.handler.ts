@@ -70,9 +70,9 @@ export function dispatchByAccepted<TMeans extends HttpMeans>(
 
     if (handler) {
       addResponseHeader(response, 'Vary', 'Accept');
-      await next(handler.bind(mimeTypes));
-    } else {
-      await next(fallback);
+      return next(handler.bind(mimeTypes));
     }
+
+    return next(fallback);
   };
 }
