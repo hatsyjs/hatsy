@@ -21,6 +21,15 @@ describe('httpListener', () => {
     server.listener.mockReset();
   });
 
+  let logErrorSpy: jest.SpyInstance;
+
+  beforeEach(() => {
+    logErrorSpy = jest.spyOn(suppressedLog, 'error');
+  });
+  afterEach(() => {
+    logErrorSpy.mockRestore();
+  });
+
   it('invokes handler', async () => {
 
     const handler = jest.fn(({ response }: RequestContext<HttpMeans>) => {
@@ -146,13 +155,14 @@ describe('httpListener', () => {
   it('logs error and invokes provided error handler', async () => {
 
     const error = new Error('test');
-    const log = suppressedLog;
-    const logErrorSpy = jest.spyOn(log, 'error');
     const errorHandler = jest.fn(({ response, error }: RequestContext<ErrorMeans & HttpMeans>) => {
       response.end(`ERROR ${error.message}`);
     });
 
-    server.listener.mockImplementation(httpListener({ log, errorHandler }, () => { throw error; }));
+    server.listener.mockImplementation(httpListener(
+        { log:suppressedLog, errorHandler },
+        () => { throw error; },
+    ));
 
     const response = await server.get('/test');
 
@@ -166,13 +176,14 @@ describe('httpListener', () => {
   it('logs HTTP error and invokes provided error handler', async () => {
 
     const error = new HttpError(404, { details: 'Never Found' });
-    const log = suppressedLog;
-    const logErrorSpy = jest.spyOn(log, 'error');
     const errorHandler = jest.fn(({ response, error }: RequestContext<ErrorMeans & HttpMeans>) => {
       response.end(`ERROR ${error.message} ${error.details}`);
     });
 
-    server.listener.mockImplementation(httpListener({ log, errorHandler }, () => { throw error; }));
+    server.listener.mockImplementation(httpListener(
+        { log: suppressedLog, errorHandler },
+        () => { throw error; },
+    ));
 
     const response = await server.get('/test');
     const body = await response.body();
@@ -187,10 +198,11 @@ describe('httpListener', () => {
   it('logs ERROR when there is no error handler', async () => {
 
     const error = new Error('test');
-    const log = suppressedLog;
-    const logErrorSpy = jest.spyOn(log, 'error');
 
-    server.listener.mockImplementation(httpListener({ log, errorHandler: false }, () => { throw error; }));
+    server.listener.mockImplementation(httpListener(
+        { log: suppressedLog, errorHandler: false },
+        () => { throw error; },
+    ));
 
     const response = await server.get('/test');
 
@@ -200,18 +212,14 @@ describe('httpListener', () => {
   it('logs ERROR when there is neither error, not default handler', async () => {
 
     const error = new Error('test');
-    const log = suppressedLog;
-    const logErrorSpy = jest.spyOn(log, 'error');
     const listener = httpListener(
-        { log, defaultHandler: false, errorHandler: false },
+        { log: suppressedLog, defaultHandler: false, errorHandler: false },
         () => { throw error; },
     );
 
     server.listener.mockImplementation((request, response) => {
       listener(request, response);
-      Promise.resolve().finally(() => {
-        response.end('NO RESPONSE');
-      });
+      response.end('NO RESPONSE');
     });
 
     await server.get('/test');
@@ -223,27 +231,28 @@ describe('httpListener', () => {
   it('logs unhandled errors', async () => {
 
     const error = new Error('test');
-    const log = suppressedLog;
-    const logErrorSpy = jest.spyOn(log, 'error');
     const errorHandler = jest.fn(() => {
       throw error;
     });
+    const whenErrorLogged = new Promise(resolve => {
+      logErrorSpy.mockImplementation(resolve);
+    });
 
     const listener = httpListener(
-        { log, errorHandler },
+        { log: suppressedLog, errorHandler },
         () => { throw error; },
     );
 
     server.listener.mockImplementation((request, response) => {
       listener(request, response);
-      Promise.resolve().finally(() => {
-        response.end('NO RESPONSE');
-      });
+      response.end('NO RESPONSE');
     });
 
     const response = await server.get('/test');
 
     expect(await response.body()).toBe('NO RESPONSE');
+
+    await whenErrorLogged;
     expect(logErrorSpy).toHaveBeenCalledWith('[GET /test]', 'Unhandled error', error);
   });
 
