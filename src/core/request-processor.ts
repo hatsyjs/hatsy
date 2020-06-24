@@ -103,6 +103,7 @@ abstract class RequestProcessorAgent<TBase, TMeans extends TBase> {
 
   abstract modify<TExt>(
       this: void,
+      context: RequestContext<TMeans>,
       modification: RequestModification<TMeans, TExt>,
   ): Promise<RequestModification<TMeans, TExt>>;
 
@@ -135,6 +136,7 @@ class RootRequestProcessorAgent<TMeans> extends RequestProcessorAgent<TMeans, TM
 
   modify<TExt>(
       this: void,
+      _context: RequestContext<TMeans>,
       modification: RequestModification<TMeans, TExt>,
   ): Promise<RequestModification<TMeans, TExt>> {
     return Promise.resolve(modification);
@@ -150,13 +152,16 @@ async function nextRequestProcessorAgent<TBase, TMeans extends TBase, TExt>(
     modification: RequestModification<TMeans, TExt> | RequestModifier<TMeans, TExt>,
 ): Promise<RequestProcessorAgent<TBase, TMeans & TExt>> {
   if (isRequestModifier(modification)) {
-    return new ModifierRequestProcessingAgent(
+    return new ModifierRequestProcessingAgent<TBase, TMeans, TExt>(
         prev,
         modification,
-        await prev.modify(await modification.modification(prev.context)),
+        await prev.modify(prev.context, await modification.modification(prev.context)),
     );
   }
-  return new ModificationRequestProcessorAgent(prev, await prev.modify(modification));
+  return new ModificationRequestProcessorAgent<TBase, TMeans, TExt>(
+      prev,
+      await prev.modify(prev.context, modification),
+  );
 }
 
 /**
@@ -169,6 +174,7 @@ class ModificationRequestProcessorAgent<TBase, TMeans extends TBase, TExt>
 
   readonly modify: <TNext>(
       this: void,
+      context: RequestContext<TMeans & TExt>,
       modification: RequestModification<TMeans & TExt, TNext>,
   ) => Promise<RequestModification<TMeans & TExt, TNext>>;
 
@@ -204,6 +210,7 @@ class ModifierRequestProcessingAgent<TBase, TMeans extends TBase, TExt>
 
   readonly modify: <TNext>(
       this: void,
+      context: RequestContext<TMeans & TExt>,
       modification: RequestModification<TMeans & TExt, TNext>,
   ) => Promise<RequestModification<TMeans & TExt, TNext>>;
 
@@ -220,8 +227,12 @@ class ModifierRequestProcessingAgent<TBase, TMeans extends TBase, TExt>
     super(prev.config);
 
     if (modifier.modifyNext) {
-      this.modify = async <TNext>(mod: RequestModification<TMeans & TExt, TNext>) => prev.modify(
-          modifier.modifyNext!(this.context, mod) as RequestModification<TMeans, TNext>,
+      this.modify = async <TNext>(
+          context: RequestContext<TMeans & TExt>,
+          mod: RequestModification<TMeans & TExt, TNext>,
+      ) => prev.modify(
+          context as RequestContext<TMeans>,
+          modifier.modifyNext!(context, mod) as RequestModification<TMeans, TNext>,
       ) as Promise<RequestModification<TMeans & TExt, TNext>>;
     } else {
       this.modify = prev.modify as this['modify'];
