@@ -172,7 +172,7 @@ class ModifiedRequestProcessorAgent<TBase, TMeans extends TBase, TExt>
 
       const modifier = modification;
 
-      modPromise = Promise.resolve(modifier.modification(prev.context)).then(mod => prev.modify(mod));
+      modPromise = prev.modify(await modifier.modification(prev.context));
 
       if (modifier.modifyNext) {
         modify = async <TNext>(mod: RequestModification<TMeans & TExt, TNext>) => prev.modify(
