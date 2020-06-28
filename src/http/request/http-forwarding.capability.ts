@@ -5,13 +5,7 @@
 import { HttpForwardTrust } from '@hatsy/http-header-value/headers';
 import { HttpAddressRep } from '@hatsy/http-header-value/node';
 import { lazyValue } from '@proc7ts/primitives';
-import {
-  RequestCapability,
-  RequestContext,
-  RequestModification,
-  RequestModifier__symbol,
-  requestUpdate,
-} from '../../core';
+import { RequestCapability, RequestContext, RequestModification, requestUpdate } from '../../core';
 import { HttpMeans } from '../http.means';
 
 /**
@@ -42,10 +36,6 @@ class HttpForwardingCapability extends RequestCapability<HttpMeans> implements H
 
   constructor(private readonly _trust: HttpForwardTrust) {
     super();
-  }
-
-  get [RequestModifier__symbol](): HttpForwarding {
-    return HttpForwarding; // eslint-disable-line @typescript-eslint/no-use-before-define
   }
 
   with(trust: HttpForwardTrust): HttpForwarding {

@@ -9,7 +9,6 @@ import {
   RequestContext,
   requestExtension,
   RequestModification,
-  RequestModifier__symbol,
   RequestValueTransformer,
 } from '../../core';
 import { readAll } from '../../impl';
@@ -67,10 +66,6 @@ class JsonParsingCapability<TInput extends HttpMeans, TBody>
 
   constructor(private readonly _transform: RequestValueTransformer<TInput, any, TBody>) {
     super();
-  }
-
-  get [RequestModifier__symbol](): JsonParsing {
-    return JsonParsing; // eslint-disable-line @typescript-eslint/no-use-before-define
   }
 
   async modification<TMeans extends TInput>(

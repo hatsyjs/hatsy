@@ -6,30 +6,18 @@ import { RequestCapabilities } from './request-capabilities';
 import { RequestContext } from './request-context';
 import { RequestHandler } from './request-handler';
 import { RequestModification } from './request-modification';
-import { RequestModifier, RequestModifier__symbol } from './request-modifier';
 
 /**
  * Request processing capability.
  *
- * This is a {@link RequestModifier request modifier} implementation able to provide request processing means for
- * handlers.
+ * Modifies request processing context in a certain way when delegates to handler.
  *
  * Request processing capabilities could be be {@link RequestCapabilities combined}.
  *
  * @typeparam TInput  A type of request processing means required in order to apply this capability.
  * @typeparam TExt  A type of extension to request processing means this capability applies.
  */
-export abstract class RequestCapability<TInput, TExt = object>
-    implements RequestModifier<TInput, TExt>, RequestCapabilities<TInput, TExt> {
-
-  /**
-   * A reference to request modifier.
-   *
-   * @default `this` instance.
-   */
-  get [RequestModifier__symbol](): RequestModifier<TInput, TExt> {
-    return this;
-  }
+export abstract class RequestCapability<TInput, TExt = object> implements RequestCapabilities<TInput, TExt> {
 
   /**
    * Builds request modification to apply by {@link for handler}.
@@ -54,7 +42,14 @@ export abstract class RequestCapability<TInput, TExt = object>
    * @returns New request processing handler.
    */
   for<TMeans extends TInput>(handler: RequestHandler<TMeans & TExt>): RequestHandler<TMeans> {
-    return async ({ next }) => next(handler, this);
+    return async context => {
+
+      const nextContext = Object.create(null);
+
+      Object.assign(nextContext, context, await this.modification(context));
+
+      return context.next(handler, nextContext);
+    };
   }
 
   /**
