@@ -5,7 +5,7 @@
 import { RequestContext } from './request-context';
 import { RequestHandler, RequestHandlerMethod } from './request-handler';
 import { RequestModification } from './request-modification';
-import { isRequestModifier, RequestModifier, RequestModifier__symbol, RequestModifierRef } from './request-modifier';
+import { isRequestModifier, RequestModifier } from './request-modifier';
 
 /**
  * Generic request processor.
@@ -107,11 +107,6 @@ abstract class RequestProcessorAgent<TBase, TMeans extends TBase> {
       modification: RequestModification<TMeans, TExt>,
   ): Promise<RequestModification<TMeans, TExt>>;
 
-  abstract modifiedBy<TInput, TExt>(
-      this: void,
-      ref: RequestModifierRef<TInput, TExt>,
-  ): RequestContext<TMeans & TInput & TExt> | undefined;
-
 }
 
 /**
@@ -178,23 +173,16 @@ class ModificationRequestProcessorAgent<TBase, TMeans extends TBase, TExt>
       modification: RequestModification<TMeans & TExt, TNext>,
   ) => Promise<RequestModification<TMeans & TExt, TNext>>;
 
-  readonly modifiedBy: <TModifierInput, TModifierExt>(
-      this: void,
-      ref: RequestModifierRef<TModifierInput, TModifierExt>,
-  ) => RequestContext<TMeans & TExt & TModifierInput & TModifierExt> | undefined;
-
   constructor(
       prev: RequestProcessorAgent<TBase, TMeans>,
       modification: RequestModification<TMeans, TExt> | RequestModifier<TMeans, TExt>,
   ) {
     super(prev.config);
     this.modify = prev.modify as this['modify'];
-    this.modifiedBy = prev.modifiedBy as this['modifiedBy'];
     this.context = {
       ...prev.context,
       ...modification,
       next: this.next.bind(this),
-      modifiedBy: this.modifiedBy,
     } as RequestContext<TMeans & TExt>;
   }
 
@@ -214,11 +202,6 @@ class ModifierRequestProcessingAgent<TBase, TMeans extends TBase, TExt>
       modification: RequestModification<TMeans & TExt, TNext>,
   ) => Promise<RequestModification<TMeans & TExt, TNext>>;
 
-  readonly modifiedBy: <TModifierInput, TModifierExt>(
-      this: void,
-      ref: RequestModifierRef<TModifierInput, TModifierExt>,
-  ) => RequestContext<TMeans & TExt & TModifierInput & TModifierExt> | undefined;
-
   constructor(
       prev: RequestProcessorAgent<TBase, TMeans>,
       modifier: RequestModifier<TMeans, TExt>,
@@ -237,18 +220,11 @@ class ModifierRequestProcessingAgent<TBase, TMeans extends TBase, TExt>
     } else {
       this.modify = prev.modify as this['modify'];
     }
-    this.modifiedBy = <TModifierInput, TModifierExt>(
-        ref: RequestModifierRef<TModifierInput, TModifierExt>,
-    ) => (modifier[RequestModifier__symbol] === ref[RequestModifier__symbol]
-            ? this.context
-            : prev.modifiedBy(ref)
-    ) as RequestContext<TMeans & TExt & TModifierInput & TModifierExt> | undefined;
 
     this.context = {
       ...prev.context,
       ...modification,
       next: this.next.bind(this),
-      modifiedBy: this.modifiedBy,
     } as RequestContext<TMeans & TExt>;
   }
 

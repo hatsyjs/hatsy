@@ -142,7 +142,6 @@ By default, HTTP request processing context contains the following properties:
 - `requestAddresses` object containing request `url` and remote `ip`.
 - `log` - A `Console` instance to log messages with.
 - `next()` method the handler can use to delegate to another one.
-- `modifiedBy()` method to check whether context modified by the specific modifier.
 
 However, the request handler may require more properties to operate. This is where context extension comes into play:
 
