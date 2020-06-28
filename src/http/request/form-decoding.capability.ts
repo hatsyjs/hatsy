@@ -9,7 +9,7 @@ import {
   RequestCapability,
   RequestContext,
   requestExtension,
-  RequestModification,
+  RequestHandler,
   RequestValueTransformer,
 } from '../../core';
 import { readAll } from '../../impl';
@@ -66,22 +66,24 @@ class FormDecodingCapability<TInput extends HttpMeans, TBody>
     super();
   }
 
-  async modification<TMeans extends TInput>(
-      context: RequestContext<TMeans>,
-  ): Promise<RequestModification<TMeans, RequestBodyMeans<TBody>>> {
+  for<TMeans extends TInput>(
+      handler: RequestHandler<TMeans & RequestBodyMeans<TBody>>,
+  ): RequestHandler<TMeans> {
+    return async context => {
 
-    const { request } = context;
-    const { 'content-type': contentType = Text__MIME } = request.headers;
+      const { request } = context;
+      const { 'content-type': contentType = Text__MIME } = request.headers;
 
-    if (!URL_ENCODED_MIMES[contentType]) {
-      return Promise.reject(new HttpError(415, { details: `${URLEncoded__MIME} request expected` }));
-    }
+      if (!URL_ENCODED_MIMES[contentType]) {
+        return Promise.reject(new HttpError(415, { details: `${URLEncoded__MIME} request expected` }));
+      }
 
-    const params = new URLSearchParams(await readAll(request));
+      const params = new URLSearchParams(await readAll(request));
 
-    return requestExtension<TMeans, RequestBodyMeans<TBody>>({
-      requestBody: await this._transform(params, context as RequestContext<TInput>),
-    });
+      return context.next(handler, requestExtension<TMeans, RequestBodyMeans<TBody>>({
+        requestBody: await this._transform(params, context as RequestContext<TInput>),
+      }));
+    };
   }
 
   withBody<TMeans extends TInput, TTransformed>(

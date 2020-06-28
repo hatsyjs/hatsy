@@ -5,7 +5,7 @@
 import { HttpForwardTrust } from '@hatsy/http-header-value/headers';
 import { HttpAddressRep } from '@hatsy/http-header-value/node';
 import { lazyValue } from '@proc7ts/primitives';
-import { RequestCapability, RequestContext, RequestModification, requestUpdate } from '../../core';
+import { RequestCapability, RequestHandler, requestUpdate } from '../../core';
 import { HttpMeans } from '../http.means';
 
 /**
@@ -38,24 +38,28 @@ class HttpForwardingCapability extends RequestCapability<HttpMeans> implements H
     super();
   }
 
-  with(trust: HttpForwardTrust): HttpForwarding {
-    return new HttpForwardingCapability(trust);
+  for<TMeans extends HttpMeans>(
+      handler: RequestHandler<TMeans & object>,
+  ): RequestHandler<TMeans> {
+    return ({ request, next }) => {
+
+      const addresses = lazyValue(() => HttpAddressRep.by(request, this._trust));
+
+      return next(handler, requestUpdate<HttpMeans>({
+        requestAddresses: {
+          get url() {
+            return addresses().url;
+          },
+          get ip() {
+            return addresses().ip;
+          },
+        },
+      }));
+    };
   }
 
-  modification<TMeans extends HttpMeans>({ request }: RequestContext<TMeans>): RequestModification<TMeans> {
-
-    const addresses = lazyValue(() => HttpAddressRep.by(request, this._trust));
-
-    return requestUpdate<HttpMeans>({
-      requestAddresses: {
-        get url() {
-          return addresses().url;
-        },
-        get ip() {
-          return addresses().ip;
-        },
-      },
-    });
+  with(trust: HttpForwardTrust): HttpForwarding {
+    return new HttpForwardingCapability(trust);
   }
 
 }

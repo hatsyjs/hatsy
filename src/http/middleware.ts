@@ -3,7 +3,7 @@
  * @module @hatsy/hatsy
  */
 import { IncomingMessage, ServerResponse } from 'http';
-import { RequestCapabilities, RequestContext, RequestHandler } from '../core';
+import { RequestCapability, RequestContext, RequestHandler } from '../core';
 import { HttpMeans } from './http.means';
 
 /**
@@ -52,12 +52,12 @@ export namespace Middleware {
  * @typeparam TInput  A type of input HTTP request processing means.
  * @param middleware  Middleware to apply.
  *
- * @returns New request processing capability set that processes HTTP requests by the given `middleware`.
+ * @returns New request processing capability that processes HTTP requests by the given `middleware`.
  */
 export function middleware<TInput extends HttpMeans>(
     middleware: Middleware<TInput['request'], TInput['response']>,
-): RequestCapabilities<TInput> {
-  return RequestCapabilities.of(
+): RequestCapability<TInput> {
+  return RequestCapability.of(
       <TMeans extends TInput>(handler: RequestHandler<TMeans>) => async (
           { request, response, next }: RequestContext<TMeans>,
       ) => new Promise<void>((resolve, reject) => {
