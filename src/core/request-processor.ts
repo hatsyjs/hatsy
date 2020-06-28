@@ -71,106 +71,43 @@ export namespace RequestProcessor {
 export function requestProcessor<TMeans>(
     config: RequestProcessor.Config<TMeans>,
 ): RequestProcessor<TMeans> {
-  return means => new RootRequestProcessorAgent(config, means).next(context => config.handler(context));
+
+  const handler = config.handler.bind(config);
+
+  return means => {
+
+    const context = { ...means } as RequestContext<TMeans>;
+
+    context.next = nextHandlerCaller(config, context) as RequestContext<TMeans>['next'];
+
+    return config.next(handler, context);
+  };
 }
 
 /**
  * @internal
  */
-abstract class RequestProcessorAgent<TBase, TMeans extends TBase> {
-
-  abstract readonly context: RequestContext<TMeans>;
-
-  protected constructor(readonly config: RequestProcessor.Config<TBase>) {
-  }
-
-  async next<TExt>(
+function nextHandlerCaller<TBase, TMeans extends TBase, TExt>(
+    config: RequestProcessor.Config<TBase>,
+    means: TMeans,
+): (
+    handler: RequestHandler<TMeans & TExt>,
+    modification?: RequestModification<TMeans, TExt>,
+) => Promise<boolean> {
+  return async (
       handler: RequestHandler<TMeans & TExt>,
       modification?: RequestModification<TMeans, TExt>,
-  ): Promise<boolean> {
+  ): Promise<boolean> => {
 
     let context: RequestContext<TMeans & TExt>;
 
     if (modification) {
-      context = (await nextRequestProcessorAgent(this, modification)).context;
+      context = { ...means, ...modification } as RequestContext<TMeans & TExt>;
+      context.next = nextHandlerCaller(config, context as TMeans & TExt);
     } else {
-      context = this.context as RequestContext<TMeans & TExt>;
+      context = means as RequestContext<TMeans & TExt>;
     }
 
-    return this.config.next(handler, context);
-  }
-
-  abstract modify<TExt>(
-      this: void,
-      context: RequestContext<TMeans>,
-      modification: RequestModification<TMeans, TExt>,
-  ): Promise<RequestModification<TMeans, TExt>>;
-
-}
-
-/**
- * @internal
- */
-class RootRequestProcessorAgent<TMeans> extends RequestProcessorAgent<TMeans, TMeans> {
-
-  readonly context: RequestContext<TMeans>;
-
-  constructor(config: RequestProcessor.Config<TMeans>, means: TMeans) {
-    super(config);
-    this.context = {
-      ...means,
-      next: this.next.bind(this),
-    };
-  }
-
-  modify<TExt>(
-      this: void,
-      _context: RequestContext<TMeans>,
-      modification: RequestModification<TMeans, TExt>,
-  ): Promise<RequestModification<TMeans, TExt>> {
-    return Promise.resolve(modification);
-  }
-
-}
-
-/**
- * @internal
- */
-async function nextRequestProcessorAgent<TBase, TMeans extends TBase, TExt>(
-    prev: RequestProcessorAgent<TBase, TMeans>,
-    modification: RequestModification<TMeans, TExt>,
-): Promise<RequestProcessorAgent<TBase, TMeans & TExt>> {
-  return new ModificationRequestProcessorAgent<TBase, TMeans, TExt>(
-      prev,
-      await prev.modify(prev.context, modification),
-  );
-}
-
-/**
- * @internal
- */
-class ModificationRequestProcessorAgent<TBase, TMeans extends TBase, TExt>
-    extends RequestProcessorAgent<TBase, TMeans & TExt> {
-
-  readonly context: RequestContext<TMeans & TExt>;
-
-  readonly modify: <TNext>(
-      this: void,
-      context: RequestContext<TMeans & TExt>,
-      modification: RequestModification<TMeans & TExt, TNext>,
-  ) => Promise<RequestModification<TMeans & TExt, TNext>>;
-
-  constructor(
-      prev: RequestProcessorAgent<TBase, TMeans>,
-      modification: RequestModification<TMeans, TExt>,
-  ) {
-    super(prev.config);
-    this.modify = prev.modify as this['modify'];
-    this.context = {
-      ...prev.context,
-      ...modification,
-      next: this.next.bind(this),
-    } as RequestContext<TMeans & TExt>;
-  }
-
+    return config.next(handler, context);
+  };
 }

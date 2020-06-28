@@ -42,14 +42,7 @@ export abstract class RequestCapability<TInput, TExt = object> implements Reques
    * @returns New request processing handler.
    */
   for<TMeans extends TInput>(handler: RequestHandler<TMeans & TExt>): RequestHandler<TMeans> {
-    return async context => {
-
-      const nextContext = Object.create(null);
-
-      Object.assign(nextContext, context, await this.modification(context));
-
-      return context.next(handler, nextContext);
-    };
+    return async context => context.next(handler, await this.modification(context));
   }
 
   /**
