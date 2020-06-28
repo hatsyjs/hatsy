@@ -2,46 +2,76 @@
  * @packageDocumentation
  * @module @hatsy/hatsy/core
  */
-import { RequestCapabilities } from './request-capabilities';
-import { RequestContext } from './request-context';
 import { RequestHandler } from './request-handler';
-import { RequestModification } from './request-modification';
-import { RequestModifier, RequestModifier__symbol } from './request-modifier';
 
 /**
  * Request processing capability.
  *
- * This is a {@link RequestModifier request modifier} implementation able to provide request processing means for
- * handlers.
+ * Modifies request processing context in a certain way when delegates to handler.
  *
- * Request processing capabilities could be be {@link RequestCapabilities combined}.
+ * Request processing capabilities could be {@link RequestCapability.combine combined}.
  *
  * @typeparam TInput  A type of request processing means required in order to apply this capability.
  * @typeparam TExt  A type of extension to request processing means this capability applies.
  */
-export abstract class RequestCapability<TInput, TExt = object>
-    implements RequestModifier<TInput, TExt>, RequestCapabilities<TInput, TExt> {
+export abstract class RequestCapability<TInput, TExt = object> {
 
   /**
-   * A reference to request modifier.
+   * Builds request capability by the given `provider`.
    *
-   * @default `this` instance.
+   * @typeparam TInput  A type of request processing means required by this provider.
+   * @typeparam TExt  A type of extension to request processing means this provider applies.
+   * @param provider  Request processing capability provider.
+   *
+   * @returns Request processing capability that call the given `provider` in order to apply.
    */
-  get [RequestModifier__symbol](): RequestModifier<TInput, TExt> {
-    return this;
+  static of<TInput, TExt>(
+      this: void,
+      provider: RequestCapability.Provider<TInput, TExt>,
+  ): RequestCapability<TInput, TExt> {
+
+    const capability: RequestCapability<TInput, TExt> = {
+      for: provider,
+      and<TNext>(next: RequestCapability<TInput & TExt, TNext>): RequestCapability<TInput, TExt & TNext> {
+        return RequestCapability.combine(capability, next);
+      },
+    };
+
+    return capability;
   }
 
   /**
-   * Builds request modification to apply by {@link for handler}.
+   * Combines two request processing capabilities.
    *
-   * @typeparam TMeans  A type of request processing means to modify.
-   * @param context  Request processing context to modify.
+   * @typeparam TInput  A type of request processing means expected by the `first` capability.
+   * @typeparam TExt  A type of request processing means extension applied by the `first` capability.
+   * @typeparam TNext  A type of request processing means extension applied by the `second` capability.
+   * @param first  First capability to combine.
+   * @param second  Second capability to combine. Receives requests modified by the `first` one.
    *
-   * @returns Request modifications to apply, or promise-like instance resolving to it.
+   * @return Combined request processing capability that applies modifications to request by the `first` capability,
+   * and then - by the `second` one.
    */
-  abstract modification<TMeans extends TInput>(
-      context: RequestContext<TMeans>,
-  ): RequestModification<TMeans, TExt> | PromiseLike<RequestModification<TMeans, TExt>>;
+  static combine<TInput, TExt, TNext>(
+      this: void,
+      first: RequestCapability<TInput, TExt>,
+      second: RequestCapability<TInput & TExt, TNext>,
+  ): RequestCapability<TInput, TExt & TNext> {
+
+    const chain: RequestCapability<TInput, TExt & TNext> = {
+
+      for<TMeans extends TInput>(delegate: RequestHandler<TMeans & TExt & TNext>): RequestHandler<TMeans> {
+        return first.for(second.for(delegate));
+      },
+
+      and<T>(next: RequestCapability<TInput & TExt & TNext, T>): RequestCapability<TInput, TExt & TNext & T> {
+        return RequestCapability.combine<TInput, TExt & TNext, T>(chain, next);
+      },
+
+    };
+
+    return chain;
+  }
 
   /**
    * Provides request processing capability to the given handler.
@@ -53,25 +83,46 @@ export abstract class RequestCapability<TInput, TExt = object>
    *
    * @returns New request processing handler.
    */
-  for<TMeans extends TInput>(handler: RequestHandler<TMeans & TExt>): RequestHandler<TMeans> {
-    return async ({ next, modifiedBy }) => modifiedBy(this[RequestModifier__symbol])
-        ? next(handler)
-        : next(handler, this);
-  }
+  abstract for<TMeans extends TInput>(handler: RequestHandler<TMeans & TExt>): RequestHandler<TMeans>;
 
   /**
-   * Combines this capability with the `next` capability set.
+   * Combines this capability with the `next` one.
    *
-   * @typeparam TNext  A type of extension to request processing means applied by `next` capability set.
-   * @param next  Next capability set that receives requests modified by this capability.
+   * @typeparam TNext  A type of extension to request processing means applied by `next` capability.
+   * @param next  Next capability that receives requests modified by this capability.
    *
-   * @return New request processing capability set that applies modifications to request by this capability,
-   * and then - by the `next` capability set.
+   * @return New request processing capability that applies modifications to request by this capability first,
+   * and then - by the `next` one.
    *
-   * @see RequestCapabilities.combine
+   * @see RequestCapability.combine
    */
-  and<TNext>(next: RequestCapabilities<TInput & TExt, TNext>): RequestCapabilities<TInput, TExt & TNext> {
-    return RequestCapabilities.combine<TInput, TExt, TNext>(this, next);
+  and<TNext>(next: RequestCapability<TInput & TExt, TNext>): RequestCapability<TInput, TExt & TNext> {
+    return RequestCapability.combine<TInput, TExt, TNext>(this, next);
   }
+
+}
+
+export namespace RequestCapability {
+
+  /**
+   * Request processing capability provider signature.
+   *
+   * Builds a request processing handler that modifies request and delegates to another one.
+   *
+   * @typeparam TInput  A type of request processing means required by this provider.
+   * @typeparam TExt  A type of extension to request processing means this provider applies.
+   */
+  export type Provider<TInput, TExt = object> =
+  /**
+   * @typeparam TMeans  A type of request processing means expected by constructed handler.
+   *
+   * @param handler  Request processing handler that will receive modified request context.
+   *
+   * @returns New request processing handler.
+   */
+      <TMeans extends TInput>(
+          this: void,
+          handler: RequestHandler<TMeans & TExt>,
+      ) => RequestHandler<TMeans>;
 
 }

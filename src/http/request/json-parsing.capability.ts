@@ -8,8 +8,7 @@ import {
   RequestCapability,
   RequestContext,
   requestExtension,
-  RequestModification,
-  RequestModifier__symbol,
+  RequestHandler,
   RequestValueTransformer,
 } from '../../core';
 import { readAll } from '../../impl';
@@ -69,33 +68,31 @@ class JsonParsingCapability<TInput extends HttpMeans, TBody>
     super();
   }
 
-  get [RequestModifier__symbol](): JsonParsing {
-    return JsonParsing; // eslint-disable-line @typescript-eslint/no-use-before-define
-  }
+  for<TMeans extends TInput>(
+      handler: RequestHandler<TMeans & RequestBodyMeans<TBody>>,
+  ): RequestHandler<TMeans> {
+    return async context => {
 
-  async modification<TMeans extends TInput>(
-      context: RequestContext<TMeans>,
-  ): Promise<RequestModification<TMeans, RequestBodyMeans<TBody>>> {
+      const { request, next } = context;
+      const { 'content-type': contentType = Text__MIME } = request.headers;
 
-    const { request } = context;
-    const { 'content-type': contentType = Text__MIME } = request.headers;
+      if (!JSON_MIMES[contentType]) {
+        return Promise.reject(new HttpError(415, { details: `${JSON__MIME} request expected` }));
+      }
 
-    if (!JSON_MIMES[contentType]) {
-      return Promise.reject(new HttpError(415, { details: `${JSON__MIME} request expected` }));
-    }
+      let json: any;
+      const text = await readAll(request);
 
-    let json: any;
-    const text = await readAll(request);
+      try {
+        json = JSON.parse(text);
+      } catch (e) {
+        return Promise.reject(new HttpError(400, { details: 'Malformed JSON', reason: e }));
+      }
 
-    try {
-      json = JSON.parse(text);
-    } catch (e) {
-      return Promise.reject(new HttpError(400, { details: 'Malformed JSON', reason: e }));
-    }
-
-    return requestExtension<TMeans, RequestBodyMeans<TBody>>({
-      requestBody: await this._transform(json, context as RequestContext<TInput>),
-    });
+      return next(handler, requestExtension<TMeans, RequestBodyMeans<TBody>>({
+        requestBody: await this._transform(json, context as RequestContext<TInput>),
+      }));
+    };
   }
 
   withBody<TMeans extends TInput, TTransformed>(

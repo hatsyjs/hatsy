@@ -4,7 +4,6 @@
  */
 import { RequestHandler } from './request-handler';
 import { RequestModification } from './request-modification';
-import { RequestModifier, RequestModifierRef } from './request-modifier';
 
 /**
  * Request processing context.
@@ -37,7 +36,7 @@ export namespace RequestContext {
      * context with the given `modifications` applied. The rest of the properties remain unchanged.
      *
      * @param handler  Target handler to delegate request processing to.
-     * @param modification  Request processing means modification or modifier. `this` context will be passed to the next
+     * @param modification  Request processing means modification. `this` context will be passed to the next
      * `handler` when omitted.
      *
      * @returns A promise resolved when request processing finishes. Resolves to `true` when request is responded,
@@ -46,20 +45,8 @@ export namespace RequestContext {
     next<TExt = object>(
         this: void,
         handler: RequestHandler<TMeans & TExt>,
-        modification?: RequestModification<TMeans, TExt> | RequestModifier<TMeans, TExt>,
+        modification?: RequestModification<TMeans, TExt>,
     ): Promise<boolean>;
-
-    /**
-     * Checks whether request modified with the given request modifier.
-     *
-     * @typeparam TInput  A type of request processing means the target modifier is able modify.
-     * @typeparam TExt  A type of extension to request processing means applied by the target modifier.
-     * @param ref  Request modifier reference.
-     *
-     * @returns This request context instance with request processing means applied, or `undefined` if target request
-     * modifier is not applied yet.
-     */
-    modifiedBy<TInput, TExt>(ref: RequestModifierRef<TInput, TExt>): RequestContext<TMeans & TInput & TExt> | undefined;
 
   }
 
