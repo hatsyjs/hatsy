@@ -171,7 +171,6 @@ server.listen(<span class="hljs-number">8080</span>);</code></pre>
 					<li><code>requestAddresses</code> object containing request <code>url</code> and remote <code>ip</code>.</li>
 					<li><code>log</code> - A <code>Console</code> instance to log messages with.</li>
 					<li><code>next()</code> method the handler can use to delegate to another one.</li>
-					<li><code>modifiedBy()</code> method to check whether context modified by the specific modifier.</li>
 				</ul>
 				<p>However, the request handler may require more properties to operate. This is where context extension comes into play:</p>
 				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { HttpMeans, RequestContext } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@hatsy/hatsy&#x27;</span>;
