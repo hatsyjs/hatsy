@@ -43,4 +43,4 @@ jobs:
     - name: Upload code coverage report
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-      run: yarn codecov --disable=gcov -f ./target/coverage/lcov.info
+      run: yarn codecov --disable=gcov
