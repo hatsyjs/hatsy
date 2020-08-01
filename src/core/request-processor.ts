@@ -37,7 +37,7 @@ export namespace RequestProcessor {
      *
      * This processor is invoked immediately on request processor call.
      */
-    readonly handler: RequestHandlerMethod<this, TMeans>
+    readonly handler: RequestHandlerMethod<this, TMeans>;
 
     /**
      * Calls the next request processing handler.

@@ -25,7 +25,7 @@ export interface DispatchLanguages<TMeans extends HttpMeans = HttpMeans> {
    *
    * This is a fallback handler typically.
    */
-  '*'?: RequestHandlerMethod<this, TMeans>
+  '*'?: RequestHandlerMethod<this, TMeans>;
 
   /**
    * Request processing method with language code as its key.

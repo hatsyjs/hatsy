@@ -23,14 +23,14 @@ export interface DispatchMimeTypes<TMeans extends HttpMeans = HttpMeans> {
   /**
    * Produces JSON.
    */
-  readonly 'application/json'?: RequestHandlerMethod<this, TMeans>
+  readonly 'application/json'?: RequestHandlerMethod<this, TMeans>;
 
   /**
    * Produces any content.
    *
    * This is a fallback handler typically.
    */
-  readonly '*/*'?: RequestHandlerMethod<this, TMeans>
+  readonly '*/*'?: RequestHandlerMethod<this, TMeans>;
 
   /**
    * Request processing method with MIME type as its key.

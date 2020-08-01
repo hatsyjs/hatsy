@@ -66,7 +66,7 @@ export namespace HttpError {
     /**
      * HTTP status message.
      */
-    readonly statusMessage?: string,
+    readonly statusMessage?: string;
 
     /**
      * Error message.

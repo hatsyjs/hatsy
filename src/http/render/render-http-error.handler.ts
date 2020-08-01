@@ -16,7 +16,7 @@ import { Rendering } from './rendering.capability';
  */
 function errorDetails(
     { error, response }: RequestContext<HttpMeans & ErrorMeans>,
-): { code: number, message?: string, details?: string } {
+): { code: number; message?: string; details?: string } {
 
   let message: string | undefined;
   let details: string | undefined;
