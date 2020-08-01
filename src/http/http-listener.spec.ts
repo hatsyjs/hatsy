@@ -160,7 +160,7 @@ describe('httpListener', () => {
     });
 
     server.listener.mockImplementation(httpListener(
-        { log:suppressedLog, errorHandler },
+        { log: suppressedLog, errorHandler },
         () => { throw error; },
     ));
 
