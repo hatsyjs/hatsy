@@ -26,6 +26,20 @@
   "main": "dist/hatsy.js",
   "module": "dist/hatsy.mjs",
   "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/hatsy.mjs",
+      "require": "./dist/hatsy.js"
+    },
+    "./core": {
+      "import": "./dist/hatsy.core.mjs",
+      "require": "./dist/hatsy.core.js"
+    },
+    "./testing": {
+      "import": "./dist/hatsy.testing.mjs",
+      "require": "./dist/hatsy.testing.js"
+    }
+  },
   "peerDependencies": {
     "jest": "^26.0.1"
   },
@@ -35,10 +49,10 @@
     }
   },
   "dependencies": {
-    "@hatsy/http-header-value": "^3.3.0",
-    "@proc7ts/a-iterable": "^2.7.0",
-    "@proc7ts/call-thru": "^4.0.0",
-    "@proc7ts/primitives": "^1.1.0"
+    "@hatsy/http-header-value": "^3.4.0",
+    "@proc7ts/a-iterable": "^2.8.0",
+    "@proc7ts/call-thru": "^4.1.0",
+    "@proc7ts/primitives": "^1.2.0"
   },
   "engines": {
     "node": ">=12"
