@@ -84,12 +84,12 @@
     "typescript": "^4.0.2"
   },
   "scripts": {
-    "all": "run-z +z clean build,lint,test",
+    "all": "run-z clean build,lint,test",
     "build": "run-z +z --then rollup --config ./rollup.config.js",
-    "ci:all": "run-z +z build,lint,test/--ci/--runInBand",
+    "ci:all": "run-z all +test/--ci/--runInBand",
     "clean": "run-z +z --then shx rm -rf d.ts dist target",
     "doc": "run-z +z --then typedoc",
-    "doc:publish": "run-z +z doc --then gh-pages --dist target/typedoc --dotfiles",
+    "doc:publish": "run-z doc --then gh-pages --dist target/typedoc --dotfiles",
     "lint": "run-z +z --then eslint . --ext .js,.ts",
     "test": "run-z +z --then jest",
     "z": "run-z +build,+lint,+test,+doc"
