@@ -84,7 +84,7 @@
     "typescript": "^4.0.2"
   },
   "scripts": {
-    "all": "run-z clean build,lint,test",
+    "all": "run-z build,lint,test",
     "build": "run-z +z --then rollup --config ./rollup.config.js",
     "ci:all": "run-z all +test/--ci/--runInBand",
     "clean": "run-z +z --then shx rm -rf d.ts dist target",
