@@ -92,6 +92,6 @@
     "doc:publish": "run-z doc --then gh-pages --dist target/typedoc --dotfiles",
     "lint": "run-z +z --then eslint . --ext .js,.ts",
     "test": "run-z +z --then jest",
-    "z": "run-z +build,+lint,+test,+doc"
+    "z": "run-z +build,+doc,+lint,+test"
   }
 }
