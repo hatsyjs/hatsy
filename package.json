@@ -50,8 +50,6 @@
   },
   "dependencies": {
     "@hatsy/http-header-value": "^3.4.0",
-    "@proc7ts/a-iterable": "^2.8.0",
-    "@proc7ts/call-thru": "^4.1.0",
     "@proc7ts/primitives": "^1.2.0"
   },
   "engines": {
