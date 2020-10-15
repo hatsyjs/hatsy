@@ -100,27 +100,37 @@ export function httpListener<TRequest extends IncomingMessage, TResponse extends
   }
 
   const { log = console } = config;
-  const [incomingHandler, whenResponded] = incomingHttpHandler(fullHttpHandler(config, handler));
+  const incomingHandler = incomingHttpHandler(fullHttpHandler(config, handler));
   const processor = requestProcessor<IncomingHttpMeans<TRequest, TResponse>>({
     handler: incomingHandler,
-    next(handler, context): Promise<boolean> {
+    next(
+        handler,
+        context,
+    ): Promise<boolean> {
 
       const { response } = context;
 
-      return Promise.race([
-        whenResponded,
-        Promise.resolve(context)
-            .then(handler)
-            .then(() => response.writableEnded),
-      ]);
+      return Promise.resolve(context)
+          .then(handler)
+          .then(() => response.writableEnded);
     },
   });
 
   return (request: TRequest, response: TResponse): void => {
-    processor({ request, response, log })
-        .catch(
-            error => log.error(`[${request.method} ${request.url}]`, 'Unhandled error', error),
-        );
+    new Promise<boolean>((onResponse, onError) => {
+      processor({
+        request,
+        response,
+        log,
+        onResponse,
+        onError,
+      }).then(
+          onResponse,
+          onError,
+      );
+    }).catch(error => {
+      log.error(`[${request.method} ${request.url}]`, 'Unhandled error', error);
+    });
   };
 }
 
@@ -131,6 +141,8 @@ interface IncomingHttpMeans<TRequest extends IncomingMessage, TResponse extends 
   readonly request: TRequest;
   readonly response: TResponse;
   readonly log: Console;
+  onResponse(this: void): void;
+  onError(this: void, error: any): void;
 }
 
 /**
@@ -138,19 +150,13 @@ interface IncomingHttpMeans<TRequest extends IncomingMessage, TResponse extends 
  */
 function incomingHttpHandler<TRequest extends IncomingMessage, TResponse extends ServerResponse>(
     handler: RequestHandler<HttpMeans<TRequest, TResponse>>,
-): [RequestHandler<IncomingHttpMeans<TRequest, TResponse>>, Promise<boolean>] {
-
-  let onResponse: () => void;
-  let onError: (error: any) => void;
-  const whenResponded = new Promise<boolean>((resolve, reject) => {
-    onResponse = () => resolve(true);
-    onError = reject;
-  });
-
-  const incomingHandler: RequestHandler<IncomingHttpMeans<TRequest, TResponse>> = ({
+): RequestHandler<IncomingHttpMeans<TRequest, TResponse>> {
+  return ({
     request,
     response,
     next,
+    onResponse,
+    onError,
   }) => {
     response.once('error', onError);
     response.once('finish', onResponse);
@@ -187,8 +193,6 @@ function incomingHttpHandler<TRequest extends IncomingMessage, TResponse extends
         },
     );
   };
-
-  return [incomingHandler, whenResponded];
 }
 
 /**
