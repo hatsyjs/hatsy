@@ -35,6 +35,7 @@
       "import": "./dist/hatsy.core.mjs",
       "require": "./dist/hatsy.core.js"
     },
+    "./package.json": "./package.json",
     "./testing": {
       "import": "./dist/hatsy.testing.mjs",
       "require": "./dist/hatsy.testing.js"
