@@ -1,3 +1,4 @@
+export * from './dispatch-error';
 export * from './error.means';
 export * from './request-body.means';
 export * from './request-capability';

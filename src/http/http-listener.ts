@@ -5,7 +5,7 @@
 import { HttpAddressRep } from '@hatsy/http-header-value/node';
 import { lazyValue, noop } from '@proc7ts/primitives';
 import type { IncomingMessage, ServerResponse } from 'http';
-import { ErrorMeans, RequestContext, RequestHandler, requestProcessor } from '../core';
+import { dispatchError, ErrorMeans, RequestContext, RequestHandler, requestProcessor } from '../core';
 import { HttpError } from './http-error';
 import type { HttpMeans } from './http.means';
 import { renderHttpError } from './render';
@@ -204,19 +204,11 @@ function fullHttpHandler<TRequest extends IncomingMessage, TResponse extends Ser
 ): RequestHandler<HttpMeans<TRequest, TResponse>> {
 
   const defaultHandler = defaultHttpHandler(config);
-  const errorHandler = httpErrorHandler(config);
 
-  return async (
-      { next }: RequestContext<HttpMeans<TRequest, TResponse>>,
-  ) => {
-    try {
-      if (!await next(handler)) {
-        await next(defaultHandler);
-      }
-    } catch (error) {
-      await next(errorHandler, { error });
-    }
-  };
+  return dispatchError(
+      httpErrorHandler(config),
+      ({ next }) => next(handler).then(ok => ok || next(defaultHandler)),
+  );
 }
 
 /**
