@@ -1,7 +1,7 @@
-import { RequestContext } from '../../core';
+import type { RequestContext } from '../../core';
 import { suppressedLog, TestHttpServer } from '../../testing';
 import { httpListener } from '../http-listener';
-import { HttpMeans } from '../http.means';
+import type { HttpMeans } from '../http.means';
 import { Rendering, RenderMeans } from '../render';
 import { addResponseHeader } from '../util';
 import { dispatchByAccepted } from './dispatch-by-accepted.handler';

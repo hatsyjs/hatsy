@@ -3,7 +3,7 @@
  * @module @hatsy/hatsy
  */
 import { arrayOfElements, elementOrArray } from '@proc7ts/primitives';
-import { ServerResponse } from 'http';
+import type { ServerResponse } from 'http';
 
 /**
  * Appends HTTP header value to server response.

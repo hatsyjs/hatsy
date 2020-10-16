@@ -4,10 +4,10 @@
  */
 import { HttpAddressRep } from '@hatsy/http-header-value/node';
 import { lazyValue, noop } from '@proc7ts/primitives';
-import { IncomingMessage, ServerResponse } from 'http';
+import type { IncomingMessage, ServerResponse } from 'http';
 import { ErrorMeans, RequestContext, RequestHandler, requestProcessor } from '../core';
 import { HttpError } from './http-error';
-import { HttpMeans } from './http.means';
+import type { HttpMeans } from './http.means';
 import { renderHttpError } from './render';
 
 /**

@@ -2,7 +2,7 @@
  * @packageDocumentation
  * @module @hatsy/hatsy/core
  */
-import { RequestContext } from './request-context';
+import type { RequestContext } from './request-context';
 
 /**
  * Request processing handler signature.

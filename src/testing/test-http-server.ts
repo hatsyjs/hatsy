@@ -3,7 +3,7 @@
  * @module @hatsy/hatsy/testing
  */
 import { createServer, IncomingMessage, request, RequestListener, RequestOptions, Server } from 'http';
-import { AddressInfo } from 'net';
+import type { AddressInfo } from 'net';
 import { promisify } from 'util';
 import { readAll } from '../impl';
 

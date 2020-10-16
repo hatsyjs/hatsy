@@ -3,12 +3,12 @@
  * @module @hatsy/hatsy
  */
 import { STATUS_CODES } from 'http';
-import { ErrorMeans, RequestContext, RequestHandler } from '../../core';
+import type { ErrorMeans, RequestContext, RequestHandler } from '../../core';
 import { dispatchByAccepted } from '../dispatch';
 import { HttpError } from '../http-error';
-import { HttpMeans } from '../http.means';
+import type { HttpMeans } from '../http.means';
 import { escapeHtml, HTML__MIME, JSON__MIME, TextJSON__MIME } from '../util';
-import { RenderMeans } from './render.means';
+import type { RenderMeans } from './render.means';
 import { Rendering } from './rendering.capability';
 
 /**

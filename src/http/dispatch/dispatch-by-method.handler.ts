@@ -2,8 +2,8 @@
  * @packageDocumentation
  * @module @hatsy/hatsy
  */
-import { RequestHandler, RequestHandlerMethod } from '../../core';
-import { HttpMeans } from '../http.means';
+import type { RequestHandler, RequestHandlerMethod } from '../../core';
+import type { HttpMeans } from '../http.means';
 
 /**
  * Request processing handlers for HTTP request methods.

@@ -1,7 +1,7 @@
 import { RequestContext, requestHandler } from '../../core';
 import { suppressedLog, TestHttpServer } from '../../testing';
 import { httpListener } from '../http-listener';
-import { HttpMeans } from '../http.means';
+import type { HttpMeans } from '../http.means';
 import { Rendering, RenderMeans } from '../render';
 import { dispatchByMethod } from './dispatch-by-method.handler';
 

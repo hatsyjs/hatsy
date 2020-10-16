@@ -3,9 +3,9 @@
  * @module @hatsy/hatsy
  */
 import { httpMimeNegotiator } from '@hatsy/http-header-value/headers';
-import { RequestHandler, RequestHandlerMethod } from '../../core';
+import type { RequestHandler, RequestHandlerMethod } from '../../core';
 import { HttpError } from '../http-error';
-import { HttpMeans } from '../http.means';
+import type { HttpMeans } from '../http.means';
 import { addResponseHeader } from '../util';
 
 /**

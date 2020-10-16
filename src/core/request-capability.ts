@@ -2,7 +2,7 @@
  * @packageDocumentation
  * @module @hatsy/hatsy/core
  */
-import { RequestHandler } from './request-handler';
+import type { RequestHandler } from './request-handler';
 
 /**
  * Request processing capability.

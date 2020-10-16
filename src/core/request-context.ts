@@ -2,8 +2,8 @@
  * @packageDocumentation
  * @module @hatsy/hatsy/core
  */
-import { RequestHandler } from './request-handler';
-import { RequestModification } from './request-modification';
+import type { RequestHandler } from './request-handler';
+import type { RequestModification } from './request-modification';
 
 /**
  * Request processing context.

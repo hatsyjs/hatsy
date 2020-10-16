@@ -13,9 +13,9 @@ import {
 } from '../../core';
 import { readAll } from '../../impl';
 import { HttpError } from '../http-error';
-import { HttpMeans } from '../http.means';
+import type { HttpMeans } from '../http.means';
 import { JSON__MIME, Text__MIME, TextJSON__MIME } from '../util';
-import { FormDecoding } from './form-decoding.capability';
+import type { FormDecoding } from './form-decoding.capability';
 
 /**
  * @internal

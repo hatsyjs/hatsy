@@ -1,6 +1,6 @@
 import { valueProvider } from '@proc7ts/primitives';
-import { ServerResponse } from 'http';
-import { RequestContext } from './request-context';
+import type { ServerResponse } from 'http';
+import type { RequestContext } from './request-context';
 import { requestHandler, RequestHandler } from './request-handler';
 
 describe('requestHandler', () => {

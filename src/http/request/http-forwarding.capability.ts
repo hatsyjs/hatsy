@@ -2,11 +2,11 @@
  * @packageDocumentation
  * @module @hatsy/hatsy
  */
-import { HttpForwardTrust } from '@hatsy/http-header-value/headers';
+import type { HttpForwardTrust } from '@hatsy/http-header-value/headers';
 import { HttpAddressRep } from '@hatsy/http-header-value/node';
 import { lazyValue } from '@proc7ts/primitives';
 import { RequestCapability, RequestHandler, requestUpdate } from '../../core';
-import { HttpMeans } from '../http.means';
+import type { HttpMeans } from '../http.means';
 
 /**
  * HTTP proxy forwarding capability.

@@ -14,7 +14,7 @@ import {
 } from '../../core';
 import { readAll } from '../../impl';
 import { HttpError } from '../http-error';
-import { HttpMeans } from '../http.means';
+import type { HttpMeans } from '../http.means';
 import { Text__MIME, URLEncoded__MIME } from '../util';
 
 /**

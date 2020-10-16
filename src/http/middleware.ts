@@ -2,9 +2,9 @@
  * @packageDocumentation
  * @module @hatsy/hatsy
  */
-import { IncomingMessage, ServerResponse } from 'http';
+import type { IncomingMessage, ServerResponse } from 'http';
 import { RequestCapability, RequestContext, RequestHandler } from '../core';
-import { HttpMeans } from './http.means';
+import type { HttpMeans } from './http.means';
 
 /**
  * HTTP middleware signature.

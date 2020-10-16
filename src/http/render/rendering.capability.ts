@@ -3,9 +3,9 @@
  * @module @hatsy/hatsy
 */
 import { RequestCapability, requestExtension, RequestHandler } from '../../core';
-import { HttpMeans } from '../http.means';
+import type { HttpMeans } from '../http.means';
 import { HTML__MIME, JSON__MIME } from '../util';
-import { RenderMeans } from './render.means';
+import type { RenderMeans } from './render.means';
 
 /**
  * @internal

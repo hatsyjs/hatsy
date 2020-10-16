@@ -1,9 +1,9 @@
 import { noop } from '@proc7ts/primitives';
-import { ErrorMeans, RequestContext } from '../core';
+import type { ErrorMeans, RequestContext } from '../core';
 import { suppressedLog, TestHttpServer } from '../testing';
 import { HttpError } from './http-error';
 import { httpListener } from './http-listener';
-import { HttpMeans } from './http.means';
+import type { HttpMeans } from './http.means';
 import { Rendering } from './render';
 
 describe('httpListener', () => {
