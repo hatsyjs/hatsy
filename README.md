@@ -236,11 +236,14 @@ The following dispatcher implemented:
 
 - [dispatchByAccepted] dispatches accordingly to [content negotiation] based on [Accept] request header.
 - [dispatchByLanguage] dispatches accordingly to [content negotiation] based on [Accept-Language] request header.
-- [dispatchByMethod] dispatches accordingly to HTTP request method.   
+- [dispatchByMethod] dispatches accordingly to HTTP request method.
+- [dispatchError] dispatches request processing error.   
 
 [dispatchByAccepted]: https://hatsyjs.github.io/hatsy/modules/@hatsy_hatsy.html#dispatchByAccepted
 [dispatchByLanguage]: https://hatsyjs.github.io/hatsy/modules/@hatsy_hatsy.html#dispatchByLanguage
-[dispatchByMethod]: https://hatsyjs.github.io/hatsy/modules/@hatsy_hatsy.html#dispatchByMethod  
+[dispatchByMethod]: https://hatsyjs.github.io/hatsy/modules/@hatsy_hatsy.html#dispatchByMethod
+[dispatchError]:  https://hatsyjs.github.io/hatsy/modules/@hatsy_hatsy_core.html#dispatchError
+  
 [content negotiation]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Content_negotiation
 [Accept]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept
 [Accept-Language]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language  
