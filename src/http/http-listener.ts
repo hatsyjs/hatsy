@@ -13,7 +13,7 @@ import { renderHttpError } from './render';
 /**
  * HTTP processing configuration.
  *
- * @typeparam TMeans  A type of supported HTTP request processing means.
+ * @typeParam TMeans  A type of supported HTTP request processing means.
  */
 export interface HttpConfig<TMeans extends HttpMeans = HttpMeans> {
 
@@ -53,8 +53,8 @@ export interface HttpConfig<TMeans extends HttpMeans = HttpMeans> {
 /**
  * Creates Node.js HTTP request listener that processes requests by HTTP request processing handler(s).
  *
- * @typeparam TRequest  A type of supported HTTP request.
- * @typeparam TResponse  A type of supported HTTP response.
+ * @typeParam TRequest  A type of supported HTTP request.
+ * @typeParam TResponse  A type of supported HTTP response.
  * @param config  HTTP processing configuration.
  * @param handler  HTTP request processing handler to delegate to.
  *
@@ -71,8 +71,8 @@ export function httpListener<TRequest extends IncomingMessage, TResponse extends
  * Creates Node.js HTTP request listener that processes requests by HTTP request processing handler(s) according to
  * default configuration.
  *
- * @typeparam TRequest  A type of supported HTTP request.
- * @typeparam TResponse  A type of supported HTTP response.
+ * @typeParam TRequest  A type of supported HTTP request.
+ * @typeParam TResponse  A type of supported HTTP response.
  * @param handler  HTTP request processing handler to delegate to.
  *
  * @returns HTTP request listener to pass to Node.js HTTP server.

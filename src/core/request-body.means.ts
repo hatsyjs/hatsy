@@ -5,7 +5,7 @@
 /**
  * Request body processing means.
  *
- * @typeparam TBody  A type of request body.
+ * @typeParam TBody  A type of request body.
  */
 export interface RequestBodyMeans<TBody> {
 
