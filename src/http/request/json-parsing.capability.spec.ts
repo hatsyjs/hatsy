@@ -1,4 +1,5 @@
-import { suppressedLog, TestHttpServer } from '../../testing';
+import { noop } from '@proc7ts/primitives';
+import { TestHttpServer } from '../../testing';
 import { httpListener } from '../http-listener';
 import { Rendering } from '../render';
 import { JsonParsing } from './json-parsing.capability';
@@ -14,12 +15,18 @@ describe('JsonParsing', () => {
     await server.stop();
   });
 
+  let errorSpy: jest.SpyInstance;
+
+  beforeEach(() => {
+    errorSpy = jest.spyOn(console, 'error').mockImplementation(noop);
+  });
+  afterEach(() => {
+    errorSpy.mockRestore();
+  });
+
   beforeEach(() => {
     server.listener.mockImplementation(
         httpListener(
-            {
-              log: suppressedLog,
-            },
             Rendering
                 .and(JsonParsing)
                 .for(({ requestBody, renderJson }) => {
@@ -46,9 +53,6 @@ describe('JsonParsing', () => {
   it('transforms JSON body form', async () => {
     server.listener.mockImplementation(
         httpListener(
-            {
-              log: suppressedLog,
-            },
             Rendering
                 .and(JsonParsing.withBody(json => ({ json })))
                 .for(({ requestBody, renderJson }) => {
@@ -118,7 +122,6 @@ describe('JsonParsing', () => {
   });
   it('responds with 400 (Bad Request) with non-JSON content', async () => {
 
-    const errorSpy = jest.spyOn(suppressedLog, 'error');
     const response = await server.post(
         '/test',
         'param1=value1&param2=value2',

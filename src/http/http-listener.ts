@@ -5,7 +5,15 @@
 import { HttpAddressRep } from '@hatsy/http-header-value/node';
 import { lazyValue, noop } from '@proc7ts/primitives';
 import type { IncomingMessage, ServerResponse } from 'http';
-import { dispatchError, ErrorMeans, RequestContext, RequestHandler, requestProcessor } from '../core';
+import {
+  dispatchError,
+  ErrorMeans,
+  LoggerMeans,
+  Logging,
+  RequestContext,
+  RequestHandler,
+  requestProcessor,
+} from '../core';
 import { HttpError } from './http-error';
 import type { HttpMeans } from './http.means';
 import { renderHttpError } from './render';
@@ -16,13 +24,6 @@ import { renderHttpError } from './render';
  * @typeParam TMeans  A type of supported HTTP request processing means.
  */
 export interface HttpConfig<TMeans extends HttpMeans = HttpMeans> {
-
-  /**
-   * A {@link HttpMeans.log logger} to use.
-   *
-   * @default `console.log`
-   */
-  log?: Console;
 
   /**
    * Default HTTP request handler.
@@ -99,7 +100,6 @@ export function httpListener<TRequest extends IncomingMessage, TResponse extends
     handler = configOrHandler as RequestHandler<HttpMeans<TRequest, TResponse>>;
   }
 
-  const { log = console } = config;
   const incomingHandler = incomingHttpHandler(fullHttpHandler(config, handler));
   const processor = requestProcessor<IncomingHttpMeans<TRequest, TResponse>>({
     handler: incomingHandler,
@@ -121,7 +121,6 @@ export function httpListener<TRequest extends IncomingMessage, TResponse extends
       processor({
         request,
         response,
-        log,
         onResponse,
         onError,
       }).then(
@@ -129,7 +128,7 @@ export function httpListener<TRequest extends IncomingMessage, TResponse extends
           onError,
       );
     }).catch(error => {
-      log.error(`[${request.method} ${request.url}]`, 'Unhandled error', error);
+      console.error(`[${request.method} ${request.url}]`, 'Unhandled error', error);
     });
   };
 }
@@ -140,7 +139,6 @@ export function httpListener<TRequest extends IncomingMessage, TResponse extends
 interface IncomingHttpMeans<TRequest extends IncomingMessage, TResponse extends ServerResponse> {
   readonly request: TRequest;
   readonly response: TResponse;
-  readonly log: Console;
   onResponse(this: void): void;
   onError(this: void, error: any): void;
 }
@@ -237,22 +235,22 @@ function httpErrorHandler<TMeans extends HttpMeans>(
     }: HttpConfig<TMeans>,
 ): RequestHandler<TMeans & ErrorMeans> {
   if (!errorHandler) {
-    return defaultHandler ? renderEmptyHttpError : logHttpError;
+    return Logging.for(defaultHandler ? renderEmptyHttpError : logHttpError);
   }
 
   const onError = errorHandler === true ? renderHttpError : errorHandler;
 
-  return context => {
+  return Logging.for(context => {
     logHttpError(context);
-    return context.next(onError);
-  };
+    return (context as RequestContext<TMeans & ErrorMeans>).next(onError);
+  });
 }
 
 /**
  * @internal
  */
 function logHttpError(
-    { request, log, error }: RequestContext<HttpMeans & ErrorMeans>,
+    { request, log, error }: RequestContext<HttpMeans & ErrorMeans & LoggerMeans>,
 ): void {
 
   const report: any[] = [`[${request.method} ${request.url}]`];
@@ -278,7 +276,7 @@ function logHttpError(
 /**
  * @internal
  */
-function renderEmptyHttpError(context: RequestContext<HttpMeans & ErrorMeans>): void {
+function renderEmptyHttpError(context: RequestContext<HttpMeans & ErrorMeans & LoggerMeans>): void {
   logHttpError(context);
   context.response.end();
 }

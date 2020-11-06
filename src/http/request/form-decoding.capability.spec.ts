@@ -1,6 +1,8 @@
+import { dispatchError } from '../../core';
+import { Logging } from '../../core/logging';
 import { suppressedLog, TestHttpServer } from '../../testing';
 import { httpListener } from '../http-listener';
-import { Rendering } from '../render';
+import { renderHttpError, Rendering } from '../render';
 import { FormDecoding } from './form-decoding.capability';
 
 describe('FormDecoding', () => {
@@ -17,14 +19,16 @@ describe('FormDecoding', () => {
   beforeEach(() => {
     server.listener.mockImplementation(
         httpListener(
-            {
-              log: suppressedLog,
-            },
-            Rendering
-                .and(FormDecoding)
-                .for(({ requestBody, renderJson }) => {
-                  renderJson({ request: Array.from(requestBody.entries()) });
-                }),
+            Logging.logBy(suppressedLog).for(
+                dispatchError(
+                    renderHttpError,
+                    Rendering
+                        .and(FormDecoding)
+                        .for(({ requestBody, renderJson }) => {
+                          renderJson({ request: Array.from(requestBody.entries()) });
+                        }),
+                ),
+            ),
         ),
     );
   });
@@ -46,14 +50,16 @@ describe('FormDecoding', () => {
   it('transforms submitted form', async () => {
     server.listener.mockImplementation(
         httpListener(
-            {
-              log: suppressedLog,
-            },
-            Rendering
-                .and(FormDecoding.withBody(params => Array.from(params.entries())))
-                .for(({ requestBody, renderJson }) => {
-                  renderJson(requestBody);
-                }),
+            Logging.logBy(suppressedLog).for(
+                dispatchError(
+                    renderHttpError,
+                    Rendering
+                        .and(FormDecoding.withBody(params => Array.from(params.entries())))
+                        .for(({ requestBody, renderJson }) => {
+                          renderJson(requestBody);
+                        }),
+                ),
+            ),
         ),
     );
 

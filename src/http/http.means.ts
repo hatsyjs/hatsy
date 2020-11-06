@@ -33,11 +33,6 @@ export interface HttpMeans<
    */
   readonly response: TResponse;
 
-  /**
-   * A logger to use.
-   */
-  readonly log: Console;
-
 }
 
 export namespace HttpMeans {
