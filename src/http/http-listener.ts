@@ -110,7 +110,7 @@ export function httpListener<
     handler = configOrHandler as RequestHandler<HttpMeans<TRequest, TResponse>>;
   }
 
-  const { logErrors = true } = config;
+  const { logError = true } = config;
   const fullHandler = fullHttpHandler(config, handler);
   const incomingHandler = incomingHttpHandler(
       config.handleBy
@@ -144,7 +144,7 @@ export function httpListener<
           onError,
       );
     }).catch(error => {
-      if (logErrors) {
+      if (logError) {
         console.error(`[${request.method} ${request.url}]`, 'Unhandled error', error);
       }
     });
@@ -245,7 +245,7 @@ function defaultHttpHandler<TExt, TRequest extends IncomingMessage, TResponse ex
  */
 function httpErrorHandler<TExt, TRequest extends IncomingMessage, TResponse extends ServerResponse>(
     {
-      logErrors = true,
+      logError = true,
       defaultHandler = true,
       errorHandler = true,
     }: AnyHttpConfig<TExt, TRequest, TResponse>,
@@ -255,7 +255,7 @@ function httpErrorHandler<TExt, TRequest extends IncomingMessage, TResponse exte
       ? (errorHandler === true ? renderHttpError : errorHandler)
       : (defaultHandler ? renderEmptyHttpResponse : noop);
 
-  if (!logErrors) {
+  if (!logError) {
     return onError;
   }
 

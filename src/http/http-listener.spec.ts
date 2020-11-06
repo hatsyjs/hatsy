@@ -216,7 +216,7 @@ describe('httpListener', () => {
     const error = new Error('test');
 
     server.listener.mockImplementation(httpListener(
-        { errorHandler: false, logErrors: false },
+        { errorHandler: false, logError: false },
         () => { throw error; },
     ));
 
@@ -282,7 +282,7 @@ describe('httpListener', () => {
 
     const whenErrorLogged = new Promise(resolve => {
       listener = httpListener(
-          { errorHandler, logErrors: false },
+          { errorHandler, logError: false },
           () => {
             setTimeout(resolve);
             throw error;
