@@ -39,6 +39,8 @@ export interface HttpConfig<TMeans extends HttpMeans = HttpMeans> {
   /**
    * Whether to log HTTP processing error.
    *
+   * Unhandled errors will be logged with `console.error` in any case.
+   *
    * @default `true`, which means an error will be logged with {@link LoggerMeans logger means}, created if necessary.
    */
   readonly logError?: boolean;

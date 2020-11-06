@@ -1,5 +1,4 @@
 import { noop } from '@proc7ts/primitives';
-import type { IncomingMessage, ServerResponse } from 'http';
 import type { ErrorMeans, RequestContext } from '../core';
 import { TestHttpServer } from '../testing';
 import { HttpError } from './http-error';
@@ -244,7 +243,7 @@ describe('httpListener', () => {
     expect(await response.body()).toBe('NO RESPONSE');
     expect(logErrorSpy).toHaveBeenCalledWith('[GET /test]', error);
   });
-  it('logs unhandled errors', async () => {
+  it('logs unhandled error', async () => {
 
     const error = new Error('test');
     const errorHandler = jest.fn(() => {
@@ -271,24 +270,20 @@ describe('httpListener', () => {
     await whenErrorLogged;
     expect(logErrorSpy).toHaveBeenCalledWith('[GET /test]', 'Unhandled error', error);
   });
-  it('does not log unhandled errors when disabled', async () => {
+  it('logs unhandled error when logging disabled', async () => {
 
     const error = new Error('test');
     const errorHandler = jest.fn(() => {
       throw error;
     });
-
-    let listener: (this: void, req: IncomingMessage, res: ServerResponse) => void;
-
     const whenErrorLogged = new Promise(resolve => {
-      listener = httpListener(
-          { errorHandler, logError: false },
-          () => {
-            setTimeout(resolve);
-            throw error;
-          },
-      );
+      logErrorSpy.mockImplementation(resolve);
     });
+
+    const listener = httpListener(
+        { errorHandler, logError: false },
+        () => { throw error; },
+    );
 
     server.listener.mockImplementation((request, response) => {
       listener(request, response);
@@ -300,7 +295,7 @@ describe('httpListener', () => {
     expect(await response.body()).toBe('NO RESPONSE');
 
     await whenErrorLogged;
-    expect(logErrorSpy).not.toHaveBeenCalled();
+    expect(logErrorSpy).toHaveBeenCalledWith('[GET /test]', 'Unhandled error', error);
   });
 
   describe('requestAddresses', () => {
