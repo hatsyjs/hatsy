@@ -2,12 +2,13 @@
  * @packageDocumentation
  * @module @hatsy/hatsy
  */
+import { escapeXML } from '@hatsy/hten';
 import { STATUS_CODES } from 'http';
 import type { ErrorMeans, RequestContext, RequestHandler } from '../../core';
 import { dispatchByAccepted } from '../dispatch';
 import { HttpError } from '../http-error';
 import type { HttpMeans } from '../http.means';
-import { escapeHtml, HTML__MIME, JSON__MIME, TextJSON__MIME } from '../util';
+import { HTML__MIME, JSON__MIME, TextJSON__MIME } from '../util';
 import type { RenderMeans } from './render.means';
 import { Rendering } from './rendering.capability';
 
@@ -49,18 +50,19 @@ function renderHtmlError(
 ): void {
 
   const details = errorDetails(context);
-  const message = escapeHtml(details.message);
+  const message = details.message ? ' ' + escapeXML(details.message) : '';
+  const detailsText = details.details ? escapeXML(details.details) : '';
 
   context.renderHtml(
       `<!DOCTYPE html>
 <html lang="en">
 <head>
-<title>ERROR ${details.code} ${message}</title>
+<title>ERROR ${details.code}${message}</title>
 </head>
 <body>
-<h1><strong>ERROR ${details.code}</strong> ${message}</h1>
+<h1><strong>ERROR ${details.code}</strong>${message}</h1>
 <hr/>
-${escapeHtml(details.details)}
+${detailsText}
 </body>
 </html>
 `,

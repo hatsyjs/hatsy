@@ -120,6 +120,21 @@ describe('httpListener', () => {
     expect(body).toContain('ERROR 403 Forbidden');
     expect(body).toContain('No Go');
   });
+  it('responds with unknown error status when handler throws error', async () => {
+
+    const error = new HttpError(499);
+
+    server.listener.mockImplementation(httpListener(() => { throw error; }));
+
+    const response = await server.get('/test');
+
+    expect(response.statusCode).toBe(499);
+    expect(response.statusMessage).toBe('unknown');
+
+    const body = await response.body();
+
+    expect(body).toContain('<h1><strong>ERROR 499</strong></h1>');
+  });
   it('responds with error status and JSON when handler throws error and JSON expected', async () => {
 
     const error = new HttpError(403, { details: 'No Go' });
