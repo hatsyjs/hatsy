@@ -1,4 +1,5 @@
 import { noop } from '@proc7ts/primitives';
+import type { IncomingMessage, ServerResponse } from 'http';
 import type { ErrorMeans, RequestContext } from '../core';
 import { TestHttpServer } from '../testing';
 import { HttpError } from './http-error';
@@ -210,6 +211,20 @@ describe('httpListener', () => {
     expect(await response.body()).toBe('');
     expect(logErrorSpy).toHaveBeenCalledWith('[GET /test]', error);
   });
+  it('does not log ERROR when there is no error handler', async () => {
+
+    const error = new Error('test');
+
+    server.listener.mockImplementation(httpListener(
+        { errorHandler: false, logErrors: false },
+        () => { throw error; },
+    ));
+
+    const response = await server.get('/test');
+
+    expect(await response.body()).toBe('');
+    expect(logErrorSpy).not.toHaveBeenCalled();
+  });
   it('logs ERROR when there is neither error, not default handler', async () => {
 
     const error = new Error('test');
@@ -255,6 +270,37 @@ describe('httpListener', () => {
 
     await whenErrorLogged;
     expect(logErrorSpy).toHaveBeenCalledWith('[GET /test]', 'Unhandled error', error);
+  });
+  it('does not log unhandled errors when disabled', async () => {
+
+    const error = new Error('test');
+    const errorHandler = jest.fn(() => {
+      throw error;
+    });
+
+    let listener: (this: void, req: IncomingMessage, res: ServerResponse) => void;
+
+    const whenErrorLogged = new Promise(resolve => {
+      listener = httpListener(
+          { errorHandler, logErrors: false },
+          () => {
+            setTimeout(resolve);
+            throw error;
+          },
+      );
+    });
+
+    server.listener.mockImplementation((request, response) => {
+      listener(request, response);
+      response.end('NO RESPONSE');
+    });
+
+    const response = await server.get('/test');
+
+    expect(await response.body()).toBe('NO RESPONSE');
+
+    await whenErrorLogged;
+    expect(logErrorSpy).not.toHaveBeenCalled();
   });
 
   describe('requestAddresses', () => {

@@ -36,6 +36,13 @@ export interface HttpConfig<TMeans extends HttpMeans = HttpMeans> {
    */
   readonly errorHandler?: RequestHandler<TMeans & ErrorMeans> | boolean;
 
+  /**
+   * Whether to log HTTP processing errors.
+   *
+   * @default `true`, which means errors will be logged with {@link LoggerMeans logger means}, created if necessary.
+   */
+  readonly logErrors?: boolean;
+
 }
 
 export namespace HttpConfig {

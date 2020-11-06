@@ -110,6 +110,7 @@ export function httpListener<
     handler = configOrHandler as RequestHandler<HttpMeans<TRequest, TResponse>>;
   }
 
+  const { logErrors = true } = config;
   const fullHandler = fullHttpHandler(config, handler);
   const incomingHandler = incomingHttpHandler(
       config.handleBy
@@ -143,7 +144,9 @@ export function httpListener<
           onError,
       );
     }).catch(error => {
-      console.error(`[${request.method} ${request.url}]`, 'Unhandled error', error);
+      if (logErrors) {
+        console.error(`[${request.method} ${request.url}]`, 'Unhandled error', error);
+      }
     });
   };
 }
@@ -242,15 +245,19 @@ function defaultHttpHandler<TExt, TRequest extends IncomingMessage, TResponse ex
  */
 function httpErrorHandler<TExt, TRequest extends IncomingMessage, TResponse extends ServerResponse>(
     {
+      logErrors = true,
       defaultHandler = true,
       errorHandler = true,
     }: AnyHttpConfig<TExt, TRequest, TResponse>,
 ): RequestHandler<HttpMeans<TRequest, TResponse> & TExt & ErrorMeans> {
-  if (!errorHandler) {
-    return Logging.for(defaultHandler ? renderEmptyHttpError : logHttpError);
-  }
 
-  const onError = errorHandler === true ? renderHttpError : errorHandler;
+  const onError = errorHandler
+      ? (errorHandler === true ? renderHttpError : errorHandler)
+      : (defaultHandler ? renderEmptyHttpResponse : noop);
+
+  if (!logErrors) {
+    return onError;
+  }
 
   return Logging.for(context => {
     logHttpError(context);
@@ -288,8 +295,7 @@ function logHttpError(
 /**
  * @internal
  */
-function renderEmptyHttpError(context: RequestContext<HttpMeans & ErrorMeans & LoggerMeans>): void {
-  logHttpError(context);
+function renderEmptyHttpResponse(context: RequestContext<HttpMeans & ErrorMeans>): void {
   context.response.end();
 }
 
