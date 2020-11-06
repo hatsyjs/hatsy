@@ -1,3 +1,4 @@
+import { Logging } from '../../core/logging';
 import { suppressedLog, TestHttpServer } from '../../testing';
 import { httpListener } from '../http-listener';
 import { Rendering } from '../render';
@@ -17,7 +18,9 @@ describe('dispatchByLanguage', () => {
   beforeEach(() => {
     server.listener.mockImplementation(httpListener(
         {
-          log: suppressedLog,
+          handleBy(handler) {
+            return Logging.logBy(suppressedLog).for(handler);
+          },
         },
         Rendering
             .for(dispatchByLanguage({

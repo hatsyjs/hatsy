@@ -1,5 +1,6 @@
-import { RequestContext, requestHandler } from '../../core';
+import { Logging, RequestContext, requestHandler } from '../../core';
 import { suppressedLog, TestHttpServer } from '../../testing';
+import { HttpError } from '../http-error';
 import { httpListener } from '../http-listener';
 import type { HttpMeans } from '../http.means';
 import { Rendering, RenderMeans } from '../render';
@@ -67,17 +68,16 @@ describe('dispatchByName', () => {
   });
   it('dispatches to GET without method specified', async () => {
     server.listener.mockImplementation(httpListener(
-        Rendering
-            .for(requestHandler([
-                ({ request }) => {
-                  delete request.method;
-                },
-                dispatchByMethod({
-                  get({ renderJson }): void {
-                    renderJson({ response: 'ok' });
-                  },
-                }),
-            ])),
+        Rendering.for(requestHandler([
+          ({ request }) => {
+            delete request.method;
+          },
+          dispatchByMethod({
+            get({ renderJson }): void {
+              renderJson({ response: 'ok' });
+            },
+          }),
+        ])),
     ));
 
     const response = await server.get('/', { method: 'HEAD' });
@@ -88,14 +88,20 @@ describe('dispatchByName', () => {
   it('does not dispatch without corresponding handler', async () => {
     server.listener.mockImplementation(httpListener(
         {
-          log: suppressedLog,
+          handleBy(handler) {
+            return Logging.logBy(suppressedLog).for(handler);
+          },
         },
-        Rendering
-            .for(dispatchByMethod({
-              get({ renderJson }): void {
-                renderJson({ response: 'ok' });
-              },
-            })),
+        Rendering.for(requestHandler([
+          dispatchByMethod({
+            get({ renderJson }): void {
+              renderJson({ response: 'ok' });
+            },
+          }),
+          () => {
+            throw new HttpError(404);
+          },
+        ])),
     ));
 
     const response = await server.get('/', { method: 'PUT' });

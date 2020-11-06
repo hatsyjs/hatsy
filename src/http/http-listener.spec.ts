@@ -1,6 +1,6 @@
 import { noop } from '@proc7ts/primitives';
 import type { ErrorMeans, RequestContext } from '../core';
-import { suppressedLog, TestHttpServer } from '../testing';
+import { TestHttpServer } from '../testing';
 import { HttpError } from './http-error';
 import { httpListener } from './http-listener';
 import type { HttpMeans } from './http.means';
@@ -24,7 +24,8 @@ describe('httpListener', () => {
   let logErrorSpy: jest.SpyInstance;
 
   beforeEach(() => {
-    logErrorSpy = jest.spyOn(suppressedLog, 'error');
+    logErrorSpy = jest.spyOn(console, 'error');
+    logErrorSpy.mockImplementation(noop);
   });
   afterEach(() => {
     logErrorSpy.mockRestore();
@@ -46,7 +47,7 @@ describe('httpListener', () => {
     }));
   });
   it('responds with `404` status when handler not responding', async () => {
-    server.listener.mockImplementation(httpListener({ log: suppressedLog }, noop));
+    server.listener.mockImplementation(httpListener(noop));
 
     const response = await server.get('/');
 
@@ -56,7 +57,7 @@ describe('httpListener', () => {
     expect(await response.body()).toContain('ERROR 404');
   });
   it('responds with `404` status and JSON when handler not responding and JSON expected', async () => {
-    server.listener.mockImplementation(httpListener({ log: suppressedLog }, noop));
+    server.listener.mockImplementation(httpListener(noop));
 
     const response = await server.get('/', { headers: { accept: 'application/json' } });
 
@@ -83,7 +84,7 @@ describe('httpListener', () => {
 
     const error = new Error('test');
 
-    server.listener.mockImplementation(httpListener({ log: suppressedLog }, () => { throw error; }));
+    server.listener.mockImplementation(httpListener(() => { throw error; }));
 
     const response = await server.get('/test');
 
@@ -95,7 +96,7 @@ describe('httpListener', () => {
 
     const error = new Error('test');
 
-    server.listener.mockImplementation(httpListener({ log: suppressedLog }, () => { throw error; }));
+    server.listener.mockImplementation(httpListener(() => { throw error; }));
 
     const response = await server.get('/test', { headers: { accept: 'application/json' } });
 
@@ -107,7 +108,7 @@ describe('httpListener', () => {
 
     const error = new HttpError(403, { details: 'No Go' });
 
-    server.listener.mockImplementation(httpListener({ log: suppressedLog }, () => { throw error; }));
+    server.listener.mockImplementation(httpListener(() => { throw error; }));
 
     const response = await server.get('/test');
 
@@ -123,7 +124,7 @@ describe('httpListener', () => {
 
     const error = new HttpError(403, { details: 'No Go' });
 
-    server.listener.mockImplementation(httpListener({ log: suppressedLog }, () => { throw error; }));
+    server.listener.mockImplementation(httpListener(() => { throw error; }));
 
     const response = await server.get('/test', { headers: { accept: 'application/json' } });
 
@@ -141,7 +142,7 @@ describe('httpListener', () => {
     });
 
     server.listener.mockImplementation(httpListener(
-        { log: suppressedLog, defaultHandler },
+        { defaultHandler },
         noop,
     ));
 
@@ -160,7 +161,7 @@ describe('httpListener', () => {
     });
 
     server.listener.mockImplementation(httpListener(
-        { log: suppressedLog, errorHandler },
+        { errorHandler },
         () => { throw error; },
     ));
 
@@ -181,7 +182,7 @@ describe('httpListener', () => {
     });
 
     server.listener.mockImplementation(httpListener(
-        { log: suppressedLog, errorHandler },
+        { errorHandler },
         () => { throw error; },
     ));
 
@@ -200,7 +201,7 @@ describe('httpListener', () => {
     const error = new Error('test');
 
     server.listener.mockImplementation(httpListener(
-        { log: suppressedLog, errorHandler: false },
+        { errorHandler: false },
         () => { throw error; },
     ));
 
@@ -209,11 +210,25 @@ describe('httpListener', () => {
     expect(await response.body()).toBe('');
     expect(logErrorSpy).toHaveBeenCalledWith('[GET /test]', error);
   });
+  it('does not log ERROR when there is no error handler', async () => {
+
+    const error = new Error('test');
+
+    server.listener.mockImplementation(httpListener(
+        { errorHandler: false, logError: false },
+        () => { throw error; },
+    ));
+
+    const response = await server.get('/test');
+
+    expect(await response.body()).toBe('');
+    expect(logErrorSpy).not.toHaveBeenCalled();
+  });
   it('logs ERROR when there is neither error, not default handler', async () => {
 
     const error = new Error('test');
     const listener = httpListener(
-        { log: suppressedLog, defaultHandler: false, errorHandler: false },
+        { defaultHandler: false, errorHandler: false },
         () => { throw error; },
     );
 
@@ -228,7 +243,7 @@ describe('httpListener', () => {
     expect(await response.body()).toBe('NO RESPONSE');
     expect(logErrorSpy).toHaveBeenCalledWith('[GET /test]', error);
   });
-  it('logs unhandled errors', async () => {
+  it('logs unhandled error', async () => {
 
     const error = new Error('test');
     const errorHandler = jest.fn(() => {
@@ -239,7 +254,34 @@ describe('httpListener', () => {
     });
 
     const listener = httpListener(
-        { log: suppressedLog, errorHandler },
+        { errorHandler },
+        () => { throw error; },
+    );
+
+    server.listener.mockImplementation((request, response) => {
+      listener(request, response);
+      response.end('NO RESPONSE');
+    });
+
+    const response = await server.get('/test');
+
+    expect(await response.body()).toBe('NO RESPONSE');
+
+    await whenErrorLogged;
+    expect(logErrorSpy).toHaveBeenCalledWith('[GET /test]', 'Unhandled error', error);
+  });
+  it('logs unhandled error when logging disabled', async () => {
+
+    const error = new Error('test');
+    const errorHandler = jest.fn(() => {
+      throw error;
+    });
+    const whenErrorLogged = new Promise(resolve => {
+      logErrorSpy.mockImplementation(resolve);
+    });
+
+    const listener = httpListener(
+        { errorHandler, logError: false },
         () => { throw error; },
     );
 

@@ -1,4 +1,5 @@
 import { noop } from '@proc7ts/primitives';
+import { Logging } from '../core/logging';
 import { suppressedLog, TestHttpServer } from '../testing';
 import { HttpError } from './http-error';
 import { httpListener } from './http-listener';
@@ -59,7 +60,9 @@ describe('middleware', () => {
 
     server.listener.mockImplementation(httpListener(
         {
-          log: suppressedLog,
+          handleBy(handler) {
+            return Logging.logBy(suppressedLog).for(handler);
+          },
         },
         middleware(ware).for(noop),
     ));

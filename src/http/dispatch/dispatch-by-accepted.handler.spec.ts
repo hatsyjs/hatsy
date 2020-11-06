@@ -1,4 +1,5 @@
 import type { RequestContext } from '../../core';
+import { Logging } from '../../core';
 import { suppressedLog, TestHttpServer } from '../../testing';
 import { httpListener } from '../http-listener';
 import type { HttpMeans } from '../http.means';
@@ -20,7 +21,9 @@ describe('dispatchByAccepted', () => {
   beforeEach(() => {
     server.listener.mockImplementation(httpListener(
         {
-          log: suppressedLog,
+          handleBy(handler) {
+            return Logging.logBy(suppressedLog).for(handler);
+          },
         },
         Rendering
             .for(dispatchByAccepted({
