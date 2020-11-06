@@ -1,11 +1,10 @@
 import { noop } from '@proc7ts/primitives';
-import { dispatchError } from '../core';
 import { Logging } from '../core/logging';
 import { suppressedLog, TestHttpServer } from '../testing';
 import { HttpError } from './http-error';
 import { httpListener } from './http-listener';
 import { middleware, Middleware } from './middleware';
-import { renderHttpError, Rendering } from './render';
+import { Rendering } from './render';
 
 describe('middleware', () => {
 
@@ -60,12 +59,12 @@ describe('middleware', () => {
     ware.mockImplementation((_request, _response, next) => next(new HttpError(503, { statusMessage: 'Custom Error' })));
 
     server.listener.mockImplementation(httpListener(
-        Logging.logBy(suppressedLog).for(
-            dispatchError(
-                renderHttpError,
-                middleware(ware).for(noop),
-            ),
-        ),
+        {
+          handleBy(handler) {
+            return Logging.logBy(suppressedLog).for(handler);
+          },
+        },
+        middleware(ware).for(noop),
     ));
 
     const response = await server.get('/test');

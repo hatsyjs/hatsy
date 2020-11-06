@@ -1,9 +1,9 @@
-import { dispatchError, Logging, RequestContext, requestHandler } from '../../core';
+import { Logging, RequestContext, requestHandler } from '../../core';
 import { suppressedLog, TestHttpServer } from '../../testing';
 import { HttpError } from '../http-error';
 import { httpListener } from '../http-listener';
 import type { HttpMeans } from '../http.means';
-import { renderHttpError, Rendering, RenderMeans } from '../render';
+import { Rendering, RenderMeans } from '../render';
 import { dispatchByMethod } from './dispatch-by-method.handler';
 
 describe('dispatchByName', () => {
@@ -87,21 +87,21 @@ describe('dispatchByName', () => {
   });
   it('does not dispatch without corresponding handler', async () => {
     server.listener.mockImplementation(httpListener(
-        Logging.logBy(suppressedLog).for(
-            dispatchError(
-                renderHttpError,
-                Rendering.for(requestHandler([
-                    dispatchByMethod({
-                      get({ renderJson }): void {
-                        renderJson({ response: 'ok' });
-                      },
-                    }),
-                    () => {
-                      throw new HttpError(404);
-                    },
-                ])),
-            ),
-        ),
+        {
+          handleBy(handler) {
+            return Logging.logBy(suppressedLog).for(handler);
+          },
+        },
+        Rendering.for(requestHandler([
+          dispatchByMethod({
+            get({ renderJson }): void {
+              renderJson({ response: 'ok' });
+            },
+          }),
+          () => {
+            throw new HttpError(404);
+          },
+        ])),
     ));
 
     const response = await server.get('/', { method: 'PUT' });

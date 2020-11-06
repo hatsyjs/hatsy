@@ -1,9 +1,9 @@
 import type { RequestContext } from '../../core';
-import { dispatchError, Logging } from '../../core';
+import { Logging } from '../../core';
 import { suppressedLog, TestHttpServer } from '../../testing';
 import { httpListener } from '../http-listener';
 import type { HttpMeans } from '../http.means';
-import { renderHttpError, Rendering, RenderMeans } from '../render';
+import { Rendering, RenderMeans } from '../render';
 import { addResponseHeader } from '../util';
 import { dispatchByAccepted } from './dispatch-by-accepted.handler';
 
@@ -20,27 +20,28 @@ describe('dispatchByAccepted', () => {
 
   beforeEach(() => {
     server.listener.mockImplementation(httpListener(
-        Logging.logBy(suppressedLog)
-            .for(dispatchError(
-                renderHttpError,
-                Rendering
-                    .for(dispatchByAccepted({
+        {
+          handleBy(handler) {
+            return Logging.logBy(suppressedLog).for(handler);
+          },
+        },
+        Rendering
+            .for(dispatchByAccepted({
 
-                      ['application/json']({ renderJson }: RequestContext<HttpMeans & RenderMeans>): void {
-                        renderJson({ response: 'json' });
-                      },
+              ['application/json']({ renderJson }: RequestContext<HttpMeans & RenderMeans>): void {
+                renderJson({ response: 'json' });
+              },
 
-                      ['text/html']({ renderHtml }: RequestContext<HttpMeans & RenderMeans>): void {
-                        renderHtml('<html lang="en"><body>HTML</body></html>');
-                      },
+              ['text/html']({ renderHtml }: RequestContext<HttpMeans & RenderMeans>): void {
+                renderHtml('<html lang="en"><body>HTML</body></html>');
+              },
 
-                      ['*/*']({ response, renderJson }: RequestContext<HttpMeans & RenderMeans>): void {
-                        addResponseHeader(response, 'Vary', 'Accept-Language');
-                        renderJson({ response: 'fallback' });
-                      },
+              ['*/*']({ response, renderJson }: RequestContext<HttpMeans & RenderMeans>): void {
+                addResponseHeader(response, 'Vary', 'Accept-Language');
+                renderJson({ response: 'fallback' });
+              },
 
-                    })),
-            )),
+            })),
     ));
   });
 

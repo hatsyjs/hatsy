@@ -1,8 +1,7 @@
-import { dispatchError } from '../../core';
 import { Logging } from '../../core/logging';
 import { suppressedLog, TestHttpServer } from '../../testing';
 import { httpListener } from '../http-listener';
-import { renderHttpError, Rendering } from '../render';
+import { Rendering } from '../render';
 import { dispatchByLanguage } from './dispatch-by-language.handler';
 
 describe('dispatchByLanguage', () => {
@@ -18,27 +17,27 @@ describe('dispatchByLanguage', () => {
 
   beforeEach(() => {
     server.listener.mockImplementation(httpListener(
-        Logging.logBy(suppressedLog).for(
-            dispatchError(
-                renderHttpError,
-                Rendering
-                    .for(dispatchByLanguage({
+        {
+          handleBy(handler) {
+            return Logging.logBy(suppressedLog).for(handler);
+          },
+        },
+        Rendering
+            .for(dispatchByLanguage({
 
-                      en({ renderJson }): void {
-                        renderJson({ lang: 'en' });
-                      },
+              en({ renderJson }): void {
+                renderJson({ lang: 'en' });
+              },
 
-                      ['en-US']({ renderJson }): void {
-                        renderJson({ lang: 'en-US' });
-                      },
+              ['en-US']({ renderJson }): void {
+                renderJson({ lang: 'en-US' });
+              },
 
-                      ['*']({ renderJson }) {
-                        renderJson({ lang: 'any' });
-                      },
+              ['*']({ renderJson }) {
+                renderJson({ lang: 'any' });
+              },
 
-                    })),
-            ),
-        ),
+            })),
     ));
   });
 
