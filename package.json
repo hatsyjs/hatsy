@@ -50,7 +50,7 @@
     }
   },
   "dependencies": {
-    "@hatsy/hten": "^1.0.0",
+    "@hatsy/hten": "^1.1.0",
     "@hatsy/http-header-value": "^3.4.0",
     "@proc7ts/primitives": "^1.3.2"
   },

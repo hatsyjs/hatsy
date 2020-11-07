@@ -2,13 +2,12 @@
  * @packageDocumentation
  * @module @hatsy/hatsy
  */
-import { escapeXML } from '@hatsy/hten';
+import { escapeXML, HTML__MIME, JSON__MIME, JSON_Text__MIME } from '@hatsy/hten';
 import { STATUS_CODES } from 'http';
 import type { ErrorMeans, RequestContext, RequestHandler } from '../../core';
 import { dispatchByAccepted } from '../dispatch';
 import { HttpError } from '../http-error';
 import type { HttpMeans } from '../http.means';
-import { HTML__MIME, JSON__MIME, TextJSON__MIME } from '../util';
 import type { RenderMeans } from './render.means';
 import { Rendering } from './rendering.capability';
 
@@ -87,7 +86,7 @@ export const renderHttpError: RequestHandler<HttpMeans & ErrorMeans> = (/*#__PUR
     /*#__PURE__*/ dispatchByAccepted<HttpMeans & ErrorMeans & RenderMeans>(
         {
           [JSON__MIME]: renderJsonError,
-          [TextJSON__MIME]: renderJsonError,
+          [JSON_Text__MIME]: renderJsonError,
           [HTML__MIME]: renderHtmlError,
           '*/*': renderHtmlError,
         },

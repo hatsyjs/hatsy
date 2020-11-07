@@ -2,9 +2,9 @@
  * @packageDocumentation
  * @module @hatsy/hatsy
 */
+import { HTML__MIME, JSON__MIME } from '@hatsy/hten';
 import { RequestCapability, requestExtension, RequestHandler } from '../../core';
 import type { HttpMeans } from '../http.means';
-import { HTML__MIME, JSON__MIME } from '../util';
 import type { RenderMeans } from './render.means';
 
 /**

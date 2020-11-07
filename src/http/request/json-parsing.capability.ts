@@ -2,6 +2,7 @@
  * @packageDocumentation
  * @module @hatsy/hatsy
  */
+import { JSON__MIME, JSON_Text__MIME, Text__MIME } from '@hatsy/hten';
 import { asis } from '@proc7ts/primitives';
 import {
   RequestBodyMeans,
@@ -14,16 +15,15 @@ import {
 import { readAll } from '../../impl';
 import { HttpError } from '../http-error';
 import type { HttpMeans } from '../http.means';
-import { JSON__MIME, Text__MIME, TextJSON__MIME } from '../util';
 import type { FormDecoding } from './form-decoding.capability';
 
 /**
  * @internal
  */
-const JSON_MIMES: Record<string, number> = {
+const JSON_MIMES: Readonly<Record<string, number>> = {
   [Text__MIME]: 1,
   [JSON__MIME]: 1,
-  [TextJSON__MIME]: 1,
+  [JSON_Text__MIME]: 1,
 };
 
 /**
