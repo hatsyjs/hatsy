@@ -23,7 +23,8 @@ Example
 -------
 
 ```typescript
-import { escapeHtml, httpListener, Rendering } from '@hatsy/hatsy';
+import { httpListener, Rendering } from '@hatsy/hatsy';
+import { escapeHTML } from '@hatsy/hten';
 import { dispatchByName, Routing } from '@hatsy/router';
 import { createServer } from 'http';
 
@@ -35,7 +36,7 @@ const server = createServer(httpListener(
             renderHtml(
 `<!DOCTYPE html>
 <html lang="en">
-<body>Hello, ${escapeHtml(searchParams.get('name') || 'World')}!</body>
+<body>Hello, ${escapeHTML(searchParams.get('name') || 'World')}!</body>
 </html>
 `            
             );
@@ -99,21 +100,27 @@ a [RequestHandler] to process HTTP requests by.
 
 [HTTP processing configuration] has the following options:
 
-- `log` - A `Console` instance to log messages with.
-
-  `console` by default.
-
 - `defaultHandler` - A request handler to call if other handlers did not respond.
 
   Issues 404 (Not Found) error by default.
 
 - `errorHandler` - A request handler to call when error occurred.
 
-  By default, handles `HttpError` with corresponding status code and renders error page (either HTML or JSON).
+  By default, handles [HttpError] with corresponding status code and renders error page (either HTML or JSON).
+
+- `logError` - Whether to log HTTP processing error.
+
+  `true` by default.
+
+- `handleBy` - Creates actual HTTP request handler.
+
+  This can be used e.g. to set up additional request processing capabilities, such as [Logging].
 
 
 [HTTP processing configuration]: https://hatsyjs.github.io/hatsy/interfaces/@hatsy_hatsy.HttpConfig.html
-  
+[HttpError]: https://hatsyjs.github.io/hatsy/classes/@hatsy_hatsy.HttpError.html 
+[Logging]: https://hatsyjs.github.io/hatsy/interfaces/@hatsy_hatsy.Logging.html
+
 
 Request Handlers
 ----------------
@@ -140,7 +147,6 @@ By default, HTTP request processing context contains the following properties:
 - `request` - Node.js HTTP request.
 - `response` - Node.js HTTP response.
 - `requestAddresses` object containing request `url` and remote `ip`.
-- `log` - A `Console` instance to log messages with.
 - `next()` method the handler can use to delegate to another one.
 
 However, the request handler may require more properties to operate. This is where context extension comes into play:
@@ -208,10 +214,16 @@ Some capabilities are:
   Extends request context with `RequestBodyMeans` containing `body` property with request body optionally
   converted to other representation.
 
+- `Logging`
+
+  Request logging capability.
+  Extends request context with `LoggerMeans` containing a logger instance for request logging.
+
 - `Routing` from [@hatsy/router] module.
 
   Initiates routing.
   Extends request context with `RouterMeans` containing request route used to dispatch to handler(s) matching it.
+
 
 See the [very first example] containing capabilities usage. Here is the explanation:
 
