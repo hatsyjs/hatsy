@@ -23,6 +23,7 @@
   "bugs": {
     "url": "https://github.com/hatsyjs/hatsy/issues"
   },
+  "type": "module",
   "main": "dist/hatsy.js",
   "module": "dist/hatsy.mjs",
   "types": "index.d.ts",
