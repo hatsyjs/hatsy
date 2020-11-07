@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>ErrorMeans | Hatsy</title>
+	<title>LoggerMeans | Hatsy</title>
 	<meta name="description" content="Documentation for Hatsy">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -57,10 +57,10 @@
 					<a href="../modules/@hatsy_hatsy_core.html">@hatsy/hatsy/core</a>
 				</li>
 				<li>
-					<a href="@hatsy_hatsy_core.ErrorMeans.html">ErrorMeans</a>
+					<a href="@hatsy_hatsy_core.LoggerMeans.html">LoggerMeans</a>
 				</li>
 			</ul>
-			<h1>Interface ErrorMeans&lt;TError&gt;</h1>
+			<h1>Interface LoggerMeans&lt;TLogger&gt;</h1>
 		</div>
 	</div>
 </header>
@@ -70,20 +70,18 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Error processing means.</p>
+						<p>Request logger means.</p>
 					</div>
-					<p>A context with these means is created once error is thrown by one of the handlers right before passing it to error
-					handler.</p>
 				</div>
 			</section>
 			<section class="tsd-panel tsd-type-parameters">
 				<h3>Type parameters</h3>
 				<ul class="tsd-type-parameters">
 					<li>
-						<h4>TError = <span class="tsd-signature-type">any</span></h4>
+						<h4>TLogger<span class="tsd-signature-symbol">: </span><a href="@hatsy_hatsy_core.RequestLogger.html" class="tsd-signature-type">RequestLogger</a> = <span class="tsd-signature-type">RequestLogger</span></h4>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
-								<p>Error type.</p>
+								<p>Request logger type.</p>
 							</div>
 						</div>
 					</li>
@@ -93,7 +91,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">ErrorMeans</span>
+						<span class="target">LoggerMeans</span>
 					</li>
 				</ul>
 			</section>
@@ -104,7 +102,7 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="@hatsy_hatsy_core.ErrorMeans.html#error" class="tsd-kind-icon">error</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="@hatsy_hatsy_core.LoggerMeans.html#log" class="tsd-kind-icon">log</a></li>
 							</ul>
 						</section>
 					</div>
@@ -113,17 +111,17 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="error" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> error</h3>
-					<div class="tsd-signature tsd-kind-icon">error<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">TError</span></div>
+					<a name="log" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> log</h3>
+					<div class="tsd-signature tsd-kind-icon">log<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">TLogger</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/26ceebe/src/core/error.means.ts#L18">hatsy/hatsy/src/core/error.means.ts:18</a></li>
+							<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/26ceebe/src/core/logging/logger.means.ts#L17">hatsy/hatsy/src/core/logging/logger.means.ts:17</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Error thrown.</p>
+							<p>A logger to use during request processing.</p>
 						</div>
 					</div>
 				</section>
@@ -151,21 +149,21 @@
 					<li class=" tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="../classes/@hatsy_hatsy_core.RequestCapability.html" class="tsd-kind-icon">Request<wbr>Capability</a>
 					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="@hatsy_hatsy_core.ErrorMeans.html" class="tsd-kind-icon">Error<wbr>Means</a>
+					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="@hatsy_hatsy_core.ErrorMeans.html" class="tsd-kind-icon">Error<wbr>Means</a>
+						<a href="@hatsy_hatsy_core.LoggerMeans.html" class="tsd-kind-icon">Logger<wbr>Means</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="@hatsy_hatsy_core.ErrorMeans.html#error" class="tsd-kind-icon">error</a>
+								<a href="@hatsy_hatsy_core.LoggerMeans.html#log" class="tsd-kind-icon">log</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="@hatsy_hatsy_core.LoggerMeans.html" class="tsd-kind-icon">Logger<wbr>Means</a>
-					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="@hatsy_hatsy_core.Logging.html" class="tsd-kind-icon">Logging</a>
 					</li>

@@ -85,7 +85,10 @@
 							<h3>Interfaces</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter"><a href="../interfaces/@hatsy_hatsy_core.ErrorMeans.html" class="tsd-kind-icon">Error<wbr>Means</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter"><a href="../interfaces/@hatsy_hatsy_core.LoggerMeans.html" class="tsd-kind-icon">Logger<wbr>Means</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter"><a href="../interfaces/@hatsy_hatsy_core.Logging.html" class="tsd-kind-icon">Logging</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter"><a href="../interfaces/@hatsy_hatsy_core.RequestBodyMeans.html" class="tsd-kind-icon">Request<wbr>Body<wbr>Means</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/@hatsy_hatsy_core.RequestLogger.html" class="tsd-kind-icon">Request<wbr>Logger</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
@@ -95,6 +98,12 @@
 								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter"><a href="@hatsy_hatsy_core.html#RequestHandlerMethod" class="tsd-kind-icon">Request<wbr>Handler<wbr>Method</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter"><a href="@hatsy_hatsy_core.html#RequestModification" class="tsd-kind-icon">Request<wbr>Modification</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter"><a href="@hatsy_hatsy_core.html#RequestValueTransformer" class="tsd-kind-icon">Request<wbr>Value<wbr>Transformer</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Variables</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="@hatsy_hatsy_core.html#Logging-1" class="tsd-kind-icon">Logging</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
@@ -118,7 +127,7 @@
 					<div class="tsd-signature tsd-kind-icon">Request<wbr>Handler&lt;TMeans&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, context<span class="tsd-signature-symbol">: </span><a href="@hatsy_hatsy_core.RequestContext.html" class="tsd-signature-type">RequestContext</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TMeans</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">PromiseLike</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">void</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/9713911/src/core/request-handler.ts#L18">hatsy/hatsy/src/core/request-handler.ts:18</a></li>
+							<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/26ceebe/src/core/request-handler.ts#L18">hatsy/hatsy/src/core/request-handler.ts:18</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -181,7 +190,7 @@
 					<div class="tsd-signature tsd-kind-icon">Request<wbr>Handler<wbr>Method&lt;TThis, TMeans&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TThis</span>, context<span class="tsd-signature-symbol">: </span><a href="@hatsy_hatsy_core.RequestContext.html" class="tsd-signature-type">RequestContext</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TMeans</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">PromiseLike</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">void</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/9713911/src/core/request-handler.ts#L38">hatsy/hatsy/src/core/request-handler.ts:38</a></li>
+							<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/26ceebe/src/core/request-handler.ts#L38">hatsy/hatsy/src/core/request-handler.ts:38</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -249,7 +258,7 @@
 					<div class="tsd-signature tsd-kind-icon">Request<wbr>Modification&lt;TMeans, TExt&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{}</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/9713911/src/core/request-modification.ts#L13">hatsy/hatsy/src/core/request-modification.ts:13</a></li>
+							<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/26ceebe/src/core/request-modification.ts#L13">hatsy/hatsy/src/core/request-modification.ts:13</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -284,7 +293,7 @@
 					<div class="tsd-signature tsd-kind-icon">Request<wbr>Value<wbr>Transformer&lt;TMeans, TFrom, TTo&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span>, from<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TFrom</span>, context<span class="tsd-signature-symbol">: </span><a href="@hatsy_hatsy_core.RequestContext.html" class="tsd-signature-type">RequestContext</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TMeans</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">TTo</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">PromiseLike</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TTo</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/9713911/src/core/request-value-transformer.ts#L16">hatsy/hatsy/src/core/request-value-transformer.ts:16</a></li>
+							<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/26ceebe/src/core/request-value-transformer.ts#L16">hatsy/hatsy/src/core/request-value-transformer.ts:16</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -363,6 +372,26 @@
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Variables</h2>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
+					<a name="Logging-1" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> Logging</h3>
+					<div class="tsd-signature tsd-kind-icon">Logging<span class="tsd-signature-symbol">:</span> <a href="../interfaces/@hatsy_hatsy_core.Logging.html" class="tsd-signature-type">Logging</a><span class="tsd-signature-symbol"> = (/*#__PURE__*/ new LoggingCapability&lt;unknown, RequestLogger&gt;(console, true))</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/26ceebe/src/core/logging/logging.capability.ts#L77">hatsy/hatsy/src/core/logging/logging.capability.ts:77</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Request logging capability instance.</p>
+						</div>
+						<p>Uses a global <code>console</code> as <a href="../interfaces/@hatsy_hatsy_core.LoggerMeans.html#log">request logger</a>, unless the logger is present in request context
+						already.</p>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Functions</h2>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
 					<a name="dispatchError" class="tsd-anchor"></a>
@@ -374,7 +403,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/9713911/src/core/dispatch-error.ts#L20">hatsy/hatsy/src/core/dispatch-error.ts:20</a></li>
+									<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/26ceebe/src/core/dispatch-error.ts#L20">hatsy/hatsy/src/core/dispatch-error.ts:20</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -422,7 +451,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/9713911/src/core/request-modification.ts#L44">hatsy/hatsy/src/core/request-modification.ts:44</a></li>
+									<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/26ceebe/src/core/request-modification.ts#L44">hatsy/hatsy/src/core/request-modification.ts:44</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -470,7 +499,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/9713911/src/core/request-handler.ts#L61">hatsy/hatsy/src/core/request-handler.ts:61</a></li>
+									<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/26ceebe/src/core/request-handler.ts#L61">hatsy/hatsy/src/core/request-handler.ts:61</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -513,7 +542,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/9713911/src/core/request-processor.ts#L71">hatsy/hatsy/src/core/request-processor.ts:71</a></li>
+									<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/26ceebe/src/core/request-processor.ts#L71">hatsy/hatsy/src/core/request-processor.ts:71</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -554,7 +583,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/9713911/src/core/request-modification.ts#L29">hatsy/hatsy/src/core/request-modification.ts:29</a></li>
+									<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/26ceebe/src/core/request-modification.ts#L29">hatsy/hatsy/src/core/request-modification.ts:29</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -614,7 +643,16 @@
 						<a href="../interfaces/@hatsy_hatsy_core.ErrorMeans.html" class="tsd-kind-icon">Error<wbr>Means</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../interfaces/@hatsy_hatsy_core.LoggerMeans.html" class="tsd-kind-icon">Logger<wbr>Means</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../interfaces/@hatsy_hatsy_core.Logging.html" class="tsd-kind-icon">Logging</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="../interfaces/@hatsy_hatsy_core.RequestBodyMeans.html" class="tsd-kind-icon">Request<wbr>Body<wbr>Means</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/@hatsy_hatsy_core.RequestLogger.html" class="tsd-kind-icon">Request<wbr>Logger</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="@hatsy_hatsy_core.html#RequestHandler" class="tsd-kind-icon">Request<wbr>Handler</a>
@@ -627,6 +665,9 @@
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="@hatsy_hatsy_core.html#RequestValueTransformer" class="tsd-kind-icon">Request<wbr>Value<wbr>Transformer</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module">
+						<a href="@hatsy_hatsy_core.html#Logging-1" class="tsd-kind-icon">Logging</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="@hatsy_hatsy_core.html#dispatchError" class="tsd-kind-icon">dispatch<wbr>Error</a>
@@ -653,6 +694,7 @@
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
 				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
 				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
 				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>

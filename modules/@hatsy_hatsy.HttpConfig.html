@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>HttpMeans | Hatsy</title>
+	<title>HttpConfig | Hatsy</title>
 	<meta name="description" content="Documentation for Hatsy">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -57,10 +57,10 @@
 					<a href="@hatsy_hatsy.html">@hatsy/hatsy</a>
 				</li>
 				<li>
-					<a href="@hatsy_hatsy.HttpMeans.html">HttpMeans</a>
+					<a href="@hatsy_hatsy.HttpConfig.html">HttpConfig</a>
 				</li>
 			</ul>
-			<h1>Namespace HttpMeans&lt;TRequest, TResponse&gt;</h1>
+			<h1>Namespace HttpConfig&lt;TMeans&gt;</h1>
 		</div>
 	</div>
 </header>
@@ -70,30 +70,33 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>HTTP request processing means.</p>
+						<p>HTTP processing configuration.</p>
 					</div>
-					<p>When passed to HTTP handler the latter responds by utilizing the passed in <a href="@hatsy_hatsy.HttpMeans.html#response">response</a>, or delegates to the
-					<a href="../interfaces/@hatsy_hatsy_core.RequestContext.Agent.html#next">next handler</a>.</p>
 				</div>
 			</section>
 			<section class="tsd-panel tsd-type-parameters">
 				<h3>Type parameters</h3>
 				<ul class="tsd-type-parameters">
 					<li>
-						<h4>TRequest<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IncomingMessage</span> = <span class="tsd-signature-type">IncomingMessage</span></h4>
+						<h4>TMeans<span class="tsd-signature-symbol">: </span><a href="@hatsy_hatsy.HttpMeans.html" class="tsd-signature-type">HttpMeans</a> = <span class="tsd-signature-type">HttpMeans</span></h4>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
-								<p>HTTP request type.</p>
+								<p>A type of supported HTTP request processing means.</p>
 							</div>
 						</div>
 					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-hierarchy">
+				<h3>Hierarchy</h3>
+				<ul class="tsd-hierarchy">
 					<li>
-						<h4>TResponse<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ServerResponse</span> = <span class="tsd-signature-type">ServerResponse</span></h4>
-						<div class="tsd-comment tsd-typography">
-							<div class="lead">
-								<p>HTTP response type.</p>
-							</div>
-						</div>
+						<span class="target">HttpConfig</span>
+						<ul class="tsd-hierarchy">
+							<li>
+								<a href="../interfaces/@hatsy_hatsy.HttpConfig.Extended.html" class="tsd-signature-type">Extended</a>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</section>
@@ -104,15 +107,15 @@
 						<section class="tsd-index-section ">
 							<h3>Interfaces</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-interface tsd-parent-kind-namespace"><a href="../interfaces/@hatsy_hatsy.HttpMeans.Addresses.html" class="tsd-kind-icon">Addresses</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter"><a href="../interfaces/@hatsy_hatsy.HttpConfig.Extended.html" class="tsd-kind-icon">Extended</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-namespace"><a href="@hatsy_hatsy.HttpMeans.html#request" class="tsd-kind-icon">request</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-namespace"><a href="@hatsy_hatsy.HttpMeans.html#requestAddresses" class="tsd-kind-icon">request<wbr>Addresses</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-namespace"><a href="@hatsy_hatsy.HttpMeans.html#response" class="tsd-kind-icon">response</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-namespace"><a href="@hatsy_hatsy.HttpConfig.html#defaultHandler" class="tsd-kind-icon">default<wbr>Handler</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-namespace"><a href="@hatsy_hatsy.HttpConfig.html#errorHandler" class="tsd-kind-icon">error<wbr>Handler</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-namespace"><a href="@hatsy_hatsy.HttpConfig.html#logError" class="tsd-kind-icon">log<wbr>Error</a></li>
 							</ul>
 						</section>
 					</div>
@@ -121,48 +124,70 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-namespace">
-					<a name="request" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> request</h3>
-					<div class="tsd-signature tsd-kind-icon">request<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">TRequest</span></div>
+					<a name="defaultHandler" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> default<wbr>Handler</h3>
+					<div class="tsd-signature tsd-kind-icon">default<wbr>Handler<span class="tsd-signature-symbol">:</span> <a href="@hatsy_hatsy_core.html#RequestHandler" class="tsd-signature-type">RequestHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TMeans</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/26ceebe/src/http/http.means.ts#L24">hatsy/hatsy/src/http/http.means.ts:24</a></li>
+							<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/26ceebe/src/http/http-config.ts#L24">hatsy/hatsy/src/http/http-config.ts:24</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>HTTP request.</p>
+							<p>Default HTTP request handler.</p>
 						</div>
+						<p>This handler will be called after all other handlers when response is not generated.</p>
+						<p>When set to <code>false</code> the default response won&#39;t be generated.</p>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><p><code>true</code>, which means a <code>404 Not Found</code> error will be raised if there is no response.</p>
+							</dd>
+						</dl>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-namespace">
-					<a name="requestAddresses" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> request<wbr>Addresses</h3>
-					<div class="tsd-signature tsd-kind-icon">request<wbr>Addresses<span class="tsd-signature-symbol">:</span> <a href="../interfaces/@hatsy_hatsy.HttpMeans.Addresses.html" class="tsd-signature-type">Addresses</a></div>
+					<a name="errorHandler" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> error<wbr>Handler</h3>
+					<div class="tsd-signature tsd-kind-icon">error<wbr>Handler<span class="tsd-signature-symbol">:</span> <a href="@hatsy_hatsy_core.html#RequestHandler" class="tsd-signature-type">RequestHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TMeans</span><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/@hatsy_hatsy_core.ErrorMeans.html" class="tsd-signature-type">ErrorMeans</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/26ceebe/src/http/http.means.ts#L29">hatsy/hatsy/src/http/http.means.ts:29</a></li>
+							<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/26ceebe/src/http/http-config.ts#L37">hatsy/hatsy/src/http/http-config.ts:37</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>HTTP request addressing info.</p>
+							<p>Error processing handler.</p>
 						</div>
+						<p>This handler will be called once request processing error occurred. Such handler would receive
+						a <a href="../interfaces/@hatsy_hatsy_core.ErrorMeans.html">error processing means</a> along with <a href="@hatsy_hatsy.HttpMeans.html">HTTP processing ones</a>.</p>
+						<p>When set to <code>false</code> the request processing errors will be logged, but otherwise ignored.</p>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><p><code>true</code>, which means the request processing error page will be rendered by <a href="@hatsy_hatsy.html#renderHttpError">renderHttpError</a>
+								handler.</p>
+							</dd>
+						</dl>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-namespace">
-					<a name="response" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> response</h3>
-					<div class="tsd-signature tsd-kind-icon">response<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">TResponse</span></div>
+					<a name="logError" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> log<wbr>Error</h3>
+					<div class="tsd-signature tsd-kind-icon">log<wbr>Error<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/26ceebe/src/http/http.means.ts#L34">hatsy/hatsy/src/http/http.means.ts:34</a></li>
+							<li>Defined in <a href="https://github.com/hatsyjs/hatsy/blob/26ceebe/src/http/http-config.ts#L46">hatsy/hatsy/src/http/http-config.ts:46</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>HTTP response.</p>
+							<p>Whether to log HTTP processing error.</p>
 						</div>
+						<p>Unhandled errors will be logged with <code>console.error</code> in any case.</p>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><p><code>true</code>, which means an error will be logged with <a href="../interfaces/@hatsy_hatsy_core.LoggerMeans.html">logger means</a>, created if necessary.</p>
+							</dd>
+						</dl>
 					</div>
 				</section>
 			</section>
@@ -177,17 +202,17 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-namespace">
-						<a href="../interfaces/@hatsy_hatsy.HttpMeans.Addresses.html" class="tsd-kind-icon">Addresses</a>
+					<li class=" tsd-kind-interface tsd-parent-kind-namespace tsd-has-type-parameter">
+						<a href="../interfaces/@hatsy_hatsy.HttpConfig.Extended.html" class="tsd-kind-icon">Extended</a>
 					</li>
 					<li class=" tsd-kind-property tsd-parent-kind-namespace">
-						<a href="@hatsy_hatsy.HttpMeans.html#request" class="tsd-kind-icon">request</a>
+						<a href="@hatsy_hatsy.HttpConfig.html#defaultHandler" class="tsd-kind-icon">default<wbr>Handler</a>
 					</li>
 					<li class=" tsd-kind-property tsd-parent-kind-namespace">
-						<a href="@hatsy_hatsy.HttpMeans.html#requestAddresses" class="tsd-kind-icon">request<wbr>Addresses</a>
+						<a href="@hatsy_hatsy.HttpConfig.html#errorHandler" class="tsd-kind-icon">error<wbr>Handler</a>
 					</li>
 					<li class=" tsd-kind-property tsd-parent-kind-namespace">
-						<a href="@hatsy_hatsy.HttpMeans.html#response" class="tsd-kind-icon">response</a>
+						<a href="@hatsy_hatsy.HttpConfig.html#logError" class="tsd-kind-icon">log<wbr>Error</a>
 					</li>
 				</ul>
 			</nav>
