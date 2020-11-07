@@ -24,22 +24,22 @@
     "url": "https://github.com/hatsyjs/hatsy/issues"
   },
   "type": "module",
-  "main": "dist/hatsy.js",
-  "module": "dist/hatsy.mjs",
+  "main": "dist/hatsy.cjs",
+  "module": "dist/hatsy.js",
   "types": "index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/hatsy.mjs",
-      "require": "./dist/hatsy.js"
+      "import": "./dist/hatsy.js",
+      "require": "./dist/hatsy.cjs"
     },
     "./core": {
-      "import": "./dist/hatsy.core.mjs",
-      "require": "./dist/hatsy.core.js"
+      "import": "./dist/hatsy.core.js",
+      "require": "./dist/hatsy.core.cjs"
     },
     "./package.json": "./package.json",
     "./testing": {
-      "import": "./dist/hatsy.testing.mjs",
-      "require": "./dist/hatsy.testing.js"
+      "import": "./dist/hatsy.testing.js",
+      "require": "./dist/hatsy.testing.cjs"
     }
   },
   "peerDependencies": {
