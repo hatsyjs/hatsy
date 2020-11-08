@@ -266,27 +266,16 @@ function httpErrorHandler<TExt, TRequest extends IncomingMessage, TResponse exte
  * @internal
  */
 function logHttpError(
-    { request, log, error }: RequestContext<HttpMeans & ErrorMeans & LoggerMeans>,
+    { request: { method, url }, log, error }: RequestContext<HttpMeans & ErrorMeans & LoggerMeans>,
 ): void {
 
-  const report: any[] = [`[${request.method} ${request.url}]`];
+  const prefix = `[${method} ${url}]`;
 
   if (error instanceof HttpError) {
-    report.push(error.message);
-
-    const { details, reason } = error;
-
-    if (details) {
-      report.push(details);
-    }
-    if (reason) {
-      report.push(reason);
-    }
+    log.error(prefix, ...error.toLog());
   } else {
-    report.push(error);
+    log.error(prefix, error);
   }
-
-  log.error(...report);
 }
 
 /**

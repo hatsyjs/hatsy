@@ -44,6 +44,26 @@ export class HttpError extends Error {
     this.reason = options.reason;
   }
 
+  /**
+   * Constructs loggable error representation.
+   *
+   * Returns an array containing error message, details, and reason.
+   */
+  toLog(): any[] {
+
+    const report: any[] = [this.message];
+    const { details, reason } = this;
+
+    if (details) {
+      report.push(details);
+    }
+    if (reason) {
+      report.push(reason);
+    }
+
+    return report;
+  }
+
 }
 
 function httpErrorMessage(
