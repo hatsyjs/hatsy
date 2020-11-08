@@ -183,7 +183,7 @@ describe('httpListener', () => {
     const response = await server.get('/test');
 
     expect(await response.body()).toContain('ERROR test');
-    expect(logErrorSpy).toHaveBeenCalledWith('[GET /test]', error);
+    expect(logErrorSpy).toHaveBeenCalledWith(error);
     expect(errorHandler).toHaveBeenCalledWith(expect.objectContaining({
       request: expect.objectContaining({ method: 'GET', url: '/test' }),
       error,
@@ -205,7 +205,7 @@ describe('httpListener', () => {
     const body = await response.body();
 
     expect(body).toContain('ERROR 404 Never Found');
-    expect(logErrorSpy).toHaveBeenCalledWith('[GET /test]', '404', 'Never Found');
+    expect(logErrorSpy).toHaveBeenCalledWith('404', 'Never Found');
     expect(errorHandler).toHaveBeenCalledWith(expect.objectContaining({
       request: expect.objectContaining({ method: 'GET', url: '/test' }),
       error,
@@ -223,7 +223,7 @@ describe('httpListener', () => {
     const response = await server.get('/test');
 
     expect(await response.body()).toBe('');
-    expect(logErrorSpy).toHaveBeenCalledWith('[GET /test]', error);
+    expect(logErrorSpy).toHaveBeenCalledWith(error);
   });
   it('does not log ERROR when there is no error handler', async () => {
 
@@ -256,7 +256,7 @@ describe('httpListener', () => {
     const response = await server.get('/test');
 
     expect(await response.body()).toBe('NO RESPONSE');
-    expect(logErrorSpy).toHaveBeenCalledWith('[GET /test]', error);
+    expect(logErrorSpy).toHaveBeenCalledWith(error);
   });
   it('logs unhandled error', async () => {
 

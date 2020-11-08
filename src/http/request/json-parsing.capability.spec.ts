@@ -133,7 +133,6 @@ describe('JsonParsing', () => {
     expect(response.statusCode).toBe(400);
     expect(await response.body()).toContain('Malformed JSON');
     expect(errorSpy).toHaveBeenCalledWith(
-        expect.any(String),
         '400',
         'Malformed JSON',
         expect.objectContaining({ message: expect.stringContaining('Unexpected token') }),
