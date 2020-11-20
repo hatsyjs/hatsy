@@ -154,7 +154,7 @@ export function httpListener<
 interface IncomingHttpMeans<TRequest extends IncomingMessage, TResponse extends ServerResponse> {
   readonly request: TRequest;
   readonly response: TResponse;
-  onResponse(this: void): void;
+  onResponse(this: void, value: boolean): void;
   onError(this: void, error: any): void;
 }
 
@@ -180,7 +180,7 @@ function incomingHttpHandler<TRequest extends IncomingMessage, TResponse extends
     // Finish request processing immediately after calling `response.end()`
     response.end = ((chunk: any, encoding: string, cb?: () => void) => {
       end(chunk, encoding, cb);
-      onResponse();
+      onResponse(true);
     }) as typeof response['end'];
 
     const requestDefaults = lazyValue(() => HttpAddressRep.defaults(request));
