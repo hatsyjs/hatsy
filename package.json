@@ -52,7 +52,7 @@
   },
   "dependencies": {
     "@hatsy/hten": "^1.1.2",
-    "@hatsy/http-header-value": "^3.5.2",
+    "@hatsy/http-header-value": "^3.5.3",
     "@proc7ts/primitives": "^1.5.1"
   },
   "engines": {
