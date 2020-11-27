@@ -59,7 +59,7 @@
     "node": ">=12"
   },
   "devDependencies": {
-    "@proc7ts/eslint-config": "^2.0.5",
+    "@run-z/eslint-config": "^1.0.0",
     "@proc7ts/rollup-helpers": "^1.1.1",
     "@proc7ts/rollup-plugin-flat-dts": "^1.1.2",
     "@rollup/plugin-commonjs": "^16.0.0",
