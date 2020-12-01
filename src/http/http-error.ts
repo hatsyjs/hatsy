@@ -47,7 +47,7 @@ export class HttpError extends Error {
   /**
    * Constructs loggable error representation.
    *
-   * Returns an array containing error message, details, and reason.
+   * @returns An array containing error message, details, and reason.
    */
   toLog(): any[] {
 
