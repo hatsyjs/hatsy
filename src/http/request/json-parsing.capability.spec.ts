@@ -1,6 +1,5 @@
 import { noop } from '@proc7ts/primitives';
 import { TestHttpServer } from '../../testing';
-import { httpListener } from '../http-listener';
 import { Rendering } from '../render';
 import { JsonParsing } from './json-parsing.capability';
 
@@ -25,14 +24,12 @@ describe('JsonParsing', () => {
   });
 
   beforeEach(() => {
-    server.listener.mockImplementation(
-        httpListener(
-            Rendering
-                .and(JsonParsing)
-                .for(({ requestBody, renderJson }) => {
-                  renderJson({ request: requestBody });
-                }),
-        ),
+    server.handleBy(
+        Rendering
+            .and(JsonParsing)
+            .for(({ requestBody, renderJson }) => {
+              renderJson({ request: requestBody });
+            }),
     );
   });
 
@@ -51,14 +48,12 @@ describe('JsonParsing', () => {
     expect(JSON.parse(await response.body())).toEqual({ request: { text: 'hello' } });
   });
   it('transforms JSON body form', async () => {
-    server.listener.mockImplementation(
-        httpListener(
-            Rendering
-                .and(JsonParsing.withBody(json => ({ json })))
-                .for(({ requestBody, renderJson }) => {
-                  renderJson(requestBody);
-                }),
-        ),
+    server.handleBy(
+        Rendering
+            .and(JsonParsing.withBody(json => ({ json })))
+            .for(({ requestBody, renderJson }) => {
+              renderJson(requestBody);
+            }),
     );
 
     const response = await server.post(

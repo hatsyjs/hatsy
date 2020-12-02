@@ -1,6 +1,5 @@
 import { Logging } from '../../core/logging';
 import { suppressedLog, TestHttpServer } from '../../testing';
-import { httpListener } from '../http-listener';
 import { Rendering } from '../render';
 import { dispatchByLanguage } from './dispatch-by-language.handler';
 
@@ -16,7 +15,7 @@ describe('dispatchByLanguage', () => {
   });
 
   beforeEach(() => {
-    server.listener.mockImplementation(httpListener(
+    server.handleBy(
         {
           handleBy(handler) {
             return Logging.logBy(suppressedLog).for(handler);
@@ -38,7 +37,7 @@ describe('dispatchByLanguage', () => {
               },
 
             })),
-    ));
+    );
   });
 
   it('dispatches by accepted language', async () => {

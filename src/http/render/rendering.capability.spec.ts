@@ -1,6 +1,6 @@
+import { noop } from '@proc7ts/primitives';
 import { TextEncoder } from 'util';
 import { TestHttpServer } from '../../testing';
-import { httpListener } from '../http-listener';
 import { Rendering } from './rendering.capability';
 
 describe('Rendering', () => {
@@ -15,15 +15,15 @@ describe('Rendering', () => {
   });
 
   afterEach(() => {
-    server.listener.mockReset();
+    server.listenBy(noop);
   });
 
   describe('renderHtml', () => {
 
     beforeEach(() => {
-      server.listener.mockImplementation(httpListener(Rendering.for(({ renderHtml }) => {
+      server.handleBy(Rendering.for(({ renderHtml }) => {
         renderHtml('TEST');
-      })));
+      }));
     });
 
     it('renders HTML', async () => {
@@ -36,9 +36,9 @@ describe('Rendering', () => {
       expect(response.headers['content-length']).toBe('4');
     });
     it('renders HTML as buffer', async () => {
-      server.listener.mockImplementation(httpListener(Rendering.for(({ renderHtml }) => {
+      server.handleBy(Rendering.for(({ renderHtml }) => {
         renderHtml(Buffer.from(new TextEncoder().encode('TEST')));
-      })));
+      }));
 
       const response = await server.get('/test');
       const body = await response.body();
@@ -48,14 +48,14 @@ describe('Rendering', () => {
       expect(response.headers['content-length']).toBe('4');
     });
     it('is applied once', async () => {
-      server.listener.mockImplementation(httpListener(
+      server.handleBy(
           Rendering
               .and(Rendering)
               .and(Rendering)
               .for(({ renderHtml }) => {
                 renderHtml('TEST');
               }),
-      ));
+      );
 
       const response = await server.get('/test');
       const body = await response.body();
@@ -78,9 +78,9 @@ describe('Rendering', () => {
   describe('renderJson', () => {
 
     beforeEach(() => {
-      server.listener.mockImplementation(httpListener(Rendering.for(({ renderJson }) => {
+      server.handleBy(Rendering.for(({ renderJson }) => {
         renderJson('TEST');
-      })));
+      }));
     });
 
     it('renders JSON', async () => {

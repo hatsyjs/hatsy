@@ -1,6 +1,5 @@
-import { Logging } from '../../core/logging';
+import { Logging } from '../../core';
 import { suppressedLog, TestHttpServer } from '../../testing';
-import { httpListener } from '../http-listener';
 import { Rendering } from '../render';
 import { FormDecoding } from './form-decoding.capability';
 
@@ -16,19 +15,17 @@ describe('FormDecoding', () => {
   });
 
   beforeEach(() => {
-    server.listener.mockImplementation(
-        httpListener(
-            {
-              handleBy(handler) {
-                return Logging.logBy(suppressedLog).for(handler);
-              },
-            },
-            Rendering
-                .and(FormDecoding)
-                .for(({ requestBody, renderJson }) => {
-                  renderJson({ request: Array.from(requestBody.entries()) });
-                }),
-        ),
+    server.handleBy(
+        {
+          handleBy(handler) {
+            return Logging.logBy(suppressedLog).for(handler);
+          },
+        },
+        Rendering
+            .and(FormDecoding)
+            .for(({ requestBody, renderJson }) => {
+              renderJson({ request: Array.from(requestBody.entries()) });
+            }),
     );
   });
 
@@ -47,19 +44,17 @@ describe('FormDecoding', () => {
     expect(JSON.parse(await response.body())).toEqual({ request: [['param1', 'value1'], ['param2', 'value2']] });
   });
   it('transforms submitted form', async () => {
-    server.listener.mockImplementation(
-        httpListener(
-            {
-              handleBy(handler) {
-                return Logging.logBy(suppressedLog).for(handler);
-              },
-            },
-            Rendering
-                .and(FormDecoding.withBody(params => Array.from(params.entries())))
-                .for(({ requestBody, renderJson }) => {
-                  renderJson(requestBody);
-                }),
-        ),
+    server.handleBy(
+        {
+          handleBy(handler) {
+            return Logging.logBy(suppressedLog).for(handler);
+          },
+        },
+        Rendering
+            .and(FormDecoding.withBody(params => Array.from(params.entries())))
+            .for(({ requestBody, renderJson }) => {
+              renderJson(requestBody);
+            }),
     );
 
     const response = await server.post(
