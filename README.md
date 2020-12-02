@@ -23,8 +23,8 @@ Example
 -------
 
 ```typescript
+import { escapeHTML } from '@frontmeans/httongue';
 import { httpListener, Rendering } from '@hatsy/hatsy';
-import { escapeHTML } from '@hatsy/hten';
 import { dispatchByName, Routing } from '@hatsy/router';
 import { createServer } from 'http';
 

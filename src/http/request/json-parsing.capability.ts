@@ -2,7 +2,7 @@
  * @packageDocumentation
  * @module @hatsy/hatsy
  */
-import { JSON__MIME, JSON_Text__MIME, Text__MIME } from '@hatsy/hten';
+import { MIMEType } from '@frontmeans/httongue';
 import { asis } from '@proc7ts/primitives';
 import {
   RequestBodyMeans,
@@ -21,9 +21,9 @@ import type { FormDecoding } from './form-decoding.capability';
  * @internal
  */
 const JSON_MIMES: Readonly<Record<string, number>> = {
-  [Text__MIME]: 1,
-  [JSON__MIME]: 1,
-  [JSON_Text__MIME]: 1,
+  [MIMEType.Text]: 1,
+  [MIMEType.JSON]: 1,
+  [MIMEType.TextJSON]: 1,
 };
 
 /**
@@ -74,10 +74,10 @@ class JsonParsingCapability<TInput extends HttpMeans, TBody>
     return async context => {
 
       const { request, next } = context;
-      const { 'content-type': contentType = Text__MIME } = request.headers;
+      const { 'content-type': contentType = MIMEType.Text } = request.headers;
 
       if (!JSON_MIMES[contentType]) {
-        return Promise.reject(new HttpError(415, { details: `${JSON__MIME} request expected` }));
+        return Promise.reject(new HttpError(415, { details: `${MIMEType.JSON} request expected` }));
       }
 
       let json: any;

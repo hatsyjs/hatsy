@@ -2,7 +2,7 @@
  * @packageDocumentation
  * @module @hatsy/hatsy
  */
-import { FormURLEncoded__MIME, Text__MIME } from '@hatsy/hten';
+import { MIMEType } from '@frontmeans/httongue';
 import { asis } from '@proc7ts/primitives';
 import { URLSearchParams } from 'url';
 import {
@@ -21,8 +21,8 @@ import type { HttpMeans } from '../http.means';
  * @internal
  */
 const URL_ENCODED_MIMES: Record<string, number> = {
-  [Text__MIME]: 1,
-  [FormURLEncoded__MIME]: 1,
+  [MIMEType.Text]: 1,
+  [MIMEType.FormURLEncoded]: 1,
 };
 
 /**
@@ -72,10 +72,10 @@ class FormDecodingCapability<TInput extends HttpMeans, TBody>
     return async context => {
 
       const { request } = context;
-      const { 'content-type': contentType = Text__MIME } = request.headers;
+      const { 'content-type': contentType = MIMEType.Text } = request.headers;
 
       if (!URL_ENCODED_MIMES[contentType]) {
-        return Promise.reject(new HttpError(415, { details: `${FormURLEncoded__MIME} request expected` }));
+        return Promise.reject(new HttpError(415, { details: `${MIMEType.FormURLEncoded} request expected` }));
       }
 
       const params = new URLSearchParams(await readAll(request));

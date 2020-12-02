@@ -2,7 +2,7 @@
  * @packageDocumentation
  * @module @hatsy/hatsy
 */
-import { HTML__MIME, JSON__MIME } from '@hatsy/hten';
+import { MIMEType } from '@frontmeans/httongue';
 import { RequestCapability, requestExtension, RequestHandler } from '../../core';
 import type { HttpMeans } from '../http.means';
 import type { RenderMeans } from './render.means';
@@ -38,12 +38,12 @@ class RenderingCapability extends RequestCapability<HttpMeans, RenderMeans> {
         renderBody,
 
         renderHtml(html: string | Buffer) {
-          response.setHeader('Content-Type', `${HTML__MIME}; charset=utf-8`);
+          response.setHeader('Content-Type', `${MIMEType.HTML}; charset=utf-8`);
           renderBody(html);
         },
 
         renderJson(body: any) {
-          response.setHeader('Content-Type', `${JSON__MIME}; charset=utf-8`);
+          response.setHeader('Content-Type', `${MIMEType.JSON}; charset=utf-8`);
           renderBody(JSON.stringify(body));
         },
 
