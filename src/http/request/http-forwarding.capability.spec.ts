@@ -1,5 +1,4 @@
 import { TestHttpServer } from '../../testing';
-import { httpListener } from '../http-listener';
 import { Rendering } from '../render';
 import { HttpForwarding } from './http-forwarding.capability';
 
@@ -15,14 +14,14 @@ describe('HttpForwarding', () => {
   });
 
   it('replaces addresses trusted forwarding info', async () => {
-    server.listener.mockImplementation(httpListener(
+    server.handleBy(
         HttpForwarding
             .with({ trusted: true })
             .and(Rendering)
             .for(({ renderJson, requestAddresses: { url: { href }, ip } }) => {
               renderJson({ href, ip });
             }),
-    ));
+    );
 
     const response = await server.get(
         '/test/nested?param=value',

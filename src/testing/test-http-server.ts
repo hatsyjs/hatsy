@@ -2,9 +2,12 @@
  * @packageDocumentation
  * @module @hatsy/hatsy/testing
  */
+import { noop } from '@proc7ts/primitives';
 import { createServer, IncomingMessage, request, RequestListener, RequestOptions, Server } from 'http';
 import type { AddressInfo } from 'net';
 import { promisify } from 'util';
+import type { RequestHandler } from '../core';
+import { HttpConfig, httpListener, HttpMeans } from '../http';
 import { readAll } from '../impl';
 
 /**
@@ -18,38 +21,103 @@ export class TestHttpServer {
    * @returns A promise resolved to started server.
    */
   static start(): Promise<TestHttpServer> {
-    return new Promise<TestHttpServer>((resolve, reject) => {
+    return new TestHttpServer()._start();
+  }
 
-      const listener = jest.fn();
-      const server = createServer(listener);
+  /**
+   * @internal
+   */
+  private _listener: RequestListener;
 
-      server.on('error', reject);
-      server.on('listening', () => resolve(new TestHttpServer(server, listener)));
-      server.listen({ port: 0, host: 'localhost' });
-    });
+  /**
+   * @internal
+   */
+  private _server!: Server;
+
+  private constructor() {
+    this._listener = noop;
   }
 
   /**
    * HTTP server instance.
    */
-  readonly server: Server;
+  get server(): Server {
+    return this._server;
+  }
 
   /**
    * An address the service is bound to.
    */
-  readonly address: AddressInfo;
+  get address(): AddressInfo {
+    return this._server.address() as AddressInfo;
+  }
 
   /**
-   * A mock of HTTP server request listener.
+   * Starts to handle incoming requests by the given request listener.
    *
-   * Does nothing by default.
+   * @param listener - New HTTP request listener.
+   *
+   * @returns `this` instance.
    */
-  readonly listener: jest.Mock<void, Parameters<RequestListener>>;
+  listenBy(listener: RequestListener): this {
+    this._listener = listener;
+    return this;
+  }
 
-  private constructor(server: Server, listener: jest.Mock<void, Parameters<RequestListener>>) {
-    this.server = server;
-    this.listener = listener;
-    this.address = server.address() as AddressInfo;
+  /**
+   * Starts to handle extended incoming requests by the given request handler.
+   *
+   * @typeParam TExt - Request processing means extension type.
+   * @param config - HTTP processing configuration.
+   * @param handler - New HTTP request processing handler.
+   *
+   * @returns `this` instance.
+   */
+  handleBy<TExt>(
+      config: HttpConfig.Extended<TExt, HttpMeans>,
+      handler: RequestHandler<HttpMeans & TExt>,
+  ): this;
+
+  /**
+   * Starts to handle incoming requests by the given request handler.
+   *
+   * @param config - HTTP processing configuration.
+   * @param handler - New HTTP request processing handler.
+   *
+   * @returns `this` instance.
+   */
+  handleBy(config: HttpConfig, handler: RequestHandler<HttpMeans>): this;
+
+  /**
+   * Starts to handle incoming requests by the given request handler according to default configuration.
+   *
+   * @param handler - New HTTP request processing handler.
+   *
+   * @returns `this` instance.
+   */
+  handleBy(handler: RequestHandler<HttpMeans>): this;
+
+  handleBy(
+      configOrHandler: HttpConfig | RequestHandler<HttpMeans>,
+      optionalHandler?: RequestHandler<HttpMeans>,
+  ): this {
+    return this.listenBy(httpListener(configOrHandler as HttpConfig, optionalHandler as RequestHandler<HttpMeans>));
+  }
+
+  /**
+   * @internal
+   */
+  private _start(): Promise<TestHttpServer> {
+    return new Promise((resolve, reject) => {
+
+      const server = this._server = createServer(
+          (request, response) => this._listener(request, response),
+      );
+
+      server.on('error', reject);
+      server.on('listening', () => resolve(this));
+      server.listen({ port: 0, host: 'localhost' });
+    });
   }
 
   /**

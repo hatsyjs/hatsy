@@ -16,24 +16,9 @@ import {
 } from '../core';
 import type { HttpConfig } from './http-config';
 import { HttpError } from './http-error';
+import type { AnyHttpConfig } from './http-listener.impl';
 import type { HttpMeans } from './http.means';
 import { renderHttpError } from './render';
-
-/**
- * @internal
- */
-interface BaseHttpConfig<TMeans extends HttpMeans = HttpMeans> extends HttpConfig<TMeans> {
-
-  handleBy?: undefined;
-
-}
-
-/**
- * @internal
- */
-type AnyHttpConfig<TExt, TRequest extends IncomingMessage, TResponse extends ServerResponse> =
-    | BaseHttpConfig<HttpMeans<TRequest, TResponse>>
-    | HttpConfig.Extended<TExt, HttpMeans<TRequest, TResponse>>;
 
 /**
  * Creates Node.js HTTP request listener that processes requests by extended HTTP request processing handler.

@@ -1,7 +1,7 @@
+import { noop } from '@proc7ts/primitives';
 import { Logging, RequestContext, requestHandler } from '../../core';
 import { suppressedLog, TestHttpServer } from '../../testing';
 import { HttpError } from '../http-error';
-import { httpListener } from '../http-listener';
 import type { HttpMeans } from '../http.means';
 import { Rendering, RenderMeans } from '../render';
 import { dispatchByMethod } from './dispatch-by-method.handler';
@@ -18,18 +18,18 @@ describe('dispatchByName', () => {
   });
 
   afterEach(() => {
-    server.listener.mockReset();
+    server.handleBy(noop);
   });
 
   it('dispatches by method', async () => {
-    server.listener.mockImplementation(httpListener(
+    server.handleBy(
         Rendering
             .for(dispatchByMethod({
               search({ renderJson }: RequestContext<HttpMeans & RenderMeans>): void {
                 renderJson({ response: 'ok' });
               },
             })),
-    ));
+    );
 
     const response = await server.get('/', { method: 'SEARCH' });
 
@@ -37,14 +37,14 @@ describe('dispatchByName', () => {
     expect(JSON.parse(await response.body())).toEqual({ response: 'ok' });
   });
   it('dispatches to HEAD', async () => {
-    server.listener.mockImplementation(httpListener(
+    server.handleBy(
         Rendering
             .for(dispatchByMethod({
               head({ renderJson }): void {
                 renderJson({ response: 'ok' });
               },
             })),
-    ));
+    );
 
     const response = await server.get('/', { method: 'HEAD' });
 
@@ -52,14 +52,14 @@ describe('dispatchByName', () => {
     expect(await response.body()).toBe('');
   });
   it('dispatches to GET on HEAD request', async () => {
-    server.listener.mockImplementation(httpListener(
+    server.handleBy(
         Rendering
             .for(dispatchByMethod({
               get({ renderJson }): void {
                 renderJson({ response: 'ok' });
               },
             })),
-    ));
+    );
 
     const response = await server.get('/', { method: 'HEAD' });
 
@@ -67,7 +67,7 @@ describe('dispatchByName', () => {
     expect(await response.body()).toBe('');
   });
   it('dispatches to GET without method specified', async () => {
-    server.listener.mockImplementation(httpListener(
+    server.handleBy(
         Rendering.for(requestHandler([
           ({ request }) => {
             delete request.method;
@@ -78,7 +78,7 @@ describe('dispatchByName', () => {
             },
           }),
         ])),
-    ));
+    );
 
     const response = await server.get('/', { method: 'HEAD' });
 
@@ -86,7 +86,7 @@ describe('dispatchByName', () => {
     expect(await response.body()).toBe('');
   });
   it('does not dispatch without corresponding handler', async () => {
-    server.listener.mockImplementation(httpListener(
+    server.handleBy(
         {
           handleBy(handler) {
             return Logging.logBy(suppressedLog).for(handler);
@@ -102,7 +102,7 @@ describe('dispatchByName', () => {
             throw new HttpError(404);
           },
         ])),
-    ));
+    );
 
     const response = await server.get('/', { method: 'PUT' });
 

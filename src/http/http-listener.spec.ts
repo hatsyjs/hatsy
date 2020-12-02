@@ -18,7 +18,7 @@ describe('httpListener', () => {
   });
 
   afterEach(() => {
-    server.listener.mockReset();
+    server.listenBy(noop);
   });
 
   let logErrorSpy: jest.SpyInstance;
@@ -37,7 +37,7 @@ describe('httpListener', () => {
       response.end('TEST');
     });
 
-    server.listener.mockImplementation(httpListener(handler));
+    server.handleBy(handler);
 
     const response = await server.get('/test');
 
@@ -47,7 +47,7 @@ describe('httpListener', () => {
     }));
   });
   it('responds with `404` status when handler not responding', async () => {
-    server.listener.mockImplementation(httpListener(noop));
+    server.handleBy(noop);
 
     const response = await server.get('/');
 
@@ -57,7 +57,7 @@ describe('httpListener', () => {
     expect(await response.body()).toContain('ERROR 404');
   });
   it('responds with `404` status and JSON when handler not responding and JSON expected', async () => {
-    server.listener.mockImplementation(httpListener(noop));
+    server.handleBy(noop);
 
     const response = await server.get('/', { headers: { accept: 'application/json' } });
 
@@ -69,7 +69,7 @@ describe('httpListener', () => {
 
     const listener = httpListener({ defaultHandler: false }, noop);
 
-    server.listener.mockImplementation((request, response) => {
+    server.listenBy((request, response) => {
       listener(request, response);
       Promise.resolve().finally(() => {
         response.end('NO RESPONSE');
@@ -84,7 +84,7 @@ describe('httpListener', () => {
 
     const error = new Error('test');
 
-    server.listener.mockImplementation(httpListener(() => { throw error; }));
+    server.handleBy(() => { throw error; });
 
     const response = await server.get('/test');
 
@@ -96,7 +96,7 @@ describe('httpListener', () => {
 
     const error = new Error('test');
 
-    server.listener.mockImplementation(httpListener(() => { throw error; }));
+    server.handleBy(() => { throw error; });
 
     const response = await server.get('/test', { headers: { accept: 'application/json' } });
 
@@ -108,7 +108,7 @@ describe('httpListener', () => {
 
     const error = new HttpError(403, { details: 'No Go' });
 
-    server.listener.mockImplementation(httpListener(() => { throw error; }));
+    server.handleBy(() => { throw error; });
 
     const response = await server.get('/test');
 
@@ -124,7 +124,7 @@ describe('httpListener', () => {
 
     const error = new HttpError(499);
 
-    server.listener.mockImplementation(httpListener(() => { throw error; }));
+    server.handleBy(() => { throw error; });
 
     const response = await server.get('/test');
 
@@ -139,7 +139,7 @@ describe('httpListener', () => {
 
     const error = new HttpError(403, { details: 'No Go' });
 
-    server.listener.mockImplementation(httpListener(() => { throw error; }));
+    server.handleBy(() => { throw error; });
 
     const response = await server.get('/test', { headers: { accept: 'application/json' } });
 
@@ -156,10 +156,10 @@ describe('httpListener', () => {
       response.end('DEFAULT');
     });
 
-    server.listener.mockImplementation(httpListener(
+    server.handleBy(
         { defaultHandler },
         noop,
-    ));
+    );
 
     const response = await server.get('/test');
 
@@ -175,10 +175,10 @@ describe('httpListener', () => {
       response.end(`ERROR ${error.message}`);
     });
 
-    server.listener.mockImplementation(httpListener(
+    server.handleBy(
         { errorHandler },
         () => { throw error; },
-    ));
+    );
 
     const response = await server.get('/test');
 
@@ -196,10 +196,10 @@ describe('httpListener', () => {
       response.end(`ERROR ${error.message} ${error.details}`);
     });
 
-    server.listener.mockImplementation(httpListener(
+    server.handleBy(
         { errorHandler },
         () => { throw error; },
-    ));
+    );
 
     const response = await server.get('/test');
     const body = await response.body();
@@ -215,10 +215,10 @@ describe('httpListener', () => {
 
     const error = new Error('test');
 
-    server.listener.mockImplementation(httpListener(
+    server.handleBy(
         { errorHandler: false },
         () => { throw error; },
-    ));
+    );
 
     const response = await server.get('/test');
 
@@ -229,10 +229,10 @@ describe('httpListener', () => {
 
     const error = new Error('test');
 
-    server.listener.mockImplementation(httpListener(
+    server.handleBy(
         { errorHandler: false, logError: false },
         () => { throw error; },
-    ));
+    );
 
     const response = await server.get('/test');
 
@@ -247,7 +247,7 @@ describe('httpListener', () => {
         () => { throw error; },
     );
 
-    server.listener.mockImplementation((request, response) => {
+    server.listenBy((request, response) => {
       listener(request, response);
       response.end('NO RESPONSE');
     });
@@ -273,7 +273,7 @@ describe('httpListener', () => {
         () => { throw error; },
     );
 
-    server.listener.mockImplementation((request, response) => {
+    server.listenBy((request, response) => {
       listener(request, response);
       response.end('NO RESPONSE');
     });
@@ -300,7 +300,7 @@ describe('httpListener', () => {
         () => { throw error; },
     );
 
-    server.listener.mockImplementation((request, response) => {
+    server.listenBy((request, response) => {
       listener(request, response);
       response.end('NO RESPONSE');
     });
@@ -315,28 +315,28 @@ describe('httpListener', () => {
 
   describe('requestAddresses', () => {
     it('contain request URL', async () => {
-      server.listener.mockImplementation(httpListener(Rendering.for(({ requestAddresses, renderJson }) => {
+      server.handleBy(Rendering.for(({ requestAddresses, renderJson }) => {
         renderJson({ url: requestAddresses.url.href });
-      })));
+      }));
 
       const response = await server.get('/test', { headers: { host: 'localhost' } });
 
       expect(JSON.parse(await response.body())).toEqual({ url: 'http://localhost/test' });
     });
     it('contain root request URL when path is unknown', async () => {
-      server.listener.mockImplementation(httpListener(Rendering.for(({ request, requestAddresses, renderJson }) => {
+      server.handleBy(Rendering.for(({ request, requestAddresses, renderJson }) => {
         delete request.url;
         renderJson({ url: requestAddresses.url.href });
-      })));
+      }));
 
       const response = await server.get('/test', { headers: { host: 'localhost' } });
 
       expect(JSON.parse(await response.body())).toEqual({ url: 'http://localhost/' });
     });
     it('contains remote address', async () => {
-      server.listener.mockImplementation(httpListener(Rendering.for(({ requestAddresses, renderJson }) => {
+      server.handleBy(Rendering.for(({ requestAddresses, renderJson }) => {
         renderJson({ ip: requestAddresses.ip });
-      })));
+      }));
 
       const response = await server.get(
           '/test',

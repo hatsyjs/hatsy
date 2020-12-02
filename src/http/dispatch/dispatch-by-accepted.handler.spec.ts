@@ -1,7 +1,6 @@
 import type { RequestContext } from '../../core';
 import { Logging } from '../../core';
 import { suppressedLog, TestHttpServer } from '../../testing';
-import { httpListener } from '../http-listener';
 import type { HttpMeans } from '../http.means';
 import { Rendering, RenderMeans } from '../render';
 import { addResponseHeader } from '../util';
@@ -19,7 +18,7 @@ describe('dispatchByAccepted', () => {
   });
 
   beforeEach(() => {
-    server.listener.mockImplementation(httpListener(
+    server.handleBy(
         {
           handleBy(handler) {
             return Logging.logBy(suppressedLog).for(handler);
@@ -42,7 +41,7 @@ describe('dispatchByAccepted', () => {
               },
 
             })),
-    ));
+    );
   });
 
   it('dispatches to accepted MIME', async () => {

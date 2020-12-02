@@ -42,14 +42,6 @@
       "require": "./dist/hatsy.testing.cjs"
     }
   },
-  "peerDependencies": {
-    "jest": "^26.0.1"
-  },
-  "peerDependenciesMeta": {
-    "jest": {
-      "optional": true
-    }
-  },
   "dependencies": {
     "@frontmeans/httongue": "^2.0.0",
     "@hatsy/http-header-value": "^3.5.3",

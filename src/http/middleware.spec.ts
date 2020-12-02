@@ -1,8 +1,7 @@
 import { noop } from '@proc7ts/primitives';
-import { Logging } from '../core/logging';
+import { Logging } from '../core';
 import { suppressedLog, TestHttpServer } from '../testing';
 import { HttpError } from './http-error';
-import { httpListener } from './http-listener';
 import { middleware, Middleware } from './middleware';
 import { Rendering } from './render';
 
@@ -18,7 +17,7 @@ describe('middleware', () => {
   });
 
   afterEach(() => {
-    server.listener.mockReset();
+    server.listenBy(noop);
   });
 
   let ware: jest.Mock<void, Parameters<Middleware>>;
@@ -28,13 +27,13 @@ describe('middleware', () => {
   });
 
   it('applies middleware after capabilities', async () => {
-    server.listener.mockImplementation(httpListener(
+    server.handleBy(
         Rendering
             .and(middleware(ware))
             .for(({ renderJson }) => {
               renderJson({ response: 'ok' });
             }),
-    ));
+    );
 
     const response = await server.get('/test');
 
@@ -42,13 +41,13 @@ describe('middleware', () => {
     expect(ware).toHaveBeenCalledTimes(1);
   });
   it('applies capabilities after middleware', async () => {
-    server.listener.mockImplementation(httpListener(
+    server.handleBy(
         middleware(ware)
             .and(Rendering)
             .for(({ renderJson }) => {
               renderJson({ response: 'ok' });
             }),
-    ));
+    );
 
     const response = await server.get('/test');
 
@@ -58,14 +57,14 @@ describe('middleware', () => {
   it('allows middleware to error', async () => {
     ware.mockImplementation((_request, _response, next) => next(new HttpError(503, { statusMessage: 'Custom Error' })));
 
-    server.listener.mockImplementation(httpListener(
+    server.handleBy(
         {
           handleBy(handler) {
             return Logging.logBy(suppressedLog).for(handler);
           },
         },
         middleware(ware).for(noop),
-    ));
+    );
 
     const response = await server.get('/test');
 
@@ -77,9 +76,9 @@ describe('middleware', () => {
       response.end('TEST');
     });
 
-    server.listener.mockImplementation(httpListener(
+    server.handleBy(
         middleware(ware).for(noop),
-    ));
+    );
 
     const response = await server.get('/test');
 
