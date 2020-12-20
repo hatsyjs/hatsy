@@ -60,7 +60,7 @@ export interface DispatchMethods<TMeans extends HttpMeans = HttpMeans> {
  * Dispatches request processing by HTTP request method.
  *
  * @typeParam TMeans  Supported HTTP route processing means.
- * @param methods  A map of request processing handlers corresponding to HTTP request methods.
+ * @param methods - A map of request processing handlers corresponding to HTTP request methods.
  *
  * @returns New HTTP request processing handler.
  */

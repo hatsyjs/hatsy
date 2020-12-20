@@ -45,7 +45,7 @@ export interface FormDecoding<TInput extends HttpMeans = HttpMeans, TBody = URLS
    *
    * @typeParam TMeans  HTTP request processing means.
    * @typeParam TTransformed  Transformed request body type.
-   * @param transformer  Transformer function.
+   * @param transformer - Transformer function.
    *
    * @returns New form decoding capability.
    */

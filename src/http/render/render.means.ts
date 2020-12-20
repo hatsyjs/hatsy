@@ -15,8 +15,8 @@ export interface RenderMeans {
   /**
    * Renders response body.
    *
-   * @param body  Response body text or Buffer.
-   * @param encoding  Response body buffer encoding. Ignored for buffer.
+   * @param body - Response body text or Buffer.
+   * @param encoding - Response body buffer encoding. Ignored for buffer.
    */
   renderBody(this: void, body: string | Buffer, encoding?: BufferEncoding): void;
 
@@ -25,7 +25,7 @@ export interface RenderMeans {
    *
    * Generates content in `UTF-8` encoding and sets `Content-Type: text/html; charset=utf-8` header.
    *
-   * @param html  HTML response text or Buffer.
+   * @param html - HTML response text or Buffer.
    */
   renderHtml(this: void, html: string | Buffer): void;
 
@@ -34,7 +34,7 @@ export interface RenderMeans {
    *
    * Generates content in `UTF-8` encoding and sets `Content-Type: application/json; charset=utf-8` header.
    *
-   * @param body  JSON object to stringify.
+   * @param body - JSON object to stringify.
    */
   renderJson(this: void, body: any): void;
 

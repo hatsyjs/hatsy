@@ -123,9 +123,9 @@ export class TestHttpServer {
   /**
    * Posts the data to the test server.
    *
-   * @param path  Request path.
-   * @param body  Request body to post, or `undefined` to post nothing.
-   * @param options  Request options. The default request method is `POST`.
+   * @param path - Request path.
+   * @param body - Request body to post, or `undefined` to post nothing.
+   * @param options - Request options. The default request method is `POST`.
    *
    * @returns A promise resolves to server response.
    */
@@ -159,8 +159,8 @@ export class TestHttpServer {
   /**
    * Requests the data from the test server.
    *
-   * @param path  Request path.
-   * @param options  Request options. The default request method is `GET`.
+   * @param path - Request path.
+   * @param options - Request options. The default request method is `GET`.
    *
    * @returns A promise resolves to server response.
    */

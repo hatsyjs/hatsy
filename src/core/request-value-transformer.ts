@@ -15,8 +15,8 @@ import type { RequestContext } from './request-context';
  */
 export type RequestValueTransformer<TMeans, TFrom, TTo> =
 /**
- * @param from  Original value to transform.
- * @param context  Request processing context to perform transformation in.
+ * @param from - Original value to transform.
+ * @param context - Request processing context to perform transformation in.
  *
  * @returns Transformed value or promise-like instance resolving to it.
  */

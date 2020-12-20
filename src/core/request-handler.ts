@@ -17,7 +17,7 @@ import type { RequestContext } from './request-context';
  */
 export type RequestHandler<TMeans> =
 /**
- * @param context  Request processing context containing the necessary means.
+ * @param context - Request processing context containing the necessary means.
  *
  * @returns Either nothing if the handler completed its work synchronously, or a promise-like instance resolved when
  * the handler completed its work asynchronously.
@@ -37,7 +37,7 @@ export type RequestHandler<TMeans> =
  */
 export type RequestHandlerMethod<TThis, TMeans> =
 /**
- * @param context  Request processing context containing the necessary means.
+ * @param context - Request processing context containing the necessary means.
  *
  * @returns Either nothing if the handler completed its work synchronously, or a promise-like instance resolved when
  * the handler completed its work asynchronously.
@@ -54,7 +54,7 @@ export type RequestHandlerMethod<TThis, TMeans> =
  * response is generated, an error thrown, or no handlers left.
  *
  * @typeParam TMeans  A type of request processing means `handlers` expect.
- * @param handlers  Either single handler or iterable of handlers to delegate request processing to.
+ * @param handlers - Either single handler or iterable of handlers to delegate request processing to.
  *
  * @returns Request processing handler.
  */

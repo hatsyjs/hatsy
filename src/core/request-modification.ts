@@ -22,7 +22,7 @@ export type RequestModification<TMeans, TExt = object> = {
  * This is a helper function to avoid TypeScript limitation. It is a good idea to inline it.
  *
  * @typeParam TMeans  A type of request processing means to modify.
- * @param modification  Partial request modification.
+ * @param modification - Partial request modification.
  *
  * @returns Request modification cast to {@link RequestModification}.
  */
@@ -37,7 +37,7 @@ export function requestUpdate<TMeans>(modification: Partial<TMeans>): RequestMod
  *
  * @typeParam TMeans  A type of request processing means to modify.
  * @typeParam TExt  A type of request processing means extension.
- * @param extension  Request extension containing all the required properties.
+ * @param extension - Request extension containing all the required properties.
  *
  * @returns Request extension cast to {@link RequestModification}.
  */

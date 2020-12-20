@@ -47,7 +47,7 @@ export interface JsonParsing<TInput extends HttpMeans = HttpMeans, TBody = any>
    *
    * @typeParam TMeans  HTTP request processing means.
    * @typeParam TTransformed  Transformed request body type.
-   * @param transformer  Transformer function.
+   * @param transformer - Transformer function.
    *
    * @returns New JSON parsing capability.
    */

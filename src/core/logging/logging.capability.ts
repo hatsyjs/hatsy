@@ -23,7 +23,7 @@ export interface Logging<TInput = unknown, TLogger extends RequestLogger = Reque
    * Configures a logging capability with the given logger.
    *
    * @typeParam TNewLogger  Request logger type.
-   * @param log  A logger to use for request processing.
+   * @param log - A logger to use for request processing.
    *
    * @returns New request logging capability.
    */

@@ -21,9 +21,9 @@ export type Middleware<
     TResponse extends ServerResponse = ServerResponse,
     > =
 /**
- * @param request  HTTP request.
+ * @param request - HTTP request.
  * @param response HTTP response.
- * @param next  Next function to delegate request processing to or report error with.
+ * @param next - Next function to delegate request processing to or report error with.
  */
     (
         this: void,
@@ -40,7 +40,7 @@ export namespace Middleware {
    */
   export type Next =
   /**
-   * @param error  Either an error to report, or nothing to delegate request processing to next handler.
+   * @param error - Either an error to report, or nothing to delegate request processing to next handler.
    */
       (this: void, error?: any) => void;
 
@@ -50,7 +50,7 @@ export namespace Middleware {
  * Involves the given `middleware` into HTTP request processing.
  *
  * @typeParam TInput  A type of input HTTP request processing means.
- * @param middleware  Middleware to apply.
+ * @param middleware - Middleware to apply.
  *
  * @returns New request processing capability that processes HTTP requests by the given `middleware`.
  */

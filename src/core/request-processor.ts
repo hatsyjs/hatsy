@@ -15,7 +15,7 @@ import type { RequestModification } from './request-modification';
  */
 export type RequestProcessor<TMeans> =
 /**
- * @param means  Initial request processing means.
+ * @param means - Initial request processing means.
  *
  * @returns A promise resolved when request processing finishes. Resolves to `true` when request is responded,
  * or to `false` otherwise.
@@ -45,8 +45,8 @@ export namespace RequestProcessor {
      * This method is called when {@link RequestContext.Agent.next delegating to request handler}. The value returned
      * is used as processing result.
      *
-     * @param handler  Request processing handler.
-     * @param context  Request processing context.
+     * @param handler - Request processing handler.
+     * @param context - Request processing context.
      *
      * @returns A promise resolved when request processing finishes. Resolves to `true` when request is responded,
      * or to `false` otherwise.
@@ -64,7 +64,7 @@ export namespace RequestProcessor {
  * Builds a request processor.
  *
  * @typeParam TMeans  A type of initial request processing means.
- * @param config  Request processor configuration.
+ * @param config - Request processor configuration.
  *
  * @returns New request processor.
  */

@@ -51,8 +51,8 @@ export interface DispatchMimeTypes<TMeans extends HttpMeans = HttpMeans> {
  * [content negotiation]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Content_negotiation
  * [Accept]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept
  *
- * @param mimeTypes  Request processing handlers for accepted MIME types.
- * @param fallback  Fallback request handler to call when negotiation failed. Issues 406 (Not Acceptable) by default.
+ * @param mimeTypes - Request processing handlers for accepted MIME types.
+ * @param fallback - Fallback request handler to call when negotiation failed. Issues 406 (Not Acceptable) by default.
  *
  * @returns New HTTP request processing handler.
  */

@@ -34,8 +34,8 @@ export class HttpError extends Error {
   /**
    * Constructs HTTP status error.
    *
-   * @param statusCode  HTTP status code.
-   * @param options  HTTP error options.
+   * @param statusCode - HTTP status code.
+   * @param options - HTTP error options.
    */
   constructor(readonly statusCode: number, options: HttpError.Options = {}) {
     super(httpErrorMessage(statusCode, options));

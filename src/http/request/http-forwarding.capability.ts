@@ -21,7 +21,7 @@ export interface HttpForwarding extends RequestCapability<HttpMeans> {
   /**
    * Configures trust policy to proxy forwarding records.
    *
-   * @param trust  New trust policy to HTTP proxy forwarding records.
+   * @param trust - New trust policy to HTTP proxy forwarding records.
    *
    * @returns New HTTP proxy forwarding capability.
    */

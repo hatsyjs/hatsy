@@ -35,8 +35,8 @@ export namespace RequestContext {
      * Delegates request processing to the next `handler` and optionally modifies processing means by creating a new
      * context with the given `modifications` applied. The rest of the properties remain unchanged.
      *
-     * @param handler  Target handler to delegate request processing to.
-     * @param modification  Request processing means modification. `this` context will be passed to the next
+     * @param handler - Target handler to delegate request processing to.
+     * @param modification - Request processing means modification. `this` context will be passed to the next
      * `handler` when omitted.
      *
      * @returns A promise resolved when request processing finishes. Resolves to `true` when request is responded,

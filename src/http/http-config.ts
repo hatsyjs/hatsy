@@ -62,7 +62,7 @@ export namespace HttpConfig {
      *
      * This can be used e.g. to set up additional request processing capabilities, such as {@link Logging}.
      *
-     * @param handler  HTTP request handler.
+     * @param handler - HTTP request handler.
      *
      * @returns HTTP request handler to use instead.
      */
