@@ -11,7 +11,7 @@ import { addResponseHeader } from '../util';
 /**
  * Request processing handlers for accepted MIME types.
  *
- * @typeParam TMeans  Supported HTTP request processing means.
+ * @typeParam TMeans - Supported HTTP request processing means.
  */
 export interface DispatchMimeTypes<TMeans extends HttpMeans = HttpMeans> {
 

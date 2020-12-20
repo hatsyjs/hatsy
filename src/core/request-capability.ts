@@ -11,16 +11,16 @@ import type { RequestHandler } from './request-handler';
  *
  * Request processing capabilities could be {@link RequestCapability.combine combined}.
  *
- * @typeParam TInput  A type of request processing means required in order to apply this capability.
- * @typeParam TExt  A type of extension to request processing means this capability applies.
+ * @typeParam TInput - A type of request processing means required in order to apply this capability.
+ * @typeParam TExt - A type of extension to request processing means this capability applies.
  */
 export abstract class RequestCapability<TInput, TExt = object> {
 
   /**
    * Builds request capability by the given `provider`.
    *
-   * @typeParam TInput  A type of request processing means required by this provider.
-   * @typeParam TExt  A type of extension to request processing means this provider applies.
+   * @typeParam TInput - A type of request processing means required by this provider.
+   * @typeParam TExt - A type of extension to request processing means this provider applies.
    * @param provider - Request processing capability provider.
    *
    * @returns Request processing capability that call the given `provider` in order to apply.
@@ -43,9 +43,9 @@ export abstract class RequestCapability<TInput, TExt = object> {
   /**
    * Combines two request processing capabilities.
    *
-   * @typeParam TInput  A type of request processing means expected by the `first` capability.
-   * @typeParam TExt  A type of request processing means extension applied by the `first` capability.
-   * @typeParam TNext  A type of request processing means extension applied by the `second` capability.
+   * @typeParam TInput - A type of request processing means expected by the `first` capability.
+   * @typeParam TExt - A type of request processing means extension applied by the `first` capability.
+   * @typeParam TNext - A type of request processing means extension applied by the `second` capability.
    * @param first - First capability to combine.
    * @param second - Second capability to combine. Receives requests modified by the `first` one.
    *
@@ -78,7 +78,7 @@ export abstract class RequestCapability<TInput, TExt = object> {
    *
    * Builds request processing handler that modifies request and delegates to target `handler`.
    *
-   * @typeParam TMeans  A type of request processing means expected by constructed handler.
+   * @typeParam TMeans - A type of request processing means expected by constructed handler.
    * @param handler - Request processing handler that will receive modified request context.
    *
    * @returns New request processing handler.
@@ -88,7 +88,7 @@ export abstract class RequestCapability<TInput, TExt = object> {
   /**
    * Combines this capability with the `next` one.
    *
-   * @typeParam TNext  A type of extension to request processing means applied by `next` capability.
+   * @typeParam TNext - A type of extension to request processing means applied by `next` capability.
    * @param next - Next capability that receives requests modified by this capability.
    *
    * @return New request processing capability that applies modifications to request by this capability first,
@@ -109,12 +109,12 @@ export namespace RequestCapability {
    *
    * Builds a request processing handler that modifies request and delegates to another one.
    *
-   * @typeParam TInput  A type of request processing means required by this provider.
-   * @typeParam TExt  A type of extension to request processing means this provider applies.
+   * @typeParam TInput - A type of request processing means required by this provider.
+   * @typeParam TExt - A type of extension to request processing means this provider applies.
    */
   export type Provider<TInput, TExt = object> =
   /**
-   * @typeParam TMeans  A type of request processing means expected by constructed handler.
+   * @typeParam TMeans - A type of request processing means expected by constructed handler.
    *
    * @param handler - Request processing handler that will receive modified request context.
    *

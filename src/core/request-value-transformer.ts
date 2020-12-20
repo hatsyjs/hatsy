@@ -9,9 +9,9 @@ import type { RequestContext } from './request-context';
  *
  * It is used to transform values in context of request processing.
  *
- * @typeParam TMeans  A type of request processing means.
- * @typeParam TFrom  A type of original, non-transformed value.
- * @typeParam TTo  A type of transformed value.
+ * @typeParam TMeans - A type of request processing means.
+ * @typeParam TFrom - A type of original, non-transformed value.
+ * @typeParam TTo - A type of transformed value.
  */
 export type RequestValueTransformer<TMeans, TFrom, TTo> =
 /**

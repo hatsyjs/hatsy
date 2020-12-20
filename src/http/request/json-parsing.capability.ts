@@ -36,8 +36,8 @@ const JSON_MIMES: Readonly<Record<string, number>> = {
  *
  * Responds with 400 (Bad Request) status code if failed to parse JSON.
  *
- * @typeParam TInput  Input HTTP request processing means.
- * @typeParam TBody  Request body type.
+ * @typeParam TInput - Input HTTP request processing means.
+ * @typeParam TBody - Request body type.
  */
 export interface JsonParsing<TInput extends HttpMeans = HttpMeans, TBody = any>
     extends RequestCapability<TInput, RequestBodyMeans<TBody>> {
@@ -45,8 +45,8 @@ export interface JsonParsing<TInput extends HttpMeans = HttpMeans, TBody = any>
   /**
    * Configures JSON parsing capability to transform submitted data.
    *
-   * @typeParam TMeans  HTTP request processing means.
-   * @typeParam TTransformed  Transformed request body type.
+   * @typeParam TMeans - HTTP request processing means.
+   * @typeParam TTransformed - Transformed request body type.
    * @param transformer - Transformer function.
    *
    * @returns New JSON parsing capability.

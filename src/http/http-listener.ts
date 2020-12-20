@@ -23,9 +23,9 @@ import { renderHttpError } from './render';
 /**
  * Creates Node.js HTTP request listener that processes requests by extended HTTP request processing handler.
  *
- * @typeParam TRequest  A type of supported HTTP request.
- * @typeParam TResponse  A type of supported HTTP response.
- * @typeParam TExt  Request processing means extension type.
+ * @typeParam TRequest - A type of supported HTTP request.
+ * @typeParam TResponse - A type of supported HTTP response.
+ * @typeParam TExt - Request processing means extension type.
  * @param config - HTTP processing configuration.
  * @param handler - HTTP request processing handler to delegate to.
  *
@@ -45,8 +45,8 @@ export function httpListener<
 /**
  * Creates Node.js HTTP request listener that processes requests by HTTP request processing handler.
  *
- * @typeParam TRequest  A type of supported HTTP request.
- * @typeParam TResponse  A type of supported HTTP response.
+ * @typeParam TRequest - A type of supported HTTP request.
+ * @typeParam TResponse - A type of supported HTTP response.
  * @param config - HTTP processing configuration.
  * @param handler - HTTP request processing handler to delegate to.
  *
@@ -63,8 +63,8 @@ export function httpListener<TRequest extends IncomingMessage, TResponse extends
  * Creates Node.js HTTP request listener that processes requests by HTTP request processing handler according to
  * default configuration.
  *
- * @typeParam TRequest  A type of supported HTTP request.
- * @typeParam TResponse  A type of supported HTTP response.
+ * @typeParam TRequest - A type of supported HTTP request.
+ * @typeParam TResponse - A type of supported HTTP response.
  * @param handler - HTTP request processing handler to delegate to.
  *
  * @returns HTTP request listener to pass to Node.js HTTP server.

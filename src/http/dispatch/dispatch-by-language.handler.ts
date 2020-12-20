@@ -11,7 +11,7 @@ import { addResponseHeader } from '../util';
 /**
  * Request processing handlers for accepted languages.
  *
- * @typeParam TMeans  Supported HTTP request processing means.
+ * @typeParam TMeans - Supported HTTP request processing means.
  */
 export interface DispatchLanguages<TMeans extends HttpMeans = HttpMeans> {
 

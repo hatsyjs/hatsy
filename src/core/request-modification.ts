@@ -7,8 +7,8 @@
  *
  * The properties present here are added to new context potentially replacing the original ones.
  *
- * @typeParam TMeans  A type of request processing means to modify.
- * @typeParam TExt  A type of request processing means extension.
+ * @typeParam TMeans - A type of request processing means to modify.
+ * @typeParam TExt - A type of request processing means extension.
  */
 export type RequestModification<TMeans, TExt = object> = {
   [K in keyof TMeans]?: TMeans[K];
@@ -21,7 +21,7 @@ export type RequestModification<TMeans, TExt = object> = {
  *
  * This is a helper function to avoid TypeScript limitation. It is a good idea to inline it.
  *
- * @typeParam TMeans  A type of request processing means to modify.
+ * @typeParam TMeans - A type of request processing means to modify.
  * @param modification - Partial request modification.
  *
  * @returns Request modification cast to {@link RequestModification}.
@@ -35,8 +35,8 @@ export function requestUpdate<TMeans>(modification: Partial<TMeans>): RequestMod
  *
  * This is a helper function to avoid TypeScript limitation. It is a good idea to inline it.
  *
- * @typeParam TMeans  A type of request processing means to modify.
- * @typeParam TExt  A type of request processing means extension.
+ * @typeParam TMeans - A type of request processing means to modify.
+ * @typeParam TExt - A type of request processing means extension.
  * @param extension - Request extension containing all the required properties.
  *
  * @returns Request extension cast to {@link RequestModification}.

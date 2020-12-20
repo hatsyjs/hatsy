@@ -7,7 +7,7 @@ import type { RequestLogger } from './request-logger';
 /**
  * Request logger means.
  *
- * @typeParam TLogger  Request logger type.
+ * @typeParam TLogger - Request logger type.
  */
 export interface LoggerMeans<TLogger extends RequestLogger = RequestLogger> {
 

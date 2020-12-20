@@ -7,11 +7,11 @@ import type { IncomingMessage, ServerResponse } from 'http';
 /**
  * HTTP request processing means.
  *
- * When passed to HTTP handler the latter responds by utilizing the passed in [[response]], or delegates to the
+ * When passed to HTTP handler the latter responds by utilizing the passed in {@link response}, or delegates to the
  * {@link RequestContext.Agent.next next handler}.
  *
- * @typeParam TRequest  HTTP request type.
- * @typeParam TResponse  HTTP response type.
+ * @typeParam TRequest - HTTP request type.
+ * @typeParam TResponse - HTTP response type.
  */
 export interface HttpMeans<
     TRequest extends IncomingMessage = IncomingMessage,

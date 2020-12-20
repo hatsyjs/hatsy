@@ -8,7 +8,7 @@ import type { HttpMeans } from './http.means';
 /**
  * HTTP processing configuration.
  *
- * @typeParam TMeans  A type of supported HTTP request processing means.
+ * @typeParam TMeans - A type of supported HTTP request processing means.
  */
 export interface HttpConfig<TMeans extends HttpMeans = HttpMeans> {
 
@@ -52,8 +52,8 @@ export namespace HttpConfig {
   /**
    * HTTP processing configuration for extended requests.
    *
-   * @typeParam TExt  Request processing means extension type.
-   * @typeParam TMeans  A type of supported HTTP request processing means.
+   * @typeParam TExt - Request processing means extension type.
+   * @typeParam TMeans - A type of supported HTTP request processing means.
    */
   export interface Extended<TExt, TMeans extends HttpMeans = HttpMeans> extends HttpConfig<TMeans & TExt> {
 

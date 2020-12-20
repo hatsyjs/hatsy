@@ -13,7 +13,7 @@ import type { RequestContext } from './request-context';
  *
  * The handler may be asynchronous.
  *
- * @typeParam TMeans  A type of request processing means this handler expects.
+ * @typeParam TMeans - A type of request processing means this handler expects.
  */
 export type RequestHandler<TMeans> =
 /**
@@ -32,8 +32,8 @@ export type RequestHandler<TMeans> =
  *
  * This is a {@link RequestHandler request handler} that requires a `this` object.
  *
- * @typeParam TThis  A type of `this` object.
- * @typeParam TMeans  A type of request processing means this handler expects.
+ * @typeParam TThis - A type of `this` object.
+ * @typeParam TMeans - A type of request processing means this handler expects.
  */
 export type RequestHandlerMethod<TThis, TMeans> =
 /**
@@ -53,7 +53,7 @@ export type RequestHandlerMethod<TThis, TMeans> =
  * Iterates over the given handlers in order and delegates the request processing to them. It stops when either
  * response is generated, an error thrown, or no handlers left.
  *
- * @typeParam TMeans  A type of request processing means `handlers` expect.
+ * @typeParam TMeans - A type of request processing means `handlers` expect.
  * @param handlers - Either single handler or iterable of handlers to delegate request processing to.
  *
  * @returns Request processing handler.

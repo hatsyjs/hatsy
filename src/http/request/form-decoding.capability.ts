@@ -34,8 +34,8 @@ const URL_ENCODED_MIMES: Record<string, number> = {
  * Responds with 415 (Unsupported Media Type) status code if request has content type specified, and it is not
  * `application/x-www-form-urlencoded` or `text/plain`.
  *
- * @typeParam TInput  Input HTTP request processing means.
- * @typeParam TBody  Request body type.
+ * @typeParam TInput - Input HTTP request processing means.
+ * @typeParam TBody - Request body type.
  */
 export interface FormDecoding<TInput extends HttpMeans = HttpMeans, TBody = URLSearchParams>
     extends RequestCapability<TInput, RequestBodyMeans<TBody>> {
@@ -43,8 +43,8 @@ export interface FormDecoding<TInput extends HttpMeans = HttpMeans, TBody = URLS
   /**
    * Configures form decoding capability to transform submitted form.
    *
-   * @typeParam TMeans  HTTP request processing means.
-   * @typeParam TTransformed  Transformed request body type.
+   * @typeParam TMeans - HTTP request processing means.
+   * @typeParam TTransformed - Transformed request body type.
    * @param transformer - Transformer function.
    *
    * @returns New form decoding capability.

@@ -15,7 +15,7 @@ import type { RequestModification } from './request-modification';
  * modified} or even extended when delegating request processing to the {@link RequestContext.Agent.next next handler}
  * by creating another context based on original one.
  *
- * @typeParam TMeans  Request processing means of this context.
+ * @typeParam TMeans - Request processing means of this context.
  */
 export type RequestContext<TMeans> = TMeans & RequestContext.Agent<TMeans>;
 
@@ -27,7 +27,7 @@ export namespace RequestContext {
    * It is extended by {@link RequestContext request processing context} in order the {@link RequestHandler handlers}
    * to be able to {@link next delegate processing} to other handlers.
    *
-   * @typeParam TMeans  A type of request processing means.
+   * @typeParam TMeans - A type of request processing means.
    */
   export interface Agent<TMeans> {
 

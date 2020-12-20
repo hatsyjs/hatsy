@@ -11,7 +11,7 @@ import type { RequestModification } from './request-modification';
  *
  * Can be constructed by {@link requestProcessor} function.
  *
- * @typeParam TMeans  A type of initial request processing means.
+ * @typeParam TMeans - A type of initial request processing means.
  */
 export type RequestProcessor<TMeans> =
 /**
@@ -28,7 +28,7 @@ export namespace RequestProcessor {
   /**
    * Request processor configuration.
    *
-   * @typeParam TMeans  A type of initial request processing means.
+   * @typeParam TMeans - A type of initial request processing means.
    */
   export interface Config<TMeans> {
 
@@ -63,7 +63,7 @@ export namespace RequestProcessor {
 /**
  * Builds a request processor.
  *
- * @typeParam TMeans  A type of initial request processing means.
+ * @typeParam TMeans - A type of initial request processing means.
  * @param config - Request processor configuration.
  *
  * @returns New request processor.

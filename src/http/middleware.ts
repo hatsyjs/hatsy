@@ -13,8 +13,8 @@ import type { HttpMeans } from './http.means';
  *
  * [Connect]: https://github.com/senchalabs/connect
  *
- * @typeParam TRequest  Supported HTTP request type.
- * @typeParam TResponse  Supported HTTP response type.
+ * @typeParam TRequest - Supported HTTP request type.
+ * @typeParam TResponse - Supported HTTP response type.
  */
 export type Middleware<
     TRequest extends IncomingMessage = IncomingMessage,
@@ -49,7 +49,7 @@ export namespace Middleware {
 /**
  * Involves the given `middleware` into HTTP request processing.
  *
- * @typeParam TInput  A type of input HTTP request processing means.
+ * @typeParam TInput - A type of input HTTP request processing means.
  * @param middleware - Middleware to apply.
  *
  * @returns New request processing capability that processes HTTP requests by the given `middleware`.

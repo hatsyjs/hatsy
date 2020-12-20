@@ -11,7 +11,7 @@ import { requestExtension } from './request-modification';
  *
  * Processes request with the given handler. If processing fails, processes error with the given `onError` one.
  *
- * @typeParam TMeans  Request processing means.
+ * @typeParam TMeans - Request processing means.
  * @param onError - Error processing handler.
  * @param handler - Request processing handler to process the original request with.
  *
