@@ -7,6 +7,7 @@
 	<meta name="description" content="Documentation for Hatsy">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="assets/css/main.css">
+	<script async src="assets/js/search.js" id="search-script"></script>
 </head>
 <body>
 <header>
@@ -49,11 +50,6 @@
 	</div>
 	<div class="tsd-page-title">
 		<div class="container">
-			<ul class="tsd-breadcrumb">
-				<li>
-					<a href="globals.html">Globals</a>
-				</li>
-			</ul>
 			<h1>Hatsy</h1>
 		</div>
 	</div>
@@ -76,28 +72,29 @@
 				<a href="#example" id="example" style="color: inherit; text-decoration: none;">
 					<h2>Example</h2>
 				</a>
-				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { escapeHTML } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@frontmeans/httongue&#x27;</span>;
-<span class="hljs-keyword">import</span> { httpListener, Rendering } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@hatsy/hatsy&#x27;</span>;
-<span class="hljs-keyword">import</span> { dispatchByName, Routing } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@hatsy/router&#x27;</span>;
-<span class="hljs-keyword">import</span> { createServer } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;http&#x27;</span>;
+				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">escapeHTML</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@frontmeans/httongue&#039;</span><span style="color: #000000">;</span>
+<span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">httpListener</span><span style="color: #000000">, </span><span style="color: #001080">Rendering</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@hatsy/hatsy&#039;</span><span style="color: #000000">;</span>
+<span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">dispatchByName</span><span style="color: #000000">, </span><span style="color: #001080">Routing</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@hatsy/router&#039;</span><span style="color: #000000">;</span>
+<span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">createServer</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;http&#039;</span><span style="color: #000000">;</span>
 
-<span class="hljs-keyword">const</span> server = createServer(httpListener(
-    Routing
-        .and(Rendering)
-        .for(dispatchByName({
-          <span class="hljs-function"><span class="hljs-title">hello</span>(<span class="hljs-params">{ route: { url: { searchParams } }, renderHtml }</span>)</span> {
-            renderHtml(
-<span class="hljs-string">`&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;en&quot;&gt;
-&lt;body&gt;Hello, <span class="hljs-subst">${escapeHTML(searchParams.get(<span class="hljs-string">&#x27;name&#x27;</span>) || <span class="hljs-string">&#x27;World&#x27;</span>)}</span>!&lt;/body&gt;
-&lt;/html&gt;
-`</span>            
-            );
-          },            
-        })),
-));
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">server</span><span style="color: #000000"> = </span><span style="color: #795E26">createServer</span><span style="color: #000000">(</span><span style="color: #795E26">httpListener</span><span style="color: #000000">(</span>
+<span style="color: #000000">    </span><span style="color: #001080">Routing</span>
+<span style="color: #000000">        .</span><span style="color: #795E26">and</span><span style="color: #000000">(</span><span style="color: #001080">Rendering</span><span style="color: #000000">)</span>
+<span style="color: #000000">        .</span><span style="color: #795E26">for</span><span style="color: #000000">(</span><span style="color: #795E26">dispatchByName</span><span style="color: #000000">({</span>
+<span style="color: #000000">          </span><span style="color: #795E26">hello</span><span style="color: #000000">({ </span><span style="color: #001080">route</span><span style="color: #000000">: { </span><span style="color: #001080">url</span><span style="color: #000000">: { </span><span style="color: #001080">searchParams</span><span style="color: #000000"> } }, </span><span style="color: #001080">renderHtml</span><span style="color: #000000"> }) {</span>
+<span style="color: #000000">            </span><span style="color: #795E26">renderHtml</span><span style="color: #000000">(</span>
+<span style="color: #A31515">`&lt;!DOCTYPE html&gt;</span>
+<span style="color: #A31515">&lt;html lang=&quot;en&quot;&gt;</span>
+<span style="color: #A31515">&lt;body&gt;Hello, </span><span style="color: #0000FF">${</span><span style="color: #795E26">escapeHTML</span><span style="color: #000000FF">(</span><span style="color: #001080">searchParams</span><span style="color: #000000FF">.</span><span style="color: #795E26">get</span><span style="color: #000000FF">(</span><span style="color: #A31515">&#039;name&#039;</span><span style="color: #000000FF">) </span><span style="color: #000000">||</span><span style="color: #000000FF"> </span><span style="color: #A31515">&#039;World&#039;</span><span style="color: #000000FF">)</span><span style="color: #0000FF">}</span><span style="color: #A31515">!&lt;/body&gt;</span>
+<span style="color: #A31515">&lt;/html&gt;</span>
+<span style="color: #A31515">`</span><span style="color: #000000">            </span>
+<span style="color: #000000">            );</span>
+<span style="color: #000000">          },            </span>
+<span style="color: #000000">        })),</span>
+<span style="color: #000000">));</span>
 
-server.listen(<span class="hljs-number">8080</span>);</code></pre>
+<span style="color: #001080">server</span><span style="color: #000000">.</span><span style="color: #795E26">listen</span><span style="color: #000000">(</span><span style="color: #098658">8080</span><span style="color: #000000">);</span>
+</code></pre>
 				<p>The server above responds with <code>Hello, your-name-here!</code> HTML at <a href="http://localhost:8080/hello?name=your-name-here">http://localhost:8080/hello?name=your-name-here</a></p>
 				<a href="#goals" id="goals" style="color: inherit; text-decoration: none;">
 					<h2>Goals</h2>
@@ -176,40 +173,41 @@ server.listen(<span class="hljs-number">8080</span>);</code></pre>
 					<li><code>next()</code> method the handler can use to delegate to another one.</li>
 				</ul>
 				<p>However, the request handler may require more properties to operate. This is where context extension comes into play:</p>
-				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { HttpMeans, RequestContext } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@hatsy/hatsy&#x27;</span>;
+				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">HttpMeans</span><span style="color: #000000">, </span><span style="color: #001080">RequestContext</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@hatsy/hatsy&#039;</span><span style="color: #000000">;</span>
 
-<span class="hljs-comment">/**
- * This is an extended request processing means containing user info.
- * 
- * They are applied by [contentExtender] handler and passed to [greeter] one.
- */</span>
-<span class="hljs-keyword">interface</span> UserMeans {
-  <span class="hljs-keyword">readonly</span> name: <span class="hljs-built_in">string</span>;
-}
+<span style="color: #008000">/**</span>
+<span style="color: #008000"> * This is an extended request processing means containing user info.</span>
+<span style="color: #008000"> * </span>
+<span style="color: #008000"> * They are applied by [contentExtender] handler and passed to [greeter] one.</span>
+<span style="color: #008000"> */</span>
+<span style="color: #0000FF">interface</span><span style="color: #000000"> </span><span style="color: #267F99">UserMeans</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #0000FF">readonly</span><span style="color: #000000"> </span><span style="color: #001080">name</span><span style="color: #000000">: </span><span style="color: #267F99">string</span><span style="color: #000000">;</span>
+<span style="color: #000000">}</span>
 
-<span class="hljs-comment">/**
- * Accepts context containing HTTP request processing means (`HttpMeans`).
- *
- * Delegates to [greeter] handler and extends its context with the necessary means.
- */</span>
-<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">contextExtender</span>(<span class="hljs-params">
-    <span class="hljs-comment">// Every context property, including methods, is suitable for destructuring.</span>
-    { requestAddresses, next }: RequestContext&lt;HttpMeans&gt;,
-</span>): <span class="hljs-title">Promise</span>&lt;<span class="hljs-title">void</span>&gt; </span>{
-  <span class="hljs-comment">// The second parameter contains request context properties that will be added or updated.</span>
-  <span class="hljs-comment">// The rest remain unchanged.</span>
-  <span class="hljs-keyword">await</span> next(greeter, { <span class="hljs-attr">name</span>: requestAddresses.url.searchParams.get(<span class="hljs-string">&#x27;name&#x27;</span>) || <span class="hljs-string">&#x27;anonymous&#x27;</span> });
-}
+<span style="color: #008000">/**</span>
+<span style="color: #008000"> * Accepts context containing HTTP request processing means (`HttpMeans`).</span>
+<span style="color: #008000"> *</span>
+<span style="color: #008000"> * Delegates to [greeter] handler and extends its context with the necessary means.</span>
+<span style="color: #008000"> */</span>
+<span style="color: #0000FF">async</span><span style="color: #000000"> </span><span style="color: #0000FF">function</span><span style="color: #000000"> </span><span style="color: #795E26">contextExtender</span><span style="color: #000000">(</span>
+<span style="color: #000000">    </span><span style="color: #008000">// Every context property, including methods, is suitable for destructuring.</span>
+<span style="color: #000000">    { </span><span style="color: #001080">requestAddresses</span><span style="color: #000000">, </span><span style="color: #001080">next</span><span style="color: #000000"> }: </span><span style="color: #267F99">RequestContext</span><span style="color: #000000">&lt;</span><span style="color: #267F99">HttpMeans</span><span style="color: #000000">&gt;,</span>
+<span style="color: #000000">): </span><span style="color: #267F99">Promise</span><span style="color: #000000">&lt;</span><span style="color: #267F99">void</span><span style="color: #000000">&gt; {</span>
+<span style="color: #000000">  </span><span style="color: #008000">// The second parameter contains request context properties that will be added or updated.</span>
+<span style="color: #000000">  </span><span style="color: #008000">// The rest remain unchanged.</span>
+<span style="color: #000000">  </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #795E26">next</span><span style="color: #000000">(</span><span style="color: #001080">greeter</span><span style="color: #000000">, { </span><span style="color: #001080">name:</span><span style="color: #000000"> </span><span style="color: #001080">requestAddresses</span><span style="color: #000000">.</span><span style="color: #001080">url</span><span style="color: #000000">.</span><span style="color: #001080">searchParams</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;name&#039;</span><span style="color: #000000">) || </span><span style="color: #A31515">&#039;anonymous&#039;</span><span style="color: #000000"> });</span>
+<span style="color: #000000">}</span>
 
-<span class="hljs-comment">/**
- * Accepts extended request processing means. I.e. both HTTP and user info.
- */</span>
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">greeter</span>(<span class="hljs-params">{ name, response }: RequestContext&lt;HttpMeans &amp; UserMeans&gt;</span>): <span class="hljs-title">void</span> </span>{
-  <span class="hljs-comment">// Respond with HTTP response.</span>
-  <span class="hljs-comment">// Hatsy would detect the handler actually responded, because of the `.end()` method call.</span>
-  <span class="hljs-comment">// Otherwise, Hatsy may try other handlers to process the same request.</span>
-  response.end(<span class="hljs-string">`Hello, <span class="hljs-subst">${name}</span>`</span>);
-}</code></pre>
+<span style="color: #008000">/**</span>
+<span style="color: #008000"> * Accepts extended request processing means. I.e. both HTTP and user info.</span>
+<span style="color: #008000"> */</span>
+<span style="color: #0000FF">function</span><span style="color: #000000"> </span><span style="color: #795E26">greeter</span><span style="color: #000000">({ </span><span style="color: #001080">name</span><span style="color: #000000">, </span><span style="color: #001080">response</span><span style="color: #000000"> }: </span><span style="color: #267F99">RequestContext</span><span style="color: #000000">&lt;</span><span style="color: #267F99">HttpMeans</span><span style="color: #000000"> &amp; </span><span style="color: #267F99">UserMeans</span><span style="color: #000000">&gt;): </span><span style="color: #267F99">void</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #008000">// Respond with HTTP response.</span>
+<span style="color: #000000">  </span><span style="color: #008000">// Hatsy would detect the handler actually responded, because of the `.end()` method call.</span>
+<span style="color: #000000">  </span><span style="color: #008000">// Otherwise, Hatsy may try other handlers to process the same request.</span>
+<span style="color: #000000">  </span><span style="color: #001080">response</span><span style="color: #000000">.</span><span style="color: #795E26">end</span><span style="color: #000000">(</span><span style="color: #A31515">`Hello, </span><span style="color: #0000FF">${</span><span style="color: #001080">name</span><span style="color: #0000FF">}</span><span style="color: #A31515">`</span><span style="color: #000000">);</span>
+<span style="color: #000000">}</span>
+</code></pre>
 				<a href="#capabilities" id="capabilities" style="color: inherit; text-decoration: none;">
 					<h2>Capabilities</h2>
 				</a>
@@ -241,11 +239,12 @@ server.listen(<span class="hljs-number">8080</span>);</code></pre>
 					</li>
 				</ul>
 				<p>See the <a href="#example">very first example</a> containing capabilities usage. Here is the explanation:</p>
-				<pre><code class="language-typescript">Routing
-        .and(Rendering) <span class="hljs-comment">// Combine two capabilities. `Rendering` will be applied after `Routing`.</span>
-                        <span class="hljs-comment">// More capabilities can be combined by chaining `.and()` calls.</span>
-        .for(handler)   <span class="hljs-comment">// Apply capabilities to the handler.</span>
-                        <span class="hljs-comment">// The handler receives a request context extended by both of them.</span></code></pre>
+				<pre><code class="language-typescript"><span style="color: #001080">Routing</span>
+<span style="color: #000000">        .</span><span style="color: #795E26">and</span><span style="color: #000000">(</span><span style="color: #001080">Rendering</span><span style="color: #000000">) </span><span style="color: #008000">// Combine two capabilities. `Rendering` will be applied after `Routing`.</span>
+<span style="color: #000000">                        </span><span style="color: #008000">// More capabilities can be combined by chaining `.and()` calls.</span>
+<span style="color: #000000">        .</span><span style="color: #795E26">for</span><span style="color: #000000">(</span><span style="color: #001080">handler</span><span style="color: #000000">)   </span><span style="color: #008000">// Apply capabilities to the handler.</span>
+<span style="color: #000000">                        </span><span style="color: #008000">// The handler receives a request context extended by both of them.</span>
+</code></pre>
 				<a href="#dispatchers" id="dispatchers" style="color: inherit; text-decoration: none;">
 					<h2>Dispatchers</h2>
 				</a>
@@ -266,17 +265,17 @@ server.listen(<span class="hljs-number">8080</span>);</code></pre>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 			<nav class="tsd-navigation primary">
 				<ul>
-					<li class="globals  ">
-						<a href="globals.html"><em>Globals</em></a>
+					<li class=" ">
+						<a href="modules.html">Modules</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/@hatsy_hatsy.html">@hatsy/hatsy</a>
+						<a href="modules/_hatsy_hatsy.html">@hatsy/hatsy</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/@hatsy_hatsy_core.html">@hatsy/hatsy/core</a>
+						<a href="modules/_hatsy_hatsy_core.html">@hatsy/hatsy/core</a>
 					</li>
 					<li class=" tsd-kind-module">
-						<a href="modules/@hatsy_hatsy_testing.html">@hatsy/hatsy/testing</a>
+						<a href="modules/_hatsy_hatsy_testing.html">@hatsy/hatsy/testing</a>
 					</li>
 				</ul>
 			</nav>
@@ -292,7 +291,7 @@ server.listen(<span class="hljs-number">8080</span>);</code></pre>
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
-				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-namespace"><span class="tsd-kind-icon">Namespace</span></li>
 				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
 				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
 				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
