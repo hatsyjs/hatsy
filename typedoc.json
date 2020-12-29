@@ -1,14 +1,9 @@
 {
-  "disableAutoModuleName": true,
-  "exclude": [
-    "**/index.ts",
-    "**/*.impl.ts",
-    "**/impl/**/*.ts",
-    "**/spec/**/*.ts",
-    "**/*.spec.ts"
+  "entryPoints": [
+    "src/index.ts",
+    "src/core/index.ts",
+    "src/testing/index.ts"
   ],
-  "excludeNotExported": true,
-  "mode": "modules",
   "name": "Hatsy",
   "out": "./target/typedoc",
   "tsconfig": "tsconfig.main.json"

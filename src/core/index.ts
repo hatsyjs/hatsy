@@ -1,3 +1,7 @@
+/**
+ * @packageDocumentation
+ * @module @hatsy/hatsy/core
+ */
 export * from './dispatch-error';
 export * from './error.means';
 export * from './logging';
