@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @hatsy/hatsy/core
- */
 import { RequestCapability } from '../request-capability';
 import type { RequestHandler } from '../request-handler';
 import { requestExtension } from '../request-modification';

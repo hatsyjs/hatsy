@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @hatsy/hatsy
- */
 import { escapeXML, MIMEType } from '@frontmeans/httongue';
 import { STATUS_CODES } from 'http';
 import type { ErrorMeans, RequestContext, RequestHandler } from '../../core';

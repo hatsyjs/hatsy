@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @hatsy/hatsy
- */
 import { arrayOfElements, elementOrArray } from '@proc7ts/primitives';
 import type { ServerResponse } from 'http';
 

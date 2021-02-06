@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @hatsy/hatsy
- */
 import type { RequestHandler, RequestHandlerMethod } from '../../core';
 import type { HttpMeans } from '../http.means';
 

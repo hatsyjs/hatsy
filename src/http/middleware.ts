@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @hatsy/hatsy
- */
 import type { IncomingMessage, ServerResponse } from 'http';
 import { RequestCapability, RequestContext, RequestHandler } from '../core';
 import type { HttpMeans } from './http.means';

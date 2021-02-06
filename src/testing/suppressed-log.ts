@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @hatsy/hatsy/testing
- */
 import { noop } from '@proc7ts/primitives';
 import type { RequestLogger } from '../core';
 

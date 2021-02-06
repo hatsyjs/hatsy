@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @hatsy/hatsy/core
- */
 import type { ErrorMeans } from './error.means';
 import type { RequestHandler } from './request-handler';
 import { requestExtension } from './request-modification';

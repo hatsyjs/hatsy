@@ -1,8 +1,4 @@
 /**
- * @packageDocumentation
- * @module @hatsy/hatsy/core
- */
-/**
  * Request body processing means.
  *
  * @typeParam TBody - A type of request body.

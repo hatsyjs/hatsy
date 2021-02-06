@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @hatsy/hatsy
- */
 import { MIMEType } from '@frontmeans/httongue';
 import { asis } from '@proc7ts/primitives';
 import {

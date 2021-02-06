@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @hatsy/hatsy/core
- */
 import type { RequestContext } from './request-context';
 
 /**

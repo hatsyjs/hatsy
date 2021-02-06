@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @hatsy/hatsy/testing
- */
 import { noop } from '@proc7ts/primitives';
 import { createServer, IncomingMessage, request, RequestListener, RequestOptions, Server } from 'http';
 import type { AddressInfo } from 'net';

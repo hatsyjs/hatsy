@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @hatsy/hatsy
-*/
 import { MIMEType } from '@frontmeans/httongue';
 import { RequestCapability, requestExtension, RequestHandler } from '../../core';
 import type { HttpMeans } from '../http.means';

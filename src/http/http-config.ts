@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @hatsy/hatsy
- */
 import type { ErrorMeans, RequestHandler } from '../core';
 import type { HttpMeans } from './http.means';
 

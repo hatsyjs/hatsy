@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @hatsy/hatsy
- */
 import { HttpAddressRep } from '@hatsy/http-header-value/node';
 import { lazyValue, noop } from '@proc7ts/primitives';
 import type { IncomingMessage, ServerResponse } from 'http';

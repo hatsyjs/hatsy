@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @hatsy/hatsy
- */
 import { httpLanguageNegotiator } from '@hatsy/http-header-value/headers';
 import type { RequestHandler, RequestHandlerMethod } from '../../core';
 import { HttpError } from '../http-error';

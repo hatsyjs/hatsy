@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @hatsy/hatsy/core
- */
 import type { RequestLogger } from './request-logger';
 
 /**

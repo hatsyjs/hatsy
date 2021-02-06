@@ -1,8 +1,4 @@
 /**
- * @packageDocumentation
- * @module @hatsy/hatsy
- */
-/**
  * A error corresponding to the given HTTP status code.
  *
  * HTTP request processing handlers may raise this error. The {@link renderHttpError error handler} would render

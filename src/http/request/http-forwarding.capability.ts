@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @hatsy/hatsy
- */
 import type { HttpForwardTrust } from '@hatsy/http-header-value/headers';
 import { HttpAddressRep } from '@hatsy/http-header-value/node';
 import { lazyValue } from '@proc7ts/primitives';

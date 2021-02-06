@@ -1,8 +1,4 @@
 /**
- * @packageDocumentation
- * @module @hatsy/hatsy/core
- */
-/**
  * A logger to use during request processing.
  */
 export interface RequestLogger {

@@ -1,8 +1,4 @@
 /**
- * @packageDocumentation
- * @module @hatsy/hatsy/core
- */
-/**
  * Modification or extension of {@link RequestContext request processing means}.
  *
  * The properties present here are added to new context potentially replacing the original ones.

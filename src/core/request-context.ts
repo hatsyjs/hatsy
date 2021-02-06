@@ -1,7 +1,3 @@
-/**
- * @packageDocumentation
- * @module @hatsy/hatsy/core
- */
 import type { RequestHandler } from './request-handler';
 import type { RequestModification } from './request-modification';
 
