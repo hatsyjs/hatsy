@@ -45,7 +45,7 @@
   "dependencies": {
     "@frontmeans/httongue": "^2.2.0",
     "@hatsy/http-header-value": "^3.5.3",
-    "@proc7ts/primitives": "^2.0.0"
+    "@proc7ts/primitives": "^2.1.0"
   },
   "engines": {
     "node": ">=12"
