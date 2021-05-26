@@ -1,4 +1,6 @@
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, jest } from '@jest/globals';
 import { noop } from '@proc7ts/primitives';
+import type { Mock } from 'jest-mock';
 import { Logging } from '../core';
 import { suppressedLog, TestHttpServer } from '../testing';
 import { HttpError } from './http-error';
@@ -20,7 +22,7 @@ describe('middleware', () => {
     server.listenBy(noop);
   });
 
-  let ware: jest.Mock<void, Parameters<Middleware>>;
+  let ware: Mock<void, Parameters<Middleware>>;
 
   beforeEach(() => {
     ware = jest.fn((_request, _response, next) => next());

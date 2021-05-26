@@ -1,4 +1,6 @@
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, jest } from '@jest/globals';
 import { noop } from '@proc7ts/primitives';
+import type { SpyInstance } from 'jest-mock';
 import { TestHttpServer } from '../../testing';
 import { Rendering } from '../render';
 import { JsonParsing } from './json-parsing.capability';
@@ -14,7 +16,7 @@ describe('JsonParsing', () => {
     await server.stop();
   });
 
-  let errorSpy: jest.SpyInstance;
+  let errorSpy: SpyInstance<void, any[]>;
 
   beforeEach(() => {
     errorSpy = jest.spyOn(console, 'error').mockImplementation(noop);

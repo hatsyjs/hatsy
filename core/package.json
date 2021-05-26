@@ -1,5 +1,4 @@
 {
-  "main": "../dist/hatsy.core.cjs",
-  "module": "../dist/hatsy.core.js",
+  "main": "../dist/hatsy.core.js",
   "types": "./index.d.ts"
 }
