@@ -1,4 +1,5 @@
-import { Logging } from '../../core/logging';
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from '@jest/globals';
+import { Logging } from '../../core';
 import { suppressedLog, TestHttpServer } from '../../testing';
 import { Rendering } from '../render';
 import { dispatchByLanguage } from './dispatch-by-language.handler';

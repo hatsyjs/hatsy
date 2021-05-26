@@ -1,4 +1,6 @@
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, jest } from '@jest/globals';
 import { noop } from '@proc7ts/primitives';
+import type { SpyInstance } from 'jest-mock';
 import type { ErrorMeans, RequestContext } from '../core';
 import { TestHttpServer } from '../testing';
 import { HttpError } from './http-error';
@@ -21,7 +23,7 @@ describe('httpListener', () => {
     server.listenBy(noop);
   });
 
-  let logErrorSpy: jest.SpyInstance;
+  let logErrorSpy: SpyInstance<void, any[]>;
 
   beforeEach(() => {
     logErrorSpy = jest.spyOn(console, 'error');
