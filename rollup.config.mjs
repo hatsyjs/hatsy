@@ -1,4 +1,3 @@
-import commonjs from '@rollup/plugin-commonjs';
 import nodeResolve from '@rollup/plugin-node-resolve';
 import { externalModules } from '@run-z/rollup-helpers';
 import path from 'path';
@@ -15,7 +14,6 @@ export default {
     'hatsy.testing': './src/testing/index.ts',
   },
   plugins: [
-    commonjs(),
     ts({
       typescript,
       tsconfig: 'tsconfig.main.json',
