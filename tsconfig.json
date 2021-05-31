@@ -17,7 +17,7 @@
       "ES2019"
     ],
     "types": [
-      "node",
+      "node"
     ],
     "outDir": "target/js",
     "sourceMap": true,
