@@ -11,4 +11,3 @@ export interface RequestBodyMeans<TBody> {
   readonly requestBody: TBody;
 
 }
-

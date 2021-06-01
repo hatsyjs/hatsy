@@ -262,5 +262,3 @@ function logHttpError(
 function renderEmptyHttpResponse(context: RequestContext<HttpMeans & ErrorMeans>): void {
   context.response.end();
 }
-
-
