@@ -1,15 +1,22 @@
 Hatsy
 =====
-###### Asynchronous TypeScript-friendly HTTP server for Node.js
+**Asynchronous TypeScript-friendly HTTP server for Node.js**
+
 [![NPM][npm-image]][npm-url]
 [![Build Status][build-status-img]][build-status-link]
+[![Code Quality][quality-img]][quality-link]
+[![Coverage][coverage-img]][coverage-link]
 [![GitHub Project][github-image]][github-url]
 [![API Documentation][api-docs-image]][api-docs-url]
 
 [npm-image]: https://img.shields.io/npm/v/@hatsy/hatsy.svg?logo=npm
 [npm-url]: https://www.npmjs.com/package/@hatsy/hatsy
 [build-status-img]: https://github.com/hatsyjs/hatsy/workflows/Build/badge.svg
-[build-status-link]: https://github.com/hatsyjs/hatsy/actions?query=workflow%3ABuild
+[build-status-link]: https://github.com/hatsyjs/hatsy/actions?query=workflow:Build
+[quality-img]: https://app.codacy.com/project/badge/Grade/2a0e884645ed42aea74cb32f7d31065c
+[quality-link]: https://www.codacy.com/gh/hatsyjs/hatsy/dashboard?utm_source=github.com&utm_medium=referral&utm_content=hatsyjs/hatsy&utm_campaign=Badge_Grade
+[coverage-img]: https://app.codacy.com/project/badge/Coverage/2a0e884645ed42aea74cb32f7d31065c
+[coverage-link]: https://www.codacy.com/gh/hatsyjs/hatsy/dashboard?utm_source=github.com&utm_medium=referral&utm_content=hatsyjs/hatsy&utm_campaign=Badge_Coverage
 [github-image]: https://img.shields.io/static/v1?logo=github&label=GitHub&message=project&color=informational
 [github-url]: https://github.com/hatsyjs/hatsy
 [api-docs-image]: https://img.shields.io/static/v1?logo=typescript&label=API&message=docs&color=informational
