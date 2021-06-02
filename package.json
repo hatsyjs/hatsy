@@ -35,7 +35,7 @@
   "dependencies": {
     "@frontmeans/httongue": "^2.3.0",
     "@hatsy/http-header-value": "^3.6.0",
-    "@proc7ts/logger": "^1.0.0",
+    "@proc7ts/logger": "^1.1.0",
     "@proc7ts/primitives": "^3.0.0"
   },
   "engines": {
