@@ -1,6 +1,7 @@
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, jest } from '@jest/globals';
+import { consoleLogger } from '@proc7ts/logger';
 import { noop } from '@proc7ts/primitives';
-import type { SpyInstance } from 'jest-mock';
+import type { Mock, SpyInstance } from 'jest-mock';
 import type { ErrorMeans, RequestContext } from '../core';
 import { TestHttpServer } from '../testing';
 import { HttpError } from './http-error';
@@ -23,11 +24,12 @@ describe('httpListener', () => {
     server.listenBy(noop);
   });
 
-  let logErrorSpy: SpyInstance<void, any[]>;
+  let logError: Mock<void, unknown[]>;
+  let logErrorSpy: SpyInstance<(...args: unknown[]) => void, []>;
 
   beforeEach(() => {
-    logErrorSpy = jest.spyOn(console, 'error');
-    logErrorSpy.mockImplementation(noop);
+    logError = jest.fn();
+    logErrorSpy = jest.spyOn((consoleLogger as any), 'error', 'get').mockReturnValue(logError);
   });
   afterEach(() => {
     logErrorSpy.mockRestore();
@@ -185,7 +187,7 @@ describe('httpListener', () => {
     const response = await server.get('/test');
 
     expect(await response.body()).toContain('ERROR test');
-    expect(logErrorSpy).toHaveBeenCalledWith(error);
+    expect(logError).toHaveBeenCalledWith(error);
     expect(errorHandler).toHaveBeenCalledWith(expect.objectContaining({
       request: expect.objectContaining({ method: 'GET', url: '/test' }),
       error,
@@ -207,7 +209,7 @@ describe('httpListener', () => {
     const body = await response.body();
 
     expect(body).toContain('ERROR 404 Never Found');
-    expect(logErrorSpy).toHaveBeenCalledWith('404', 'Never Found');
+    expect(logError).toHaveBeenCalledWith('404', 'Never Found');
     expect(errorHandler).toHaveBeenCalledWith(expect.objectContaining({
       request: expect.objectContaining({ method: 'GET', url: '/test' }),
       error,
@@ -225,7 +227,7 @@ describe('httpListener', () => {
     const response = await server.get('/test');
 
     expect(await response.body()).toBe('');
-    expect(logErrorSpy).toHaveBeenCalledWith(error);
+    expect(logError).toHaveBeenCalledWith(error);
   });
   it('does not log ERROR when there is no error handler', async () => {
 
@@ -239,7 +241,7 @@ describe('httpListener', () => {
     const response = await server.get('/test');
 
     expect(await response.body()).toBe('');
-    expect(logErrorSpy).not.toHaveBeenCalled();
+    expect(logError).not.toHaveBeenCalled();
   });
   it('logs ERROR when there is neither error, not default handler', async () => {
 
@@ -258,7 +260,7 @@ describe('httpListener', () => {
     const response = await server.get('/test');
 
     expect(await response.body()).toBe('NO RESPONSE');
-    expect(logErrorSpy).toHaveBeenCalledWith(error);
+    expect(logError).toHaveBeenCalledWith(error);
   });
   it('logs unhandled error', async () => {
 
@@ -267,7 +269,7 @@ describe('httpListener', () => {
       throw error;
     });
     const whenErrorLogged = new Promise(resolve => {
-      logErrorSpy.mockImplementation(resolve);
+      logError.mockImplementation(resolve);
     });
 
     const listener = httpListener(
@@ -285,7 +287,7 @@ describe('httpListener', () => {
     expect(await response.body()).toBe('NO RESPONSE');
 
     await whenErrorLogged;
-    expect(logErrorSpy).toHaveBeenCalledWith('[GET /test]', 'Unhandled error', error);
+    expect(logError).toHaveBeenCalledWith('[GET /test]', 'Unhandled error', error);
   });
   it('logs unhandled error when logging disabled', async () => {
 
@@ -294,7 +296,7 @@ describe('httpListener', () => {
       throw error;
     });
     const whenErrorLogged = new Promise(resolve => {
-      logErrorSpy.mockImplementation(resolve);
+      logError.mockImplementation(resolve);
     });
 
     const listener = httpListener(
@@ -312,7 +314,7 @@ describe('httpListener', () => {
     expect(await response.body()).toBe('NO RESPONSE');
 
     await whenErrorLogged;
-    expect(logErrorSpy).toHaveBeenCalledWith('[GET /test]', 'Unhandled error', error);
+    expect(logError).toHaveBeenCalledWith('[GET /test]', 'Unhandled error', error);
   });
 
   describe('requestAddresses', () => {

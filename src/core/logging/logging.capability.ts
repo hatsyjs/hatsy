@@ -1,3 +1,4 @@
+import { consoleLogger } from '@proc7ts/logger';
 import { RequestCapability } from '../request-capability';
 import type { RequestHandler } from '../request-handler';
 import { requestExtension } from '../request-modification';
@@ -70,4 +71,4 @@ class LoggingCapability<TInput, TLogger extends RequestLogger>
  * Uses a global `console` as {@link LoggerMeans.log request logger}, unless the logger is present in request context
  * already.
  */
-export const Logging: Logging = (/*#__PURE__*/ new LoggingCapability<unknown, RequestLogger>(console, true));
+export const Logging: Logging = (/*#__PURE__*/ new LoggingCapability<unknown, RequestLogger>(consoleLogger, true));

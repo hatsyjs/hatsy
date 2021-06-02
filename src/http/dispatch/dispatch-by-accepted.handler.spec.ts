@@ -1,7 +1,8 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from '@jest/globals';
+import { silentLogger } from '@proc7ts/logger';
 import type { RequestContext } from '../../core';
 import { Logging } from '../../core';
-import { suppressedLog, TestHttpServer } from '../../testing';
+import { TestHttpServer } from '../../testing';
 import type { HttpMeans } from '../http.means';
 import { Rendering, RenderMeans } from '../render';
 import { addResponseHeader } from '../util';
@@ -22,7 +23,7 @@ describe('dispatchByAccepted', () => {
     server.handleBy(
         {
           handleBy(handler) {
-            return Logging.logBy(suppressedLog).for(handler);
+            return Logging.logBy(silentLogger).for(handler);
           },
         },
         Rendering
