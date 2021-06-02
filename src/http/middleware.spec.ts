@@ -1,8 +1,9 @@
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, jest } from '@jest/globals';
+import { silentLogger } from '@proc7ts/logger';
 import { noop } from '@proc7ts/primitives';
 import type { Mock } from 'jest-mock';
 import { Logging } from '../core';
-import { suppressedLog, TestHttpServer } from '../testing';
+import { TestHttpServer } from '../testing';
 import { HttpError } from './http-error';
 import { middleware, Middleware } from './middleware';
 import { Rendering } from './render';
@@ -62,7 +63,7 @@ describe('middleware', () => {
     server.handleBy(
         {
           handleBy(handler) {
-            return Logging.logBy(suppressedLog).for(handler);
+            return Logging.logBy(silentLogger).for(handler);
           },
         },
         middleware(ware).for(noop),

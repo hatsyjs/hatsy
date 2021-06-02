@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
+import { consoleLogger } from '@proc7ts/logger';
 import { noop } from '@proc7ts/primitives';
 import type { Mock } from 'jest-mock';
 import type { RequestContext } from '../request-context';
@@ -22,7 +23,7 @@ describe('Logging', () => {
 
       await processor(Logging.for(handler))({});
 
-      expect(handler).toHaveBeenCalledWith(expect.objectContaining({ log: console }));
+      expect(handler).toHaveBeenCalledWith(expect.objectContaining({ log: consoleLogger }));
     });
     it('does not override the request logger', async () => {
 

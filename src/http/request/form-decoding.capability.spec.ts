@@ -1,6 +1,7 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from '@jest/globals';
+import { silentLogger } from '@proc7ts/logger';
 import { Logging } from '../../core';
-import { suppressedLog, TestHttpServer } from '../../testing';
+import { TestHttpServer } from '../../testing';
 import { Rendering } from '../render';
 import { FormDecoding } from './form-decoding.capability';
 
@@ -19,7 +20,7 @@ describe('FormDecoding', () => {
     server.handleBy(
         {
           handleBy(handler) {
-            return Logging.logBy(suppressedLog).for(handler);
+            return Logging.logBy(silentLogger).for(handler);
           },
         },
         Rendering
@@ -48,7 +49,7 @@ describe('FormDecoding', () => {
     server.handleBy(
         {
           handleBy(handler) {
-            return Logging.logBy(suppressedLog).for(handler);
+            return Logging.logBy(silentLogger).for(handler);
           },
         },
         Rendering

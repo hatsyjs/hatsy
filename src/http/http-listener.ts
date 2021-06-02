@@ -1,4 +1,5 @@
 import { HttpAddressRep } from '@hatsy/http-header-value/node';
+import { consoleLogger } from '@proc7ts/logger';
 import { lazyValue, noop } from '@proc7ts/primitives';
 import type { IncomingMessage, ServerResponse } from 'http';
 import {
@@ -124,7 +125,7 @@ export function httpListener<
           onError,
       );
     }).catch(error => {
-      console.error(`[${request.method} ${request.url}]`, 'Unhandled error', error);
+      consoleLogger.error(`[${request.method} ${request.url}]`, 'Unhandled error', error);
     });
   };
 }
