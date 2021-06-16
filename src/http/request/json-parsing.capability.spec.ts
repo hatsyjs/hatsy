@@ -1,6 +1,7 @@
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, jest } from '@jest/globals';
 import { consoleLogger } from '@proc7ts/logger';
-import type { Mock, SpyInstance } from 'jest-mock';
+import { noop } from '@proc7ts/primitives';
+import type { SpyInstance } from 'jest-mock';
 import { TestHttpServer } from '../../testing';
 import { Rendering } from '../render';
 import { JsonParsing } from './json-parsing.capability';
@@ -16,12 +17,10 @@ describe('JsonParsing', () => {
     await server.stop();
   });
 
-  let logError: Mock<void, unknown[]>;
-  let logErrorSpy: SpyInstance<(...args: unknown[]) => void, []>;
+  let logErrorSpy: SpyInstance<void, unknown[]>;
 
   beforeEach(() => {
-    logError = jest.fn();
-    logErrorSpy = jest.spyOn((consoleLogger as any), 'error', 'get').mockImplementation(() => logError);
+    logErrorSpy = jest.spyOn(consoleLogger, 'error').mockImplementation(noop);
   });
   afterEach(() => {
     logErrorSpy.mockRestore();
@@ -131,7 +130,7 @@ describe('JsonParsing', () => {
 
     expect(response.statusCode).toBe(400);
     expect(await response.body()).toContain('Malformed JSON');
-    expect(logError).toHaveBeenCalledWith(
+    expect(logErrorSpy).toHaveBeenCalledWith(
         '400',
         'Malformed JSON',
         expect.objectContaining({ message: expect.stringContaining('Unexpected token') }),
