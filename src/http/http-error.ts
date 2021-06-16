@@ -45,7 +45,7 @@ export class HttpError extends Error {
    *
    * @returns An array containing error message, details, and reason.
    */
-  toLog(): any[] {
+  toLog(): unknown[] {
 
     const report: any[] = [this.message];
     const { details, reason } = this;
