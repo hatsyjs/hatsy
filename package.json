@@ -35,7 +35,7 @@
   "dependencies": {
     "@frontmeans/httongue": "^2.3.0",
     "@hatsy/http-header-value": "^3.6.0",
-    "@proc7ts/logger": "^1.2.0-dev.3",
+    "@proc7ts/logger": "^1.2.0",
     "@proc7ts/primitives": "^3.0.0"
   },
   "engines": {
@@ -59,7 +59,7 @@
     "rollup-plugin-flat-dts": "^1.2.2",
     "rollup-plugin-sourcemaps": "^0.6.3",
     "rollup-plugin-typescript2": "^0.30.0",
-    "run-z": "^1.8.0",
+    "run-z": "^1.9.1",
     "shx": "^0.3.3",
     "ts-jest": "^27.0.3",
     "tslib": "^2.3.0",
