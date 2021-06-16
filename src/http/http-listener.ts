@@ -250,11 +250,7 @@ function httpErrorHandler<TExt, TRequest extends IncomingMessage, TResponse exte
 function logHttpError(
     { log, error }: RequestContext<HttpMeans & ErrorMeans & LoggerMeans>,
 ): void {
-  if (error instanceof HttpError) {
-    log.error(...error.toLog());
-  } else {
-    log.error(error);
-  }
+  log.error(error);
 }
 
 /**

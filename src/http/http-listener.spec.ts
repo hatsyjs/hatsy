@@ -207,7 +207,7 @@ describe('httpListener', () => {
     const body = await response.body();
 
     expect(body).toContain('ERROR 404 Never Found');
-    expect(logErrorSpy).toHaveBeenCalledWith('404', 'Never Found');
+    expect(logErrorSpy).toHaveBeenCalledWith(error);
     expect(errorHandler).toHaveBeenCalledWith(expect.objectContaining({
       request: expect.objectContaining({ method: 'GET', url: '/test' }),
       error,

@@ -1,3 +1,5 @@
+import type { DueLog, Loggable } from '@proc7ts/logger';
+
 /**
  * A error corresponding to the given HTTP status code.
  *
@@ -6,7 +8,7 @@
  *
  * @see HttpConfig.errorHandler
  */
-export class HttpError extends Error {
+export class HttpError extends Error implements Loggable {
 
   /**
    * HTTP status message.
@@ -41,13 +43,19 @@ export class HttpError extends Error {
   }
 
   /**
-   * Constructs loggable error representation.
+   * Performs additional message processing before it is logged.
    *
-   * @returns An array containing error message, details, and reason.
+   * At output or default logging stage replaces this error with error message, details, and reason. Does nothing at
+   * other logging stages.
+   *
+   * @returns Either new loggable value representation, or nothing outside the output logging stage.
    */
-  toLog(): unknown[] {
+  toLog({ on = 'out' }: DueLog): unknown[] | void {
+    if (on !== 'out') {
+      return;
+    }
 
-    const report: any[] = [this.message];
+    const report: unknown[] = [this.message];
     const { details, reason } = this;
 
     if (details) {

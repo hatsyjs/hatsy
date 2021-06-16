@@ -3,6 +3,7 @@ import { consoleLogger } from '@proc7ts/logger';
 import { noop } from '@proc7ts/primitives';
 import type { SpyInstance } from 'jest-mock';
 import { TestHttpServer } from '../../testing';
+import { HttpError } from '../http-error';
 import { Rendering } from '../render';
 import { JsonParsing } from './json-parsing.capability';
 
@@ -130,10 +131,13 @@ describe('JsonParsing', () => {
 
     expect(response.statusCode).toBe(400);
     expect(await response.body()).toContain('Malformed JSON');
-    expect(logErrorSpy).toHaveBeenCalledWith(
-        '400',
-        'Malformed JSON',
-        expect.objectContaining({ message: expect.stringContaining('Unexpected token') }),
-    );
+    expect(logErrorSpy).toHaveBeenCalledWith(expect.any(HttpError));
+
+    const error = logErrorSpy.mock.calls[0][0] as HttpError;
+
+    expect(error.details).toBe('Malformed JSON');
+    expect(error.statusCode).toBe(400);
+    expect(error.reason).toBeInstanceOf(SyntaxError);
+    expect(error.message).toBe('400');
   });
 });
