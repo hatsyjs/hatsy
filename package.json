@@ -3,15 +3,10 @@
   "version": "2.5.0",
   "description": "Asynchronous TypeScript-friendly HTTP server for Node.js",
   "keywords": [
-    "api",
-    "http",
+    "http-framework",
     "http-server",
-    "rest",
-    "restful",
-    "router",
-    "web",
-    "web-server",
-    "typescript"
+    "request-handler",
+    "web-server"
   ],
   "homepage": "https://github.com/hatsyjs/hatsy",
   "repository": {
