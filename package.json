@@ -50,7 +50,7 @@
     "jest": "^27.0.6",
     "jest-junit": "^12.2.0",
     "jest-mock": "^27.0.6",
-    "rollup": "^2.52.8",
+    "rollup": "^2.53.1",
     "rollup-plugin-flat-dts": "^1.2.2",
     "rollup-plugin-sourcemaps": "^0.6.3",
     "rollup-plugin-typescript2": "^0.30.0",
@@ -58,7 +58,7 @@
     "shx": "^0.3.3",
     "ts-jest": "^27.0.3",
     "tslib": "^2.3.0",
-    "typedoc": "^0.21.2",
+    "typedoc": "^0.21.3",
     "typescript": "^4.3.5"
   },
   "scripts": {
