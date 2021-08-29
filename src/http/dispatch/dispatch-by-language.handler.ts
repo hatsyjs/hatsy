@@ -14,14 +14,14 @@ export interface DispatchLanguages<TMeans extends HttpMeans = HttpMeans> {
   /**
    * English response.
    */
-  'en'?: RequestHandlerMethod<this, TMeans>;
+  'en'?: RequestHandlerMethod<this, TMeans> | undefined;
 
   /**
    * Response in any language.
    *
    * This is a fallback handler typically.
    */
-  '*'?: RequestHandlerMethod<this, TMeans>;
+  '*'?: RequestHandlerMethod<this, TMeans> | undefined;
 
   /**
    * Request processing method with language code as its key.

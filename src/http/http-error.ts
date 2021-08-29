@@ -13,21 +13,21 @@ export class HttpError extends Error implements Loggable {
   /**
    * HTTP status message.
    */
-  readonly statusMessage?: string;
+  readonly statusMessage?: string | undefined;
 
   /**
    * Error details.
    *
    * This will be displayed on error page in addition to error code.
    */
-  readonly details?: string;
+  readonly details?: string | undefined;
 
   /**
    * Arbitrary error reason.
    *
    * This is another error typically.
    */
-  readonly reason?: any;
+  readonly reason?: unknown | undefined;
 
   /**
    * Constructs HTTP status error.
@@ -90,28 +90,28 @@ export namespace HttpError {
     /**
      * HTTP status message.
      */
-    readonly statusMessage?: string;
+    readonly statusMessage?: string | undefined;
 
     /**
      * Error message.
      *
      * @default Constructed by status code and status message.
      */
-    readonly message?: string;
+    readonly message?: string | undefined;
 
     /**
      * Error details.
      *
      * This will be displayed on error page in addition to error code.
      */
-    readonly details?: string;
+    readonly details?: string | undefined;
 
     /**
      * Arbitrary error reason.
      *
      * This is another error typically.
      */
-    readonly reason?: any;
+    readonly reason?: unknown | undefined;
 
   }
 

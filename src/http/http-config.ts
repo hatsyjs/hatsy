@@ -17,7 +17,7 @@ export interface HttpConfig<TMeans extends HttpMeans = HttpMeans> {
    *
    * @default `true`, which means a `404 Not Found` error will be raised if there is no response.
    */
-  readonly defaultHandler?: RequestHandler<TMeans> | boolean;
+  readonly defaultHandler?: RequestHandler<TMeans> | boolean | undefined;
 
   /**
    * Error processing handler.
@@ -30,7 +30,7 @@ export interface HttpConfig<TMeans extends HttpMeans = HttpMeans> {
    * @default `true`, which means the request processing error page will be rendered by {@link renderHttpError}
    * handler.
    */
-  readonly errorHandler?: RequestHandler<TMeans & ErrorMeans> | boolean;
+  readonly errorHandler?: RequestHandler<TMeans & ErrorMeans> | boolean | undefined;
 
   /**
    * Whether to log HTTP processing error.
@@ -39,7 +39,7 @@ export interface HttpConfig<TMeans extends HttpMeans = HttpMeans> {
    *
    * @default `true`, which means an error will be logged with {@link LoggerMeans logger means}, created if necessary.
    */
-  readonly logError?: boolean;
+  readonly logError?: boolean | undefined;
 
 }
 

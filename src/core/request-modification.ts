@@ -7,7 +7,7 @@
  * @typeParam TExt - A type of request processing means extension.
  */
 export type RequestModification<TMeans, TExt = object> = {
-  [K in keyof TMeans]?: TMeans[K];
+  [K in keyof TMeans]?: TMeans[K] | undefined;
 } & {
   [K in Exclude<keyof TExt, keyof TMeans>]: TExt[K];
 };

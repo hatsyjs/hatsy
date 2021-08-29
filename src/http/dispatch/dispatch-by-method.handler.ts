@@ -11,39 +11,39 @@ export interface DispatchMethods<TMeans extends HttpMeans = HttpMeans> {
   /**
    * Request processing handler for HTTP DELETE.
    */
-  readonly delete?: RequestHandlerMethod<this, TMeans>;
+  readonly delete?: RequestHandlerMethod<this, TMeans> | undefined;
 
   /**
    * Request processing handler for HTTP GET.
    *
    * It is also called for HTTP HEAD requests unless a [head] handler is also defined.
    */
-  readonly get?: RequestHandlerMethod<this, TMeans>;
+  readonly get?: RequestHandlerMethod<this, TMeans> | undefined;
 
   /**
    * Request processing handler for HTTP HEAD.
    */
-  readonly head?: RequestHandlerMethod<this, TMeans>;
+  readonly head?: RequestHandlerMethod<this, TMeans> | undefined;
 
   /**
    * Request processing handler for HTTP OPTIONS.
    */
-  readonly options?: RequestHandlerMethod<this, TMeans>;
+  readonly options?: RequestHandlerMethod<this, TMeans> | undefined;
 
   /**
    * Request processing handler for HTTP PATCH.
    */
-  readonly patch?: RequestHandlerMethod<this, TMeans>;
+  readonly patch?: RequestHandlerMethod<this, TMeans> | undefined;
 
   /**
    * Request processing handler for HTTP POST.
    */
-  readonly post?: RequestHandlerMethod<this, TMeans>;
+  readonly post?: RequestHandlerMethod<this, TMeans> | undefined;
 
   /**
    * Request processing handler for HTTP PUT.
    */
-  readonly put?: RequestHandlerMethod<this, TMeans>;
+  readonly put?: RequestHandlerMethod<this, TMeans> | undefined;
 
   /**
    * Request handler method with lower-case HTTP method name as its key.
