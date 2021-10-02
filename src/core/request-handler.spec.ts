@@ -17,6 +17,7 @@ describe('requestHandler', () => {
       response,
       next: async (handler: RequestHandler<any>) => {
         await handler(context);
+
         return response.writableEnded;
       },
       modifiedBy: valueProvider(false),

@@ -48,6 +48,7 @@ class LoggingCapability<TInput, TLogger extends RequestLogger>
         if ((context as Partial<LoggerMeans>).log) {
           return context.next(handler);
         }
+
         return context.next(handler, requestExtension({ log }));
       };
     } else {

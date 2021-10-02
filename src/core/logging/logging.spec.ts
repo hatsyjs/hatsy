@@ -61,6 +61,7 @@ describe('Logging', () => {
           context: RequestContext<TMeans & TExt>,
       ): Promise<boolean> {
         await handler(context);
+
         return true;
       },
     });

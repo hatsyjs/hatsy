@@ -60,12 +60,14 @@ export function requestHandler<TMeans>(
   if (typeof handlers === 'function') {
     return handlers;
   }
+
   return async (context: RequestContext<TMeans>): Promise<void> => {
     for (const handler of handlers) {
       if (await context.next(handler)) {
         return;
       }
     }
+
     return;
   };
 }

@@ -256,6 +256,7 @@ describe('httpListener', () => {
     });
 
     await server.get('/test');
+
     const response = await server.get('/test');
 
     expect(await response.body()).toBe('NO RESPONSE');

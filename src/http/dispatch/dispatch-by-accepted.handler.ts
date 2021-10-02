@@ -66,6 +66,7 @@ export function dispatchByAccepted<TMeans extends HttpMeans>(
 
     if (handler) {
       addResponseHeader(response, 'Vary', 'Accept');
+
       return next(handler.bind(mimeTypes));
     }
 

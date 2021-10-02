@@ -34,6 +34,7 @@ export default defineConfig({
     if (id.startsWith(path.resolve('src', 'impl') + path.sep)) {
       return 'hatsy.impl';
     }
+
     return 'hatsy';
   },
   output: {

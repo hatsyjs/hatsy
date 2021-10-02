@@ -57,6 +57,7 @@ export class TestHttpServer {
    */
   listenBy(listener: RequestListener): this {
     this._listener = listener;
+
     return this;
   }
 

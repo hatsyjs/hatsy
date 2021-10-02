@@ -240,6 +240,7 @@ function httpErrorHandler<TExt, TRequest extends IncomingMessage, TResponse exte
 
   return Logging.for(context => {
     logHttpError(context);
+
     return (context as RequestContext<HttpMeans<TRequest, TResponse> & TExt & ErrorMeans>).next(onError);
   });
 }
