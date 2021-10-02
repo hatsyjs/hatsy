@@ -73,6 +73,7 @@ describe('httpListener', () => {
 
     server.listenBy((request, response) => {
       listener(request, response);
+      // eslint-disable-next-line jest/valid-expect-in-promise
       Promise.resolve().finally(() => {
         response.end('NO RESPONSE');
       });
