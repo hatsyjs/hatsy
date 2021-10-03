@@ -1,316 +1,153 @@
-<!doctype html>
-<html class="default no-js">
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Hatsy</title>
-	<meta name="description" content="Documentation for Hatsy">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="assets/css/main.css">
-	<script async src="assets/js/search.js" id="search-script"></script>
-</head>
-<body>
-<header>
-	<div class="tsd-page-toolbar">
-		<div class="container">
-			<div class="table-wrap">
-				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
-					<div class="field">
-						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
-						<input id="tsd-search-field" type="text" />
-					</div>
-					<ul class="results">
-						<li class="state loading">Preparing search index...</li>
-						<li class="state failure">The search index is not available</li>
-					</ul>
-					<a href="index.html" class="title">Hatsy</a>
-				</div>
-				<div class="table-cell" id="tsd-widgets">
-					<div id="tsd-filter">
-						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
-						<div class="tsd-filter-group">
-							<div class="tsd-select" id="tsd-filter-visibility">
-								<span class="tsd-select-label">All</span>
-								<ul class="tsd-select-list">
-									<li data-value="public">Public</li>
-									<li data-value="protected">Public/Protected</li>
-									<li data-value="private" class="selected">All</li>
-								</ul>
-							</div>
-							<input type="checkbox" id="tsd-filter-inherited" checked />
-							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
-							<input type="checkbox" id="tsd-filter-externals" checked />
-							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
-						</div>
-					</div>
-					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="tsd-page-title">
-		<div class="container">
-			<h1>Hatsy</h1>
-		</div>
-	</div>
-</header>
-<div class="container container-main">
-	<div class="row">
-		<div class="col-8 col-content">
-			<div class="tsd-panel tsd-typography">
-				<a href="#hatsy" id="hatsy" style="color: inherit; text-decoration: none;">
-					<h1>Hatsy</h1>
-				</a>
-				<p><strong>Asynchronous TypeScript-friendly HTTP server for Node.js</strong></p>
-				<p><a href="https://www.npmjs.com/package/@hatsy/hatsy"><img src="https://img.shields.io/npm/v/@hatsy/hatsy.svg?logo=npm" alt="NPM"></a>
-					<a href="https://github.com/hatsyjs/hatsy/actions?query=workflow:Build"><img src="https://github.com/hatsyjs/hatsy/workflows/Build/badge.svg" alt="Build Status"></a>
-					<a href="https://www.codacy.com/gh/hatsyjs/hatsy/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=hatsyjs/hatsy&amp;utm_campaign=Badge_Grade"><img src="https://app.codacy.com/project/badge/Grade/2a0e884645ed42aea74cb32f7d31065c" alt="Code Quality"></a>
-					<a href="https://www.codacy.com/gh/hatsyjs/hatsy/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=hatsyjs/hatsy&amp;utm_campaign=Badge_Coverage"><img src="https://app.codacy.com/project/badge/Coverage/2a0e884645ed42aea74cb32f7d31065c" alt="Coverage"></a>
-					<a href="https://github.com/hatsyjs/hatsy"><img src="https://img.shields.io/static/v1?logo=github&label=GitHub&message=project&color=informational" alt="GitHub Project"></a>
-				<a href="https://hatsyjs.github.io/hatsy/"><img src="https://img.shields.io/static/v1?logo=typescript&label=API&message=docs&color=informational" alt="API Documentation"></a></p>
-				<a href="#example" id="example" style="color: inherit; text-decoration: none;">
-					<h2>Example</h2>
-				</a>
-				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">escapeHTML</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@frontmeans/httongue&#039;</span><span style="color: #000000">;</span>
-<span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">httpListener</span><span style="color: #000000">, </span><span style="color: #001080">Rendering</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@hatsy/hatsy&#039;</span><span style="color: #000000">;</span>
-<span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">dispatchByName</span><span style="color: #000000">, </span><span style="color: #001080">Routing</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@hatsy/router&#039;</span><span style="color: #000000">;</span>
-<span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">createServer</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;http&#039;</span><span style="color: #000000">;</span>
+<!DOCTYPE html><html class="default no-js"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Hatsy</title><meta name="description" content="Documentation for Hatsy"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script async src="assets/search.js" id="search-script"></script></head><body><header><div class="tsd-page-toolbar"><div class="container"><div class="table-wrap"><div class="table-cell" id="tsd-search" data-base="."><div class="field"><label for="tsd-search-field" class="tsd-widget search no-caption">Search</label><input type="text" id="tsd-search-field"/></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="index.html" class="title">Hatsy</a></div><div class="table-cell" id="tsd-widgets"><div id="tsd-filter"><a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a><div class="tsd-filter-group"><div class="tsd-select" id="tsd-filter-visibility"><span class="tsd-select-label">All</span><ul class="tsd-select-list"><li data-value="public">Public</li><li data-value="protected">Public/Protected</li><li data-value="private" class="selected">All</li></ul></div> <input type="checkbox" id="tsd-filter-inherited" checked/><label class="tsd-widget" for="tsd-filter-inherited">Inherited</label><input type="checkbox" id="tsd-filter-externals" checked/><label class="tsd-widget" for="tsd-filter-externals">Externals</label></div></div><a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a></div></div></div></div><div class="tsd-page-title"><div class="container"><h1> Hatsy</h1></div></div></header><div class="container container-main"><div class="row"><div class="col-8 col-content"><div class="tsd-panel tsd-typography">
+<a href="#hatsy" id="hatsy" style="color: inherit; text-decoration: none;">
+  <h1>Hatsy</h1>
+</a>
+<p><strong>Asynchronous TypeScript-friendly HTTP server for Node.js</strong></p>
+<p><a href="https://www.npmjs.com/package/@hatsy/hatsy"><img src="https://img.shields.io/npm/v/@hatsy/hatsy.svg?logo=npm" alt="NPM"></a>
+<a href="https://github.com/hatsyjs/hatsy/actions?query=workflow:Build"><img src="https://github.com/hatsyjs/hatsy/workflows/Build/badge.svg" alt="Build Status"></a>
+<a href="https://www.codacy.com/gh/hatsyjs/hatsy/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=hatsyjs/hatsy&amp;utm_campaign=Badge_Grade"><img src="https://app.codacy.com/project/badge/Grade/2a0e884645ed42aea74cb32f7d31065c" alt="Code Quality"></a>
+<a href="https://www.codacy.com/gh/hatsyjs/hatsy/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=hatsyjs/hatsy&amp;utm_campaign=Badge_Coverage"><img src="https://app.codacy.com/project/badge/Coverage/2a0e884645ed42aea74cb32f7d31065c" alt="Coverage"></a>
+<a href="https://github.com/hatsyjs/hatsy"><img src="https://img.shields.io/static/v1?logo=github&label=GitHub&message=project&color=informational" alt="GitHub Project"></a>
+<a href="https://hatsyjs.github.io/hatsy/"><img src="https://img.shields.io/static/v1?logo=typescript&label=API&message=docs&color=informational" alt="API Documentation"></a></p>
 
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">server</span><span style="color: #000000"> = </span><span style="color: #795E26">createServer</span><span style="color: #000000">(</span><span style="color: #795E26">httpListener</span><span style="color: #000000">(</span>
-<span style="color: #000000">    </span><span style="color: #001080">Routing</span>
-<span style="color: #000000">        .</span><span style="color: #795E26">and</span><span style="color: #000000">(</span><span style="color: #001080">Rendering</span><span style="color: #000000">)</span>
-<span style="color: #000000">        .</span><span style="color: #795E26">for</span><span style="color: #000000">(</span><span style="color: #795E26">dispatchByName</span><span style="color: #000000">({</span>
-<span style="color: #000000">          </span><span style="color: #795E26">hello</span><span style="color: #000000">({ </span><span style="color: #001080">route</span><span style="color: #000000">: { </span><span style="color: #001080">url</span><span style="color: #000000">: { </span><span style="color: #001080">searchParams</span><span style="color: #000000"> } }, </span><span style="color: #001080">renderHtml</span><span style="color: #000000"> }) {</span>
-<span style="color: #000000">            </span><span style="color: #795E26">renderHtml</span><span style="color: #000000">(</span>
-<span style="color: #A31515">`&lt;!DOCTYPE html&gt;</span>
-<span style="color: #A31515">&lt;html lang=&quot;en&quot;&gt;</span>
-<span style="color: #A31515">&lt;body&gt;Hello, </span><span style="color: #0000FF">${</span><span style="color: #795E26">escapeHTML</span><span style="color: #000000FF">(</span><span style="color: #001080">searchParams</span><span style="color: #000000FF">.</span><span style="color: #795E26">get</span><span style="color: #000000FF">(</span><span style="color: #A31515">&#039;name&#039;</span><span style="color: #000000FF">) </span><span style="color: #000000">||</span><span style="color: #000000FF"> </span><span style="color: #A31515">&#039;World&#039;</span><span style="color: #000000FF">)</span><span style="color: #0000FF">}</span><span style="color: #A31515">!&lt;/body&gt;</span>
-<span style="color: #A31515">&lt;/html&gt;</span>
-<span style="color: #A31515">`</span><span style="color: #000000">            </span>
-<span style="color: #000000">            );</span>
-<span style="color: #000000">          },            </span>
-<span style="color: #000000">        })),</span>
-<span style="color: #000000">));</span>
-
-<span style="color: #001080">server</span><span style="color: #000000">.</span><span style="color: #795E26">listen</span><span style="color: #000000">(</span><span style="color: #098658">8080</span><span style="color: #000000">);</span>
+<a href="#example" id="example" style="color: inherit; text-decoration: none;">
+  <h2>Example</h2>
+</a>
+<pre><code class="language-typescript"><span class="hl-0">import</span><span class="hl-1"> { </span><span class="hl-2">escapeHTML</span><span class="hl-1"> } </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&#39;@frontmeans/httongue&#39;</span><span class="hl-1">;</span><br/><span class="hl-0">import</span><span class="hl-1"> { </span><span class="hl-2">httpListener</span><span class="hl-1">, </span><span class="hl-2">Rendering</span><span class="hl-1"> } </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&#39;@hatsy/hatsy&#39;</span><span class="hl-1">;</span><br/><span class="hl-0">import</span><span class="hl-1"> { </span><span class="hl-2">dispatchByName</span><span class="hl-1">, </span><span class="hl-2">Routing</span><span class="hl-1"> } </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&#39;@hatsy/router&#39;</span><span class="hl-1">;</span><br/><span class="hl-0">import</span><span class="hl-1"> { </span><span class="hl-2">createServer</span><span class="hl-1"> } </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&#39;http&#39;</span><span class="hl-1">;</span><br/><br/><span class="hl-4">const</span><span class="hl-1"> </span><span class="hl-5">server</span><span class="hl-1"> = </span><span class="hl-6">createServer</span><span class="hl-1">(</span><span class="hl-6">httpListener</span><span class="hl-1">(</span><br/><span class="hl-1">    </span><span class="hl-2">Routing</span><br/><span class="hl-1">        .</span><span class="hl-6">and</span><span class="hl-1">(</span><span class="hl-2">Rendering</span><span class="hl-1">)</span><br/><span class="hl-1">        .</span><span class="hl-6">for</span><span class="hl-1">(</span><span class="hl-6">dispatchByName</span><span class="hl-1">({</span><br/><span class="hl-1">          </span><span class="hl-6">hello</span><span class="hl-1">({ </span><span class="hl-2">route</span><span class="hl-1">: { </span><span class="hl-2">url</span><span class="hl-1">: { </span><span class="hl-2">searchParams</span><span class="hl-1"> } }, </span><span class="hl-2">renderHtml</span><span class="hl-1"> }) {</span><br/><span class="hl-1">            </span><span class="hl-6">renderHtml</span><span class="hl-1">(</span><br/><span class="hl-3">`&lt;!DOCTYPE html&gt;</span><br/><span class="hl-3">&lt;html lang=&quot;en&quot;&gt;</span><br/><span class="hl-3">&lt;body&gt;Hello, </span><span class="hl-4">${</span><span class="hl-6">escapeHTML</span><span class="hl-7">(</span><span class="hl-2">searchParams</span><span class="hl-7">.</span><span class="hl-6">get</span><span class="hl-7">(</span><span class="hl-3">&#39;name&#39;</span><span class="hl-7">) </span><span class="hl-1">||</span><span class="hl-7"> </span><span class="hl-3">&#39;World&#39;</span><span class="hl-7">)</span><span class="hl-4">}</span><span class="hl-3">!&lt;/body&gt;</span><br/><span class="hl-3">&lt;/html&gt;</span><br/><span class="hl-3">`</span><span class="hl-1">            </span><br/><span class="hl-1">            );</span><br/><span class="hl-1">          },            </span><br/><span class="hl-1">        })),</span><br/><span class="hl-1">));</span><br/><br/><span class="hl-2">server</span><span class="hl-1">.</span><span class="hl-6">listen</span><span class="hl-1">(</span><span class="hl-8">8080</span><span class="hl-1">);</span>
 </code></pre>
-				<p>The server above responds with <code>Hello, your-name-here!</code> HTML at <a href="http://localhost:8080/hello?name=your-name-here">http://localhost:8080/hello?name=your-name-here</a></p>
-				<a href="#goals" id="goals" style="color: inherit; text-decoration: none;">
-					<h2>Goals</h2>
-				</a>
-				<p>Hatsy is developed with the following goals in mind:</p>
-				<ul>
-					<li><p>Simple API.</p>
-						<p>Hatsy is a thin layer atop of Node.js HTTP listener.
-							Everything in Hatsy implemented as a <a href="#request-handlers">RequestHandler</a> function.
-						There is no API like application, middleware, etc. They all can be boiled down to handlers.</p>
-						<p>More than that, Hatsy is not strictly bound to Node.js API. The core functionality works with any type of requests.</p>
-					</li>
-					<li><p>First-class TypeScript support.</p>
-						<p>No need in declaration merging.
-						The request context can be extended in a type-safe manner when needed.</p>
-					</li>
-					<li><p>Asynchronous processing.</p>
-						<p>A <a href="#request-handlers">RequestHandler</a> can be either synchronous or asynchronous.</p>
-					</li>
-				</ul>
-				<p>Good to have:</p>
-				<ul>
-					<li><p>Existing middleware support. At least at some level.</p>
-						<p><a href="https://github.com/senchalabs/connect">Connect</a>-style middleware supported. Not ExpressJS one.</p>
-					</li>
-				</ul>
-				<p>Non-goals:</p>
-				<ul>
-					<li><p>HTTP/2, TLS support.</p>
-						<p>The typical place of Node.js-driven HTTP server is behind the forwarding proxy. So, there is no need in these
-						technologies supported at Node.js application level.</p>
-						<p>Such support is still possible however. Everything that works with standard HTTP API will work with TLS or HTTP/2
-						compatibility API. Specific functionality can be added by extending a request context. </p>
-					</li>
-				</ul>
-				<a href="#http-listener" id="http-listener" style="color: inherit; text-decoration: none;">
-					<h2>HTTP listener</h2>
-				</a>
-				<p><code>httpListener([config,] handler)</code> function creates a Node.js HTTP listener. It accepts an optional configuration and
-				a <a href="#request-handlers">RequestHandler</a> to process HTTP requests by.</p>
-				<p><a href="https://hatsyjs.github.io/hatsy/interfaces/@hatsy_hatsy.HttpConfig.html">HTTP processing configuration</a> has the following options:</p>
-				<ul>
-					<li><p><code>defaultHandler</code> - A request handler to call if other handlers did not respond.</p>
-						<p>Issues 404 (Not Found) error by default.</p>
-					</li>
-					<li><p><code>errorHandler</code> - A request handler to call when error occurred.</p>
-						<p>By default, handles <a href="https://hatsyjs.github.io/hatsy/classes/@hatsy_hatsy.HttpError.html">HttpError</a> with corresponding status code and renders error page (either HTML or JSON).</p>
-					</li>
-					<li><p><code>logError</code> - Whether to log HTTP processing error.</p>
-						<p><code>true</code> by default.</p>
-					</li>
-					<li><p><code>handleBy</code> - Creates actual HTTP request handler.</p>
-						<p>This can be used e.g. to set up additional request processing capabilities, such as <a href="https://hatsyjs.github.io/hatsy/interfaces/@hatsy_hatsy.Logging.html">Logging</a>.</p>
-					</li>
-				</ul>
-				<a href="#request-handlers" id="request-handlers" style="color: inherit; text-decoration: none;">
-					<h2>Request Handlers</h2>
-				</a>
-				<p>Everything in Hatsy is implemented as a request handler, which is a function accepting a <a href="#request-context">RequestContext</a> as its only
-				parameter. The latter contains all means necessary for request processing.</p>
-				<p>The handler can do the following:</p>
-				<ul>
-					<li>Respond synchronously. E.g. by utilizing HTTP response from request context.</li>
-					<li>Respond asynchronously by returning a promise.</li>
-					<li>Delegate request processing to another handler by calling <code>next()</code> function from request context.</li>
-					<li>Modify or even extend with additional properties the request context for the next handler.</li>
-				</ul>
-				<a href="#request-context" id="request-context" style="color: inherit; text-decoration: none;">
-					<h3>Request Context</h3>
-				</a>
-				<p>By default, HTTP request processing context contains the following properties:</p>
-				<ul>
-					<li><code>request</code> - Node.js HTTP request.</li>
-					<li><code>response</code> - Node.js HTTP response.</li>
-					<li><code>requestAddresses</code> object containing request <code>url</code> and remote <code>ip</code>.</li>
-					<li><code>next()</code> method the handler can use to delegate to another one.</li>
-				</ul>
-				<p>However, the request handler may require more properties to operate. This is where context extension comes into play:</p>
-				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">HttpMeans</span><span style="color: #000000">, </span><span style="color: #001080">RequestContext</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@hatsy/hatsy&#039;</span><span style="color: #000000">;</span>
+<p>The server above responds with <code>Hello, your-name-here!</code> HTML at <a href="http://localhost:8080/hello?name=your-name-here">http://localhost:8080/hello?name=your-name-here</a></p>
 
-<span style="color: #008000">/**</span>
-<span style="color: #008000"> * This is an extended request processing means containing user info.</span>
-<span style="color: #008000"> * </span>
-<span style="color: #008000"> * They are applied by [contentExtender] handler and passed to [greeter] one.</span>
-<span style="color: #008000"> */</span>
-<span style="color: #0000FF">interface</span><span style="color: #000000"> </span><span style="color: #267F99">UserMeans</span><span style="color: #000000"> {</span>
-<span style="color: #000000">  </span><span style="color: #0000FF">readonly</span><span style="color: #000000"> </span><span style="color: #001080">name</span><span style="color: #000000">: </span><span style="color: #267F99">string</span><span style="color: #000000">;</span>
-<span style="color: #000000">}</span>
+<a href="#goals" id="goals" style="color: inherit; text-decoration: none;">
+  <h2>Goals</h2>
+</a>
+<p>Hatsy is developed with the following goals in mind:</p>
+<ul>
+<li><p>Simple API.</p>
+<p>Hatsy is a thin layer atop of Node.js HTTP listener. 
+Everything in Hatsy implemented as a <a href="#request-handlers">RequestHandler</a> function.
+There is no API like application, middleware, etc. They all can be boiled down to handlers.</p>
+<p>More than that, Hatsy is not strictly bound to Node.js API. The core functionality works with any type of requests.</p>
+</li>
+<li><p>First-class TypeScript support.</p>
+<p>No need in declaration merging.
+The request context can be extended in a type-safe manner when needed.</p>
+</li>
+<li><p>Asynchronous processing.</p>
+<p>A <a href="#request-handlers">RequestHandler</a> can be either synchronous or asynchronous.</p>
+</li>
+</ul>
+<p>Good to have:</p>
+<ul>
+<li><p>Existing middleware support. At least at some level.</p>
+<p><a href="https://github.com/senchalabs/connect">Connect</a>-style middleware supported. Not ExpressJS one.</p>
+</li>
+</ul>
+<p>Non-goals:</p>
+<ul>
+<li><p>HTTP/2, TLS support.</p>
+<p>The typical place of Node.js-driven HTTP server is behind the forwarding proxy. So, there is no need in these
+technologies supported at Node.js application level.</p>
+<p>Such support is still possible however. Everything that works with standard HTTP API will work with TLS or HTTP/2
+compatibility API. Specific functionality can be added by extending a request context.</p>
+</li>
+</ul>
 
-<span style="color: #008000">/**</span>
-<span style="color: #008000"> * Accepts context containing HTTP request processing means (`HttpMeans`).</span>
-<span style="color: #008000"> *</span>
-<span style="color: #008000"> * Delegates to [greeter] handler and extends its context with the necessary means.</span>
-<span style="color: #008000"> */</span>
-<span style="color: #0000FF">async</span><span style="color: #000000"> </span><span style="color: #0000FF">function</span><span style="color: #000000"> </span><span style="color: #795E26">contextExtender</span><span style="color: #000000">(</span>
-<span style="color: #000000">    </span><span style="color: #008000">// Every context property, including methods, is suitable for destructuring.</span>
-<span style="color: #000000">    { </span><span style="color: #001080">requestAddresses</span><span style="color: #000000">, </span><span style="color: #001080">next</span><span style="color: #000000"> }: </span><span style="color: #267F99">RequestContext</span><span style="color: #000000">&lt;</span><span style="color: #267F99">HttpMeans</span><span style="color: #000000">&gt;,</span>
-<span style="color: #000000">): </span><span style="color: #267F99">Promise</span><span style="color: #000000">&lt;</span><span style="color: #267F99">void</span><span style="color: #000000">&gt; {</span>
-<span style="color: #000000">  </span><span style="color: #008000">// The second parameter contains request context properties that will be added or updated.</span>
-<span style="color: #000000">  </span><span style="color: #008000">// The rest remain unchanged.</span>
-<span style="color: #000000">  </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #795E26">next</span><span style="color: #000000">(</span><span style="color: #001080">greeter</span><span style="color: #000000">, { </span><span style="color: #001080">name:</span><span style="color: #000000"> </span><span style="color: #001080">requestAddresses</span><span style="color: #000000">.</span><span style="color: #001080">url</span><span style="color: #000000">.</span><span style="color: #001080">searchParams</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;name&#039;</span><span style="color: #000000">) || </span><span style="color: #A31515">&#039;anonymous&#039;</span><span style="color: #000000"> });</span>
-<span style="color: #000000">}</span>
+<a href="#http-listener" id="http-listener" style="color: inherit; text-decoration: none;">
+  <h2>HTTP listener</h2>
+</a>
+<p><code>httpListener([config,] handler)</code> function creates a Node.js HTTP listener. It accepts an optional configuration and
+a <a href="#request-handlers">RequestHandler</a> to process HTTP requests by.</p>
+<p><a href="https://hatsyjs.github.io/hatsy/interfaces/_hatsy_hatsy.HttpConfig.html">HTTP processing configuration</a> has the following options:</p>
+<ul>
+<li><p><code>defaultHandler</code> - A request handler to call if other handlers did not respond.</p>
+<p>Issues 404 (Not Found) error by default.</p>
+</li>
+<li><p><code>errorHandler</code> - A request handler to call when error occurred.</p>
+<p>By default, handles <a href="https://hatsyjs.github.io/hatsy/classes/_hatsy_hatsy.HttpError.html">HttpError</a> with corresponding status code and renders error page (either HTML or JSON).</p>
+</li>
+<li><p><code>logError</code> - Whether to log HTTP processing error.</p>
+<p><code>true</code> by default.</p>
+</li>
+<li><p><code>handleBy</code> - Creates actual HTTP request handler.</p>
+<p>This can be used e.g. to set up additional request processing capabilities, such as <a href="https://hatsyjs.github.io/hatsy/interfaces/_hatsy_hatsy.Logging.html">Logging</a>.</p>
+</li>
+</ul>
 
-<span style="color: #008000">/**</span>
-<span style="color: #008000"> * Accepts extended request processing means. I.e. both HTTP and user info.</span>
-<span style="color: #008000"> */</span>
-<span style="color: #0000FF">function</span><span style="color: #000000"> </span><span style="color: #795E26">greeter</span><span style="color: #000000">({ </span><span style="color: #001080">name</span><span style="color: #000000">, </span><span style="color: #001080">response</span><span style="color: #000000"> }: </span><span style="color: #267F99">RequestContext</span><span style="color: #000000">&lt;</span><span style="color: #267F99">HttpMeans</span><span style="color: #000000"> &amp; </span><span style="color: #267F99">UserMeans</span><span style="color: #000000">&gt;): </span><span style="color: #267F99">void</span><span style="color: #000000"> {</span>
-<span style="color: #000000">  </span><span style="color: #008000">// Respond with HTTP response.</span>
-<span style="color: #000000">  </span><span style="color: #008000">// Hatsy would detect the handler actually responded, because of the `.end()` method call.</span>
-<span style="color: #000000">  </span><span style="color: #008000">// Otherwise, Hatsy may try other handlers to process the same request.</span>
-<span style="color: #000000">  </span><span style="color: #001080">response</span><span style="color: #000000">.</span><span style="color: #795E26">end</span><span style="color: #000000">(</span><span style="color: #A31515">`Hello, </span><span style="color: #0000FF">${</span><span style="color: #001080">name</span><span style="color: #0000FF">}</span><span style="color: #A31515">`</span><span style="color: #000000">);</span>
-<span style="color: #000000">}</span>
+<a href="#request-handlers" id="request-handlers" style="color: inherit; text-decoration: none;">
+  <h2>Request Handlers</h2>
+</a>
+<p>Everything in Hatsy is implemented as a request handler, which is a function accepting a <a href="#request-context">RequestContext</a> as its only
+parameter. The latter contains all means necessary for request processing.</p>
+<p>The handler can do the following:</p>
+<ul>
+<li>Respond synchronously. E.g. by utilizing HTTP response from request context.</li>
+<li>Respond asynchronously by returning a promise.</li>
+<li>Delegate request processing to another handler by calling <code>next()</code> function from request context.</li>
+<li>Modify or even extend with additional properties the request context for the next handler.</li>
+</ul>
+
+<a href="#request-context" id="request-context" style="color: inherit; text-decoration: none;">
+  <h3>Request Context</h3>
+</a>
+<p>By default, HTTP request processing context contains the following properties:</p>
+<ul>
+<li><code>request</code> - Node.js HTTP request.</li>
+<li><code>response</code> - Node.js HTTP response.</li>
+<li><code>requestAddresses</code> object containing request <code>url</code> and remote <code>ip</code>.</li>
+<li><code>next()</code> method the handler can use to delegate to another one.</li>
+</ul>
+<p>However, the request handler may require more properties to operate. This is where context extension comes into play:</p>
+<pre><code class="language-typescript"><span class="hl-0">import</span><span class="hl-1"> { </span><span class="hl-2">HttpMeans</span><span class="hl-1">, </span><span class="hl-2">RequestContext</span><span class="hl-1"> } </span><span class="hl-0">from</span><span class="hl-1"> </span><span class="hl-3">&#39;@hatsy/hatsy&#39;</span><span class="hl-1">;</span><br/><br/><span class="hl-9">/**</span><br/><span class="hl-9"> * This is an extended request processing means containing user info.</span><br/><span class="hl-9"> * </span><br/><span class="hl-9"> * They are applied by [contentExtender] handler and passed to [greeter] one.</span><br/><span class="hl-9"> */</span><br/><span class="hl-4">interface</span><span class="hl-1"> </span><span class="hl-10">UserMeans</span><span class="hl-1"> {</span><br/><span class="hl-1">  </span><span class="hl-4">readonly</span><span class="hl-1"> </span><span class="hl-2">name</span><span class="hl-1">: </span><span class="hl-10">string</span><span class="hl-1">;</span><br/><span class="hl-1">}</span><br/><br/><span class="hl-9">/**</span><br/><span class="hl-9"> * Accepts context containing HTTP request processing means (`HttpMeans`).</span><br/><span class="hl-9"> *</span><br/><span class="hl-9"> * Delegates to [greeter] handler and extends its context with the necessary means.</span><br/><span class="hl-9"> */</span><br/><span class="hl-4">async</span><span class="hl-1"> </span><span class="hl-4">function</span><span class="hl-1"> </span><span class="hl-6">contextExtender</span><span class="hl-1">(</span><br/><span class="hl-1">    </span><span class="hl-9">// Every context property, including methods, is suitable for destructuring.</span><br/><span class="hl-1">    { </span><span class="hl-2">requestAddresses</span><span class="hl-1">, </span><span class="hl-2">next</span><span class="hl-1"> }: </span><span class="hl-10">RequestContext</span><span class="hl-1">&lt;</span><span class="hl-10">HttpMeans</span><span class="hl-1">&gt;,</span><br/><span class="hl-1">): </span><span class="hl-10">Promise</span><span class="hl-1">&lt;</span><span class="hl-10">void</span><span class="hl-1">&gt; {</span><br/><span class="hl-1">  </span><span class="hl-9">// The second parameter contains request context properties that will be added or updated.</span><br/><span class="hl-1">  </span><span class="hl-9">// The rest remain unchanged.</span><br/><span class="hl-1">  </span><span class="hl-0">await</span><span class="hl-1"> </span><span class="hl-6">next</span><span class="hl-1">(</span><span class="hl-2">greeter</span><span class="hl-1">, { </span><span class="hl-2">name:</span><span class="hl-1"> </span><span class="hl-2">requestAddresses</span><span class="hl-1">.</span><span class="hl-2">url</span><span class="hl-1">.</span><span class="hl-2">searchParams</span><span class="hl-1">.</span><span class="hl-6">get</span><span class="hl-1">(</span><span class="hl-3">&#39;name&#39;</span><span class="hl-1">) || </span><span class="hl-3">&#39;anonymous&#39;</span><span class="hl-1"> });</span><br/><span class="hl-1">}</span><br/><br/><span class="hl-9">/**</span><br/><span class="hl-9"> * Accepts extended request processing means. I.e. both HTTP and user info.</span><br/><span class="hl-9"> */</span><br/><span class="hl-4">function</span><span class="hl-1"> </span><span class="hl-6">greeter</span><span class="hl-1">({ </span><span class="hl-2">name</span><span class="hl-1">, </span><span class="hl-2">response</span><span class="hl-1"> }: </span><span class="hl-10">RequestContext</span><span class="hl-1">&lt;</span><span class="hl-10">HttpMeans</span><span class="hl-1"> &amp; </span><span class="hl-10">UserMeans</span><span class="hl-1">&gt;): </span><span class="hl-10">void</span><span class="hl-1"> {</span><br/><span class="hl-1">  </span><span class="hl-9">// Respond with HTTP response.</span><br/><span class="hl-1">  </span><span class="hl-9">// Hatsy would detect the handler actually responded, because of the `.end()` method call.</span><br/><span class="hl-1">  </span><span class="hl-9">// Otherwise, Hatsy may try other handlers to process the same request.</span><br/><span class="hl-1">  </span><span class="hl-2">response</span><span class="hl-1">.</span><span class="hl-6">end</span><span class="hl-1">(</span><span class="hl-3">`Hello, </span><span class="hl-4">${</span><span class="hl-2">name</span><span class="hl-4">}</span><span class="hl-3">`</span><span class="hl-1">);</span><br/><span class="hl-1">}</span>
 </code></pre>
-				<a href="#capabilities" id="capabilities" style="color: inherit; text-decoration: none;">
-					<h2>Capabilities</h2>
-				</a>
-				<p>Request handlers are everything needed to process the requests. However, it is quite typical to add more request
-					processing means. The request processing capabilities is a conventional API for the task. They also can be combined
-				to add multiple processing means at a time.</p>
-				<p>Some capabilities are:</p>
-				<ul>
-					<li><p><code>Rendering</code>.</p>
-						<p>Extends request context with <code>RenderMeans</code> containing <code>renderHtml()</code> and <code>renderJson()</code> methods.</p>
-					</li>
-					<li><p><code>FormDecoding</code>.</p>
-						<p>Decodes <code>application/x-www-form-urlecoded</code> request.
-							Extends request context with <code>RequestBodyMeans</code> containing <code>body</code> property with request body decoded as
-						<code>URLSearchParams</code> or converted to some other representation.</p>
-					</li>
-					<li><p><code>JsonParsing</code></p>
-						<p>Parses <code>application/json</code> request.
-							Extends request context with <code>RequestBodyMeans</code> containing <code>body</code> property with request body optionally
-						converted to other representation.</p>
-					</li>
-					<li><p><code>Logging</code></p>
-						<p>Request logging capability.
-						Extends request context with <code>LoggerMeans</code> containing a logger instance for request logging.</p>
-					</li>
-					<li><p><code>Routing</code> from <a href="https://www.npmjs.com/package/@hatsy/router">@hatsy/router</a> module.</p>
-						<p>Initiates routing.
-						Extends request context with <code>RouterMeans</code> containing request route used to dispatch to handler(s) matching it.</p>
-					</li>
-				</ul>
-				<p>See the <a href="#example">very first example</a> containing capabilities usage. Here is the explanation:</p>
-				<pre><code class="language-typescript"><span style="color: #001080">Routing</span>
-<span style="color: #000000">        .</span><span style="color: #795E26">and</span><span style="color: #000000">(</span><span style="color: #001080">Rendering</span><span style="color: #000000">) </span><span style="color: #008000">// Combine two capabilities. `Rendering` will be applied after `Routing`.</span>
-<span style="color: #000000">                        </span><span style="color: #008000">// More capabilities can be combined by chaining `.and()` calls.</span>
-<span style="color: #000000">        .</span><span style="color: #795E26">for</span><span style="color: #000000">(</span><span style="color: #001080">handler</span><span style="color: #000000">)   </span><span style="color: #008000">// Apply capabilities to the handler.</span>
-<span style="color: #000000">                        </span><span style="color: #008000">// The handler receives a request context extended by both of them.</span>
+
+<a href="#capabilities" id="capabilities" style="color: inherit; text-decoration: none;">
+  <h2>Capabilities</h2>
+</a>
+<p>Request handlers are everything needed to process the requests. However, it is quite typical to add more request
+processing means. The request processing capabilities is a conventional API for the task. They also can be combined
+to add multiple processing means at a time.</p>
+<p>Some capabilities are:</p>
+<ul>
+<li><p><code>Rendering</code>.</p>
+<p>Extends request context with <code>RenderMeans</code> containing <code>renderHtml()</code> and <code>renderJson()</code> methods.</p>
+</li>
+<li><p><code>FormDecoding</code>.</p>
+<p>Decodes <code>application/x-www-form-urlecoded</code> request.
+Extends request context with <code>RequestBodyMeans</code> containing <code>body</code> property with request body decoded as
+<code>URLSearchParams</code> or converted to some other representation.</p>
+</li>
+<li><p><code>JsonParsing</code></p>
+<p>Parses <code>application/json</code> request.
+Extends request context with <code>RequestBodyMeans</code> containing <code>body</code> property with request body optionally
+converted to other representation.</p>
+</li>
+<li><p><code>Logging</code></p>
+<p>Request logging capability.
+Extends request context with <code>LoggerMeans</code> containing a logger instance for request logging.</p>
+</li>
+<li><p><code>Routing</code> from <a href="https://www.npmjs.com/package/@hatsy/router">@hatsy/router</a> module.</p>
+<p>Initiates routing.
+Extends request context with <code>RouterMeans</code> containing request route used to dispatch to handler(s) matching it.</p>
+</li>
+</ul>
+<p>See the <a href="#example">very first example</a> containing capabilities usage. Here is the explanation:</p>
+<pre><code class="language-typescript"><span class="hl-2">Routing</span><br/><span class="hl-1">        .</span><span class="hl-6">and</span><span class="hl-1">(</span><span class="hl-2">Rendering</span><span class="hl-1">) </span><span class="hl-9">// Combine two capabilities. `Rendering` will be applied after `Routing`.</span><br/><span class="hl-1">                        </span><span class="hl-9">// More capabilities can be combined by chaining `.and()` calls.</span><br/><span class="hl-1">        .</span><span class="hl-6">for</span><span class="hl-1">(</span><span class="hl-2">handler</span><span class="hl-1">)   </span><span class="hl-9">// Apply capabilities to the handler.</span><br/><span class="hl-1">                        </span><span class="hl-9">// The handler receives a request context extended by both of them.</span>
 </code></pre>
-				<a href="#dispatchers" id="dispatchers" style="color: inherit; text-decoration: none;">
-					<h2>Dispatchers</h2>
-				</a>
-				<p>Dispatchers are handlers that delegate processing to other handlers depending on request.</p>
-				<p>The following dispatcher implemented:</p>
-				<ul>
-					<li><a href="https://hatsyjs.github.io/hatsy/modules/@hatsy_hatsy.html#dispatchByAccepted">dispatchByAccepted</a> dispatches accordingly to <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Content_negotiation">content negotiation</a> based on <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept">Accept</a> request header.</li>
-					<li><a href="https://hatsyjs.github.io/hatsy/modules/@hatsy_hatsy.html#dispatchByLanguage">dispatchByLanguage</a> dispatches accordingly to <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Content_negotiation">content negotiation</a> based on <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language">Accept-Language</a> request header.</li>
-					<li><a href="https://hatsyjs.github.io/hatsy/modules/@hatsy_hatsy.html#dispatchByMethod">dispatchByMethod</a> dispatches accordingly to HTTP request method.</li>
-					<li><a href="https://hatsyjs.github.io/hatsy/modules/@hatsy_hatsy_core.html#dispatchError">dispatchError</a> dispatches request processing error.   </li>
-				</ul>
-				<a href="#middleware" id="middleware" style="color: inherit; text-decoration: none;">
-					<h2>Middleware</h2>
-				</a>
-				<p><a href="https://github.com/senchalabs/connect">Connect</a>-style middleware can be utilized by <a href="https://hatsyjs.github.io/hatsy/modules/@hatsy_hatsy.html#middleware">middleware</a> function.</p>
-			</div>
-		</div>
-		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
-			<nav class="tsd-navigation primary">
-				<ul>
-					<li class=" ">
-						<a href="modules.html">Modules</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="modules/module__hatsy_hatsy.html">Module @hatsy/hatsy</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="modules/module__hatsy_hatsy_core.html">Module @hatsy/hatsy/core</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="modules/testing.html">testing</a>
-					</li>
-				</ul>
-			</nav>
-			<nav class="tsd-navigation secondary menu-sticky">
-				<ul class="before-current">
-				</ul>
-			</nav>
-		</div>
-	</div>
-</div>
-<footer class="with-border-bottom">
-	<div class="container">
-		<h2>Legend</h2>
-		<div class="tsd-legend-group">
-			<ul class="tsd-legend">
-				<li class="tsd-kind-namespace"><span class="tsd-kind-icon">Namespace</span></li>
-				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
-				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
-				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
-				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
-				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
-				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
-			</ul>
-		</div>
-	</div>
-</footer>
-<div class="container tsd-generator">
-	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
-</div>
-<div class="overlay"></div>
-<script src="assets/js/main.js"></script>
-</body>
-</html>
+
+<a href="#dispatchers" id="dispatchers" style="color: inherit; text-decoration: none;">
+  <h2>Dispatchers</h2>
+</a>
+<p>Dispatchers are handlers that delegate processing to other handlers depending on request.</p>
+<p>The following dispatcher implemented:</p>
+<ul>
+<li><a href="https://hatsyjs.github.io/hatsy/modules/_hatsy_hatsy.html#dispatchByAccepted">dispatchByAccepted</a> dispatches accordingly to <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Content_negotiation">content negotiation</a> based on <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept">Accept</a> request header.</li>
+<li><a href="https://hatsyjs.github.io/hatsy/modules/_hatsy_hatsy.html#dispatchByLanguage">dispatchByLanguage</a> dispatches accordingly to <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Content_negotiation">content negotiation</a> based on <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language">Accept-Language</a> request header.</li>
+<li><a href="https://hatsyjs.github.io/hatsy/modules/_hatsy_hatsy.html#dispatchByMethod">dispatchByMethod</a> dispatches accordingly to HTTP request method.</li>
+<li><a href="https://hatsyjs.github.io/hatsy/modules/_hatsy_hatsy_core.html#dispatchError">dispatchError</a> dispatches request processing error.</li>
+</ul>
+
+<a href="#middleware" id="middleware" style="color: inherit; text-decoration: none;">
+  <h2>Middleware</h2>
+</a>
+<p><a href="https://github.com/senchalabs/connect">Connect</a>-style middleware can be utilized by <a href="https://hatsyjs.github.io/hatsy/modules/_hatsy_hatsy.html#middleware">middleware</a> function.</p>
+</div></div><div class="col-4 col-menu menu-sticky-wrap menu-highlight"><nav class="tsd-navigation primary"><ul><li class="current"><a href="modules.html">Modules</a></li><li class=" tsd-kind-module"><a href="modules/_hatsy_hatsy.html">@hatsy/hatsy</a></li><li class=" tsd-kind-module"><a href="modules/_hatsy_hatsy_core.html">@hatsy/hatsy/core</a></li><li class=" tsd-kind-module"><a href="modules/testing.html">testing</a></li></ul></nav></div></div></div><footer class="with-border-bottom"><div class="container"><h2>Legend</h2><div class="tsd-legend-group"><ul class="tsd-legend"><li class="tsd-kind-namespace"><span class="tsd-kind-icon">Namespace</span></li><li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li><li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li><li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li><li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li></ul><ul class="tsd-legend"><li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li><li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li></ul><ul class="tsd-legend"><li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li><li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li></ul></div><h2>Settings</h2><p>Theme <select id="theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></p></div></footer><div class="container tsd-generator"><p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></div><div class="overlay"></div><script src="assets/main.js"></script></body></html>
