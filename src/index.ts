@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * @module Module @hatsy/hatsy
+ * @module @hatsy/hatsy
  */
 export * from './core';
 export * from './http';

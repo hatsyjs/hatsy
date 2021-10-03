@@ -121,9 +121,9 @@ a [RequestHandler] to process HTTP requests by.
   This can be used e.g. to set up additional request processing capabilities, such as [Logging].
 
 
-[HTTP processing configuration]: https://hatsyjs.github.io/hatsy/interfaces/@hatsy_hatsy.HttpConfig.html
-[HttpError]: https://hatsyjs.github.io/hatsy/classes/@hatsy_hatsy.HttpError.html 
-[Logging]: https://hatsyjs.github.io/hatsy/interfaces/@hatsy_hatsy.Logging.html
+[HTTP processing configuration]: https://hatsyjs.github.io/hatsy/interfaces/_hatsy_hatsy.HttpConfig.html
+[HttpError]: https://hatsyjs.github.io/hatsy/classes/_hatsy_hatsy.HttpError.html 
+[Logging]: https://hatsyjs.github.io/hatsy/interfaces/_hatsy_hatsy.Logging.html
 
 
 Request Handlers
@@ -255,10 +255,10 @@ The following dispatcher implemented:
 - [dispatchByMethod] dispatches accordingly to HTTP request method.
 - [dispatchError] dispatches request processing error.   
 
-[dispatchByAccepted]: https://hatsyjs.github.io/hatsy/modules/@hatsy_hatsy.html#dispatchByAccepted
-[dispatchByLanguage]: https://hatsyjs.github.io/hatsy/modules/@hatsy_hatsy.html#dispatchByLanguage
-[dispatchByMethod]: https://hatsyjs.github.io/hatsy/modules/@hatsy_hatsy.html#dispatchByMethod
-[dispatchError]:  https://hatsyjs.github.io/hatsy/modules/@hatsy_hatsy_core.html#dispatchError
+[dispatchByAccepted]: https://hatsyjs.github.io/hatsy/modules/_hatsy_hatsy.html#dispatchByAccepted
+[dispatchByLanguage]: https://hatsyjs.github.io/hatsy/modules/_hatsy_hatsy.html#dispatchByLanguage
+[dispatchByMethod]: https://hatsyjs.github.io/hatsy/modules/_hatsy_hatsy.html#dispatchByMethod
+[dispatchError]:  https://hatsyjs.github.io/hatsy/modules/_hatsy_hatsy_core.html#dispatchError
   
 [content negotiation]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Content_negotiation
 [Accept]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept
@@ -270,4 +270,4 @@ Middleware
 
 [Connect]-style middleware can be utilized by [middleware] function.
 
-[middleware]: https://hatsyjs.github.io/hatsy/modules/@hatsy_hatsy.html#middleware
+[middleware]: https://hatsyjs.github.io/hatsy/modules/_hatsy_hatsy.html#middleware

@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * @module Module @hatsy/hatsy/core
+ * @module @hatsy/hatsy/core
  */
 export * from './dispatch-error';
 export * from './error.means';
