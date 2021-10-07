@@ -17,7 +17,7 @@ export interface BaseHttpConfig<TMeans extends HttpMeans = HttpMeans> extends Ht
 export type AnyHttpConfig<
     TExt,
     TRequest extends IncomingMessage = IncomingMessage,
-    TResponse extends ServerResponse = ServerResponse
+    TResponse extends ServerResponse = ServerResponse,
     > =
     | BaseHttpConfig<HttpMeans<TRequest, TResponse>>
     | HttpConfig.Extended<TExt, HttpMeans<TRequest, TResponse>>;
