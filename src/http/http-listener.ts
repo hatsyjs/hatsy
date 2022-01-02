@@ -160,10 +160,10 @@ function incomingHttpHandler<TRequest extends IncomingMessage, TResponse extends
     const end = response.end.bind(response);
 
     // Finish request processing immediately after calling `response.end()`
-    response.end = ((chunk: any, encoding: string, cb?: () => void) => {
+    (response as ServerResponse).end = ((chunk: any, encoding: string, cb?: () => void) => {
       end(chunk, encoding, cb);
       onResponse(true);
-    }) as typeof response['end'];
+    }) as ServerResponse['end'];
 
     const requestDefaults = lazyValue(() => HttpAddressRep.defaults(request));
     const requestURL = lazyValue(() => {
