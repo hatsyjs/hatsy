@@ -1,5 +1,5 @@
 import { escapeXML, MIMEType } from '@frontmeans/httongue';
-import { STATUS_CODES } from 'http';
+import { STATUS_CODES } from 'node:http';
 import type { ErrorMeans, RequestContext, RequestHandler } from '../../core';
 import { dispatchByAccepted } from '../dispatch';
 import { HttpError } from '../http-error';

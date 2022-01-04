@@ -1,6 +1,6 @@
 import { MIMEType } from '@frontmeans/httongue';
 import { asis } from '@proc7ts/primitives';
-import { URLSearchParams } from 'url';
+import { URLSearchParams } from 'node:url';
 import {
   RequestBodyMeans,
   RequestCapability,

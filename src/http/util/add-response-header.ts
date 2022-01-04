@@ -1,5 +1,5 @@
 import { arrayOfElements, elementOrArray } from '@proc7ts/primitives';
-import type { ServerResponse } from 'http';
+import type { ServerResponse } from 'node:http';
 
 /**
  * Appends HTTP header value to server response.

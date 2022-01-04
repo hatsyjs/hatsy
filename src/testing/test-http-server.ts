@@ -1,7 +1,7 @@
 import { noop } from '@proc7ts/primitives';
-import { createServer, IncomingMessage, request, RequestListener, RequestOptions, Server } from 'http';
-import type { AddressInfo } from 'net';
-import { promisify } from 'util';
+import { createServer, IncomingMessage, request, RequestListener, RequestOptions, Server } from 'node:http';
+import type { AddressInfo } from 'node:net';
+import { promisify } from 'node:util';
 import type { RequestHandler } from '../core';
 import { HttpConfig, httpListener, HttpMeans } from '../http';
 import { readAll } from '../impl';

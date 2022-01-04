@@ -1,7 +1,7 @@
 import { HttpAddressRep } from '@hatsy/http-header-value/node';
 import { consoleLogger } from '@proc7ts/logger';
 import { lazyValue, noop } from '@proc7ts/primitives';
-import type { IncomingMessage, ServerResponse } from 'http';
+import type { IncomingMessage, ServerResponse } from 'node:http';
 import {
   dispatchError,
   ErrorMeans,
@@ -160,7 +160,7 @@ function incomingHttpHandler<TRequest extends IncomingMessage, TResponse extends
     const end = response.end.bind(response);
 
     // Finish request processing immediately after calling `response.end()`
-    (response as ServerResponse).end = ((chunk: any, encoding: string, cb?: () => void) => {
+    (response as ServerResponse).end = ((chunk: any, encoding: BufferEncoding, cb?: () => void) => {
       end(chunk, encoding, cb);
       onResponse(true);
     }) as ServerResponse['end'];

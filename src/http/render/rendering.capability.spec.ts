@@ -1,6 +1,6 @@
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from '@jest/globals';
 import { noop } from '@proc7ts/primitives';
-import { TextEncoder } from 'util';
+import { TextEncoder } from 'node:util';
 import { TestHttpServer } from '../../testing';
 import { Rendering } from './rendering.capability';
 

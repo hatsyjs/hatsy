@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from '@jest/globals';
 import { valueProvider } from '@proc7ts/primitives';
-import type { ServerResponse } from 'http';
+import type { ServerResponse } from 'node:http';
 import type { RequestContext } from './request-context';
 import { requestHandler, RequestHandler } from './request-handler';
 
