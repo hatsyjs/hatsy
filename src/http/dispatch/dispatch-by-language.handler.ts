@@ -21,6 +21,7 @@ export interface DispatchLanguages<TMeans extends HttpMeans = HttpMeans> {
    *
    * This is a fallback handler typically.
    */
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   '*'?: RequestHandlerMethod<this, TMeans> | undefined;
 
   /**

@@ -14,11 +14,13 @@ export interface DispatchMimeTypes<TMeans extends HttpMeans = HttpMeans> {
   /**
    * Produces HTML.
    */
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   readonly 'text/html'?: RequestHandlerMethod<this, TMeans> | undefined;
 
   /**
    * Produces JSON.
    */
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   readonly 'application/json'?: RequestHandlerMethod<this, TMeans> | undefined;
 
   /**
@@ -26,6 +28,7 @@ export interface DispatchMimeTypes<TMeans extends HttpMeans = HttpMeans> {
    *
    * This is a fallback handler typically.
    */
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   readonly '*/*'?: RequestHandlerMethod<this, TMeans> | undefined;
 
   /**
