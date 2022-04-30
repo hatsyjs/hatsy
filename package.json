@@ -40,9 +40,9 @@
     "@jest/globals": "^27.5.1",
     "@run-z/eslint-config": "^3.0.0",
     "@run-z/rollup-helpers": "^2.0.0",
-    "@types/node": "^14.18.13",
-    "@typescript-eslint/eslint-plugin": "^5.20.0",
-    "@typescript-eslint/parser": "^5.20.0",
+    "@types/node": "^14.18.16",
+    "@typescript-eslint/eslint-plugin": "^5.21.0",
+    "@typescript-eslint/parser": "^5.21.0",
     "eslint": "^8.14.0",
     "eslint-plugin-jest": "^26.1.5",
     "gh-pages": "^3.2.3",
@@ -53,7 +53,7 @@
     "remark-lint-list-item-indent": "^3.1.1",
     "remark-lint-no-shortcut-reference-link": "^3.1.1",
     "remark-preset-lint-recommended": "^6.1.2",
-    "rollup": "^2.70.2",
+    "rollup": "^2.71.0",
     "rollup-plugin-flat-dts": "^1.4.0",
     "rollup-plugin-sourcemaps": "^0.6.3",
     "rollup-plugin-typescript2": "^0.31.2",
@@ -62,7 +62,7 @@
     "ts-jest": "^27.1.4",
     "tslib": "^2.4.0",
     "typedoc": "^0.22.15",
-    "typescript": "^4.6.3"
+    "typescript": "^4.6.4"
   },
   "scripts": {
     "all": "run-z build,lint,test",
