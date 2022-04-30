@@ -1,5 +1,5 @@
-Hatsy
-=====
+# Hatsy
+
 **Asynchronous TypeScript-friendly HTTP server for Node.js**
 
 [![NPM][npm-image]][npm-url]
@@ -22,9 +22,7 @@ Hatsy
 [api-docs-image]: https://img.shields.io/static/v1?logo=typescript&label=API&message=docs&color=informational
 [api-docs-url]: https://hatsyjs.github.io/hatsy/
 
-
-Example
--------
+## Example
 
 ```typescript
 import { escapeHTML } from '@frontmeans/httongue';
@@ -32,46 +30,51 @@ import { httpListener, Rendering } from '@hatsy/hatsy';
 import { dispatchByName, Routing } from '@hatsy/router';
 import { createServer } from 'http';
 
-const server = createServer(httpListener(
-    Routing
-        .and(Rendering)
-        .for(dispatchByName({
-          hello({ route: { url: { searchParams } }, renderHtml }) {
-            renderHtml(
-`<!DOCTYPE html>
+const server = createServer(
+  httpListener(
+    Routing.and(Rendering).for(
+      dispatchByName({
+        hello({
+          route: {
+            url: { searchParams },
+          },
+          renderHtml,
+        }) {
+          renderHtml(
+            `<!DOCTYPE html>
 <html lang="en">
 <body>Hello, ${escapeHTML(searchParams.get('name') || 'World')}!</body>
 </html>
-`            
-            );
-          },            
-        })),
-));
+`,
+          );
+        },
+      }),
+    ),
+  ),
+);
 
 server.listen(8080);
 ```
 
 The server above responds with `Hello, your-name-here!` HTML at http://localhost:8080/hello?name=your-name-here
 
-
-Goals
------
+## Goals
 
 Hatsy is developed with the following goals in mind:
 
 - Simple API.
 
-  Hatsy is a thin layer atop of Node.js HTTP listener. 
+  Hatsy is a thin layer atop of Node.js HTTP listener.
   Everything in Hatsy implemented as a [RequestHandler] function.
   There is no API like application, middleware, etc. They all can be boiled down to handlers.
-  
+
   More than that, Hatsy is not strictly bound to Node.js API. The core functionality works with any type of requests.
 
 - First-class TypeScript support.
 
   No need in declaration merging.
   The request context can be extended in a type-safe manner when needed.
-  
+
 - Asynchronous processing.
 
   A [RequestHandler] can be either synchronous or asynchronous.
@@ -88,16 +91,13 @@ Non-goals:
 
   The typical place of Node.js-driven HTTP server is behind the forwarding proxy. So, there is no need in these
   technologies supported at Node.js application level.
-  
+
   Such support is still possible however. Everything that works with standard HTTP API will work with TLS or HTTP/2
-  compatibility API. Specific functionality can be added by extending a request context. 
+  compatibility API. Specific functionality can be added by extending a request context.
 
+[connect]: https://github.com/senchalabs/connect
 
-[Connect]: https://github.com/senchalabs/connect
-
-
-HTTP listener
--------------
+## HTTP listener
 
 `httpListener([config,] handler)` function creates a Node.js HTTP listener. It accepts an optional configuration and
 a [RequestHandler] to process HTTP requests by.
@@ -120,16 +120,13 @@ a [RequestHandler] to process HTTP requests by.
 
   This can be used e.g. to set up additional request processing capabilities, such as [Logging].
 
+[http processing configuration]: https://hatsyjs.github.io/hatsy/interfaces/_hatsy_hatsy.HttpConfig.html
+[httperror]: https://hatsyjs.github.io/hatsy/classes/_hatsy_hatsy.HttpError.html
+[logging]: https://hatsyjs.github.io/hatsy/interfaces/_hatsy_hatsy.Logging.html
 
-[HTTP processing configuration]: https://hatsyjs.github.io/hatsy/interfaces/_hatsy_hatsy.HttpConfig.html
-[HttpError]: https://hatsyjs.github.io/hatsy/classes/_hatsy_hatsy.HttpError.html 
-[Logging]: https://hatsyjs.github.io/hatsy/interfaces/_hatsy_hatsy.Logging.html
+## Request Handlers
 
-
-Request Handlers
-----------------
-
-[RequestHandler]: #request-handlers
+[requesthandler]: #request-handlers
 
 Everything in Hatsy is implemented as a request handler, which is a function accepting a [RequestContext] as its only
 parameter. The latter contains all means necessary for request processing.
@@ -141,10 +138,9 @@ The handler can do the following:
 - Delegate request processing to another handler by calling `next()` function from request context.
 - Modify or even extend with additional properties the request context for the next handler.
 
-
 ### Request Context
 
-[RequestContext]: #request-context
+[requestcontext]: #request-context
 
 By default, HTTP request processing context contains the following properties:
 
@@ -160,7 +156,7 @@ import { HttpMeans, RequestContext } from '@hatsy/hatsy';
 
 /**
  * This is an extended request processing means containing user info.
- * 
+ *
  * They are applied by [contentExtender] handler and passed to [greeter] one.
  */
 interface UserMeans {
@@ -173,8 +169,8 @@ interface UserMeans {
  * Delegates to [greeter] handler and extends its context with the necessary means.
  */
 async function contextExtender(
-    // Every context property, including methods, is suitable for destructuring.
-    { requestAddresses, next }: RequestContext<HttpMeans>,
+  // Every context property, including methods, is suitable for destructuring.
+  { requestAddresses, next }: RequestContext<HttpMeans>,
 ): Promise<void> {
   // The second parameter contains request context properties that will be added or updated.
   // The rest remain unchanged.
@@ -192,9 +188,7 @@ function greeter({ name, response }: RequestContext<HttpMeans & UserMeans>): voi
 }
 ```
 
-
-Capabilities
-------------
+## Capabilities
 
 Request handlers are everything needed to process the requests. However, it is quite typical to add more request
 processing means. The request processing capabilities is a conventional API for the task. They also can be combined
@@ -211,7 +205,7 @@ Some capabilities are:
   Decodes `application/x-www-form-urlecoded` request.
   Extends request context with `RequestBodyMeans` containing `body` property with request body decoded as
   `URLSearchParams` or converted to some other representation.
-  
+
 - `JsonParsing`
 
   Parses `application/json` request.
@@ -228,23 +222,19 @@ Some capabilities are:
   Initiates routing.
   Extends request context with `RouterMeans` containing request route used to dispatch to handler(s) matching it.
 
-
 See the [very first example] containing capabilities usage. Here is the explanation:
 
 ```typescript
-Routing
-        .and(Rendering) // Combine two capabilities. `Rendering` will be applied after `Routing`.
-                        // More capabilities can be combined by chaining `.and()` calls.
-        .for(handler)   // Apply capabilities to the handler.
-                        // The handler receives a request context extended by both of them.
+Routing.and(Rendering) // Combine two capabilities. `Rendering` will be applied after `Routing`.
+  // More capabilities can be combined by chaining `.and()` calls.
+  .for(handler); // Apply capabilities to the handler.
+// The handler receives a request context extended by both of them.
 ```
 
 [very first example]: #example
 [@hatsy/router]: https://www.npmjs.com/package/@hatsy/router
 
-
-Dispatchers
------------
+## Dispatchers
 
 Dispatchers are handlers that delegate processing to other handlers depending on request.
 
@@ -253,20 +243,17 @@ The following dispatcher implemented:
 - [dispatchByAccepted] dispatches accordingly to [content negotiation] based on [Accept] request header.
 - [dispatchByLanguage] dispatches accordingly to [content negotiation] based on [Accept-Language] request header.
 - [dispatchByMethod] dispatches accordingly to HTTP request method.
-- [dispatchError] dispatches request processing error.   
+- [dispatchError] dispatches request processing error.
 
-[dispatchByAccepted]: https://hatsyjs.github.io/hatsy/modules/_hatsy_hatsy.html#dispatchByAccepted
-[dispatchByLanguage]: https://hatsyjs.github.io/hatsy/modules/_hatsy_hatsy.html#dispatchByLanguage
-[dispatchByMethod]: https://hatsyjs.github.io/hatsy/modules/_hatsy_hatsy.html#dispatchByMethod
-[dispatchError]:  https://hatsyjs.github.io/hatsy/modules/_hatsy_hatsy_core.html#dispatchError
-  
+[dispatchbyaccepted]: https://hatsyjs.github.io/hatsy/modules/_hatsy_hatsy.html#dispatchByAccepted
+[dispatchbylanguage]: https://hatsyjs.github.io/hatsy/modules/_hatsy_hatsy.html#dispatchByLanguage
+[dispatchbymethod]: https://hatsyjs.github.io/hatsy/modules/_hatsy_hatsy.html#dispatchByMethod
+[dispatcherror]: https://hatsyjs.github.io/hatsy/modules/_hatsy_hatsy_core.html#dispatchError
 [content negotiation]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Content_negotiation
-[Accept]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept
-[Accept-Language]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language  
+[accept]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept
+[accept-language]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language
 
-
-Middleware
-----------
+## Middleware
 
 [Connect]-style middleware can be utilized by [middleware] function.
 

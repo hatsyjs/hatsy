@@ -12,18 +12,11 @@
     "importsNotUsedAsValues": "error",
     "importHelpers": true,
     "noEmitHelpers": true,
-    "lib": [
-      "DOM",
-      "ES2019"
-    ],
-    "types": [
-      "node"
-    ],
+    "lib": ["DOM", "ES2019"],
+    "types": ["node"],
     "outDir": "target/js",
     "sourceMap": true,
     "newLine": "LF"
   },
-  "include": [
-    "src/**/*"
-  ]
+  "include": ["src/**/*"]
 }

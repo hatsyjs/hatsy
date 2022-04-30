@@ -1,9 +1,5 @@
 {
-  "entryPoints": [
-    "src/index.ts",
-    "src/core/index.ts",
-    "src/testing/index.ts"
-  ],
+  "entryPoints": ["src/index.ts", "src/core/index.ts", "src/testing/index.ts"],
   "name": "Hatsy",
   "out": "./target/typedoc",
   "tsconfig": "tsconfig.main.json"
