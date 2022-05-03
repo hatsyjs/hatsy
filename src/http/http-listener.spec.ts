@@ -24,7 +24,7 @@ describe('httpListener', () => {
     server.listenBy(noop);
   });
 
-  let logErrorSpy: SpyInstance<void, unknown[]>;
+  let logErrorSpy: SpyInstance<(...args: unknown[]) => void>;
 
   beforeEach(() => {
     logErrorSpy = jest.spyOn(consoleLogger, 'error').mockImplementation(noop);

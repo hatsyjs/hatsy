@@ -23,7 +23,7 @@ describe('middleware', () => {
     server.listenBy(noop);
   });
 
-  let ware: Mock<void, Parameters<Middleware>>;
+  let ware: Mock<Middleware>;
 
   beforeEach(() => {
     ware = jest.fn((_request, _response, next) => next());

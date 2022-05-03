@@ -12,7 +12,7 @@ import type { RequestLogger } from './request-logger';
 
 describe('Logging', () => {
 
-  let handler: Mock<void, [RequestContext<LoggerMeans>]>;
+  let handler: Mock<(context: RequestContext<LoggerMeans>) => void>;
 
   beforeEach(() => {
     handler = jest.fn();
