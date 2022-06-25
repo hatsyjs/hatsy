@@ -137,7 +137,7 @@ interface IncomingHttpMeans<TRequest extends IncomingMessage, TResponse extends 
   readonly request: TRequest;
   readonly response: TResponse;
   onResponse(this: void, value: boolean): void;
-  onError(this: void, error: any): void;
+  onError(this: void, error: unknown): void;
 }
 
 /**
@@ -160,7 +160,7 @@ function incomingHttpHandler<TRequest extends IncomingMessage, TResponse extends
     const end = response.end.bind(response);
 
     // Finish request processing immediately after calling `response.end()`
-    (response as ServerResponse).end = ((chunk: any, encoding: BufferEncoding, cb?: () => void) => {
+    (response as ServerResponse).end = ((chunk: unknown, encoding: BufferEncoding, cb?: () => void) => {
       end(chunk, encoding, cb);
       onResponse(true);
     }) as ServerResponse['end'];

@@ -33,12 +33,10 @@ export namespace Middleware {
   /**
    * A signature of the function the {@link Middleware middleware} may call to delegate request processing
    * or report error with.
-   */
-  export type Next =
-  /**
+   *
    * @param error - Either an error to report, or nothing to delegate request processing to next handler.
    */
-      (this: void, error?: any) => void;
+  export type Next = (this: void, error?: unknown) => void;
 
 }
 
@@ -58,7 +56,7 @@ export function middleware<TInput extends HttpMeans>(
           { request, response, next }: RequestContext<TMeans>,
       ) => new Promise<void>((resolve, reject) => {
 
-        const mdNext = (error?: any): void => {
+        const mdNext = (error?: unknown): void => {
           if (error !== undefined) {
             reject(error);
           } else {

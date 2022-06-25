@@ -76,7 +76,7 @@ class JsonParsingCapability<TInput extends HttpMeans, TBody>
         return Promise.reject(new HttpError(415, { details: `${MIMEType.JSON} request expected` }));
       }
 
-      let json: any;
+      let json: unknown;
       const text = await readAll(request);
 
       try {

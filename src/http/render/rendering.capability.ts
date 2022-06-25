@@ -38,7 +38,7 @@ class RenderingCapability extends RequestCapability<HttpMeans, RenderMeans> {
           renderBody(html);
         },
 
-        renderJson(body: any) {
+        renderJson(body: unknown) {
           response.setHeader('Content-Type', `${MIMEType.JSON}; charset=utf-8`);
           renderBody(JSON.stringify(body));
         },

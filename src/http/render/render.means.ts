@@ -32,6 +32,6 @@ export interface RenderMeans {
    *
    * @param body - JSON object to stringify.
    */
-  renderJson(this: void, body: any): void;
+  renderJson(this: void, body: unknown): void;
 
 }
