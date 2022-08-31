@@ -6,7 +6,7 @@
  * @typeParam TMeans - A type of request processing means to modify.
  * @typeParam TExt - A type of request processing means extension.
  */
-export type RequestModification<TMeans, TExt = object> = {
+export type RequestModification<TMeans, TExt extends object = object> = {
   [K in keyof TMeans]?: TMeans[K] | undefined;
 } & {
   [K in Exclude<keyof TExt, keyof TMeans>]: TExt[K];
@@ -37,6 +37,8 @@ export function requestUpdate<TMeans>(modification: Partial<TMeans>): RequestMod
  *
  * @returns Request extension cast to {@link RequestModification}.
  */
-export function requestExtension<TMeans, TExt>(extension: TExt): RequestModification<TMeans, TExt> {
+export function requestExtension<TMeans, TExt extends object>(
+  extension: TExt,
+): RequestModification<TMeans, TExt> {
   return extension;
 }

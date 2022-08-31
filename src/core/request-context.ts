@@ -16,7 +16,6 @@ import type { RequestModification } from './request-modification';
 export type RequestContext<TMeans> = TMeans & RequestContext.Agent<TMeans>;
 
 export namespace RequestContext {
-
   /**
    * Request processing agent interface.
    *
@@ -26,7 +25,6 @@ export namespace RequestContext {
    * @typeParam TMeans - A type of request processing means.
    */
   export interface Agent<TMeans> {
-
     /**
      * Delegates request processing to the next `handler` and optionally modifies processing means by creating a new
      * context with the given `modifications` applied. The rest of the properties remain unchanged.
@@ -38,12 +36,10 @@ export namespace RequestContext {
      * @returns A promise resolved when request processing finishes. Resolves to `true` when request is responded,
      * or to `false` otherwise.
      */
-    next<TExt = object>(
-        this: void,
-        handler: RequestHandler<TMeans & TExt>,
-        modification?: RequestModification<TMeans, TExt>,
+    next<TExt extends object = object>(
+      this: void,
+      handler: RequestHandler<TMeans & TExt>,
+      modification?: RequestModification<TMeans, TExt>,
     ): Promise<boolean>;
-
   }
-
 }

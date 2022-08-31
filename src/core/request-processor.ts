@@ -10,24 +10,21 @@ import type { RequestModification } from './request-modification';
  * @typeParam TMeans - A type of initial request processing means.
  */
 export type RequestProcessor<TMeans> =
-/**
- * @param means - Initial request processing means.
- *
- * @returns A promise resolved when request processing finishes. Resolves to `true` when request is responded,
- * or to `false` otherwise.
- */
-    (this: void, means: TMeans) => Promise<boolean>;
-
+  /**
+   * @param means - Initial request processing means.
+   *
+   * @returns A promise resolved when request processing finishes. Resolves to `true` when request is responded,
+   * or to `false` otherwise.
+   */
+  (this: void, means: TMeans) => Promise<boolean>;
 
 export namespace RequestProcessor {
-
   /**
    * Request processor configuration.
    *
    * @typeParam TMeans - A type of initial request processing means.
    */
   export interface Config<TMeans> {
-
     /**
      * Initial request processing handler.
      *
@@ -47,13 +44,11 @@ export namespace RequestProcessor {
      * @returns A promise resolved when request processing finishes. Resolves to `true` when request is responded,
      * or to `false` otherwise.
      */
-    next<TExt>(
-        handler: RequestHandler<TMeans & TExt>,
-        context: RequestContext<TMeans & TExt>,
+    next<TExt extends object>(
+      handler: RequestHandler<TMeans & TExt>,
+      context: RequestContext<TMeans & TExt>,
     ): Promise<boolean>;
-
   }
-
 }
 
 /**
@@ -65,13 +60,11 @@ export namespace RequestProcessor {
  * @returns New request processor.
  */
 export function requestProcessor<TMeans>(
-    config: RequestProcessor.Config<TMeans>,
+  config: RequestProcessor.Config<TMeans>,
 ): RequestProcessor<TMeans> {
-
   const handler = config.handler.bind(config);
 
   return means => {
-
     const context = { ...means } as RequestContext<TMeans>;
 
     context.next = nextHandlerCaller(config, context) as RequestContext<TMeans>['next'];
@@ -83,18 +76,17 @@ export function requestProcessor<TMeans>(
 /**
  * @internal
  */
-function nextHandlerCaller<TBase, TMeans extends TBase, TExt>(
-    config: RequestProcessor.Config<TBase>,
-    means: TMeans,
+function nextHandlerCaller<TBase, TMeans extends TBase, TExt extends object>(
+  config: RequestProcessor.Config<TBase>,
+  means: TMeans,
 ): (
-    handler: RequestHandler<TMeans & TExt>,
-    modification?: RequestModification<TMeans, TExt>,
+  handler: RequestHandler<TMeans & TExt>,
+  modification?: RequestModification<TMeans, TExt>,
 ) => Promise<boolean> {
   return async (
-      handler: RequestHandler<TMeans & TExt>,
-      modification?: RequestModification<TMeans, TExt>,
+    handler: RequestHandler<TMeans & TExt>,
+    modification?: RequestModification<TMeans, TExt>,
   ): Promise<boolean> => {
-
     let context: RequestContext<TMeans & TExt>;
 
     if (modification) {
