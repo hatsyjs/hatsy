@@ -10,10 +10,9 @@ import type { IncomingMessage, ServerResponse } from 'node:http';
  * @typeParam TResponse - HTTP response type.
  */
 export interface HttpMeans<
-    TRequest extends IncomingMessage = IncomingMessage,
-    TResponse extends ServerResponse = ServerResponse,
-    > {
-
+  TRequest extends IncomingMessage = IncomingMessage,
+  TResponse extends ServerResponse = ServerResponse,
+> {
   /**
    * HTTP request.
    */
@@ -28,16 +27,13 @@ export interface HttpMeans<
    * HTTP response.
    */
   readonly response: TResponse;
-
 }
 
 export namespace HttpMeans {
-
   /**
    * HTTP request addressing info.
    */
   export interface Addresses {
-
     /**
      * Request URL.
      */
@@ -47,7 +43,5 @@ export namespace HttpMeans {
      * Remote address.
      */
     readonly ip: string;
-
   }
-
 }

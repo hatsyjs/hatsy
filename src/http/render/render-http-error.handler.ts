@@ -10,10 +10,11 @@ import { Rendering } from './rendering.capability';
 /**
  * @internal
  */
-function errorDetails(
-    { error, response }: RequestContext<HttpMeans & ErrorMeans>,
-): { code: number; message?: string; details?: string } {
-
+function errorDetails({ error, response }: RequestContext<HttpMeans & ErrorMeans>): {
+  code: number;
+  message?: string;
+  details?: string;
+} {
   let message: string | undefined;
   let details: string | undefined;
 
@@ -40,16 +41,13 @@ function errorDetails(
 /**
  * @internal
  */
-function renderHtmlError(
-    context: RequestContext<HttpMeans & RenderMeans & ErrorMeans>,
-): void {
-
+function renderHtmlError(context: RequestContext<HttpMeans & RenderMeans & ErrorMeans>): void {
   const details = errorDetails(context);
   const message = details.message ? ' ' + escapeXML(details.message) : '';
   const detailsText = details.details ? escapeXML(details.details) : '';
 
   context.renderHtml(
-      `<!DOCTYPE html>
+    `<!DOCTYPE html>
 <html lang="en">
 <head>
 <title>ERROR ${details.code}${message}</title>
@@ -78,14 +76,14 @@ function renderJsonError(context: RequestContext<HttpMeans & RenderMeans & Error
  *
  * Renders either JSON or HTML error page.
  */
-export const renderHttpError: RequestHandler<HttpMeans & ErrorMeans> = (/*#__PURE__*/ Rendering.for(
-    /*#__PURE__*/ dispatchByAccepted<HttpMeans & ErrorMeans & RenderMeans>(
-        {
-          [MIMEType.JSON]: renderJsonError,
-          [MIMEType.TextJSON]: renderJsonError,
-          [MIMEType.HTML]: renderHtmlError,
-          '*/*': renderHtmlError,
-        },
-        renderHtmlError,
-    ),
-));
+export const renderHttpError: RequestHandler<HttpMeans & ErrorMeans> = /*#__PURE__*/ Rendering.for(
+  /*#__PURE__*/ dispatchByAccepted<HttpMeans & ErrorMeans & RenderMeans>(
+    {
+      [MIMEType.JSON]: renderJsonError,
+      [MIMEType.TextJSON]: renderJsonError,
+      [MIMEType.HTML]: renderHtmlError,
+      '*/*': renderHtmlError,
+    },
+    renderHtmlError,
+  ),
+);

@@ -9,16 +9,10 @@ import type { RenderMeans } from './render.means';
 class RenderingCapability extends RequestCapability<HttpMeans, RenderMeans> {
 
   for<TMeans extends HttpMeans>(
-      handler: RequestHandler<TMeans & RenderMeans>,
+    handler: RequestHandler<TMeans & RenderMeans>,
   ): RequestHandler<TMeans> {
-    return ({
-      request: { method },
-      response,
-      next,
-    }) => {
-
+    return ({ request: { method }, response, next }) => {
       const renderBody = (body: string | Buffer, encoding: BufferEncoding = 'utf-8'): void => {
-
         const length = Buffer.isBuffer(body) ? body.byteLength : Buffer.byteLength(body, encoding);
 
         response.setHeader('Content-Length', length);
@@ -29,21 +23,22 @@ class RenderingCapability extends RequestCapability<HttpMeans, RenderMeans> {
         }
       };
 
-      return next(handler, requestExtension<TMeans, RenderMeans>({
+      return next(
+        handler,
+        requestExtension<TMeans, RenderMeans>({
+          renderBody,
 
-        renderBody,
+          renderHtml(html: string | Buffer) {
+            response.setHeader('Content-Type', `${MIMEType.HTML}; charset=utf-8`);
+            renderBody(html);
+          },
 
-        renderHtml(html: string | Buffer) {
-          response.setHeader('Content-Type', `${MIMEType.HTML}; charset=utf-8`);
-          renderBody(html);
-        },
-
-        renderJson(body: unknown) {
-          response.setHeader('Content-Type', `${MIMEType.JSON}; charset=utf-8`);
-          renderBody(JSON.stringify(body));
-        },
-
-      }));
+          renderJson(body: unknown) {
+            response.setHeader('Content-Type', `${MIMEType.JSON}; charset=utf-8`);
+            renderBody(JSON.stringify(body));
+          },
+        }),
+      );
     };
   }
 
@@ -54,4 +49,5 @@ class RenderingCapability extends RequestCapability<HttpMeans, RenderMeans> {
  *
  * Provides {@link RenderMeans HTTP response body render means} for handlers.
  */
-export const Rendering: RequestCapability<HttpMeans, RenderMeans> = (/*#__PURE__*/ new RenderingCapability());
+export const Rendering: RequestCapability<HttpMeans, RenderMeans>
+  /*#__PURE__*/ = new RenderingCapability();

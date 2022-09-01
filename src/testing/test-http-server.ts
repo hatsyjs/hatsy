@@ -1,5 +1,12 @@
 import { noop } from '@proc7ts/primitives';
-import { createServer, IncomingMessage, request, RequestListener, RequestOptions, Server } from 'node:http';
+import {
+  createServer,
+  IncomingMessage,
+  request,
+  RequestListener,
+  RequestOptions,
+  Server,
+} from 'node:http';
 import type { AddressInfo } from 'node:net';
 import { promisify } from 'node:util';
 import type { RequestHandler } from '../core';
@@ -71,8 +78,8 @@ export class TestHttpServer {
    * @returns `this` instance.
    */
   handleBy<TExt>(
-      config: HttpConfig.Extended<TExt, HttpMeans>,
-      handler: RequestHandler<HttpMeans & TExt>,
+    config: HttpConfig.Extended<TExt, HttpMeans>,
+    handler: RequestHandler<HttpMeans & TExt>,
   ): this;
 
   /**
@@ -95,10 +102,12 @@ export class TestHttpServer {
   handleBy(handler: RequestHandler<HttpMeans>): this;
 
   handleBy(
-      configOrHandler: HttpConfig | RequestHandler<HttpMeans>,
-      optionalHandler?: RequestHandler<HttpMeans>,
+    configOrHandler: HttpConfig | RequestHandler<HttpMeans>,
+    optionalHandler?: RequestHandler<HttpMeans>,
   ): this {
-    return this.listenBy(httpListener(configOrHandler as HttpConfig, optionalHandler as RequestHandler<HttpMeans>));
+    return this.listenBy(
+      httpListener(configOrHandler as HttpConfig, optionalHandler as RequestHandler<HttpMeans>),
+    );
   }
 
   /**
@@ -106,10 +115,7 @@ export class TestHttpServer {
    */
   private _start(): Promise<TestHttpServer> {
     return new Promise((resolve, reject) => {
-
-      const server = this._server = createServer(
-          (request, response) => this._listener(request, response),
-      );
+      const server = (this._server = createServer((request, response) => this._listener(request, response)));
 
       server.on('error', reject);
       server.on('listening', () => resolve(this));
@@ -126,25 +132,27 @@ export class TestHttpServer {
    *
    * @returns A promise resolves to server response.
    */
-  post(path: string, body?: string | Buffer, options?: RequestOptions): Promise<TestHttpServer.Response> {
+  post(
+    path: string,
+    body?: string | Buffer,
+    options?: RequestOptions,
+  ): Promise<TestHttpServer.Response> {
     return new Promise((resolve, reject) => {
-
       const req = request(
-          `http://${this.address.address}:${this.address.port}${path}`,
-          {
-            method: 'POST',
-            host: this.address.address,
-            port: this.address.port,
-            ...options,
-          },
-          response => {
+        `http://${this.address.address}:${this.address.port}${path}`,
+        {
+          method: 'POST',
+          host: this.address.address,
+          port: this.address.port,
+          ...options,
+        },
+        response => {
+          const resp = response as TestHttpServer.Response;
 
-            const resp = response as TestHttpServer.Response;
+          resp.body = () => readAll(resp);
 
-            resp.body = () => readAll(resp);
-
-            resolve(resp);
-          },
+          resolve(resp);
+        },
       );
 
       req.on('close', reject);
@@ -177,19 +185,15 @@ export class TestHttpServer {
 }
 
 export namespace TestHttpServer {
-
   /**
    * A response of test HTTP server.
    */
   export interface Response extends IncomingMessage {
-
     /**
      * Reads response body.
      *
      * @returns A promise resolved to response body.
      */
     body(): Promise<string>;
-
   }
-
 }

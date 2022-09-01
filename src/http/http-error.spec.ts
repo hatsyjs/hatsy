@@ -17,22 +17,28 @@ describe('HttpError', () => {
 
   describe('toLog', () => {
     it('does nothing at input stage', () => {
-
       const error = new HttpError(400, { details: 'Test' });
 
       expect(dueLog({ on: 'in', line: [error] }).line).toEqual([error]);
     });
     it('expands status message at default stage', () => {
-      expect(dueLog({ line: [new HttpError(404, { statusMessage: 'Not Found' })] }).line).toEqual(['404 Not Found']);
+      expect(dueLog({ line: [new HttpError(404, { statusMessage: 'Not Found' })] }).line).toEqual([
+        '404 Not Found',
+      ]);
     });
     it('expands error details at default stage', () => {
-      expect(dueLog({ line: [new HttpError(400, { details: 'Test' })] }).line).toEqual(['400', 'Test']);
+      expect(dueLog({ line: [new HttpError(400, { details: 'Test' })] }).line).toEqual([
+        '400',
+        'Test',
+      ]);
     });
     it('expands reason at output stage', () => {
-
       const reason = new Error('test');
 
-      expect(dueLog({ on: 'out', line: [new HttpError(500, { reason })] }).line).toEqual(['500', reason]);
+      expect(dueLog({ on: 'out', line: [new HttpError(500, { reason })] }).line).toEqual([
+        '500',
+        reason,
+      ]);
     });
   });
 });

@@ -1,4 +1,13 @@
-import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, jest } from '@jest/globals';
+import {
+  afterAll,
+  afterEach,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  jest,
+} from '@jest/globals';
 import { silentLogger } from '@proc7ts/logger';
 import { noop } from '@proc7ts/primitives';
 import type { Mock } from 'jest-mock';
@@ -9,7 +18,6 @@ import { middleware, Middleware } from './middleware';
 import { Rendering } from './render';
 
 describe('middleware', () => {
-
   let server: TestHttpServer;
 
   beforeAll(async () => {
@@ -31,11 +39,9 @@ describe('middleware', () => {
 
   it('applies middleware after capabilities', async () => {
     server.handleBy(
-        Rendering
-            .and(middleware(ware))
-            .for(({ renderJson }) => {
-              renderJson({ response: 'ok' });
-            }),
+      Rendering.and(middleware(ware)).for(({ renderJson }) => {
+        renderJson({ response: 'ok' });
+      }),
     );
 
     const response = await server.get('/test');
@@ -45,11 +51,11 @@ describe('middleware', () => {
   });
   it('applies capabilities after middleware', async () => {
     server.handleBy(
-        middleware(ware)
-            .and(Rendering)
-            .for(({ renderJson }) => {
-              renderJson({ response: 'ok' });
-            }),
+      middleware(ware)
+        .and(Rendering)
+        .for(({ renderJson }) => {
+          renderJson({ response: 'ok' });
+        }),
     );
 
     const response = await server.get('/test');
@@ -61,12 +67,12 @@ describe('middleware', () => {
     ware.mockImplementation((_request, _response, next) => next(new HttpError(503, { statusMessage: 'Custom Error' })));
 
     server.handleBy(
-        {
-          handleBy(handler) {
-            return Logging.logBy(silentLogger).for(handler);
-          },
+      {
+        handleBy(handler) {
+          return Logging.logBy(silentLogger).for(handler);
         },
-        middleware(ware).for(noop),
+      },
+      middleware(ware).for(noop),
     );
 
     const response = await server.get('/test');
@@ -79,9 +85,7 @@ describe('middleware', () => {
       response.end('TEST');
     });
 
-    server.handleBy(
-        middleware(ware).for(noop),
-    );
+    server.handleBy(middleware(ware).for(noop));
 
     const response = await server.get('/test');
 

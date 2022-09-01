@@ -31,12 +31,12 @@ import { renderHttpError } from './render';
  * @see requestHandler
  */
 export function httpListener<
-    TExt,
-    TRequest extends IncomingMessage = IncomingMessage,
-    TResponse extends ServerResponse = ServerResponse,
-    >(
-    config: HttpConfig.Extended<TExt, HttpMeans<TRequest, TResponse>>,
-    handler: RequestHandler<HttpMeans<TRequest, TResponse> & TExt>,
+  TExt,
+  TRequest extends IncomingMessage = IncomingMessage,
+  TResponse extends ServerResponse = ServerResponse,
+>(
+  config: HttpConfig.Extended<TExt, HttpMeans<TRequest, TResponse>>,
+  handler: RequestHandler<HttpMeans<TRequest, TResponse> & TExt>,
 ): (this: void, req: TRequest, res: TResponse) => void;
 
 /**
@@ -52,8 +52,8 @@ export function httpListener<
  * @see requestHandler
  */
 export function httpListener<TRequest extends IncomingMessage, TResponse extends ServerResponse>(
-    config: HttpConfig<HttpMeans<TRequest, TResponse>>,
-    handler: RequestHandler<HttpMeans<TRequest, TResponse>>,
+  config: HttpConfig<HttpMeans<TRequest, TResponse>>,
+  handler: RequestHandler<HttpMeans<TRequest, TResponse>>,
 ): (this: void, req: TRequest, res: TResponse) => void;
 
 /**
@@ -69,18 +69,19 @@ export function httpListener<TRequest extends IncomingMessage, TResponse extends
  * @see requestHandler
  */
 export function httpListener<TRequest extends IncomingMessage, TResponse extends ServerResponse>(
-    handler: RequestHandler<HttpMeans<TRequest, TResponse>>,
+  handler: RequestHandler<HttpMeans<TRequest, TResponse>>,
 ): (this: void, req: TRequest, res: TResponse) => void;
 
 export function httpListener<
-    TExt,
-    TRequest extends IncomingMessage,
-    TResponse extends ServerResponse,
-    >(
-    configOrHandler: AnyHttpConfig<TExt, TRequest, TResponse> | RequestHandler<HttpMeans<TRequest, TResponse>>,
-    optionalHandler?: RequestHandler<HttpMeans<TRequest, TResponse>>,
+  TExt,
+  TRequest extends IncomingMessage,
+  TResponse extends ServerResponse,
+>(
+  configOrHandler:
+    | AnyHttpConfig<TExt, TRequest, TResponse>
+    | RequestHandler<HttpMeans<TRequest, TResponse>>,
+  optionalHandler?: RequestHandler<HttpMeans<TRequest, TResponse>>,
 ): (this: void, req: TRequest, res: TResponse) => void {
-
   let config: AnyHttpConfig<TExt, TRequest, TResponse>;
   let handler: RequestHandler<HttpMeans<TRequest, TResponse>>;
 
@@ -94,22 +95,18 @@ export function httpListener<
 
   const fullHandler = fullHttpHandler(config, handler);
   const incomingHandler = incomingHttpHandler(
-      config.handleBy
-          ? config.handleBy(fullHandler)
-          : fullHandler as RequestHandler<HttpMeans<TRequest, TResponse>>,
+    config.handleBy
+      ? config.handleBy(fullHandler)
+      : (fullHandler as RequestHandler<HttpMeans<TRequest, TResponse>>),
   );
   const processor = requestProcessor<IncomingHttpMeans<TRequest, TResponse>>({
     handler: incomingHandler,
-    next(
-        handler,
-        context,
-    ): Promise<boolean> {
-
+    next(handler, context): Promise<boolean> {
       const { response } = context;
 
       return Promise.resolve(context)
-          .then(handler)
-          .then(() => response.writableEnded);
+        .then(handler)
+        .then(() => response.writableEnded);
     },
   });
 
@@ -120,10 +117,7 @@ export function httpListener<
         response,
         onResponse,
         onError,
-      }).then(
-          onResponse,
-          onError,
-      );
+      }).then(onResponse, onError);
     }).catch(error => {
       consoleLogger.error(`[${request.method} ${request.url}]`, 'Unhandled error', error);
     });
@@ -144,15 +138,9 @@ interface IncomingHttpMeans<TRequest extends IncomingMessage, TResponse extends 
  * @internal
  */
 function incomingHttpHandler<TRequest extends IncomingMessage, TResponse extends ServerResponse>(
-    handler: RequestHandler<HttpMeans<TRequest, TResponse>>,
+  handler: RequestHandler<HttpMeans<TRequest, TResponse>>,
 ): RequestHandler<IncomingHttpMeans<TRequest, TResponse>> {
-  return ({
-    request,
-    response,
-    next,
-    onResponse,
-    onError,
-  }) => {
+  return ({ request, response, next, onResponse, onError }) => {
     response.once('error', onError);
     response.once('finish', onResponse);
     response.once('close', onResponse);
@@ -160,33 +148,33 @@ function incomingHttpHandler<TRequest extends IncomingMessage, TResponse extends
     const end = response.end.bind(response);
 
     // Finish request processing immediately after calling `response.end()`
-    (response as ServerResponse).end = ((chunk: unknown, encoding: BufferEncoding, cb?: () => void) => {
+    (response as ServerResponse).end = ((
+      chunk: unknown,
+      encoding: BufferEncoding,
+      cb?: () => void,
+    ) => {
       end(chunk, encoding, cb);
       onResponse(true);
     }) as ServerResponse['end'];
 
     const requestDefaults = lazyValue(() => HttpAddressRep.defaults(request));
     const requestURL = lazyValue(() => {
-
       const { host, proto } = requestDefaults();
       const { url = '' } = request;
 
       return new URL(url, `${proto}://${host}`);
     });
 
-    return next(
-        handler,
-        {
-          requestAddresses: {
-            get ip() {
-              return requestDefaults().for;
-            },
-            get url() {
-              return requestURL();
-            },
-          },
+    return next(handler, {
+      requestAddresses: {
+        get ip() {
+          return requestDefaults().for;
         },
-    );
+        get url() {
+          return requestURL();
+        },
+      },
+    });
   };
 }
 
@@ -194,45 +182,54 @@ function incomingHttpHandler<TRequest extends IncomingMessage, TResponse extends
  * @internal
  */
 function fullHttpHandler<TExt, TRequest extends IncomingMessage, TResponse extends ServerResponse>(
-    config: AnyHttpConfig<TExt, TRequest, TResponse>,
-    handler: RequestHandler<HttpMeans<TRequest, TResponse> & TExt>,
+  config: AnyHttpConfig<TExt, TRequest, TResponse>,
+  handler: RequestHandler<HttpMeans<TRequest, TResponse> & TExt>,
 ): RequestHandler<HttpMeans<TRequest, TResponse> & TExt> {
-
   const defaultHandler = defaultHttpHandler(config);
 
-  return dispatchError(
-      httpErrorHandler(config),
-      ({ next }) => next(handler).then(ok => ok || next(defaultHandler)),
-  );
+  return dispatchError(httpErrorHandler(config), ({ next }) => next(handler).then(ok => ok || next(defaultHandler)));
 }
 
 /**
  * @internal
  */
-function defaultHttpHandler<TExt, TRequest extends IncomingMessage, TResponse extends ServerResponse>(
-    {
-      defaultHandler = true,
-    }: AnyHttpConfig<TExt, TRequest, TResponse>,
-): RequestHandler<HttpMeans<TRequest, TResponse> & TExt> {
+function defaultHttpHandler<
+  TExt,
+  TRequest extends IncomingMessage,
+  TResponse extends ServerResponse,
+>({
+  defaultHandler = true,
+}: AnyHttpConfig<TExt, TRequest, TResponse>): RequestHandler<
+  HttpMeans<TRequest, TResponse> & TExt
+> {
   return defaultHandler
-      ? (defaultHandler !== true ? defaultHandler : () => Promise.reject(new HttpError(404)))
-      : noop;
+    ? defaultHandler !== true
+      ? defaultHandler
+      : () => Promise.reject(new HttpError(404))
+    : noop;
 }
 
 /**
  * @internal
  */
-function httpErrorHandler<TExt, TRequest extends IncomingMessage, TResponse extends ServerResponse>(
-    {
-      logError = true,
-      defaultHandler = true,
-      errorHandler = true,
-    }: AnyHttpConfig<TExt, TRequest, TResponse>,
-): RequestHandler<HttpMeans<TRequest, TResponse> & TExt & ErrorMeans> {
-
+function httpErrorHandler<
+  TExt,
+  TRequest extends IncomingMessage,
+  TResponse extends ServerResponse,
+>({
+  logError = true,
+  defaultHandler = true,
+  errorHandler = true,
+}: AnyHttpConfig<TExt, TRequest, TResponse>): RequestHandler<
+  HttpMeans<TRequest, TResponse> & TExt & ErrorMeans
+> {
   const onError = errorHandler
-      ? (errorHandler === true ? renderHttpError : errorHandler)
-      : (defaultHandler ? renderEmptyHttpResponse : noop);
+    ? errorHandler === true
+      ? renderHttpError
+      : errorHandler
+    : defaultHandler
+    ? renderEmptyHttpResponse
+    : noop;
 
   if (!logError) {
     return onError;
@@ -241,16 +238,16 @@ function httpErrorHandler<TExt, TRequest extends IncomingMessage, TResponse exte
   return Logging.for(context => {
     logHttpError(context);
 
-    return (context as RequestContext<HttpMeans<TRequest, TResponse> & TExt & ErrorMeans>).next(onError);
+    return (context as RequestContext<HttpMeans<TRequest, TResponse> & TExt & ErrorMeans>).next(
+      onError,
+    );
   });
 }
 
 /**
  * @internal
  */
-function logHttpError(
-    { log, error }: RequestContext<HttpMeans & ErrorMeans & LoggerMeans>,
-): void {
+function logHttpError({ log, error }: RequestContext<HttpMeans & ErrorMeans & LoggerMeans>): void {
   log.error(error);
 }
 

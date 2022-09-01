@@ -10,11 +10,10 @@ import { addResponseHeader } from '../util';
  * @typeParam TMeans - Supported HTTP request processing means.
  */
 export interface DispatchLanguages<TMeans extends HttpMeans = HttpMeans> {
-
   /**
    * English response.
    */
-  'en'?: RequestHandlerMethod<this, TMeans> | undefined;
+  en?: RequestHandlerMethod<this, TMeans> | undefined;
 
   /**
    * Response in any language.
@@ -30,7 +29,6 @@ export interface DispatchLanguages<TMeans extends HttpMeans = HttpMeans> {
    * Language code can be a `*` wildcard.
    */
   readonly [code: string]: RequestHandlerMethod<this, TMeans> | undefined;
-
 }
 
 /**
@@ -46,13 +44,11 @@ export interface DispatchLanguages<TMeans extends HttpMeans = HttpMeans> {
  * [Accept-Language]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language
  */
 export function dispatchByLanguage<TMeans extends HttpMeans>(
-    languages: DispatchLanguages<TMeans>,
+  languages: DispatchLanguages<TMeans>,
 ): RequestHandler<TMeans> {
-
   const negotiator = httpLanguageNegotiator(languages);
 
   return ({ request, response, next }) => {
-
     const { 'accept-language': acceptLanguage = '*' } = request.headers;
     const handler = negotiator(acceptLanguage);
 

@@ -13,7 +13,6 @@ import type { HttpMeans } from '../http.means';
  * The proxy forwarding information is not trusted by default.
  */
 export interface HttpForwarding extends RequestCapability<HttpMeans> {
-
   /**
    * Configures trust policy to proxy forwarding records.
    *
@@ -22,7 +21,6 @@ export interface HttpForwarding extends RequestCapability<HttpMeans> {
    * @returns New HTTP proxy forwarding capability.
    */
   with(trust: HttpForwardTrust): HttpForwarding;
-
 }
 
 /**
@@ -34,23 +32,23 @@ class HttpForwardingCapability extends RequestCapability<HttpMeans> implements H
     super();
   }
 
-  for<TMeans extends HttpMeans>(
-      handler: RequestHandler<TMeans & object>,
-  ): RequestHandler<TMeans> {
+  for<TMeans extends HttpMeans>(handler: RequestHandler<TMeans & object>): RequestHandler<TMeans> {
     return ({ request, next }) => {
-
       const addresses = lazyValue(() => HttpAddressRep.by(request, this._trust));
 
-      return next(handler, requestUpdate<HttpMeans>({
-        requestAddresses: {
-          get url() {
-            return addresses().url;
+      return next(
+        handler,
+        requestUpdate<HttpMeans>({
+          requestAddresses: {
+            get url() {
+              return addresses().url;
+            },
+            get ip() {
+              return addresses().ip;
+            },
           },
-          get ip() {
-            return addresses().ip;
-          },
-        },
-      }));
+        }),
+      );
     };
   }
 
@@ -65,4 +63,4 @@ class HttpForwardingCapability extends RequestCapability<HttpMeans> implements H
  *
  * Can be used directly, or {@link HttpForwarding.with configured} first.
  */
-export const HttpForwarding: HttpForwarding = (/*#__PURE__*/ new HttpForwardingCapability({}));
+export const HttpForwarding: HttpForwarding = /*#__PURE__*/ new HttpForwardingCapability({});

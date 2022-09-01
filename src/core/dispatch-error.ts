@@ -14,8 +14,8 @@ import { requestExtension } from './request-modification';
  * @returns New request processing handler.
  */
 export function dispatchError<TMeans>(
-    onError: RequestHandler<TMeans & ErrorMeans>,
-    handler: RequestHandler<TMeans>,
+  onError: RequestHandler<TMeans & ErrorMeans>,
+  handler: RequestHandler<TMeans>,
 ): RequestHandler<TMeans> {
   return context => context
       .next(handler)

@@ -7,7 +7,6 @@ import type { HttpMeans } from '../http.means';
  * @typeParam TMeans - Supported HTTP request processing means.
  */
 export interface DispatchMethods<TMeans extends HttpMeans = HttpMeans> {
-
   /**
    * Request processing handler for HTTP DELETE.
    */
@@ -49,7 +48,6 @@ export interface DispatchMethods<TMeans extends HttpMeans = HttpMeans> {
    * Request handler method with lower-case HTTP method name as its key.
    */
   readonly [method: string]: RequestHandlerMethod<this, TMeans> | undefined;
-
 }
 
 /**
@@ -61,10 +59,9 @@ export interface DispatchMethods<TMeans extends HttpMeans = HttpMeans> {
  * @returns New HTTP request processing handler.
  */
 export function dispatchByMethod<TMeans extends HttpMeans>(
-    methods: DispatchMethods<TMeans>,
+  methods: DispatchMethods<TMeans>,
 ): RequestHandler<TMeans> {
   return async ({ request: { method }, next }) => {
-
     const verb = method ? method.toLocaleLowerCase() : 'get';
     const handler = methods[verb] || (verb === 'head' && methods.get);
 

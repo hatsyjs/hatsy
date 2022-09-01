@@ -36,8 +36,7 @@ const JSON_MIMES: Readonly<Record<string, number>> = {
  * @typeParam TBody - Request body type.
  */
 export interface JsonParsing<TInput extends HttpMeans = HttpMeans, TBody = any>
-    extends RequestCapability<TInput, RequestBodyMeans<TBody>> {
-
+  extends RequestCapability<TInput, RequestBodyMeans<TBody>> {
   /**
    * Configures JSON parsing capability to transform submitted data.
    *
@@ -48,27 +47,25 @@ export interface JsonParsing<TInput extends HttpMeans = HttpMeans, TBody = any>
    * @returns New JSON parsing capability.
    */
   withBody<TMeans extends TInput, TTransformed>(
-      transformer: RequestValueTransformer<TMeans, any, TTransformed>,
+    transformer: RequestValueTransformer<TMeans, any, TTransformed>,
   ): FormDecoding<TMeans, TTransformed>;
-
 }
 
 /**
  * @internal
  */
 class JsonParsingCapability<TInput extends HttpMeans, TBody>
-    extends RequestCapability<TInput, RequestBodyMeans<TBody>>
-    implements JsonParsing<TInput, TBody> {
+  extends RequestCapability<TInput, RequestBodyMeans<TBody>>
+  implements JsonParsing<TInput, TBody> {
 
   constructor(private readonly _transform: RequestValueTransformer<TInput, any, TBody>) {
     super();
   }
 
   for<TMeans extends TInput>(
-      handler: RequestHandler<TMeans & RequestBodyMeans<TBody>>,
+    handler: RequestHandler<TMeans & RequestBodyMeans<TBody>>,
   ): RequestHandler<TMeans> {
     return async context => {
-
       const { request, next } = context;
       const { 'content-type': contentType = MIMEType.Text } = request.headers;
 
@@ -85,14 +82,17 @@ class JsonParsingCapability<TInput extends HttpMeans, TBody>
         return Promise.reject(new HttpError(400, { details: 'Malformed JSON', reason: e }));
       }
 
-      return next(handler, requestExtension<TMeans, RequestBodyMeans<TBody>>({
-        requestBody: await this._transform(json, context as RequestContext<TInput>),
-      }));
+      return next(
+        handler,
+        requestExtension<TMeans, RequestBodyMeans<TBody>>({
+          requestBody: await this._transform(json, context as RequestContext<TInput>),
+        }),
+      );
     };
   }
 
   withBody<TMeans extends TInput, TTransformed>(
-      transformer: RequestValueTransformer<TMeans, any, TTransformed>,
+    transformer: RequestValueTransformer<TMeans, any, TTransformed>,
   ): FormDecoding<TMeans, TTransformed> {
     return new JsonParsingCapability<TMeans, TTransformed>(transformer);
   }

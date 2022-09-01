@@ -6,10 +6,8 @@ import type { RequestLogger } from './request-logger';
  * @typeParam TLogger - Request logger type.
  */
 export interface LoggerMeans<TLogger extends RequestLogger = RequestLogger> {
-
   /**
    * A logger to use during request processing.
    */
   readonly log: TLogger;
-
 }

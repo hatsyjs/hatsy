@@ -7,7 +7,6 @@
  * All `renderXXX` methods write `Content-Length` header. They skip writing content body when request method is `HEAD`.
  */
 export interface RenderMeans {
-
   /**
    * Renders response body.
    *
@@ -33,5 +32,4 @@ export interface RenderMeans {
    * @param body - JSON object to stringify.
    */
   renderJson(this: void, body: unknown): void;
-
 }

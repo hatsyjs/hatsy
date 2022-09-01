@@ -4,7 +4,6 @@ import type { Logger } from '@proc7ts/logger';
  * A logger to use during request processing.
  */
 export interface RequestLogger extends Logger {
-
   /**
    * Logs error.
    *
@@ -41,5 +40,4 @@ export interface RequestLogger extends Logger {
    * @param args - Arbitrary arguments to log.
    */
   trace(...args: unknown[]): void;
-
 }

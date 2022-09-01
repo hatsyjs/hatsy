@@ -10,18 +10,15 @@ import type { RequestContext } from './request-context';
  * The handler may be asynchronous.
  *
  * @typeParam TMeans - A type of request processing means this handler expects.
- */
-export type RequestHandler<TMeans> =
-/**
  * @param context - Request processing context containing the necessary means.
  *
  * @returns Either nothing if the handler completed its work synchronously, or a promise-like instance resolved when
  * the handler completed its work asynchronously.
  */
-    (
-        this: void,
-        context: RequestContext<TMeans>,
-    ) => PromiseLike<unknown> | void;
+export type RequestHandler<TMeans> = (
+  this: void,
+  context: RequestContext<TMeans>,
+) => PromiseLike<unknown> | void;
 
 /**
  * Request processing method signature.
@@ -30,18 +27,15 @@ export type RequestHandler<TMeans> =
  *
  * @typeParam TThis - A type of `this` object.
  * @typeParam TMeans - A type of request processing means this handler expects.
- */
-export type RequestHandlerMethod<TThis, TMeans> =
-/**
- * @param context - Request processing context containing the necessary means.
+ *  @param context - Request processing context containing the necessary means.
  *
  * @returns Either nothing if the handler completed its work synchronously, or a promise-like instance resolved when
  * the handler completed its work asynchronously.
  */
-    (
-        this: TThis,
-        context: RequestContext<TMeans>,
-    ) => PromiseLike<unknown> | void;
+export type RequestHandlerMethod<TThis, TMeans> = (
+  this: TThis,
+  context: RequestContext<TMeans>,
+) => PromiseLike<unknown> | void;
 
 /**
  * Builds a request processing handler that delegates request processing to other handlers.
@@ -55,7 +49,7 @@ export type RequestHandlerMethod<TThis, TMeans> =
  * @returns Request processing handler.
  */
 export function requestHandler<TMeans>(
-    handlers: RequestHandler<TMeans> | Iterable<RequestHandler<TMeans>>,
+  handlers: RequestHandler<TMeans> | Iterable<RequestHandler<TMeans>>,
 ): RequestHandler<TMeans> {
   if (typeof handlers === 'function') {
     return handlers;

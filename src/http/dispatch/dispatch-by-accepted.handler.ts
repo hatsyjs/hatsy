@@ -10,7 +10,6 @@ import { addResponseHeader } from '../util';
  * @typeParam TMeans - Supported HTTP request processing means.
  */
 export interface DispatchMimeTypes<TMeans extends HttpMeans = HttpMeans> {
-
   /**
    * Produces HTML.
    */
@@ -37,7 +36,6 @@ export interface DispatchMimeTypes<TMeans extends HttpMeans = HttpMeans> {
    * MIME can be a wildcard like `image/*` or `* / *`.
    */
   readonly [mimeType: string]: RequestHandlerMethod<this, TMeans> | undefined;
-
 }
 
 /**
@@ -56,14 +54,12 @@ export interface DispatchMimeTypes<TMeans extends HttpMeans = HttpMeans> {
  * @returns New HTTP request processing handler.
  */
 export function dispatchByAccepted<TMeans extends HttpMeans>(
-    mimeTypes: DispatchMimeTypes<TMeans>,
-    fallback: RequestHandler<TMeans> = () => Promise.reject(new HttpError(406)),
+  mimeTypes: DispatchMimeTypes<TMeans>,
+  fallback: RequestHandler<TMeans> = () => Promise.reject(new HttpError(406)),
 ): RequestHandler<TMeans> {
-
   const negotiator = httpMimeNegotiator(mimeTypes);
 
   return async ({ request, response, next }) => {
-
     const { accept = '*/*' } = request.headers;
     const handler = negotiator(accept);
 

@@ -71,22 +71,20 @@ export class HttpError extends Error implements Loggable {
 }
 
 function httpErrorMessage(
-    statusCode: number,
-    {
-      statusMessage,
-      message = statusMessage ? `${statusCode} ${statusMessage}` : `${statusCode}`,
-    }: HttpError.Options,
+  statusCode: number,
+  {
+    statusMessage,
+    message = statusMessage ? `${statusCode} ${statusMessage}` : `${statusCode}`,
+  }: HttpError.Options,
 ): string {
   return message;
 }
 
 export namespace HttpError {
-
   /**
    * Options for {@link HttpError HTTP error} construction.
    */
   export interface Options {
-
     /**
      * HTTP status message.
      */
@@ -112,7 +110,5 @@ export namespace HttpError {
      * This is another error typically.
      */
     readonly reason?: unknown | undefined;
-
   }
-
 }

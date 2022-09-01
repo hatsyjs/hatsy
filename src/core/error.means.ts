@@ -7,10 +7,8 @@
  * @typeParam TError - Error type.
  */
 export interface ErrorMeans<TError = any> {
-
   /**
    * Error thrown.
    */
   readonly error: TError;
-
 }

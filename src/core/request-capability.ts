@@ -22,13 +22,14 @@ export abstract class RequestCapability<TInput, TExt = object> {
    * @returns Request processing capability that call the given `provider` in order to apply.
    */
   static of<TInput, TExt>(
-      this: void,
-      provider: RequestCapability.Provider<TInput, TExt>,
+    this: void,
+    provider: RequestCapability.Provider<TInput, TExt>,
   ): RequestCapability<TInput, TExt> {
-
     const capability: RequestCapability<TInput, TExt> = {
       for: provider,
-      and<TNext>(next: RequestCapability<TInput & TExt, TNext>): RequestCapability<TInput, TExt & TNext> {
+      and<TNext>(
+        next: RequestCapability<TInput & TExt, TNext>,
+      ): RequestCapability<TInput, TExt & TNext> {
         return RequestCapability.combine(capability, next);
       },
     };
@@ -49,21 +50,22 @@ export abstract class RequestCapability<TInput, TExt = object> {
    * and then - by the `second` one.
    */
   static combine<TInput, TExt, TNext>(
-      this: void,
-      first: RequestCapability<TInput, TExt>,
-      second: RequestCapability<TInput & TExt, TNext>,
+    this: void,
+    first: RequestCapability<TInput, TExt>,
+    second: RequestCapability<TInput & TExt, TNext>,
   ): RequestCapability<TInput, TExt & TNext> {
-
     const chain: RequestCapability<TInput, TExt & TNext> = {
-
-      for<TMeans extends TInput>(delegate: RequestHandler<TMeans & TExt & TNext>): RequestHandler<TMeans> {
+      for<TMeans extends TInput>(
+        delegate: RequestHandler<TMeans & TExt & TNext>,
+      ): RequestHandler<TMeans> {
         return first.for(second.for(delegate));
       },
 
-      and<T>(next: RequestCapability<TInput & TExt & TNext, T>): RequestCapability<TInput, TExt & TNext & T> {
+      and<T>(
+        next: RequestCapability<TInput & TExt & TNext, T>,
+      ): RequestCapability<TInput, TExt & TNext & T> {
         return RequestCapability.combine<TInput, TExt & TNext, T>(chain, next);
       },
-
     };
 
     return chain;
@@ -79,7 +81,9 @@ export abstract class RequestCapability<TInput, TExt = object> {
    *
    * @returns New request processing handler.
    */
-  abstract for<TMeans extends TInput>(handler: RequestHandler<TMeans & TExt>): RequestHandler<TMeans>;
+  abstract for<TMeans extends TInput>(
+    handler: RequestHandler<TMeans & TExt>,
+  ): RequestHandler<TMeans>;
 
   /**
    * Combines this capability with the `next` one.
@@ -92,14 +96,15 @@ export abstract class RequestCapability<TInput, TExt = object> {
    *
    * @see RequestCapability.combine
    */
-  and<TNext>(next: RequestCapability<TInput & TExt, TNext>): RequestCapability<TInput, TExt & TNext> {
+  and<TNext>(
+    next: RequestCapability<TInput & TExt, TNext>,
+  ): RequestCapability<TInput, TExt & TNext> {
     return RequestCapability.combine<TInput, TExt, TNext>(this, next);
   }
 
 }
 
 export namespace RequestCapability {
-
   /**
    * Request processing capability provider signature.
    *
@@ -107,18 +112,14 @@ export namespace RequestCapability {
    *
    * @typeParam TInput - A type of request processing means required by this provider.
    * @typeParam TExt - A type of extension to request processing means this provider applies.
-   */
-  export type Provider<TInput, TExt = object> =
-  /**
    * @typeParam TMeans - A type of request processing means expected by constructed handler.
    *
    * @param handler - Request processing handler that will receive modified request context.
    *
    * @returns New request processing handler.
    */
-      <TMeans extends TInput>(
-          this: void,
-          handler: RequestHandler<TMeans & TExt>,
-      ) => RequestHandler<TMeans>;
-
+  export type Provider<TInput, TExt = object> = <TMeans extends TInput>(
+    this: void,
+    handler: RequestHandler<TMeans & TExt>,
+  ) => RequestHandler<TMeans>;
 }

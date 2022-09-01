@@ -5,7 +5,6 @@ import { TestHttpServer } from '../../testing';
 import { Rendering } from './rendering.capability';
 
 describe('Rendering', () => {
-
   let server: TestHttpServer;
 
   beforeAll(async () => {
@@ -20,15 +19,15 @@ describe('Rendering', () => {
   });
 
   describe('renderHtml', () => {
-
     beforeEach(() => {
-      server.handleBy(Rendering.for(({ renderHtml }) => {
-        renderHtml('TEST');
-      }));
+      server.handleBy(
+        Rendering.for(({ renderHtml }) => {
+          renderHtml('TEST');
+        }),
+      );
     });
 
     it('renders HTML', async () => {
-
       const response = await server.get('/test');
       const body = await response.body();
 
@@ -37,9 +36,11 @@ describe('Rendering', () => {
       expect(response.headers['content-length']).toBe('4');
     });
     it('renders HTML as buffer', async () => {
-      server.handleBy(Rendering.for(({ renderHtml }) => {
-        renderHtml(Buffer.from(new TextEncoder().encode('TEST')));
-      }));
+      server.handleBy(
+        Rendering.for(({ renderHtml }) => {
+          renderHtml(Buffer.from(new TextEncoder().encode('TEST')));
+        }),
+      );
 
       const response = await server.get('/test');
       const body = await response.body();
@@ -50,12 +51,11 @@ describe('Rendering', () => {
     });
     it('is applied once', async () => {
       server.handleBy(
-          Rendering
-              .and(Rendering)
-              .and(Rendering)
-              .for(({ renderHtml }) => {
-                renderHtml('TEST');
-              }),
+        Rendering.and(Rendering)
+          .and(Rendering)
+          .for(({ renderHtml }) => {
+            renderHtml('TEST');
+          }),
       );
 
       const response = await server.get('/test');
@@ -66,7 +66,6 @@ describe('Rendering', () => {
       expect(response.headers['content-length']).toBe('4');
     });
     it('does not render HTML on HEAD request', async () => {
-
       const response = await server.get('/test', { method: 'head' });
       const body = await response.body();
 
@@ -77,15 +76,15 @@ describe('Rendering', () => {
   });
 
   describe('renderJson', () => {
-
     beforeEach(() => {
-      server.handleBy(Rendering.for(({ renderJson }) => {
-        renderJson('TEST');
-      }));
+      server.handleBy(
+        Rendering.for(({ renderJson }) => {
+          renderJson('TEST');
+        }),
+      );
     });
 
     it('renders JSON', async () => {
-
       const response = await server.get('/test');
       const body = await response.body();
 
@@ -94,7 +93,6 @@ describe('Rendering', () => {
       expect(response.headers['content-length']).toBe('6');
     });
     it('does not render JSON on HEAD request', async () => {
-
       const response = await server.get('/test', { method: 'head' });
       const body = await response.body();
 

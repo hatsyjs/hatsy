@@ -11,7 +11,6 @@ import { Logging } from './logging.capability';
 import type { RequestLogger } from './request-logger';
 
 describe('Logging', () => {
-
   let handler: Mock<(context: RequestContext<LoggerMeans>) => void>;
 
   beforeEach(() => {
@@ -20,13 +19,11 @@ describe('Logging', () => {
 
   describe('by default', () => {
     it('uses `console` as request logger', async () => {
-
       await processor(Logging.for(handler))({});
 
       expect(handler).toHaveBeenCalledWith(expect.objectContaining({ log: consoleLogger }));
     });
     it('does not override the request logger', async () => {
-
       const log: RequestLogger = silentLogger;
 
       await processor<LoggerMeans>(Logging.for(handler))({ log });
@@ -37,7 +34,6 @@ describe('Logging', () => {
 
   describe('logBy', () => {
     it('overrides request logger', async () => {
-
       const extendedLog = {
         fatal: noop,
         error: noop,
@@ -47,7 +43,9 @@ describe('Logging', () => {
         trace: noop,
       };
 
-      await processor<LoggerMeans>(Logging.logBy<typeof extendedLog>(extendedLog).for(handler))({ log: console });
+      await processor<LoggerMeans>(Logging.logBy<typeof extendedLog>(extendedLog).for(handler))({
+        log: console,
+      });
 
       expect(handler).toHaveBeenCalledWith(expect.objectContaining({ log: extendedLog }));
     });
@@ -57,8 +55,8 @@ describe('Logging', () => {
     return requestProcessor({
       handler,
       async next<TExt>(
-          handler: RequestHandler<TMeans & TExt>,
-          context: RequestContext<TMeans & TExt>,
+        handler: RequestHandler<TMeans & TExt>,
+        context: RequestContext<TMeans & TExt>,
       ): Promise<boolean> {
         await handler(context);
 

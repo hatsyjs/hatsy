@@ -9,7 +9,6 @@ import { Rendering, RenderMeans } from '../render';
 import { dispatchByMethod } from './dispatch-by-method.handler';
 
 describe('dispatchByName', () => {
-
   let server: TestHttpServer;
 
   beforeAll(async () => {
@@ -25,12 +24,13 @@ describe('dispatchByName', () => {
 
   it('dispatches by method', async () => {
     server.handleBy(
-        Rendering
-            .for(dispatchByMethod({
-              search({ renderJson }: RequestContext<HttpMeans & RenderMeans>): void {
-                renderJson({ response: 'ok' });
-              },
-            })),
+      Rendering.for(
+        dispatchByMethod({
+          search({ renderJson }: RequestContext<HttpMeans & RenderMeans>): void {
+            renderJson({ response: 'ok' });
+          },
+        }),
+      ),
     );
 
     const response = await server.get('/', { method: 'SEARCH' });
@@ -40,12 +40,13 @@ describe('dispatchByName', () => {
   });
   it('dispatches to HEAD', async () => {
     server.handleBy(
-        Rendering
-            .for(dispatchByMethod({
-              head({ renderJson }): void {
-                renderJson({ response: 'ok' });
-              },
-            })),
+      Rendering.for(
+        dispatchByMethod({
+          head({ renderJson }): void {
+            renderJson({ response: 'ok' });
+          },
+        }),
+      ),
     );
 
     const response = await server.get('/', { method: 'HEAD' });
@@ -55,12 +56,13 @@ describe('dispatchByName', () => {
   });
   it('dispatches to GET on HEAD request', async () => {
     server.handleBy(
-        Rendering
-            .for(dispatchByMethod({
-              get({ renderJson }): void {
-                renderJson({ response: 'ok' });
-              },
-            })),
+      Rendering.for(
+        dispatchByMethod({
+          get({ renderJson }): void {
+            renderJson({ response: 'ok' });
+          },
+        }),
+      ),
     );
 
     const response = await server.get('/', { method: 'HEAD' });
@@ -70,7 +72,8 @@ describe('dispatchByName', () => {
   });
   it('dispatches to GET without method specified', async () => {
     server.handleBy(
-        Rendering.for(requestHandler([
+      Rendering.for(
+        requestHandler([
           ({ request }) => {
             delete request.method;
           },
@@ -79,7 +82,8 @@ describe('dispatchByName', () => {
               renderJson({ response: 'ok' });
             },
           }),
-        ])),
+        ]),
+      ),
     );
 
     const response = await server.get('/', { method: 'HEAD' });
@@ -89,12 +93,13 @@ describe('dispatchByName', () => {
   });
   it('does not dispatch without corresponding handler', async () => {
     server.handleBy(
-        {
-          handleBy(handler) {
-            return Logging.logBy(silentLogger).for(handler);
-          },
+      {
+        handleBy(handler) {
+          return Logging.logBy(silentLogger).for(handler);
         },
-        Rendering.for(requestHandler([
+      },
+      Rendering.for(
+        requestHandler([
           dispatchByMethod({
             get({ renderJson }): void {
               renderJson({ response: 'ok' });
@@ -103,7 +108,8 @@ describe('dispatchByName', () => {
           () => {
             throw new HttpError(404);
           },
-        ])),
+        ]),
+      ),
     );
 
     const response = await server.get('/', { method: 'PUT' });

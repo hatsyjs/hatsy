@@ -7,7 +7,6 @@ import type { HttpMeans } from './http.means';
  * @typeParam TMeans - A type of supported HTTP request processing means.
  */
 export interface HttpConfig<TMeans extends HttpMeans = HttpMeans> {
-
   /**
    * Default HTTP request handler.
    *
@@ -40,19 +39,17 @@ export interface HttpConfig<TMeans extends HttpMeans = HttpMeans> {
    * @default `true`, which means an error will be logged with {@link LoggerMeans logger means}, created if necessary.
    */
   readonly logError?: boolean | undefined;
-
 }
 
 export namespace HttpConfig {
-
   /**
    * HTTP processing configuration for extended requests.
    *
    * @typeParam TExt - Request processing means extension type.
    * @typeParam TMeans - A type of supported HTTP request processing means.
    */
-  export interface Extended<TExt, TMeans extends HttpMeans = HttpMeans> extends HttpConfig<TMeans & TExt> {
-
+  export interface Extended<TExt, TMeans extends HttpMeans = HttpMeans>
+    extends HttpConfig<TMeans & TExt> {
     /**
      * Creates actual HTTP request handler.
      *
@@ -63,7 +60,5 @@ export namespace HttpConfig {
      * @returns HTTP request handler to use instead.
      */
     handleBy(handler: RequestHandler<TMeans & TExt>): RequestHandler<TMeans>;
-
   }
-
 }

@@ -34,8 +34,7 @@ const URL_ENCODED_MIMES: Record<string, number> = {
  * @typeParam TBody - Request body type.
  */
 export interface FormDecoding<TInput extends HttpMeans = HttpMeans, TBody = URLSearchParams>
-    extends RequestCapability<TInput, RequestBodyMeans<TBody>> {
-
+  extends RequestCapability<TInput, RequestBodyMeans<TBody>> {
   /**
    * Configures form decoding capability to transform submitted form.
    *
@@ -46,44 +45,49 @@ export interface FormDecoding<TInput extends HttpMeans = HttpMeans, TBody = URLS
    * @returns New form decoding capability.
    */
   withBody<TMeans extends TInput, TTransformed>(
-      transformer: RequestValueTransformer<TMeans, URLSearchParams, TTransformed>,
+    transformer: RequestValueTransformer<TMeans, URLSearchParams, TTransformed>,
   ): FormDecoding<TMeans, TTransformed>;
-
 }
 
 /**
  * @internal
  */
 class FormDecodingCapability<TInput extends HttpMeans, TBody>
-    extends RequestCapability<TInput, RequestBodyMeans<TBody>>
-    implements FormDecoding<TInput, TBody> {
+  extends RequestCapability<TInput, RequestBodyMeans<TBody>>
+  implements FormDecoding<TInput, TBody> {
 
-  constructor(private readonly _transform: RequestValueTransformer<TInput, URLSearchParams, TBody>) {
+  constructor(
+    private readonly _transform: RequestValueTransformer<TInput, URLSearchParams, TBody>,
+  ) {
     super();
   }
 
   for<TMeans extends TInput>(
-      handler: RequestHandler<TMeans & RequestBodyMeans<TBody>>,
+    handler: RequestHandler<TMeans & RequestBodyMeans<TBody>>,
   ): RequestHandler<TMeans> {
     return async context => {
-
       const { request } = context;
       const { 'content-type': contentType = MIMEType.Text } = request.headers;
 
       if (!URL_ENCODED_MIMES[contentType]) {
-        return Promise.reject(new HttpError(415, { details: `${MIMEType.FormURLEncoded} request expected` }));
+        return Promise.reject(
+          new HttpError(415, { details: `${MIMEType.FormURLEncoded} request expected` }),
+        );
       }
 
       const params = new URLSearchParams(await readAll(request));
 
-      return context.next(handler, requestExtension<TMeans, RequestBodyMeans<TBody>>({
-        requestBody: await this._transform(params, context as RequestContext<TInput>),
-      }));
+      return context.next(
+        handler,
+        requestExtension<TMeans, RequestBodyMeans<TBody>>({
+          requestBody: await this._transform(params, context as RequestContext<TInput>),
+        }),
+      );
     };
   }
 
   withBody<TMeans extends TInput, TTransformed>(
-      transformer: RequestValueTransformer<TMeans, URLSearchParams, TTransformed>,
+    transformer: RequestValueTransformer<TMeans, URLSearchParams, TTransformed>,
   ): FormDecoding<TMeans, TTransformed> {
     return new FormDecodingCapability<TMeans, TTransformed>(transformer);
   }

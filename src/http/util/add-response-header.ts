@@ -11,7 +11,6 @@ import type { ServerResponse } from 'node:http';
  * @param value - HTTP header value to add.
  */
 export function addResponseHeader(response: ServerResponse, name: string, value: string): void {
-
   const oldValues = arrayOfElements(response.getHeader(name)).map(String);
   const newValues = elementOrArray(new Set<string>(oldValues).add(value))!;
 

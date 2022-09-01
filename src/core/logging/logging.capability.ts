@@ -14,8 +14,7 @@ import type { RequestLogger } from './request-logger';
  * @typeParam TLogger - Request logger type.
  */
 export interface Logging<TInput = unknown, TLogger extends RequestLogger = RequestLogger>
-    extends RequestCapability<TInput, LoggerMeans<TLogger>> {
-
+  extends RequestCapability<TInput, LoggerMeans<TLogger>> {
   /**
    * Configures a logging capability with the given logger.
    *
@@ -25,42 +24,41 @@ export interface Logging<TInput = unknown, TLogger extends RequestLogger = Reque
    * @returns New request logging capability.
    */
   logBy<TNewLogger extends RequestLogger>(log: TNewLogger): Logging<TInput, TNewLogger>;
-
 }
 
 /**
  * @internal
  */
 class LoggingCapability<TInput, TLogger extends RequestLogger>
-    extends RequestCapability<TInput, LoggerMeans<TLogger>>
-    implements Logging<TInput, TLogger> {
+  extends RequestCapability<TInput, LoggerMeans<TLogger>>
+  implements Logging<TInput, TLogger> {
 
   readonly for: <TMeans extends TInput>(
-      handler: RequestHandler<TMeans & LoggerMeans<TLogger>>,
+    handler: RequestHandler<TMeans & LoggerMeans<TLogger>>,
   ) => RequestHandler<TMeans>;
 
   constructor(log: TLogger, byDefault = false) {
     super();
     if (byDefault) {
-      this.for = <TMeans extends TInput>(
+      this.for
+        = <TMeans extends TInput>(
           handler: RequestHandler<TMeans & LoggerMeans<TLogger>>,
-      ): RequestHandler<TMeans> => context => {
-        if ((context as Partial<LoggerMeans>).log) {
-          return context.next(handler);
-        }
+        ): RequestHandler<TMeans> => context => {
+          if ((context as Partial<LoggerMeans>).log) {
+            return context.next(handler);
+          }
 
-        return context.next(handler, requestExtension({ log }));
-      };
+          return context.next(handler, requestExtension({ log }));
+        };
     } else {
-      this.for = <TMeans extends TInput>(
+      this.for
+        = <TMeans extends TInput>(
           handler: RequestHandler<TMeans & LoggerMeans<TLogger>>,
-      ): RequestHandler<TMeans> => context => context.next(handler, requestExtension({ log }));
+        ): RequestHandler<TMeans> => context => context.next(handler, requestExtension({ log }));
     }
   }
 
-  logBy<TNewLogger extends RequestLogger>(
-      log: TNewLogger,
-  ): Logging<TInput, TNewLogger> {
+  logBy<TNewLogger extends RequestLogger>(log: TNewLogger): Logging<TInput, TNewLogger> {
     return new LoggingCapability(log);
   }
 
@@ -72,4 +70,7 @@ class LoggingCapability<TInput, TLogger extends RequestLogger>
  * Uses a global `console` as {@link LoggerMeans.log request logger}, unless the logger is present in request context
  * already.
  */
-export const Logging: Logging = (/*#__PURE__*/ new LoggingCapability<unknown, RequestLogger>(consoleLogger, true));
+export const Logging: Logging = /*#__PURE__*/ new LoggingCapability<unknown, RequestLogger>(
+  consoleLogger,
+  true,
+);
