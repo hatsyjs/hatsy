@@ -49,5 +49,5 @@ class RenderingCapability extends RequestCapability<HttpMeans, RenderMeans> {
  *
  * Provides {@link RenderMeans HTTP response body render means} for handlers.
  */
-export const Rendering: RequestCapability<HttpMeans, RenderMeans>
-  /*#__PURE__*/ = new RenderingCapability();
+export const Rendering: RequestCapability<HttpMeans, RenderMeans> =
+  /*#__PURE__*/ new RenderingCapability();

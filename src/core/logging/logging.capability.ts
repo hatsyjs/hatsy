@@ -40,8 +40,8 @@ class LoggingCapability<TInput, TLogger extends RequestLogger>
   constructor(log: TLogger, byDefault = false) {
     super();
     if (byDefault) {
-      this.for
-        = <TMeans extends TInput>(
+      this.for =
+        <TMeans extends TInput>(
           handler: RequestHandler<TMeans & LoggerMeans<TLogger>>,
         ): RequestHandler<TMeans> => context => {
           if ((context as Partial<LoggerMeans>).log) {
@@ -51,8 +51,8 @@ class LoggingCapability<TInput, TLogger extends RequestLogger>
           return context.next(handler, requestExtension({ log }));
         };
     } else {
-      this.for
-        = <TMeans extends TInput>(
+      this.for =
+        <TMeans extends TInput>(
           handler: RequestHandler<TMeans & LoggerMeans<TLogger>>,
         ): RequestHandler<TMeans> => context => context.next(handler, requestExtension({ log }));
     }
