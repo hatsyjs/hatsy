@@ -21,14 +21,18 @@ describe('Logging', () => {
     it('uses `console` as request logger', async () => {
       await processor(Logging.for(handler))({});
 
-      expect(handler).toHaveBeenCalledWith(expect.objectContaining({ log: consoleLogger }));
+      expect(handler).toHaveBeenCalledWith(
+        expect.objectContaining({ log: consoleLogger }) as unknown as RequestContext<LoggerMeans>,
+      );
     });
     it('does not override the request logger', async () => {
       const log: RequestLogger = silentLogger;
 
       await processor<LoggerMeans>(Logging.for(handler))({ log });
 
-      expect(handler).toHaveBeenCalledWith(expect.objectContaining({ log }));
+      expect(handler).toHaveBeenCalledWith(
+        expect.objectContaining({ log }) as unknown as RequestContext<LoggerMeans>,
+      );
     });
   });
 
@@ -47,7 +51,9 @@ describe('Logging', () => {
         log: console,
       });
 
-      expect(handler).toHaveBeenCalledWith(expect.objectContaining({ log: extendedLog }));
+      expect(handler).toHaveBeenCalledWith(
+        expect.objectContaining({ log: extendedLog }) as unknown as RequestContext<LoggerMeans>,
+      );
     });
   });
 

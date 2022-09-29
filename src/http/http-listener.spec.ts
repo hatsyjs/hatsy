@@ -10,7 +10,7 @@ import {
 } from '@jest/globals';
 import { consoleLogger } from '@proc7ts/logger';
 import { noop } from '@proc7ts/primitives';
-import type { SpyInstance } from 'jest-mock';
+import type { Mock } from 'jest-mock';
 import type { ErrorMeans, RequestContext } from '../core';
 import { TestHttpServer } from '../testing';
 import { HttpError } from './http-error';
@@ -32,10 +32,10 @@ describe('httpListener', () => {
     server.listenBy(noop);
   });
 
-  let logErrorSpy: SpyInstance<(...args: unknown[]) => void>;
+  let logErrorSpy: Mock<(...args: unknown[]) => void>;
 
   beforeEach(() => {
-    logErrorSpy = jest.spyOn(consoleLogger, 'error').mockImplementation(noop);
+    logErrorSpy = jest.spyOn(consoleLogger, 'error').mockImplementation(noop) as typeof logErrorSpy;
   });
   afterEach(() => {
     logErrorSpy.mockRestore();
@@ -54,7 +54,7 @@ describe('httpListener', () => {
     expect(handler).toHaveBeenCalledWith(
       expect.objectContaining({
         request: expect.objectContaining({ method: 'GET', url: '/test' }),
-      }),
+      }) as unknown as RequestContext<HttpMeans>,
     );
   });
   it('responds with `404` status when handler not responding', async () => {
@@ -185,7 +185,7 @@ describe('httpListener', () => {
     expect(defaultHandler).toHaveBeenCalledWith(
       expect.objectContaining({
         request: expect.objectContaining({ method: 'GET', url: '/test' }),
-      }),
+      }) as unknown as RequestContext<HttpMeans>,
     );
   });
   it('logs error and invokes provided error handler', async () => {
@@ -206,7 +206,7 @@ describe('httpListener', () => {
       expect.objectContaining({
         request: expect.objectContaining({ method: 'GET', url: '/test' }),
         error,
-      }),
+      }) as unknown as RequestContext<ErrorMeans & HttpMeans>,
     );
   });
   it('logs HTTP error and invokes provided error handler', async () => {
@@ -228,7 +228,7 @@ describe('httpListener', () => {
       expect.objectContaining({
         request: expect.objectContaining({ method: 'GET', url: '/test' }),
         error,
-      }),
+      }) as unknown as RequestContext<ErrorMeans & HttpMeans>,
     );
   });
   it('logs ERROR when there is no error handler', async () => {

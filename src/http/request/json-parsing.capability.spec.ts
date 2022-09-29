@@ -10,7 +10,7 @@ import {
 } from '@jest/globals';
 import { consoleLogger } from '@proc7ts/logger';
 import { noop } from '@proc7ts/primitives';
-import type { SpyInstance } from 'jest-mock';
+import type { Mock } from 'jest-mock';
 import { TestHttpServer } from '../../testing';
 import { HttpError } from '../http-error';
 import { Rendering } from '../render';
@@ -26,10 +26,10 @@ describe('JsonParsing', () => {
     await server.stop();
   });
 
-  let logErrorSpy: SpyInstance<(...args: unknown[]) => void>;
+  let logErrorSpy: Mock<(...args: unknown[]) => void>;
 
   beforeEach(() => {
-    logErrorSpy = jest.spyOn(consoleLogger, 'error').mockImplementation(noop);
+    logErrorSpy = jest.spyOn(consoleLogger, 'error').mockImplementation(noop) as typeof logErrorSpy;
   });
   afterEach(() => {
     logErrorSpy.mockRestore();
