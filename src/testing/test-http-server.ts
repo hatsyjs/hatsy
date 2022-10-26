@@ -119,7 +119,7 @@ export class TestHttpServer {
 
       server.on('error', reject);
       server.on('listening', () => resolve(this));
-      server.listen({ port: 0, host: 'localhost' });
+      server.listen({ port: 0, host: '127.0.0.1' });
     });
   }
 
