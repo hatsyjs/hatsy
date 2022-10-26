@@ -22,10 +22,19 @@
   "main": "./dist/hatsy.js",
   "types": "./index.d.ts",
   "exports": {
-    ".": "./dist/hatsy.js",
-    "./core": "./dist/hatsy.core.js",
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./dist/hatsy.js"
+    },
+    "./core": {
+      "types": "./core/index.d.ts",
+      "default": "./dist/hatsy.core.js"
+    },
     "./package.json": "./package.json",
-    "./testing": "./dist/hatsy.testing.js"
+    "./testing": {
+      "types": "./testing/index.d.ts",
+      "default": "./dist/hatsy.testing.js"
+    }
   },
   "dependencies": {
     "@frontmeans/httongue": "^2.3.0",
