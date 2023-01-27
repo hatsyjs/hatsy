@@ -19,25 +19,34 @@
     "url": "https://github.com/hatsyjs/hatsy/issues"
   },
   "type": "module",
-  "main": "./dist/hatsy.js",
-  "types": "./index.d.ts",
+  "types": "./dist/hatsy.d.ts",
+  "typesVersions": {
+    "*": {
+      "core": [
+        "./dist/hatsy.core.d.ts"
+      ],
+      "testing": [
+        "./dist/hatsy.testing.d.ts"
+      ]
+    }
+  },
   "exports": {
     ".": {
-      "types": "./index.d.ts",
+      "types": "./dist/hatsy.d.ts",
       "default": "./dist/hatsy.js"
     },
     "./core": {
-      "types": "./core/index.d.ts",
+      "types": "./dist/hatsy.core.d.ts",
       "default": "./dist/hatsy.core.js"
     },
     "./package.json": "./package.json",
     "./testing": {
-      "types": "./testing/index.d.ts",
+      "types": "./dist/hatsy.testing.d.ts",
       "default": "./dist/hatsy.testing.js"
     }
   },
   "dependencies": {
-    "@frontmeans/httongue": "^2.3.0",
+    "@frontmeans/httongue": "^2.4.0",
     "@hatsy/http-header-value": "^3.7.0",
     "@proc7ts/logger": "^1.3.2",
     "@proc7ts/primitives": "^3.0.2"
@@ -48,7 +57,10 @@
   "devDependencies": {
     "@jest/globals": "^29.4.1",
     "@run-z/eslint-config": "^3.3.1",
-    "@run-z/rollup-helpers": "^2.1.0",
+    "@run-z/prettier-config": "^2.0.0",
+    "@run-z/project-config": "^0.15.0",
+    "@swc/core": "^1.3.29",
+    "@swc/jest": "^0.2.24",
     "@types/node": "^18.11.18",
     "@typescript-eslint/eslint-plugin": "^5.49.0",
     "@typescript-eslint/parser": "^5.49.0",
@@ -61,10 +73,7 @@
     "prettier": "^2.8.3",
     "prettier-eslint-cli": "^7.1.0",
     "rollup": "^3.11.0",
-    "rollup-plugin-flat-dts": "^2.0.2",
-    "rollup-plugin-typescript2": "^0.34.1",
     "run-z": "^1.11.0",
-    "shx": "^0.3.4",
     "ts-jest": "^29.0.5",
     "tslib": "^2.5.0",
     "typedoc": "^0.23.24",
@@ -72,14 +81,14 @@
   },
   "scripts": {
     "all": "run-z build,lint,test",
-    "build": "run-z +z --then rollup -c",
+    "build": "run-z +z --then build-z",
     "ci:all": "run-z all +test/--ci/--runInBand",
-    "clean": "run-z +z --then shx rm -rf \"index.d.ts?(.map)\" \"*/index.d.ts?(.map)\" dist target",
+    "clean": "run-z +z --then clean-z",
     "doc": "run-z +z --then typedoc",
     "doc:publish": "run-z doc --then gh-pages --dist target/typedoc --dotfiles",
     "format": "run-z +z --then prettier-eslint --write --include-dot-files \"src/**/*.*\" \"*.{js,cjs,json,md}\"",
     "lint": "run-z +z --then eslint .",
-    "test": "run-z +z env:NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" --then jest",
-    "z": "run-z +cmd:rollup,+cmd:typedoc,+cmd:eslint,+cmd:jest"
+    "test": "run-z +z env:NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" --then test-z",
+    "z": "run-z +cmd:build-z,+cmd:typedoc,+cmd:eslint,+cmd:test-z"
   }
 }

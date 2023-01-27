@@ -1,4 +1,0 @@
-{
-  "main": "../dist/hatsy.testing.js",
-  "types": "./index.d.ts"
-}
