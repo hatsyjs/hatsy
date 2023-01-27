@@ -1,6 +1,6 @@
 {
   "name": "@hatsy/hatsy",
-  "version": "2.5.2",
+  "version": "2.5.3",
   "description": "Asynchronous TypeScript-friendly HTTP server for Node.js",
   "keywords": [
     "http-framework",
