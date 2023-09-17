@@ -11,12 +11,13 @@ import {
 import { consoleLogger } from '@proc7ts/logger';
 import { noop } from '@proc7ts/primitives';
 import type { Mock } from 'jest-mock';
-import type { ErrorMeans, RequestContext } from '../core';
-import { TestHttpServer } from '../testing';
-import { HttpError } from './http-error';
-import { httpListener } from './http-listener';
-import type { HttpMeans } from './http.means';
-import { Rendering } from './render';
+import { ErrorMeans } from '../core/error.means.js';
+import { RequestContext } from '../core/request-context.js';
+import { TestHttpServer } from '../testing/test-http-server.js';
+import { HttpError } from './http-error.js';
+import { httpListener } from './http-listener.js';
+import { HttpMeans } from './http.means.js';
+import { Rendering } from './render/rendering.capability.js';
 
 describe('httpListener', () => {
   let server: TestHttpServer;

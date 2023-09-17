@@ -1,5 +1,5 @@
-import type { RequestHandler } from './request-handler';
-import type { RequestModification } from './request-modification';
+import type { RequestHandler } from './request-handler.js';
+import type { RequestModification } from './request-modification.js';
 
 /**
  * Request processing context.

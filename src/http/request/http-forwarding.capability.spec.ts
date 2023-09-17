@@ -1,7 +1,7 @@
 import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
-import { TestHttpServer } from '../../testing';
-import { Rendering } from '../render';
-import { HttpForwarding } from './http-forwarding.capability';
+import { TestHttpServer } from '../../testing/test-http-server.js';
+import { Rendering } from '../render/rendering.capability.js';
+import { HttpForwarding } from './http-forwarding.capability.js';
 
 describe('HttpForwarding', () => {
   let server: TestHttpServer;

@@ -1,7 +1,8 @@
-import { MIMEType } from '@frontmeans/httongue';
-import { RequestCapability, requestExtension, RequestHandler } from '../../core';
-import type { HttpMeans } from '../http.means';
-import type { RenderMeans } from './render.means';
+import { RequestCapability } from '../../core/request-capability.js';
+import { RequestHandler } from '../../core/request-handler.js';
+import { requestExtension } from '../../core/request-modification.js';
+import type { HttpMeans } from '../http.means.js';
+import type { RenderMeans } from './render.means.js';
 
 /**
  * @internal
@@ -29,12 +30,12 @@ class RenderingCapability extends RequestCapability<HttpMeans, RenderMeans> {
           renderBody,
 
           renderHtml(html: string | Buffer) {
-            response.setHeader('Content-Type', `${MIMEType.HTML}; charset=utf-8`);
+            response.setHeader('Content-Type', `text/html; charset=utf-8`);
             renderBody(html);
           },
 
           renderJson(body: unknown) {
-            response.setHeader('Content-Type', `${MIMEType.JSON}; charset=utf-8`);
+            response.setHeader('Content-Type', `application/json; charset=utf-8`);
             renderBody(JSON.stringify(body));
           },
         }),

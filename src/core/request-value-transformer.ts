@@ -1,4 +1,4 @@
-import type { RequestContext } from './request-context';
+import type { RequestContext } from './request-context.js';
 
 /**
  * Signature of request value transformer function.

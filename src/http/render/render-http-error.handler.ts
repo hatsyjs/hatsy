@@ -1,11 +1,13 @@
-import { escapeXML, MIMEType } from '@frontmeans/httongue';
+import { escapeXML } from 'httongue';
 import { STATUS_CODES } from 'node:http';
-import type { ErrorMeans, RequestContext, RequestHandler } from '../../core';
-import { dispatchByAccepted } from '../dispatch';
-import { HttpError } from '../http-error';
-import type { HttpMeans } from '../http.means';
-import type { RenderMeans } from './render.means';
-import { Rendering } from './rendering.capability';
+import { ErrorMeans } from '../../core/error.means.js';
+import { RequestContext } from '../../core/request-context.js';
+import { RequestHandler } from '../../core/request-handler.js';
+import { dispatchByAccepted } from '../dispatch/dispatch-by-accepted.handler.js';
+import { HttpError } from '../http-error.js';
+import { HttpMeans } from '../http.means.js';
+import { RenderMeans } from './render.means.js';
+import { Rendering } from './rendering.capability.js';
 
 /**
  * @internal
@@ -79,9 +81,9 @@ function renderJsonError(context: RequestContext<HttpMeans & RenderMeans & Error
 export const renderHttpError: RequestHandler<HttpMeans & ErrorMeans> = /*#__PURE__*/ Rendering.for(
   /*#__PURE__*/ dispatchByAccepted<HttpMeans & ErrorMeans & RenderMeans>(
     {
-      [MIMEType.JSON]: renderJsonError,
-      [MIMEType.TextJSON]: renderJsonError,
-      [MIMEType.HTML]: renderHtmlError,
+      'application/json': renderJsonError,
+      'text/json': renderJsonError,
+      'text/html': renderHtmlError,
       '*/*': renderHtmlError,
     },
     renderHtmlError,

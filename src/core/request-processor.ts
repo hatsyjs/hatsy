@@ -1,6 +1,6 @@
-import type { RequestContext } from './request-context';
-import type { RequestHandler, RequestHandlerMethod } from './request-handler';
-import type { RequestModification } from './request-modification';
+import type { RequestContext } from './request-context.js';
+import type { RequestHandler, RequestHandlerMethod } from './request-handler.js';
+import type { RequestModification } from './request-modification.js';
 
 /**
  * Generic request processor.

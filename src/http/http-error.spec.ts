@@ -1,6 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
 import { dueLog } from '@proc7ts/logger';
-import { HttpError } from './http-error';
+import { HttpError } from './http-error.js';
 
 describe('HttpError', () => {
   describe('message', () => {
@@ -33,11 +33,11 @@ describe('HttpError', () => {
       ]);
     });
     it('expands reason at output stage', () => {
-      const reason = new Error('test');
+      const cause = new Error('test');
 
-      expect(dueLog({ on: 'out', line: [new HttpError(500, { reason })] }).line).toEqual([
+      expect(dueLog({ on: 'out', line: [new HttpError(500, { cause })] }).line).toEqual([
         '500',
-        reason,
+        cause,
       ]);
     });
   });

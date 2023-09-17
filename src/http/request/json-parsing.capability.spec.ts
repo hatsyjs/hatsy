@@ -11,10 +11,10 @@ import {
 import { consoleLogger } from '@proc7ts/logger';
 import { noop } from '@proc7ts/primitives';
 import type { Mock } from 'jest-mock';
-import { TestHttpServer } from '../../testing';
-import { HttpError } from '../http-error';
-import { Rendering } from '../render';
-import { JsonParsing } from './json-parsing.capability';
+import { TestHttpServer } from '../../testing/test-http-server.js';
+import { HttpError } from '../http-error.js';
+import { Rendering } from '../render/rendering.capability.js';
+import { JsonParsing } from './json-parsing.capability.js';
 
 describe('JsonParsing', () => {
   let server: TestHttpServer;
@@ -111,7 +111,7 @@ describe('JsonParsing', () => {
 
     expect(error.details).toBe('Malformed JSON');
     expect(error.statusCode).toBe(400);
-    expect(error.reason).toBeInstanceOf(SyntaxError);
+    expect(error.cause).toBeInstanceOf(SyntaxError);
     expect(error.message).toBe('400');
   });
 });

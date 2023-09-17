@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it } from '@jest/globals';
 import { valueProvider } from '@proc7ts/primitives';
 import type { ServerResponse } from 'node:http';
-import type { RequestContext } from './request-context';
-import { requestHandler, RequestHandler } from './request-handler';
+import type { RequestContext } from './request-context.js';
+import { requestHandler, RequestHandler } from './request-handler.js';
 
 describe('requestHandler', () => {
   let context: RequestContext<object>;

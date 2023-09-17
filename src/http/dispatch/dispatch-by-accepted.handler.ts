@@ -1,8 +1,8 @@
-import { httpMimeNegotiator } from '@hatsy/http-header-value/headers';
-import type { RequestHandler, RequestHandlerMethod } from '../../core';
-import { HttpError } from '../http-error';
-import type { HttpMeans } from '../http.means';
-import { addResponseHeader } from '../util';
+import { httpMimeNegotiator } from 'http-header-value/headers.js';
+import { HttpError } from '../http-error.js';
+import type { HttpMeans } from '../http.means.js';
+import { RequestHandler, RequestHandlerMethod } from '../../core/request-handler.js';
+import { addResponseHeader } from '../util/add-response-header.js';
 
 /**
  * Request processing handlers for accepted MIME types.

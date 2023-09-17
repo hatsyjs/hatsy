@@ -1,5 +1,6 @@
-import type { ErrorMeans, RequestHandler } from '../core';
-import type { HttpMeans } from './http.means';
+import { ErrorMeans } from '../core/error.means.js';
+import { RequestHandler } from '../core/request-handler.js';
+import type { HttpMeans } from './http.means.js';
 
 /**
  * HTTP processing configuration.

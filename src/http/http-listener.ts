@@ -1,21 +1,19 @@
-import { HttpAddressRep } from '@hatsy/http-header-value/node';
 import { consoleLogger } from '@proc7ts/logger';
 import { lazyValue, noop } from '@proc7ts/primitives';
+import { HttpAddressRep } from 'http-header-value/node.js';
 import type { IncomingMessage, ServerResponse } from 'node:http';
-import {
-  dispatchError,
-  ErrorMeans,
-  LoggerMeans,
-  Logging,
-  RequestContext,
-  RequestHandler,
-  requestProcessor,
-} from '../core';
-import type { HttpConfig } from './http-config';
-import { HttpError } from './http-error';
-import type { AnyHttpConfig } from './http-listener.impl';
-import type { HttpMeans } from './http.means';
-import { renderHttpError } from './render';
+import { dispatchError } from '../core/dispatch-error.js';
+import { ErrorMeans } from '../core/error.means.js';
+import { LoggerMeans } from '../core/logging/logger.means.js';
+import { Logging } from '../core/logging/logging.capability.js';
+import { RequestContext } from '../core/request-context.js';
+import { RequestHandler } from '../core/request-handler.js';
+import { requestProcessor } from '../core/request-processor.js';
+import { HttpConfig } from './http-config.js';
+import { HttpError } from './http-error.js';
+import { AnyHttpConfig } from './http-listener.impl.js';
+import { HttpMeans } from './http.means.js';
+import { renderHttpError } from './render/render-http-error.handler.js';
 
 /**
  * Creates Node.js HTTP request listener that processes requests by extended HTTP request processing handler.

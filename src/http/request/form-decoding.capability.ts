@@ -1,24 +1,21 @@
-import { MIMEType } from '@frontmeans/httongue';
 import { asis } from '@proc7ts/primitives';
 import { URLSearchParams } from 'node:url';
-import {
-  RequestBodyMeans,
-  RequestCapability,
-  RequestContext,
-  requestExtension,
-  RequestHandler,
-  RequestValueTransformer,
-} from '../../core';
-import { readAll } from '../../impl';
-import { HttpError } from '../http-error';
-import type { HttpMeans } from '../http.means';
+import { RequestBodyMeans } from '../../core/request-body.means.js';
+import { RequestCapability } from '../../core/request-capability.js';
+import { RequestContext } from '../../core/request-context.js';
+import { RequestHandler } from '../../core/request-handler.js';
+import { requestExtension } from '../../core/request-modification.js';
+import { RequestValueTransformer } from '../../core/request-value-transformer.js';
+import { readAll } from '../../impl/read-all.js';
+import { HttpError } from '../http-error.js';
+import { HttpMeans } from '../http.means.js';
 
 /**
  * @internal
  */
 const URL_ENCODED_MIMES: Record<string, number> = {
-  [MIMEType.Text]: 1,
-  [MIMEType.FormURLEncoded]: 1,
+  'text/plain': 1,
+  'application/x-www-form-urlencoded': 1,
 };
 
 /**
@@ -56,10 +53,11 @@ class FormDecodingCapability<TInput extends HttpMeans, TBody>
   extends RequestCapability<TInput, RequestBodyMeans<TBody>>
   implements FormDecoding<TInput, TBody> {
 
-  constructor(
-    private readonly _transform: RequestValueTransformer<TInput, URLSearchParams, TBody>,
-  ) {
+  readonly #transform: RequestValueTransformer<TInput, URLSearchParams, TBody>;
+
+  constructor(transform: RequestValueTransformer<TInput, URLSearchParams, TBody>) {
     super();
+    this.#transform = transform;
   }
 
   for<TMeans extends TInput>(
@@ -67,11 +65,11 @@ class FormDecodingCapability<TInput extends HttpMeans, TBody>
   ): RequestHandler<TMeans> {
     return async context => {
       const { request } = context;
-      const { 'content-type': contentType = MIMEType.Text } = request.headers;
+      const { 'content-type': contentType = 'text/plain' } = request.headers;
 
       if (!URL_ENCODED_MIMES[contentType]) {
         return Promise.reject(
-          new HttpError(415, { details: `${MIMEType.FormURLEncoded} request expected` }),
+          new HttpError(415, { details: `application/x-www-form-urlencoded request expected` }),
         );
       }
 
@@ -80,7 +78,7 @@ class FormDecodingCapability<TInput extends HttpMeans, TBody>
       return context.next(
         handler,
         requestExtension<TMeans, RequestBodyMeans<TBody>>({
-          requestBody: await this._transform(params, context as RequestContext<TInput>),
+          requestBody: await this.#transform(params, context as RequestContext<TInput>),
         }),
       );
     };

@@ -1,11 +1,11 @@
-import type { RequestContext } from './request-context';
+import type { RequestContext } from './request-context.js';
 
 /**
  * Request processing handler signature.
  *
  * Handler implementations expect a request processing context containing specific processing means.
  * E.g. the ones for {@link HttpMeans HTTP request processing}. The handler may either respond using the provided means,
- * or delegate to {@link RequestContext.Agent.next next handler}.
+ * or delegate to {@link RequestContext.Agent#next next handler}.
  *
  * The handler may be asynchronous.
  *
