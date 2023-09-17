@@ -1,14 +1,14 @@
-import { HttpAddressRep } from '@hatsy/http-header-value/node';
 import { consoleLogger } from '@proc7ts/logger';
 import { lazyValue, noop } from '@proc7ts/primitives';
+import { HttpAddressRep } from 'http-header-value/node.js';
 import type { IncomingMessage, ServerResponse } from 'node:http';
 import {
-  dispatchError,
   ErrorMeans,
   LoggerMeans,
   Logging,
   RequestContext,
   RequestHandler,
+  dispatchError,
   requestProcessor,
 } from '../core';
 import type { HttpConfig } from './http-config';

@@ -1,4 +1,3 @@
-import { MIMEType } from '@frontmeans/httongue';
 import { asis } from '@proc7ts/primitives';
 import {
   RequestBodyMeans,
@@ -17,9 +16,9 @@ import type { FormDecoding } from './form-decoding.capability';
  * @internal
  */
 const JSON_MIMES: Readonly<Record<string, number>> = {
-  [MIMEType.Text]: 1,
-  [MIMEType.JSON]: 1,
-  [MIMEType.TextJSON]: 1,
+  'text/plain': 1,
+  'application/json': 1,
+  'text/json': 1,
 };
 
 /**
@@ -67,10 +66,10 @@ class JsonParsingCapability<TInput extends HttpMeans, TBody>
   ): RequestHandler<TMeans> {
     return async context => {
       const { request, next } = context;
-      const { 'content-type': contentType = MIMEType.Text } = request.headers;
+      const { 'content-type': contentType = 'text/plain' } = request.headers;
 
       if (!JSON_MIMES[contentType]) {
-        return Promise.reject(new HttpError(415, { details: `${MIMEType.JSON} request expected` }));
+        return Promise.reject(new HttpError(415, { details: `application/json request expected` }));
       }
 
       let json: unknown;

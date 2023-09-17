@@ -1,4 +1,3 @@
-import { MIMEType } from '@frontmeans/httongue';
 import { asis } from '@proc7ts/primitives';
 import { URLSearchParams } from 'node:url';
 import {
@@ -17,8 +16,8 @@ import type { HttpMeans } from '../http.means';
  * @internal
  */
 const URL_ENCODED_MIMES: Record<string, number> = {
-  [MIMEType.Text]: 1,
-  [MIMEType.FormURLEncoded]: 1,
+  'text/plain': 1,
+  'application/x-www-form-urlencoded': 1,
 };
 
 /**
@@ -67,11 +66,11 @@ class FormDecodingCapability<TInput extends HttpMeans, TBody>
   ): RequestHandler<TMeans> {
     return async context => {
       const { request } = context;
-      const { 'content-type': contentType = MIMEType.Text } = request.headers;
+      const { 'content-type': contentType = 'text/plain' } = request.headers;
 
       if (!URL_ENCODED_MIMES[contentType]) {
         return Promise.reject(
-          new HttpError(415, { details: `${MIMEType.FormURLEncoded} request expected` }),
+          new HttpError(415, { details: `application/x-www-form-urlencoded request expected` }),
         );
       }
 

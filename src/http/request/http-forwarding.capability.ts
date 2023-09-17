@@ -1,6 +1,6 @@
-import type { HttpForwardTrust } from '@hatsy/http-header-value/headers';
-import { HttpAddressRep } from '@hatsy/http-header-value/node';
 import { lazyValue } from '@proc7ts/primitives';
+import type { HttpForwardTrust } from 'http-header-value/headers.js';
+import { HttpAddressRep } from 'http-header-value/node.js';
 import { RequestCapability, RequestHandler, requestUpdate } from '../../core';
 import type { HttpMeans } from '../http.means';
 

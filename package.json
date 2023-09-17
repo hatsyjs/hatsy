@@ -1,6 +1,6 @@
 {
   "name": "@hatsy/hatsy",
-  "version": "2.5.3",
+  "version": "3.0.0-pre.0",
   "description": "Asynchronous TypeScript-friendly HTTP server for Node.js",
   "keywords": [
     "http-framework",
@@ -22,10 +22,10 @@
   "types": "./dist/hatsy.d.ts",
   "typesVersions": {
     "*": {
-      "core": [
+      "core.js": [
         "./dist/hatsy.core.d.ts"
       ],
-      "testing": [
+      "testing.js": [
         "./dist/hatsy.testing.d.ts"
       ]
     }
@@ -35,30 +35,28 @@
       "types": "./dist/hatsy.d.ts",
       "default": "./dist/hatsy.js"
     },
-    "./core": {
+    "./core.js": {
       "types": "./dist/hatsy.core.d.ts",
       "default": "./dist/hatsy.core.js"
     },
     "./package.json": "./package.json",
-    "./testing": {
+    "./testing.js": {
       "types": "./dist/hatsy.testing.d.ts",
       "default": "./dist/hatsy.testing.js"
     }
   },
   "sideEffects": false,
   "dependencies": {
-    "@frontmeans/httongue": "^2.4.0",
-    "@hatsy/http-header-value": "^3.7.1",
-    "@proc7ts/logger": "^1.3.2",
-    "@proc7ts/primitives": "^3.0.2"
+    "@proc7ts/logger": "^2.0.0",
+    "@proc7ts/primitives": "^4.0.1",
+    "httongue": "^3.1.0",
+    "http-header-value": "^4.0.0"
   },
   "engines": {
-    "node": ">=12"
+    "node": ">=18"
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",
-    "@proc7ts/context-values": "^7.1.1",
-    "@proc7ts/logger": "^1.3.2",
     "@run-z/eslint-config": "^3.5.0",
     "@run-z/prettier-config": "^2.0.0",
     "@run-z/project-config": "^0.20.0",

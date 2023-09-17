@@ -1,4 +1,4 @@
-import { arrayOfElements, elementOrArray } from '@proc7ts/primitives';
+import { asArray, elementOrArray } from '@proc7ts/primitives';
 import type { ServerResponse } from 'node:http';
 
 /**
@@ -11,7 +11,7 @@ import type { ServerResponse } from 'node:http';
  * @param value - HTTP header value to add.
  */
 export function addResponseHeader(response: ServerResponse, name: string, value: string): void {
-  const oldValues = arrayOfElements(response.getHeader(name)).map(String);
+  const oldValues = asArray(response.getHeader(name)).map(String);
   const newValues = elementOrArray(new Set<string>(oldValues).add(value))!;
 
   response.setHeader(name, newValues);

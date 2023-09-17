@@ -1,4 +1,4 @@
-import { escapeXML, MIMEType } from '@frontmeans/httongue';
+import { escapeXML } from 'httongue';
 import { STATUS_CODES } from 'node:http';
 import type { ErrorMeans, RequestContext, RequestHandler } from '../../core';
 import { dispatchByAccepted } from '../dispatch';
@@ -79,9 +79,9 @@ function renderJsonError(context: RequestContext<HttpMeans & RenderMeans & Error
 export const renderHttpError: RequestHandler<HttpMeans & ErrorMeans> = /*#__PURE__*/ Rendering.for(
   /*#__PURE__*/ dispatchByAccepted<HttpMeans & ErrorMeans & RenderMeans>(
     {
-      [MIMEType.JSON]: renderJsonError,
-      [MIMEType.TextJSON]: renderJsonError,
-      [MIMEType.HTML]: renderHtmlError,
+      'application/json': renderJsonError,
+      'text/json': renderJsonError,
+      'text/html': renderHtmlError,
       '*/*': renderHtmlError,
     },
     renderHtmlError,

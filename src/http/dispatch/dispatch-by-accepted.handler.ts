@@ -1,4 +1,4 @@
-import { httpMimeNegotiator } from '@hatsy/http-header-value/headers';
+import { httpMimeNegotiator } from 'http-header-value/headers.js';
 import type { RequestHandler, RequestHandlerMethod } from '../../core';
 import { HttpError } from '../http-error';
 import type { HttpMeans } from '../http.means';
