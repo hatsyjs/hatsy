@@ -120,13 +120,13 @@ a [RequestHandler] to process HTTP requests by.
 
   This can be used e.g. to set up additional request processing capabilities, such as [Logging].
 
-[http processing configuration]: https://hatsyjs.github.io/hatsy/interfaces/_hatsy_hatsy.HttpConfig.html
-[httperror]: https://hatsyjs.github.io/hatsy/classes/_hatsy_hatsy.HttpError.html
-[logging]: https://hatsyjs.github.io/hatsy/interfaces/_hatsy_hatsy.Logging.html
+[http processing configuration]: https://hatsyjs.github.io/hatsy/interfaces/_hatsy_hatsy.HttpConfig-1.html
+[HttpError]: https://hatsyjs.github.io/hatsy/classes/_hatsy_hatsy.HttpError-1.html
+[Logging]: https://hatsyjs.github.io/hatsy/variables/_hatsy_hatsy.Logging-1.html
 
 ## Request Handlers
 
-[requesthandler]: #request-handlers
+[RequestHandler]: #request-handlers
 
 Everything in Hatsy is implemented as a request handler, which is a function accepting a [RequestContext] as its only
 parameter. The latter contains all means necessary for request processing.
@@ -140,7 +140,7 @@ The handler can do the following:
 
 ### Request Context
 
-[requestcontext]: #request-context
+[RequestContext]: #request-context
 
 By default, HTTP request processing context contains the following properties:
 
@@ -245,13 +245,13 @@ The following dispatcher implemented:
 - [dispatchByMethod] dispatches accordingly to HTTP request method.
 - [dispatchError] dispatches request processing error.
 
-[dispatchbyaccepted]: https://hatsyjs.github.io/hatsy/modules/_hatsy_hatsy.html#dispatchByAccepted
-[dispatchbylanguage]: https://hatsyjs.github.io/hatsy/modules/_hatsy_hatsy.html#dispatchByLanguage
-[dispatchbymethod]: https://hatsyjs.github.io/hatsy/modules/_hatsy_hatsy.html#dispatchByMethod
-[dispatcherror]: https://hatsyjs.github.io/hatsy/modules/_hatsy_hatsy_core.html#dispatchError
-[content negotiation]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Content_negotiation
-[accept]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept
-[accept-language]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language
+[dispatchByAccepted]: https://hatsyjs.github.io/hatsy/functions/_hatsy_hatsy.dispatchByAccepted.html
+[dispatchByLanguage]: https://hatsyjs.github.io/hatsy/functions/_hatsy_hatsy.dispatchByLanguage.html
+[dispatchByMethod]: https://hatsyjs.github.io/hatsy/functions/_hatsy_hatsy.dispatchByMethod.html
+[dispatchError]: https://hatsyjs.github.io/hatsy/functions/_hatsy_hatsy.dispatchError.html
+[content negotiation]: https://developer.mozilla.org/docs/Web/HTTP/Content_negotiation
+[accept]: https://developer.mozilla.org/docs/Web/HTTP/Headers/Accept
+[accept-language]: https://developer.mozilla.org/docs/Web/HTTP/Headers/Accept-Language
 
 ## Middleware
 
