@@ -25,7 +25,7 @@
 ## Example
 
 ```typescript
-import { escapeHTML } from '@frontmeans/httongue';
+import { escapeHTML } from 'httongue';
 import { httpListener, Rendering } from '@hatsy/hatsy';
 import { dispatchByName, Routing } from '@hatsy/router';
 import { createServer } from 'http';
