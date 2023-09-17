@@ -3,6 +3,7 @@
   "compilerOptions": {
     "noImplicitOverride": true,
     "outDir": "target/js",
+    "rootDir": "src",
     "typeRoots": ["node_modules/@types"],
     "types": ["node"]
   },
