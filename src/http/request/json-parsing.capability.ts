@@ -1,16 +1,14 @@
 import { asis } from '@proc7ts/primitives';
-import {
-  RequestBodyMeans,
-  RequestCapability,
-  RequestContext,
-  requestExtension,
-  RequestHandler,
-  RequestValueTransformer,
-} from '../../core';
-import { readAll } from '../../impl';
-import { HttpError } from '../http-error';
-import type { HttpMeans } from '../http.means';
-import type { FormDecoding } from './form-decoding.capability';
+import { RequestBodyMeans } from '../../core/request-body.means.js';
+import { RequestCapability } from '../../core/request-capability.js';
+import { RequestContext } from '../../core/request-context.js';
+import { RequestHandler } from '../../core/request-handler.js';
+import { requestExtension } from '../../core/request-modification.js';
+import { RequestValueTransformer } from '../../core/request-value-transformer.js';
+import { readAll } from '../../impl/read-all.js';
+import { HttpError } from '../http-error.js';
+import { HttpMeans } from '../http.means.js';
+import { FormDecoding } from './form-decoding.capability.js';
 
 /**
  * @internal
@@ -80,8 +78,8 @@ class JsonParsingCapability<TInput extends HttpMeans, TBody>
 
       try {
         json = JSON.parse(text);
-      } catch (e) {
-        return Promise.reject(new HttpError(400, { details: 'Malformed JSON', reason: e }));
+      } catch (cause) {
+        return Promise.reject(new HttpError(400, { details: 'Malformed JSON', cause }));
       }
 
       return next(

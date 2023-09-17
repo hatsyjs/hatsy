@@ -2,13 +2,13 @@ import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import { consoleLogger, silentLogger } from '@proc7ts/logger';
 import { noop } from '@proc7ts/primitives';
 import type { Mock } from 'jest-mock';
-import type { RequestContext } from '../request-context';
-import type { RequestHandler } from '../request-handler';
-import type { RequestProcessor } from '../request-processor';
-import { requestProcessor } from '../request-processor';
-import type { LoggerMeans } from './logger.means';
-import { Logging } from './logging.capability';
-import type { RequestLogger } from './request-logger';
+import type { RequestContext } from '../request-context.js';
+import type { RequestHandler } from '../request-handler.js';
+import type { RequestProcessor } from '../request-processor.js';
+import { requestProcessor } from '../request-processor.js';
+import type { LoggerMeans } from './logger.means.js';
+import { Logging } from './logging.capability.js';
+import type { RequestLogger } from './request-logger.js';
 
 describe('Logging', () => {
   let handler: Mock<(context: RequestContext<LoggerMeans>) => void>;

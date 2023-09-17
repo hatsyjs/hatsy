@@ -1,9 +1,9 @@
 import { consoleLogger } from '@proc7ts/logger';
-import { RequestCapability } from '../request-capability';
-import type { RequestHandler } from '../request-handler';
-import { requestExtension } from '../request-modification';
-import type { LoggerMeans } from './logger.means';
-import type { RequestLogger } from './request-logger';
+import { RequestCapability } from '../request-capability.js';
+import type { RequestHandler } from '../request-handler.js';
+import { requestExtension } from '../request-modification.js';
+import type { LoggerMeans } from './logger.means.js';
+import type { RequestLogger } from './request-logger.js';
 
 /**
  * Request logging capability.

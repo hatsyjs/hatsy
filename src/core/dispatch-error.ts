@@ -1,6 +1,6 @@
-import type { ErrorMeans } from './error.means';
-import type { RequestHandler } from './request-handler';
-import { requestExtension } from './request-modification';
+import type { ErrorMeans } from './error.means.js';
+import type { RequestHandler } from './request-handler.js';
+import { requestExtension } from './request-modification.js';
 
 /**
  * Dispatches request processing error.

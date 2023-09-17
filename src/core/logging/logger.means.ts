@@ -1,4 +1,4 @@
-import type { RequestLogger } from './request-logger';
+import type { RequestLogger } from './request-logger.js';
 
 /**
  * Request logger means.

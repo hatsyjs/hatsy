@@ -1,6 +1,8 @@
 import type { IncomingMessage, ServerResponse } from 'node:http';
-import { RequestCapability, RequestContext, RequestHandler } from '../core';
-import type { HttpMeans } from './http.means';
+import { RequestCapability } from '../core/request-capability.js';
+import { RequestContext } from '../core/request-context.js';
+import { RequestHandler } from '../core/request-handler.js';
+import type { HttpMeans } from './http.means.js';
 
 /**
  * HTTP middleware signature.

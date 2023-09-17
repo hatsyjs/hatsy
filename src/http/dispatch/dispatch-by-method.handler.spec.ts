@@ -1,12 +1,15 @@
 import { afterAll, afterEach, beforeAll, describe, expect, it } from '@jest/globals';
 import { silentLogger } from '@proc7ts/logger';
 import { noop } from '@proc7ts/primitives';
-import { Logging, RequestContext, requestHandler } from '../../core';
-import { TestHttpServer } from '../../testing';
-import { HttpError } from '../http-error';
-import type { HttpMeans } from '../http.means';
-import { Rendering, RenderMeans } from '../render';
-import { dispatchByMethod } from './dispatch-by-method.handler';
+import { TestHttpServer } from '../../testing/test-http-server.js';
+import { Rendering } from '../render/rendering.capability.js';
+import { dispatchByMethod } from './dispatch-by-method.handler.js';
+import { RequestContext } from '../../core/request-context.js';
+import { HttpMeans } from '../http.means.js';
+import { RenderMeans } from '../render/render.means.js';
+import { requestHandler } from '../../core/request-handler.js';
+import { Logging } from '../../core/logging/logging.capability.js';
+import { HttpError } from '../http-error.js';
 
 describe('dispatchByName', () => {
   let server: TestHttpServer;

@@ -11,11 +11,11 @@ import {
 import { silentLogger } from '@proc7ts/logger';
 import { noop } from '@proc7ts/primitives';
 import type { Mock } from 'jest-mock';
-import { Logging } from '../core';
-import { TestHttpServer } from '../testing';
-import { HttpError } from './http-error';
-import { middleware, Middleware } from './middleware';
-import { Rendering } from './render';
+import { Logging } from '../core/logging/logging.capability.js';
+import { TestHttpServer } from '../testing/test-http-server.js';
+import { HttpError } from './http-error.js';
+import { Middleware, middleware } from './middleware.js';
+import { Rendering } from './render/rendering.capability.js';
 
 describe('middleware', () => {
   let server: TestHttpServer;

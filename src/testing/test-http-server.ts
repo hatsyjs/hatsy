@@ -9,9 +9,11 @@ import {
 } from 'node:http';
 import type { AddressInfo } from 'node:net';
 import { promisify } from 'node:util';
-import type { RequestHandler } from '../core';
-import { HttpConfig, httpListener, HttpMeans } from '../http';
-import { readAll } from '../impl';
+import { RequestHandler } from '../core/request-handler.js';
+import { HttpConfig } from '../http/http-config.js';
+import { httpListener } from '../http/http-listener.js';
+import { HttpMeans } from '../http/http.means.js';
+import { readAll } from '../impl/read-all.js';
 
 /**
  * Testing HTTP server and client.

@@ -1,8 +1,10 @@
 import { lazyValue } from '@proc7ts/primitives';
 import type { HttpForwardTrust } from 'http-header-value/headers.js';
 import { HttpAddressRep } from 'http-header-value/node.js';
-import { RequestCapability, RequestHandler, requestUpdate } from '../../core';
-import type { HttpMeans } from '../http.means';
+import { RequestCapability } from '../../core/request-capability.js';
+import { RequestHandler } from '../../core/request-handler.js';
+import { requestUpdate } from '../../core/request-modification.js';
+import { HttpMeans } from '../http.means.js';
 
 /**
  * HTTP proxy forwarding capability.

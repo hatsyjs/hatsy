@@ -1,6 +1,8 @@
-import { RequestCapability, requestExtension, RequestHandler } from '../../core';
-import type { HttpMeans } from '../http.means';
-import type { RenderMeans } from './render.means';
+import { RequestCapability } from '../../core/request-capability.js';
+import { RequestHandler } from '../../core/request-handler.js';
+import { requestExtension } from '../../core/request-modification.js';
+import type { HttpMeans } from '../http.means.js';
+import type { RenderMeans } from './render.means.js';
 
 /**
  * @internal

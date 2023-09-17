@@ -1,8 +1,8 @@
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from '@jest/globals';
 import { noop } from '@proc7ts/primitives';
 import { TextEncoder } from 'node:util';
-import { TestHttpServer } from '../../testing';
-import { Rendering } from './rendering.capability';
+import { TestHttpServer } from '../../testing/test-http-server.js';
+import { Rendering } from './rendering.capability.js';
 
 describe('Rendering', () => {
   let server: TestHttpServer;

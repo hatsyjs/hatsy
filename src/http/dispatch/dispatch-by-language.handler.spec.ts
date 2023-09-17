@@ -1,9 +1,9 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from '@jest/globals';
 import { silentLogger } from '@proc7ts/logger';
-import { Logging } from '../../core';
-import { TestHttpServer } from '../../testing';
-import { Rendering } from '../render';
-import { dispatchByLanguage } from './dispatch-by-language.handler';
+import { Logging } from '../../core/logging/logging.capability.js';
+import { TestHttpServer } from '../../testing/test-http-server.js';
+import { Rendering } from '../render/rendering.capability.js';
+import { dispatchByLanguage } from './dispatch-by-language.handler.js';
 
 describe('dispatchByLanguage', () => {
   let server: TestHttpServer;

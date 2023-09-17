@@ -1,5 +1,8 @@
 {
-  "entryPoints": ["src/index.ts", "src/core/index.ts", "src/testing/index.ts"],
+  "entryPoints": ["src/mod.ts", "src/core/mod.ts", "src/testing/mod.ts"],
+  "excludeInternal": true,
+  "excludePrivate": true,
   "name": "Hatsy",
-  "out": "./target/typedoc"
+  "out": "./target/typedoc",
+  "sort": ["static-first", "visibility", "enum-value-ascending", "alphabetical", "kind"]
 }

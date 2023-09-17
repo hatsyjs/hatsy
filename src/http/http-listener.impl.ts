@@ -1,6 +1,6 @@
 import type { IncomingMessage, ServerResponse } from 'node:http';
-import type { HttpConfig } from './http-config';
-import type { HttpMeans } from './http.means';
+import type { HttpConfig } from './http-config.js';
+import type { HttpMeans } from './http.means.js';
 
 /**
  * @internal

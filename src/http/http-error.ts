@@ -10,24 +10,9 @@ import type { DueLog, Loggable } from '@proc7ts/logger';
  */
 export class HttpError extends Error implements Loggable {
 
-  /**
-   * HTTP status message.
-   */
-  readonly statusMessage?: string | undefined;
-
-  /**
-   * Error details.
-   *
-   * This will be displayed on error page in addition to error code.
-   */
-  readonly details?: string | undefined;
-
-  /**
-   * Arbitrary error reason.
-   *
-   * This is another error typically.
-   */
-  readonly reason?: unknown | undefined;
+  readonly #statusCode: number;
+  readonly #statusMessage?: string | undefined;
+  readonly #details?: string | undefined;
 
   /**
    * Constructs HTTP status error.
@@ -35,11 +20,35 @@ export class HttpError extends Error implements Loggable {
    * @param statusCode - HTTP status code.
    * @param options - HTTP error options.
    */
-  constructor(readonly statusCode: number, options: HttpError.Options = {}) {
-    super(httpErrorMessage(statusCode, options));
-    this.statusMessage = options.statusMessage;
-    this.details = options.details;
-    this.reason = options.reason;
+  constructor(statusCode: number, options: HttpError.Options = {}) {
+    super(httpErrorMessage(statusCode, options), options);
+    this.name = 'HttpError';
+    this.#statusCode = statusCode;
+    this.#statusMessage = options.statusMessage;
+    this.#details = options.details;
+  }
+
+  /**
+   * HTTP status code.
+   */
+  get statusCode(): number {
+    return this.#statusCode;
+  }
+
+  /**
+   * HTTP status message.
+   */
+  get statusMessage(): string | undefined {
+    return this.#statusMessage;
+  }
+
+  /**
+   * Error details.
+   *
+   * This will be displayed on error page in addition to error code.
+   */
+  get details(): string | undefined {
+    return this.#details;
   }
 
   /**
@@ -56,13 +65,13 @@ export class HttpError extends Error implements Loggable {
     }
 
     const report: unknown[] = [this.message];
-    const { details, reason } = this;
+    const { details, cause } = this;
 
     if (details) {
       report.push(details);
     }
-    if (reason) {
-      report.push(reason);
+    if (cause) {
+      report.push(cause);
     }
 
     return report;
@@ -84,7 +93,7 @@ export namespace HttpError {
   /**
    * Options for {@link HttpError HTTP error} construction.
    */
-  export interface Options {
+  export interface Options extends ErrorOptions {
     /**
      * HTTP status message.
      */
@@ -103,12 +112,5 @@ export namespace HttpError {
      * This will be displayed on error page in addition to error code.
      */
     readonly details?: string | undefined;
-
-    /**
-     * Arbitrary error reason.
-     *
-     * This is another error typically.
-     */
-    readonly reason?: unknown | undefined;
   }
 }

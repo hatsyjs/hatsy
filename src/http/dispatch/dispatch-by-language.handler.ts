@@ -1,8 +1,8 @@
 import { httpLanguageNegotiator } from 'http-header-value/headers.js';
-import type { RequestHandler, RequestHandlerMethod } from '../../core';
-import { HttpError } from '../http-error';
-import type { HttpMeans } from '../http.means';
-import { addResponseHeader } from '../util';
+import { RequestHandler, RequestHandlerMethod } from '../../core/request-handler.js';
+import { HttpError } from '../http-error.js';
+import type { HttpMeans } from '../http.means.js';
+import { addResponseHeader } from '../util/add-response-header.js';
 
 /**
  * Request processing handlers for accepted languages.

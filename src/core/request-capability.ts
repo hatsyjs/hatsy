@@ -1,4 +1,4 @@
-import type { RequestHandler } from './request-handler';
+import type { RequestHandler } from './request-handler.js';
 
 /**
  * Request processing capability.

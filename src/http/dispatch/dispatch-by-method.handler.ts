@@ -1,5 +1,5 @@
-import type { RequestHandler, RequestHandlerMethod } from '../../core';
-import type { HttpMeans } from '../http.means';
+import { RequestHandler, RequestHandlerMethod } from '../../core/request-handler.js';
+import type { HttpMeans } from '../http.means.js';
 
 /**
  * Request processing handlers for HTTP request methods.
