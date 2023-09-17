@@ -57,8 +57,11 @@ class JsonParsingCapability<TInput extends HttpMeans, TBody>
   extends RequestCapability<TInput, RequestBodyMeans<TBody>>
   implements JsonParsing<TInput, TBody> {
 
-  constructor(private readonly _transform: RequestValueTransformer<TInput, any, TBody>) {
+  readonly #transform: RequestValueTransformer<TInput, any, TBody>;
+
+  constructor(transform: RequestValueTransformer<TInput, any, TBody>) {
     super();
+    this.#transform = transform;
   }
 
   for<TMeans extends TInput>(
@@ -84,7 +87,7 @@ class JsonParsingCapability<TInput extends HttpMeans, TBody>
       return next(
         handler,
         requestExtension<TMeans, RequestBodyMeans<TBody>>({
-          requestBody: await this._transform(json, context as RequestContext<TInput>),
+          requestBody: await this.#transform(json, context as RequestContext<TInput>),
         }),
       );
     };

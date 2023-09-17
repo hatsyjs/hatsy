@@ -55,10 +55,11 @@ class FormDecodingCapability<TInput extends HttpMeans, TBody>
   extends RequestCapability<TInput, RequestBodyMeans<TBody>>
   implements FormDecoding<TInput, TBody> {
 
-  constructor(
-    private readonly _transform: RequestValueTransformer<TInput, URLSearchParams, TBody>,
-  ) {
+  readonly #transform: RequestValueTransformer<TInput, URLSearchParams, TBody>;
+
+  constructor(transform: RequestValueTransformer<TInput, URLSearchParams, TBody>) {
     super();
+    this.#transform = transform;
   }
 
   for<TMeans extends TInput>(
@@ -79,7 +80,7 @@ class FormDecodingCapability<TInput extends HttpMeans, TBody>
       return context.next(
         handler,
         requestExtension<TMeans, RequestBodyMeans<TBody>>({
-          requestBody: await this._transform(params, context as RequestContext<TInput>),
+          requestBody: await this.#transform(params, context as RequestContext<TInput>),
         }),
       );
     };

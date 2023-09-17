@@ -24,35 +24,35 @@ export class TestHttpServer {
    * @returns A promise resolved to started server.
    */
   static start(): Promise<TestHttpServer> {
-    return new TestHttpServer()._start();
+    return new TestHttpServer().#start();
   }
 
   /**
    * @internal
    */
-  private _listener: RequestListener;
+  #listener: RequestListener;
 
   /**
    * @internal
    */
-  private _server!: Server;
+  #server!: Server;
 
   private constructor() {
-    this._listener = noop;
+    this.#listener = noop;
   }
 
   /**
    * HTTP server instance.
    */
   get server(): Server {
-    return this._server;
+    return this.#server;
   }
 
   /**
    * An address the service is bound to.
    */
   get address(): AddressInfo {
-    return this._server.address() as AddressInfo;
+    return this.#server.address() as AddressInfo;
   }
 
   /**
@@ -63,7 +63,7 @@ export class TestHttpServer {
    * @returns `this` instance.
    */
   listenBy(listener: RequestListener): this {
-    this._listener = listener;
+    this.#listener = listener;
 
     return this;
   }
@@ -113,9 +113,9 @@ export class TestHttpServer {
   /**
    * @internal
    */
-  private _start(): Promise<TestHttpServer> {
+  #start(): Promise<TestHttpServer> {
     return new Promise((resolve, reject) => {
-      const server = (this._server = createServer((request, response) => this._listener(request, response)));
+      const server = (this.#server = createServer((request, response) => this.#listener(request, response)));
 
       server.on('error', reject);
       server.on('listening', () => resolve(this));

@@ -28,13 +28,16 @@ export interface HttpForwarding extends RequestCapability<HttpMeans> {
  */
 class HttpForwardingCapability extends RequestCapability<HttpMeans> implements HttpForwarding {
 
-  constructor(private readonly _trust: HttpForwardTrust) {
+  readonly #trust: HttpForwardTrust;
+
+  constructor(trust: HttpForwardTrust) {
     super();
+    this.#trust = trust;
   }
 
   for<TMeans extends HttpMeans>(handler: RequestHandler<TMeans & object>): RequestHandler<TMeans> {
     return ({ request, next }) => {
-      const addresses = lazyValue(() => HttpAddressRep.by(request, this._trust));
+      const addresses = lazyValue(() => HttpAddressRep.by(request, this.#trust));
 
       return next(
         handler,
