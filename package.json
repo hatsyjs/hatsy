@@ -48,7 +48,7 @@
   "sideEffects": false,
   "dependencies": {
     "@proc7ts/logger": "^2.0.0",
-    "@proc7ts/primitives": "workspace:@proc7ts/primitives@^4.0.0",
+    "@proc7ts/primitives": "@proc7ts/primitives@^4.0.0",
     "httongue": "^3.1.0",
     "http-header-value": "^4.0.0"
   },
