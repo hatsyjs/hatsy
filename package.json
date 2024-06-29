@@ -59,7 +59,7 @@
     "@jest/globals": "^29.7.0",
     "@run-z/eslint-config": "^4.0.0",
     "@run-z/prettier-config": "^2.0.0",
-    "@run-z/project-config": "^0.20.2",
+    "@run-z/project-config": "^0.20.3",
     "@swc/core": "^1.6.5",
     "@swc/jest": "^0.2.36",
     "@types/node": "^20.14.9",
@@ -78,7 +78,7 @@
     "ts-jest": "^29.1.5",
     "tslib": "^2.6.3",
     "typedoc": "^0.26.3",
-    "typescript": "~5.4.5"
+    "typescript": "~5.5.2"
   },
   "scripts": {
     "all": "run-z build,lint,test",
