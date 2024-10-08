@@ -14,9 +14,9 @@
 [build-status-img]: https://github.com/hatsyjs/hatsy/workflows/Build/badge.svg
 [build-status-link]: https://github.com/hatsyjs/hatsy/actions?query=workflow:Build
 [quality-img]: https://app.codacy.com/project/badge/Grade/2a0e884645ed42aea74cb32f7d31065c
-[quality-link]: https://www.codacy.com/gh/hatsyjs/hatsy/dashboard?utm_source=github.com&utm_medium=referral&utm_content=hatsyjs/hatsy&utm_campaign=Badge_Grade
+[quality-link]: https://app.codacy.com/gh/hatsyjs/hatsy/dashboard?utm_source=gh&utm_medium=referral&utm_content=hatsyjs/hatsy&utm_campaign=Badge_Grade
 [coverage-img]: https://app.codacy.com/project/badge/Coverage/2a0e884645ed42aea74cb32f7d31065c
-[coverage-link]: https://www.codacy.com/gh/hatsyjs/hatsy/dashboard?utm_source=github.com&utm_medium=referral&utm_content=hatsyjs/hatsy&utm_campaign=Badge_Coverage
+[coverage-link]: https://app.codacy.com/gh/hatsyjs/hatsy/dashboard?utm_source=gh&utm_medium=referral&utm_content=hatsyjs/hatsy&utm_campaign=Badge_Coverage
 [github-image]: https://img.shields.io/static/v1?logo=github&label=GitHub&message=project&color=informational
 [github-url]: https://github.com/hatsyjs/hatsy
 [api-docs-image]: https://img.shields.io/static/v1?logo=typescript&label=API&message=docs&color=informational
