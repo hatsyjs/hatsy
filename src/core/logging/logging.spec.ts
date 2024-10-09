@@ -1,7 +1,6 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import { consoleLogger, silentLogger } from '@proc7ts/logger';
 import { noop } from '@proc7ts/primitives';
-import type { Mock } from 'jest-mock';
 import type { RequestContext } from '../request-context.js';
 import type { RequestHandler } from '../request-handler.js';
 import type { RequestProcessor } from '../request-processor.js';
@@ -11,7 +10,7 @@ import { Logging } from './logging.capability.js';
 import type { RequestLogger } from './request-logger.js';
 
 describe('Logging', () => {
-  let handler: Mock<(context: RequestContext<LoggerMeans>) => void>;
+  let handler: jest.Mock<(context: RequestContext<LoggerMeans>) => void>;
 
   beforeEach(() => {
     handler = jest.fn();

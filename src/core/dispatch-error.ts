@@ -17,7 +17,8 @@ export function dispatchError<TMeans>(
   onError: RequestHandler<TMeans & ErrorMeans>,
   handler: RequestHandler<TMeans>,
 ): RequestHandler<TMeans> {
-  return context => context
+  return context =>
+    context
       .next(handler)
       .catch(error => context.next<ErrorMeans>(onError, requestExtension({ error })));
 }

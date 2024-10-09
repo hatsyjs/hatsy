@@ -11,7 +11,6 @@ import type { RequestHandler } from './request-handler.js';
  * @typeParam TExt - A type of extension to request processing means this capability applies.
  */
 export abstract class RequestCapability<TInput, TExt = object> {
-
   /**
    * Builds request capability by the given `provider`.
    *
@@ -101,7 +100,6 @@ export abstract class RequestCapability<TInput, TExt = object> {
   ): RequestCapability<TInput, TExt & TNext> {
     return RequestCapability.combine<TInput, TExt, TNext>(this, next);
   }
-
 }
 
 export namespace RequestCapability {

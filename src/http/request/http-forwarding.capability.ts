@@ -29,7 +29,6 @@ export interface HttpForwarding extends RequestCapability<HttpMeans> {
  * @internal
  */
 class HttpForwardingCapability extends RequestCapability<HttpMeans> implements HttpForwarding {
-
   readonly #trust: HttpForwardTrust;
 
   constructor(trust: HttpForwardTrust) {
@@ -60,7 +59,6 @@ class HttpForwardingCapability extends RequestCapability<HttpMeans> implements H
   with(trust: HttpForwardTrust): HttpForwarding {
     return new HttpForwardingCapability(trust);
   }
-
 }
 
 /**

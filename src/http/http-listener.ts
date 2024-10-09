@@ -185,7 +185,9 @@ function fullHttpHandler<TExt, TRequest extends IncomingMessage, TResponse exten
 ): RequestHandler<HttpMeans<TRequest, TResponse> & TExt> {
   const defaultHandler = defaultHttpHandler(config);
 
-  return dispatchError(httpErrorHandler(config), ({ next }) => next(handler).then(ok => ok || next(defaultHandler)));
+  return dispatchError(httpErrorHandler(config), ({ next }) =>
+    next(handler).then(ok => ok || next(defaultHandler)),
+  );
 }
 
 /**
@@ -226,8 +228,8 @@ function httpErrorHandler<
       ? renderHttpError
       : errorHandler
     : defaultHandler
-    ? renderEmptyHttpResponse
-    : noop;
+      ? renderEmptyHttpResponse
+      : noop;
 
   if (!logError) {
     return onError;

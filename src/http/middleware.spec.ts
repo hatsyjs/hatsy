@@ -10,7 +10,6 @@ import {
 } from '@jest/globals';
 import { silentLogger } from '@proc7ts/logger';
 import { noop } from '@proc7ts/primitives';
-import type { Mock } from 'jest-mock';
 import { Logging } from '../core/logging/logging.capability.js';
 import { TestHttpServer } from '../testing/test-http-server.js';
 import { HttpError } from './http-error.js';
@@ -31,7 +30,7 @@ describe('middleware', () => {
     server.listenBy(noop);
   });
 
-  let ware: Mock<Middleware>;
+  let ware: jest.Mock<Middleware>;
 
   beforeEach(() => {
     ware = jest.fn((_request, _response, next) => next());
@@ -64,7 +63,9 @@ describe('middleware', () => {
     expect(ware).toHaveBeenCalledTimes(1);
   });
   it('allows middleware to error', async () => {
-    ware.mockImplementation((_request, _response, next) => next(new HttpError(503, { statusMessage: 'Custom Error' })));
+    ware.mockImplementation((_request, _response, next) =>
+      next(new HttpError(503, { statusMessage: 'Custom Error' })),
+    );
 
     server.handleBy(
       {

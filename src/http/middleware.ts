@@ -49,7 +49,8 @@ export function middleware<TInput extends HttpMeans>(
   function middlewareProvider<TMeans extends TInput>(
     handler: RequestHandler<TMeans>,
   ): RequestHandler<TMeans> {
-    return async ({ request, response, next }: RequestContext<TMeans>) => await new Promise<void>((resolve, reject) => {
+    return async ({ request, response, next }: RequestContext<TMeans>) =>
+      await new Promise<void>((resolve, reject) => {
         const mdNext = (error?: unknown): void => {
           if (error !== undefined) {
             reject(error);

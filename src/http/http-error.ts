@@ -9,7 +9,6 @@ import type { DueLog, Loggable } from '@proc7ts/logger';
  * @see HttpConfig.errorHandler
  */
 export class HttpError extends Error implements Loggable {
-
   readonly #statusCode: number;
   readonly #statusMessage?: string | undefined;
   readonly #details?: string | undefined;
@@ -76,7 +75,6 @@ export class HttpError extends Error implements Loggable {
 
     return report;
   }
-
 }
 
 function httpErrorMessage(

@@ -8,7 +8,6 @@ import type { RenderMeans } from './render.means.js';
  * @internal
  */
 class RenderingCapability extends RequestCapability<HttpMeans, RenderMeans> {
-
   for<TMeans extends HttpMeans>(
     handler: RequestHandler<TMeans & RenderMeans>,
   ): RequestHandler<TMeans> {
@@ -42,7 +41,6 @@ class RenderingCapability extends RequestCapability<HttpMeans, RenderMeans> {
       );
     };
   }
-
 }
 
 /**

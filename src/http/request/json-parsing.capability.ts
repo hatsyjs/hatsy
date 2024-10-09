@@ -53,8 +53,8 @@ export interface JsonParsing<TInput extends HttpMeans = HttpMeans, TBody = any>
  */
 class JsonParsingCapability<TInput extends HttpMeans, TBody>
   extends RequestCapability<TInput, RequestBodyMeans<TBody>>
-  implements JsonParsing<TInput, TBody> {
-
+  implements JsonParsing<TInput, TBody>
+{
   readonly #transform: RequestValueTransformer<TInput, any, TBody>;
 
   constructor(transform: RequestValueTransformer<TInput, any, TBody>) {
@@ -96,7 +96,6 @@ class JsonParsingCapability<TInput extends HttpMeans, TBody>
   ): FormDecoding<TMeans, TTransformed> {
     return new JsonParsingCapability<TMeans, TTransformed>(transformer);
   }
-
 }
 
 /**

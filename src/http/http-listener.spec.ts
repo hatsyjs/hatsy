@@ -10,7 +10,6 @@ import {
 } from '@jest/globals';
 import { consoleLogger } from '@proc7ts/logger';
 import { noop } from '@proc7ts/primitives';
-import type { Mock } from 'jest-mock';
 import { ErrorMeans } from '../core/error.means.js';
 import { RequestContext } from '../core/request-context.js';
 import { TestHttpServer } from '../testing/test-http-server.js';
@@ -33,7 +32,7 @@ describe('httpListener', () => {
     server.listenBy(noop);
   });
 
-  let logErrorSpy: Mock<(...args: unknown[]) => void>;
+  let logErrorSpy: jest.Mock<(...args: unknown[]) => void>;
 
   beforeEach(() => {
     logErrorSpy = jest.spyOn(consoleLogger, 'error').mockImplementation(noop) as typeof logErrorSpy;

@@ -51,8 +51,8 @@ export interface FormDecoding<TInput extends HttpMeans = HttpMeans, TBody = URLS
  */
 class FormDecodingCapability<TInput extends HttpMeans, TBody>
   extends RequestCapability<TInput, RequestBodyMeans<TBody>>
-  implements FormDecoding<TInput, TBody> {
-
+  implements FormDecoding<TInput, TBody>
+{
   readonly #transform: RequestValueTransformer<TInput, URLSearchParams, TBody>;
 
   constructor(transform: RequestValueTransformer<TInput, URLSearchParams, TBody>) {
@@ -89,7 +89,6 @@ class FormDecodingCapability<TInput extends HttpMeans, TBody>
   ): FormDecoding<TMeans, TTransformed> {
     return new FormDecodingCapability<TMeans, TTransformed>(transformer);
   }
-
 }
 
 /**

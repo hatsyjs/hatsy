@@ -31,8 +31,8 @@ export interface Logging<TInput = unknown, TLogger extends RequestLogger = Reque
  */
 class LoggingCapability<TInput, TLogger extends RequestLogger>
   extends RequestCapability<TInput, LoggerMeans<TLogger>>
-  implements Logging<TInput, TLogger> {
-
+  implements Logging<TInput, TLogger>
+{
   readonly for: <TMeans extends TInput>(
     handler: RequestHandler<TMeans & LoggerMeans<TLogger>>,
   ) => RequestHandler<TMeans>;
@@ -43,7 +43,8 @@ class LoggingCapability<TInput, TLogger extends RequestLogger>
       this.for =
         <TMeans extends TInput>(
           handler: RequestHandler<TMeans & LoggerMeans<TLogger>>,
-        ): RequestHandler<TMeans> => context => {
+        ): RequestHandler<TMeans> =>
+        context => {
           if ((context as Partial<LoggerMeans>).log) {
             return context.next(handler);
           }
@@ -54,14 +55,15 @@ class LoggingCapability<TInput, TLogger extends RequestLogger>
       this.for =
         <TMeans extends TInput>(
           handler: RequestHandler<TMeans & LoggerMeans<TLogger>>,
-        ): RequestHandler<TMeans> => context => context.next(handler, requestExtension({ log }));
+        ): RequestHandler<TMeans> =>
+        context =>
+          context.next(handler, requestExtension({ log }));
     }
   }
 
   logBy<TNewLogger extends RequestLogger>(log: TNewLogger): Logging<TInput, TNewLogger> {
     return new LoggingCapability(log);
   }
-
 }
 
 /**

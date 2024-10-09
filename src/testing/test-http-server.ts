@@ -19,7 +19,6 @@ import { readAll } from '../impl/read-all.js';
  * Testing HTTP server and client.
  */
 export class TestHttpServer {
-
   /**
    * Starts new test HTTP server and binds it ro random port ad localhost.
    *
@@ -117,7 +116,9 @@ export class TestHttpServer {
    */
   #start(): Promise<TestHttpServer> {
     return new Promise((resolve, reject) => {
-      const server = (this.#server = createServer((request, response) => this.#listener(request, response)));
+      const server = (this.#server = createServer((request, response) =>
+        this.#listener(request, response),
+      ));
 
       server.on('error', reject);
       server.on('listening', () => resolve(this));
@@ -183,7 +184,6 @@ export class TestHttpServer {
   stop(): Promise<void> {
     return promisify(this.server.close.bind(this.server))();
   }
-
 }
 
 export namespace TestHttpServer {

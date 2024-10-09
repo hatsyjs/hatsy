@@ -51,7 +51,8 @@ describe('requestHandler', () => {
     const error = new Error('test');
     const calls: number[] = [];
 
-    const call = async (): Promise<unknown> => await requestHandler([
+    const call = async (): Promise<unknown> =>
+      await requestHandler([
         () => {
           calls.push(1);
         },
@@ -69,7 +70,8 @@ describe('requestHandler', () => {
   });
   it('stops handlers execution once response written', async () => {
     const calls: number[] = [];
-    const call = async (): Promise<unknown> => await requestHandler([
+    const call = async (): Promise<unknown> =>
+      await requestHandler([
         () => {
           calls.push(1);
         },
